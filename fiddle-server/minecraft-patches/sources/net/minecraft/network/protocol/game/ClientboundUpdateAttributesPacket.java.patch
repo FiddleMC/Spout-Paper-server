@@ -1,0 +1,20 @@
+--- a/net/minecraft/network/protocol/game/ClientboundUpdateAttributesPacket.java
++++ b/net/minecraft/network/protocol/game/ClientboundUpdateAttributesPacket.java
+@@ -27,7 +_,7 @@
+     private final int entityId;
+     private final List<ClientboundUpdateAttributesPacket.AttributeSnapshot> attributes;
+ 
+-    public ClientboundUpdateAttributesPacket(int entityId, Collection<AttributeInstance> attributes) {
++    public ClientboundUpdateAttributesPacket(int entityId, Collection<AttributeInstance> attributes, net.minecraft.server.level.@org.jspecify.annotations.Nullable ServerPlayer selfPlayer) { // Fiddle - Block mapping - Breaking speed - Pass self player to attributes packet
+         this.entityId = entityId;
+         this.attributes = Lists.newArrayList();
+ 
+@@ -35,7 +_,7 @@
+             this.attributes
+                 .add(
+                     new ClientboundUpdateAttributesPacket.AttributeSnapshot(
+-                        attributeInstance.getAttribute(), attributeInstance.getBaseValue(), attributeInstance.getModifiers()
++                        attributeInstance.getAttribute(), attributeInstance.getBaseValue(), org.fiddlemc.fiddle.impl.packetmapping.block.breakspeed.BlockBreakSpeedAttributeModification.withServerToClientModifierIfNecessary(attributeInstance, attributeInstance.getModifiers(), selfPlayer) // Fiddle - Block mapping - Breaking speed - Add attribute modifier in packets to self
+                     )
+                 );
+         }

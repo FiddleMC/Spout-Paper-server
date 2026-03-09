@@ -1,5 +1,6 @@
 package org.fiddlemc.fiddle.impl.packetmapping.block;
 
+import net.minecraft.core.BlockPos;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
 import org.fiddlemc.fiddle.api.packetmapping.block.BlockMappingFunctionContext;
 import org.fiddlemc.fiddle.impl.packetmapping.WithClientViewMappingFunctionContextImpl;
@@ -28,6 +29,10 @@ public class BlockMappingFunctionContextImpl extends WithClientViewMappingFuncti
 
     public BlockMappingFunctionContextImpl(ClientView clientView, int physicalBlockX, int physicalBlockY, int physicalBlockZ) {
         this(clientView, true, physicalBlockX, physicalBlockY, physicalBlockZ);
+    }
+
+    public BlockMappingFunctionContextImpl(ClientView clientView, BlockPos physicalBlockPos) {
+        this(clientView, physicalBlockPos.getX(), physicalBlockPos.getY(), physicalBlockPos.getZ());
     }
 
     @Override

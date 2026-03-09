@@ -1,0 +1,40 @@
+--- a/net/minecraft/world/level/block/state/BlockBehaviour.java
++++ b/net/minecraft/world/level/block/state/BlockBehaviour.java
+@@ -350,12 +_,20 @@
+     }
+ 
+     protected float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
++        // Fiddle start - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
++        return this.getDestroyProgress(state, player, level, pos, null);
++    }
++
++    protected float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos, @Nullable ItemStack heldItemStack) {
++        // Fiddle end - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
+         float destroySpeed = state.getDestroySpeed(level, pos);
+         if (destroySpeed == -1.0F) {
+             return 0.0F;
+         } else {
+-            int i = player.hasCorrectToolForDrops(state) ? 30 : 100;
+-            return player.getDestroySpeed(state) / destroySpeed / i;
++            // Fiddle start - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
++            int i = player.hasCorrectToolForDrops(state, heldItemStack) ? 30 : 100;
++            return player.getDestroySpeed(state, heldItemStack) / destroySpeed / i;
++            // Fiddle end - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
+         }
+     }
+ 
+@@ -754,7 +_,13 @@
+         }
+ 
+         public float getDestroyProgress(Player player, BlockGetter level, BlockPos pos) {
+-            return this.getBlock().getDestroyProgress(this.asState(), player, level, pos);
++            // Fiddle start - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
++            return this.getDestroyProgress(player, level, pos, null);
++        }
++
++        public float getDestroyProgress(Player player, BlockGetter level, BlockPos pos, @Nullable ItemStack heldItemStack) {
++            return this.getBlock().getDestroyProgress(this.asState(), player, level, pos, heldItemStack);
++            // Fiddle end - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
+         }
+ 
+         public int getDirectSignal(BlockGetter level, BlockPos pos, Direction direction) {

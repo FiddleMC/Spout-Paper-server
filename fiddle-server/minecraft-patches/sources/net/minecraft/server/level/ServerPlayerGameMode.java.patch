@@ -1,0 +1,26 @@
+--- a/net/minecraft/server/level/ServerPlayerGameMode.java
++++ b/net/minecraft/server/level/ServerPlayerGameMode.java
+@@ -38,10 +_,12 @@
+     protected final ServerPlayer player;
+     private GameType gameModeForPlayer = GameType.DEFAULT_MODE;
+     private @Nullable GameType previousGameModeForPlayer;
+-    private boolean isDestroyingBlock;
+-    private int destroyProgressStart;
++    // Fiddle start - Block mapping - Breaking speed - Keep ratio history for compensation - Make fields public
++    public boolean isDestroyingBlock;
++    public int destroyProgressStart;
+     private BlockPos destroyPos = BlockPos.ZERO;
+-    private int gameTicks;
++    public int gameTicks;
++    // Fiddle end - Block mapping - Breaking speed - Keep ratio history for compensation - Make fields public
+     private boolean hasDelayedDestroy;
+     private BlockPos delayedDestroyPos = BlockPos.ZERO;
+     private int delayedTickStart;
+@@ -276,6 +_,7 @@
+                     BlockState blockStatex = this.level.getBlockState(pos);
+                     if (!blockStatex.isAir()) {
+                         float f1 = blockStatex.getDestroyProgress(this.player, this.player.level(), pos) * (i1 + 1);
++                        f1 *= org.fiddlemc.fiddle.impl.packetmapping.block.breakspeed.BlockBreakSpeedLatencyCompensation.getCompensationFactor(this.player, this.player.level(), pos, blockStatex); // Fiddle - Block mapping - Breaking speed - Compensate for difference in intended ratio and recently observed ratio
+                         if (f1 >= 0.7F) {
+                             this.isDestroyingBlock = false;
+                             this.level.destroyBlockProgress(this.player.getId(), pos, -1);

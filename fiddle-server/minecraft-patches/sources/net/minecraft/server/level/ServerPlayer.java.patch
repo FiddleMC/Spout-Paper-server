@@ -1,5 +1,24 @@
 --- a/net/minecraft/server/level/ServerPlayer.java
 +++ b/net/minecraft/server/level/ServerPlayer.java
+@@ -64,7 +_,6 @@
+ import net.minecraft.network.protocol.game.ClientboundMerchantOffersPacket;
+ import net.minecraft.network.protocol.game.ClientboundMountScreenOpenPacket;
+ import net.minecraft.network.protocol.game.ClientboundOpenBookPacket;
+-import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
+ import net.minecraft.network.protocol.game.ClientboundOpenSignEditorPacket;
+ import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
+ import net.minecraft.network.protocol.game.ClientboundPlayerCombatEndPacket;
+@@ -226,6 +_,10 @@
+     private static final boolean DEFAULT_SEEN_CREDITS = false;
+     private static final boolean DEFAULT_SPAWN_EXTRA_PARTICLES_ON_FALL = false;
+     public ServerGamePacketListenerImpl connection;
++    // Fiddle start - Block mapping - Breaking speed - Store factor in player
++    public float serverToClientSideBlockBreakSpeedFactor = 1;
++    public org.fiddlemc.fiddle.impl.packetmapping.block.breakspeed.BlockBreakSpeedFactorHistory serverToClientSideBlockBreakSpeedFactorHistory = new org.fiddlemc.fiddle.impl.packetmapping.block.breakspeed.BlockBreakSpeedFactorHistory();
++    // Fiddle end - Block mapping - Breaking speed - Store factor in player
+     private final MinecraftServer server;
+     public final ServerPlayerGameMode gameMode;
+     private final PlayerAdvancements advancements;
 @@ -272,12 +_,14 @@
      private long timeEntitySatOnShoulder;
      private CompoundTag shoulderEntityLeft = new CompoundTag();

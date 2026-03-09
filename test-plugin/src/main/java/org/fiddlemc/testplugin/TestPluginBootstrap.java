@@ -71,13 +71,20 @@ public class TestPluginBootstrap implements PluginBootstrap {
 
             event.registry().register(TypedKey.create(RegistryKey.BLOCK, Key.key("example:ash_block")), builder -> {
                 builder
-                    .requiresCorrectToolForDrops() // It drops nothing unless broken with the right tool (a shovel, as defined in the included data pack)
                     .mapColor(BlockType.LIGHT_GRAY_WOOL) // It shows up light gray on maps
-                    .pushReaction(PistonMoveReaction.BREAK); // It breaks when pushed by a piston
+                    .strength(0.5f) // It breaks like sand
+                    .pushReaction(PistonMoveReaction.BREAK) // It breaks when pushed by a piston
+                    .requiresCorrectToolForDrops(); // It drops nothing unless broken with the right tool (a shovel, as defined in the included data pack)
             });
 
             event.registry().register(TypedKey.create(RegistryKey.BLOCK, Key.key("example:ash_stairs")), builder -> {
-                builder.inheritsFromStairs(PluginBlockTypes.ASH_BLOCK.get()); // It's a stair block
+                builder
+                    .inheritsFromStairs(PluginBlockTypes.ASH_BLOCK.get()) // It's a stair block
+                    // Add the same properties as above
+                    .mapColor(BlockType.LIGHT_GRAY_WOOL)
+                    .strength(0.5f)
+                    .pushReaction(PistonMoveReaction.BREAK)
+                    .requiresCorrectToolForDrops();
             });
 
         });

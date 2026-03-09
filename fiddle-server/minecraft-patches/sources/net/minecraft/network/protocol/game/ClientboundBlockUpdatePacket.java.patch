@@ -5,7 +5,7 @@
  
  public class ClientboundBlockUpdatePacket implements Packet<ClientGamePacketListener> {
 -    public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundBlockUpdatePacket> STREAM_CODEC = StreamCodec.composite(
-+    // Fiddle start - Block mapping - Implementation - Apply to single block update
++    // Fiddle start - Block mapping - Implementation part - Apply to single block update
 +    public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundBlockUpdatePacket> STREAM_CODEC = new StreamCodec<>() {
 +
 +        private static final StreamCodec<io.netty.buffer.ByteBuf, BlockState> BLOCK_STATE_CODEC = ByteBufCodecs.idMapper(Block.BLOCK_STATE_REGISTRY);
@@ -25,7 +25,7 @@
 +
 +    };
 +    public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundBlockUpdatePacket> UNMAPPED_STREAM_CODEC = StreamCodec.composite(
-+        // Fiddle end - Block mapping - Implementation - Apply to single block update
++        // Fiddle end - Block mapping - Implementation part - Apply to single block update
          BlockPos.STREAM_CODEC,
          ClientboundBlockUpdatePacket::getPos,
          ByteBufCodecs.idMapper(Block.BLOCK_STATE_REGISTRY),

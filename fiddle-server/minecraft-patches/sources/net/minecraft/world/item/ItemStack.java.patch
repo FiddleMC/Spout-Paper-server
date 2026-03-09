@@ -32,7 +32,7 @@
  
              @Override
              public void encode(RegistryFriendlyByteBuf buffer, ItemStack value) {
-+                // Fiddle start - Item mapping - Implementation - Apply at ItemStack encoding
++                // Fiddle start - Item mapping - Implementation part - Apply at ItemStack encoding
 +                org.fiddlemc.fiddle.impl.packetmapping.item.ItemMappingFunctionContextImpl itemMappingContext = new org.fiddlemc.fiddle.impl.packetmapping.item.ItemMappingFunctionContextImpl(buffer.getClientViewOrFallback(), buffer.isEncodingItemFrameItem, buffer.isEncodingStonecutterRecipeResult);
 +                org.fiddlemc.fiddle.impl.packetmapping.item.reverse.@Nullable ItemMappingReverser itemMappingReverser = ((org.fiddlemc.fiddle.impl.clientview.ClientViewImpl) buffer.getClientViewOrFallback()).getItemMappingReverser();
 +                ItemStack mappedValue = org.fiddlemc.fiddle.impl.packetmapping.item.ItemMappingsImpl.get().apply(value, itemMappingContext);
@@ -65,7 +65,7 @@
 +            }
 +
 +            private void encodeUnmapped(RegistryFriendlyByteBuf buffer, ItemStack value) {
-+                // Fiddle end - Item mapping - Implementation - Apply at ItemStack encoding
++                // Fiddle end - Item mapping - Implementation part - Apply at ItemStack encoding
                  if (value.isEmpty() || value.getItem() == null) { // CraftBukkit - NPE fix itemstack.getItem()
                      buffer.writeVarInt(0);
                  } else {

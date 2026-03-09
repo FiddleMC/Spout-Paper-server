@@ -1,0 +1,11 @@
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -2577,7 +_,7 @@
+     public void updateScaledHealth(boolean sendHealth) {
+         // SPIGOT-3813: Attributes before health
+         if (this.getHandle().connection != null) {
+-            this.getHandle().connection.send(new ClientboundUpdateAttributesPacket(this.getHandle().getId(), Set.of(this.getScaledMaxHealth())));
++            this.getHandle().connection.send(new ClientboundUpdateAttributesPacket(this.getHandle().getId(), Set.of(this.getScaledMaxHealth()), null)); // Fiddle - Block mapping - Breaking speed - Pass self player to attributes packet
+             if (sendHealth) {
+                 this.sendHealthUpdate();
+             }

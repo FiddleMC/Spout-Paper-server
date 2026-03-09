@@ -9,3 +9,33 @@
      public static final int MAX_HEALTH = 20;
      public static final int SLEEP_DURATION = 100;
      public static final int WAKE_UP_DURATION = 10;
+@@ -628,7 +_,13 @@
+     }
+ 
+     public float getDestroySpeed(BlockState state) {
+-        float destroySpeed = this.inventory.getSelectedItem().getDestroySpeed(state);
++        // Fiddle start - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
++        return this.getDestroySpeed(state, null);
++    }
++
++    public float getDestroySpeed(BlockState state, @Nullable ItemStack heldItemStack) {
++        float destroySpeed = (heldItemStack != null ? heldItemStack : this.inventory.getSelectedItem()).getDestroySpeed(state);
++        // Fiddle end - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
+         if (destroySpeed > 1.0F) {
+             destroySpeed += (float)this.getAttributeValue(Attributes.MINING_EFFICIENCY);
+         }
+@@ -660,7 +_,13 @@
+     }
+ 
+     public boolean hasCorrectToolForDrops(BlockState state) {
+-        return !state.requiresCorrectToolForDrops() || this.inventory.getSelectedItem().isCorrectToolForDrops(state);
++        // Fiddle start - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
++        return this.hasCorrectToolForDrops(state, null);
++    }
++
++    public boolean hasCorrectToolForDrops(BlockState state, @Nullable ItemStack heldItemStack) {
++        return !state.requiresCorrectToolForDrops() || (heldItemStack != null ? heldItemStack : this.inventory.getSelectedItem()).isCorrectToolForDrops(state);
++        // Fiddle end - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
+     }
+ 
+     @Override
