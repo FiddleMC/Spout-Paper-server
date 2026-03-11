@@ -42,16 +42,15 @@ optionalInclude("test-plugin")
 
 fun optionalInclude(name: String, op: (ProjectDescriptor.() -> Unit)? = null) {
     val settingsFile = file("$name.settings.gradle.kts")
-    if (settingsFile.exists()) {
-        apply(from = settingsFile)
-        findProject(":$name")?.let { op?.invoke(it) }
-    } else {
+    if (!settingsFile.exists()) {
         settingsFile.writeText(
             """
-            // Uncomment to enable the '$name' project
-            // include(":$name")
+            // Comment to disable the '$name' project
+            include(":$name")
 
             """.trimIndent()
         )
     }
+    apply(from = settingsFile)
+    findProject(":$name")?.let { op?.invoke(it) }
 }
