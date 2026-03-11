@@ -35,4 +35,15 @@ public final class FiddleResourcePackConstructionImpl extends ComposableImpl<Fid
         return new FiddleResourcePackConstructEventImpl();
     }
 
+    @Override
+    protected void copyInformationFromEvent(final FiddleResourcePackConstructEventImpl event) {
+        byte[] bytes;
+        try {
+            bytes = event.buildZip();
+        } catch (Exception e) {
+            throw new RuntimeException("An exception occurred while constructing the server resource pack", e);
+        }
+        // TODO serve to players
+    }
+
 }
