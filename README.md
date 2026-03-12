@@ -65,8 +65,8 @@ There are no builds available at the moment, but you can build Fiddle yourself b
 * `./gradlew applyPatches`
 * Create a runnable server jar with `./gradlew createMojmapPaperclipJar` (the jar file will be placed in `fiddle-server/build/libs`)
 
-You can run a test server (which [includes some example blocks and items](https://github.com/FiddleMC/Fiddle/blob/master/test-plugin/src/main/java/org/fiddlemc/testplugin/TestPluginBootstrap.java)):
-* Enable the test-plugin (uncomment a line in `test-plugin.settings.gradle.kts`)
+You can easily run a test server (which [includes some example blocks and items](https://github.com/FiddleMC/Fiddle/blob/master/test-plugin/src/main/java/org/fiddlemc/testplugin/TestPluginBootstrap.java)):
+* `./gradlew applyPatches`
 * `./gradlew runDevServer`
 <!--
 You can download the latest stable JAR from [releases](https://github.com/FiddleMC/Fiddle/releases) and the latest development JAR from [actions](https://github.com/FiddleMC/Fiddle/actions).
