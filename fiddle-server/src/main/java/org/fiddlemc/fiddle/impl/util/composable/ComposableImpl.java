@@ -21,7 +21,7 @@ public abstract class ComposableImpl<E extends LifecycleEvent, EI extends PaperL
      */
     private static class ComposableEventTypeImpl extends PrioritizableLifecycleEventType.Simple<BootstrapContext, LifecycleEvent> implements ComposableEventType<LifecycleEvent>, LifecycleEventType<BootstrapContext, LifecycleEvent, PrioritizedLifecycleEventHandlerConfiguration<BootstrapContext>> {
 
-        public ComposableEventTypeImpl(final String name) {
+        public ComposableEventTypeImpl(String name) {
             super(name, BootstrapContext.class);
         }
 

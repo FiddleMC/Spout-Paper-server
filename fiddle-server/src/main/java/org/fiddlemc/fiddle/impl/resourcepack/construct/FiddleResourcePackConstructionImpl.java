@@ -1,13 +1,22 @@
 package org.fiddlemc.fiddle.impl.resourcepack.construct;
 
+import io.papermc.paper.plugin.bootstrap.BootstrapContext;
+import io.papermc.paper.plugin.lifecycle.event.LifecycleEventRunner;
+import io.papermc.paper.plugin.lifecycle.event.handler.LifecycleEventHandler;
+import io.papermc.paper.plugin.lifecycle.event.handler.configuration.PrioritizedLifecycleEventHandlerConfiguration;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEventType;
+import io.papermc.paper.plugin.lifecycle.event.types.PrioritizableLifecycleEventType;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
 import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackConstructEvent;
+import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackConstructFinishEvent;
 import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackConstruction;
 import org.fiddlemc.fiddle.impl.configuration.FiddleGlobalConfiguration;
 import org.fiddlemc.fiddle.impl.resourcepack.send.FiddleResourcePackSending;
 import org.fiddlemc.fiddle.impl.resourcepack.serve.FiddleResourcePackServing;
 import org.fiddlemc.fiddle.impl.util.composable.ComposableImpl;
 import org.fiddlemc.fiddle.impl.util.java.serviceloader.NoArgsConstructorServiceProviderImpl;
+import org.jspecify.annotations.Nullable;
+import java.util.EnumMap;
 import java.util.Map;
 
 /**
@@ -42,22 +51,30 @@ public final class FiddleResourcePackConstructionImpl extends ComposableImpl<Fid
 
     @Override
     protected void copyInformationFromEvent(final FiddleResourcePackConstructEventImpl event) {
-        Map<ClientView.AwarenessLevel, byte[]> packs;
+        // Build the pack contents
+        Map<ClientView.AwarenessLevel, byte[]> packBytes;
         try {
-            packs = event.buildPacks();
+            packBytes = event.buildPacks();
         } catch (Exception e) {
             throw new RuntimeException("An exception occurred while constructing the server resource pack", e);
         }
-        byte[] vanillaPack = packs.get(ClientView.AwarenessLevel.RESOURCE_PACK);
-        byte[] clientModPack = packs.get(ClientView.AwarenessLevel.CLIENT_MOD);
-        // Initialize the packet sending
-        FiddleResourcePackSending.initialize(vanillaPack, clientModPack);
-        // Use the pack output as configured in the configuration
+        // Create pack instances
+        Map<ClientView.AwarenessLevel, FiddleConstructedResourcePackImpl> packs = new EnumMap<>(ClientView.AwarenessLevel.class);
+        for (Map.Entry<ClientView.AwarenessLevel, byte[]> entry : packBytes.entrySet()) {
+            packs.put(entry.getKey(), new FiddleConstructedResourcePackImpl(entry.getKey(), entry.getValue()));
+        }
+        // Call plugins
+        LifecycleEventRunner.INSTANCE.callEvent(this.finish(), new FiddleResourcePackConstructFinishEventImpl(packs));
+        // Get the packs to pass to built-in output use cases
+        FiddleConstructedResourcePackImpl vanillaPack = packs.get(ClientView.AwarenessLevel.RESOURCE_PACK);
+        FiddleConstructedResourcePackImpl clientModPack = packs.get(ClientView.AwarenessLevel.CLIENT_MOD);
         // TODO save to file if enabled
+        // Set up the HTTP serving
         if (FiddleResourcePackServing.isEnabled()) {
-            // Initialize the packet serving
             FiddleResourcePackServing.start(vanillaPack, clientModPack);
         }
+        // Initialize the packet sending
+        FiddleResourcePackSending.initialize(vanillaPack, clientModPack);
     }
 
     /**
@@ -65,6 +82,28 @@ public final class FiddleResourcePackConstructionImpl extends ComposableImpl<Fid
      */
     public boolean isEnabled() {
         return FiddleGlobalConfiguration.get().generatedResourcePack.output.serveOverHttp.enabled;
+    }
+
+    private static class FiddleResourcePackConstructFinishEventType extends PrioritizableLifecycleEventType.Simple<BootstrapContext, FiddleResourcePackConstructFinishEvent> {
+
+        public FiddleResourcePackConstructFinishEventType() {
+            super("fiddle_resource_pack_construction_finish", BootstrapContext.class);
+        }
+
+    }
+
+    /**
+     * The cached return value of {@link #finish()},
+     * or null if not cached yet.
+     */
+    private @Nullable FiddleResourcePackConstructFinishEventType finishEventType;
+
+    @Override
+    public LifecycleEventType<BootstrapContext, FiddleResourcePackConstructFinishEvent, PrioritizedLifecycleEventHandlerConfiguration<BootstrapContext>> finish() {
+        if (this.finishEventType == null) {
+            this.finishEventType = new FiddleResourcePackConstructFinishEventType();
+        }
+        return this.finishEventType;
     }
 
 }

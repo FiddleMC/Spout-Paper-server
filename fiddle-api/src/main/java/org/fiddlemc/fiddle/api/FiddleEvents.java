@@ -1,6 +1,7 @@
 package org.fiddlemc.fiddle.api;
 
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
+import io.papermc.paper.plugin.lifecycle.event.handler.configuration.PrioritizedLifecycleEventHandlerConfiguration;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEventType;
 import io.papermc.paper.registry.event.RegistryComposeEvent;
 import io.papermc.paper.registry.event.RegistryEvents;
@@ -21,6 +22,7 @@ import org.fiddlemc.fiddle.api.packetmapping.component.translatable.ServerSideTr
 import org.fiddlemc.fiddle.api.packetmapping.item.ItemMappings;
 import org.fiddlemc.fiddle.api.packetmapping.item.ItemMappingsComposeEvent;
 import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackConstructEvent;
+import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackConstructFinishEvent;
 import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackConstruction;
 import org.fiddlemc.fiddle.api.util.composable.ComposableEventType;
 import org.jspecify.annotations.Nullable;
@@ -37,7 +39,8 @@ public final class FiddleEvents {
 
     public static final LifecycleEventType.Prioritizable<BootstrapContext, RegistryComposeEvent<BlockType, BlockRegistryEntry.Builder>> BLOCK = RegistryEvents.BLOCK.compose();
     public static final LifecycleEventType.Prioritizable<BootstrapContext, RegistryComposeEvent<ItemType, ItemRegistryEntry.Builder>> ITEM = RegistryEvents.ITEM.compose();
-    public static final ComposableEventType<FiddleResourcePackConstructEvent> RESOURCE_PACK = FiddleResourcePackConstruction.get().compose();
+    public static final ComposableEventType<FiddleResourcePackConstructEvent> RESOURCE_PACK_CONSTRUCT = FiddleResourcePackConstruction.get().compose();
+    public static final LifecycleEventType<BootstrapContext, FiddleResourcePackConstructFinishEvent, PrioritizedLifecycleEventHandlerConfiguration<BootstrapContext>> RESOURCE_PACK_CONSTRUCT_FINISH = FiddleResourcePackConstruction.get().finish();
     public static final ComposableEventType<BlockMappingsComposeEvent<?>> BLOCK_MAPPING = ((BlockMappings) BlockMappings.get()).compose();
     public static final ComposableEventType<ItemMappingsComposeEvent<?>> ITEM_MAPPING = ((ItemMappings) ItemMappings.get()).compose();
     public static final ComposableEventType<ComponentMappingsComposeEvent<?>> COMPONENT_MAPPING = ((ComponentMappings) ComponentMappings.get()).compose();

@@ -4,6 +4,7 @@ import io.papermc.paper.configuration.type.number.IntOr;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
 import org.fiddlemc.fiddle.impl.configuration.FiddleGlobalConfiguration;
+import org.fiddlemc.fiddle.impl.resourcepack.construct.FiddleConstructedResourcePackImpl;
 import org.fiddlemc.fiddle.impl.resourcepack.construct.FiddleResourcePackConstructionImpl;
 import org.jspecify.annotations.Nullable;
 
@@ -42,9 +43,9 @@ public final class FiddleResourcePackServing {
         return getServerPort();
     }
 
-    public static void start(byte[] vanillaPack, byte[] clientModPack) {
-        vanillaPackBytes = vanillaPack;
-        clientModPackBytes = clientModPack;
+    public static void start(FiddleConstructedResourcePackImpl vanillaPack, FiddleConstructedResourcePackImpl clientModPack) {
+        vanillaPackBytes = vanillaPack.getBytes();
+        clientModPackBytes = clientModPack.getBytes();
         int port = getPort();
         if (port == getServerPort()) {
             ChannelHandlerHTTPServer.inject();

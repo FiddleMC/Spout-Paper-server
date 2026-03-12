@@ -292,7 +292,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
     }
 
     private void configureResourcePack(@NotNull BootstrapContext context) {
-        context.getLifecycleManager().registerEventHandler(FiddleEvents.RESOURCE_PACK, event -> {
+        context.getLifecycleManager().registerEventHandler(FiddleEvents.RESOURCE_PACK_CONSTRUCT, event -> {
             event.getAssetPath(ClientView.AwarenessLevel.RESOURCE_PACK, "blockstates", BlockType.BOOKSHELF.getKey(), "json").setJsonObjectMutable(JsonParser.parseString("""
             {
               "variants": {

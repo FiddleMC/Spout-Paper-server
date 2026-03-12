@@ -4,8 +4,8 @@ import com.google.common.hash.Hashing;
 import com.google.common.io.ByteSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
-import net.minecraft.server.network.ConfigurationTask;
 import org.fiddlemc.fiddle.impl.configuration.FiddleGlobalConfiguration;
+import org.fiddlemc.fiddle.impl.resourcepack.construct.FiddleConstructedResourcePackImpl;
 import org.fiddlemc.fiddle.impl.resourcepack.construct.FiddleResourcePackConstructionImpl;
 import org.fiddlemc.fiddle.impl.resourcepack.serve.FiddleResourcePackServing;
 import org.jspecify.annotations.Nullable;
@@ -44,13 +44,9 @@ public final class FiddleResourcePackSending {
         return UUID.nameUUIDFromBytes(sha1.getBytes(StandardCharsets.UTF_8));
     }
 
-    public static void initialize(byte[] vanillaPack, byte[] clientModPack) {
+    public static void initialize(FiddleConstructedResourcePackImpl vanillaPack, FiddleConstructedResourcePackImpl clientModPack) {
         FiddleResourcePackConstructionImpl construction = FiddleResourcePackConstructionImpl.get();
         if (!construction.isEnabled()) return;
-        String vanillaPackSha1 = sha1(vanillaPack);
-        UUID vanillaPackUUID = uuid(vanillaPackSha1);
-        String clientModPackSha1 = sha1(clientModPack);
-        UUID clientModPackUUID = uuid(clientModPackSha1);
         String vanillaURL;
         String clientModURL;
         if (FiddleResourcePackServing.isEnabled()) {
@@ -61,18 +57,18 @@ public final class FiddleResourcePackSending {
             throw new IllegalStateException(); // TODO allow using URL referring to some external service
         }
         vanillaPacket = new ClientboundResourcePackPushPacket(
-            vanillaPackUUID,
+            vanillaPack.getUUID(),
             vanillaURL,
-            vanillaPackSha1,
+            vanillaPack.getSHA1Hash(),
             false,
             Optional.of(Component.literal("\n")
                 .append(Component.literal("\nThis server adds additional custom blocks and items"))
                 .append(Component.literal("\nTo use them, click \"Yes\" below (Optional)")))
         );
         clientModPacket = new ClientboundResourcePackPushPacket(
-            clientModPackUUID,
+            clientModPack.getUUID(),
             clientModURL,
-            clientModPackSha1,
+            clientModPack.getSHA1Hash(),
             true,
             Optional.of(Component.literal("(This resource pack contains the textures for the custom blocks and items, and must be accepted"))
         );
