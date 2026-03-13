@@ -92,9 +92,8 @@ public final class ServerSideTranslationsImpl extends ComposableImpl<ServerSideT
             if (translation != null && translation.overrideClientSide()) {
                 return translation;
             }
-            int underscoreIndex = lowerCaseLocale.indexOf('_');
-            if (underscoreIndex > 0) {
-                String group = lowerCaseLocale.substring(0, underscoreIndex);
+            @Nullable String group = MinecraftLocaleUtil.getLanguageGroup(lowerCaseLocale);
+            if (group != null) {
                 @Nullable ServerSideTranslation alternative = translationsForKey.languageGroupTranslations == null ? null : translationsForKey.languageGroupTranslations.get(group);
                 if (alternative != null) {
                     if (alternative.overrideClientSide()) {
