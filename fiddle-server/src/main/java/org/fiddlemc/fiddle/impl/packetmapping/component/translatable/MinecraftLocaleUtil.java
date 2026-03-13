@@ -1,7 +1,10 @@
 package org.fiddlemc.fiddle.impl.packetmapping.component.translatable;
 
+import net.minecraft.locale.Language;
 import org.jspecify.annotations.Nullable;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -41,7 +44,7 @@ public final class MinecraftLocaleUtil {
      * may be confusing, inaccurate or objectionable.
      * </p>
      */
-    private static KnownLocale[] knownLocales = {
+    private static final KnownLocale[] knownLocales = {
         new KnownLocale("af_za"),
         new KnownLocale("ar_sa"),
         new KnownLocale("ast_es"),
@@ -181,7 +184,12 @@ public final class MinecraftLocaleUtil {
         new KnownLocale("zh_tw"),
         new KnownLocale("zlm_arab")
     };
-    private static Map<String, KnownLocale> knownLocalesByLowerCaseLocale = Arrays.stream(knownLocales).collect(Collectors.toMap(locale -> locale.lowerCaseLocale, Function.identity()));
+    private static final Map<String, KnownLocale> knownLocalesByLowerCaseLocale = Arrays.stream(knownLocales).collect(Collectors.toMap(locale -> locale.lowerCaseLocale, Function.identity()));
+    private static final Map<String, List<KnownLocale>> knownLocalesByLanguageGroup = Arrays.stream(knownLocales).filter(locale -> locale.languageGroup != null).collect(Collectors.groupingBy(locale -> locale.languageGroup));
+
+    public static KnownLocale[] getKnownLocales() {
+        return knownLocales;
+    }
 
     /**
      * @return The known Minecraft locale for the given string,
@@ -189,6 +197,14 @@ public final class MinecraftLocaleUtil {
      */
     public static @Nullable KnownLocale getKnownLocale(String lowerCaseLocale) {
         return knownLocalesByLowerCaseLocale.get(lowerCaseLocale);
+    }
+
+    public static List<KnownLocale> getKnownLocalesForLanguageGroup(String languageGroup) {
+        return knownLocalesByLanguageGroup.getOrDefault(languageGroup, Collections.emptyList());
+    }
+
+    public static KnownLocale getDefault() {
+        return getKnownLocale(Language.DEFAULT);
     }
 
     /**

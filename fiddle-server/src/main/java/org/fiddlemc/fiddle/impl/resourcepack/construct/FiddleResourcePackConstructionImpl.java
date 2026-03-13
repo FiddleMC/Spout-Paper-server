@@ -1,5 +1,7 @@
 package org.fiddlemc.fiddle.impl.resourcepack.construct;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventRunner;
 import io.papermc.paper.plugin.lifecycle.event.handler.configuration.PrioritizedLifecycleEventHandlerConfiguration;
@@ -10,6 +12,7 @@ import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackConstruc
 import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackConstructFinishEvent;
 import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackConstruction;
 import org.fiddlemc.fiddle.impl.configuration.FiddleGlobalConfiguration;
+import org.fiddlemc.fiddle.impl.packetmapping.component.translatable.ServerSideTranslationsImpl;
 import org.fiddlemc.fiddle.impl.resourcepack.send.FiddleResourcePackSending;
 import org.fiddlemc.fiddle.impl.resourcepack.serve.FiddleResourcePackServing;
 import org.fiddlemc.fiddle.impl.util.composable.ComposableImpl;
@@ -48,19 +51,27 @@ public final class FiddleResourcePackConstructionImpl extends ComposableImpl<Fid
         // Create the event
         FiddleResourcePackConstructEventImpl event = new FiddleResourcePackConstructEventImpl();
         // Initialize built-in resources
+        // Initialize shared pack.mcmeta
+        JsonObject packMetaJSON = JsonParser.parseString("""
+            {
+              "pack": {
+                "min_format": 75,
+                "max_format": 75,
+                "description": "Fiddle server resource pack"
+              }
+            }
+            """).getAsJsonObject();
+        // Initialize shared language files
+        Map<String, JsonObject> languageFiles = ServerSideTranslationsImpl.get().exportForResourcePackAsJSONs();
         for (ClientView.AwarenessLevel awarenessLevel : ClientView.AwarenessLevel.getAll()) {
             // Skip if the awareness level is not relevant
             if (!generateForAwarenessLevel(awarenessLevel)) continue;
             // Add pack.mcmeta
-            event.path(awarenessLevel, "pack.mcmeta").asJsonObject().setParsedFromString("""
-                {
-                  "pack": {
-                    "min_format": 75,
-                    "max_format": 75,
-                    "description": "Fiddle server resource pack"
-                  }
-                }
-                """);
+            event.path(awarenessLevel, "pack.mcmeta").asJsonObject().setMutable(packMetaJSON);
+            // Add the language files
+            for (Map.Entry<String, JsonObject> entry : languageFiles.entrySet()) {
+                event.path(awarenessLevel, "assets/minecraft/lang/" + entry.getKey() + ".json").asJsonObject().setMutable(entry.getValue());
+            }
         }
         // Return the event
         return event;
