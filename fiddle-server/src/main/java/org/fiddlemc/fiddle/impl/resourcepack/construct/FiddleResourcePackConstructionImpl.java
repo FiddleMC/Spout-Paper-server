@@ -2,7 +2,6 @@ package org.fiddlemc.fiddle.impl.resourcepack.construct;
 
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventRunner;
-import io.papermc.paper.plugin.lifecycle.event.handler.LifecycleEventHandler;
 import io.papermc.paper.plugin.lifecycle.event.handler.configuration.PrioritizedLifecycleEventHandlerConfiguration;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEventType;
 import io.papermc.paper.plugin.lifecycle.event.types.PrioritizableLifecycleEventType;
@@ -46,7 +45,25 @@ public final class FiddleResourcePackConstructionImpl extends ComposableImpl<Fid
 
     @Override
     protected FiddleResourcePackConstructEventImpl createComposeEvent() {
-        return new FiddleResourcePackConstructEventImpl();
+        // Create the event
+        FiddleResourcePackConstructEventImpl event = new FiddleResourcePackConstructEventImpl();
+        // Initialize built-in resources
+        for (ClientView.AwarenessLevel awarenessLevel : ClientView.AwarenessLevel.getAll()) {
+            // Skip if the awareness level is not relevant
+            if (!generateForAwarenessLevel(awarenessLevel)) continue;
+            // Add pack.mcmeta
+            event.path(awarenessLevel, "pack.mcmeta").asJsonObject().setParsedFromString("""
+                {
+                  "pack": {
+                    "min_format": 75,
+                    "max_format": 75,
+                    "description": "Fiddle server resource pack"
+                  }
+                }
+                """);
+        }
+        // Return the event
+        return event;
     }
 
     @Override
@@ -104,6 +121,10 @@ public final class FiddleResourcePackConstructionImpl extends ComposableImpl<Fid
             this.finishEventType = new FiddleResourcePackConstructFinishEventType();
         }
         return this.finishEventType;
+    }
+
+    public static boolean generateForAwarenessLevel(ClientView.AwarenessLevel awarenessLevel) {
+        return awarenessLevel != ClientView.AwarenessLevel.VANILLA;
     }
 
 }

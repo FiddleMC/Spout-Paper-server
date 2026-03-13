@@ -2,6 +2,8 @@ package org.fiddlemc.fiddle.api.resourcepack.construct;
 
 import com.google.common.hash.Hashing;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.UUID;
 
 public interface FiddleConstructedResourcePack {
@@ -29,5 +31,10 @@ public interface FiddleConstructedResourcePack {
      * @return A {@link UUID} for the pack, based on {@link #getAwarenessLevel()} and {@link #getSHA1Hash()}.
      */
     UUID getUUID();
+
+    /**
+     * Writes the {@linkplain #getBytes() contents} of this pack to a file at the given path.
+     */
+    void writeToFile(Path path) throws IOException;
 
 }

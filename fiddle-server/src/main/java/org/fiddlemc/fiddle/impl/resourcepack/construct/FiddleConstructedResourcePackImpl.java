@@ -5,6 +5,9 @@ import com.google.common.hash.Hashing;
 import com.google.common.io.ByteSource;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
 import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleConstructedResourcePack;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -52,6 +55,11 @@ public final class FiddleConstructedResourcePackImpl implements FiddleConstructe
     @Override
     public UUID getUUID() {
         return this.uuid;
+    }
+
+    @Override
+    public void writeToFile(Path path) throws IOException {
+        Files.write(path, this.getBytes());
     }
 
 }

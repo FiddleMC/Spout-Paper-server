@@ -1,6 +1,5 @@
 package org.fiddlemc.fiddle.impl.resourcepack.construct;
 
-import com.google.gson.JsonParser;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.lifecycle.event.PaperLifecycleEvent;
@@ -46,21 +45,9 @@ public final class FiddleResourcePackConstructEventImpl implements PaperLifecycl
         this.paths = new Map[ClientView.AwarenessLevel.getAll().length];
         for (ClientView.AwarenessLevel awarenessLevel : ClientView.AwarenessLevel.getAll()) {
             // Skip if the awareness level is not relevant
-            if (!generateResourcePackForAwarenessLevel(awarenessLevel)) {
-                continue;
-            }
-            // Initialize paths at index
+            if (!FiddleResourcePackConstructionImpl.generateForAwarenessLevel(awarenessLevel)) continue;
+            // Initialize paths for awareness level
             this.paths[awarenessLevel.ordinal()] = new HashMap<>();
-            // Add pack.mcmeta
-            this.path(awarenessLevel, "pack.mcmeta").setJsonObjectMutable(JsonParser.parseString("""
-            {
-              "pack": {
-                "min_format": 75,
-                "max_format": 75,
-                "description": "Fiddle server resource pack"
-              }
-            }
-            """).getAsJsonObject());
         }
     }
 
@@ -144,7 +131,7 @@ public final class FiddleResourcePackConstructEventImpl implements PaperLifecycl
             } else {
                 bytes = Arrays.copyOf(bytes, bytes.length);
             }
-            path(awarenessLevel, pathInResourcePack).setBytesMutable(bytes);
+            path(awarenessLevel, pathInResourcePack).asBytes().setMutable(bytes);
         }
     }
 
@@ -179,7 +166,7 @@ public final class FiddleResourcePackConstructEventImpl implements PaperLifecycl
                         } else {
                             bytes = Arrays.copyOf(bytes, bytes.length);
                         }
-                        path(awarenessLevel, pathInResourcePack + (pathInResourcePack.isEmpty() ? relativePath.substring(1) : relativePath)).setBytesMutable(bytes);
+                        path(awarenessLevel, pathInResourcePack + (pathInResourcePack.isEmpty() ? relativePath.substring(1) : relativePath)).asBytes().setMutable(bytes);
                     }
                 }
             }
@@ -200,7 +187,7 @@ public final class FiddleResourcePackConstructEventImpl implements PaperLifecycl
         // Create an archive for each relevant awareness level
         Map<ClientView.AwarenessLevel, byte[]> packs = new EnumMap<>(ClientView.AwarenessLevel.class);
         for (ClientView.AwarenessLevel awarenessLevel : ClientView.AwarenessLevel.getAll()) {
-            if (!generateResourcePackForAwarenessLevel(awarenessLevel)) {
+            if (!FiddleResourcePackConstructionImpl.generateForAwarenessLevel(awarenessLevel)) {
                 continue;
             }
 
@@ -218,13 +205,13 @@ public final class FiddleResourcePackConstructEventImpl implements PaperLifecycl
 
                         // Skip if no file exists at the path
                         FiddleResourcePackPathImpl file = pathEntry.getValue();
-                        if (!file.exists) {
+                        if (!file.exists()) {
                             continue;
                         }
 
                         // Determine whether to compress the data
                         String path = pathEntry.getKey();
-                        byte[] data = file.getBytesImmutable();
+                        byte[] data = file.asBytes().getImmutable();
                         boolean compress;
                         if (data.length >= 2097152) {
                             // Larger than 2 MB: don't compress
@@ -271,10 +258,6 @@ public final class FiddleResourcePackConstructEventImpl implements PaperLifecycl
         // Return the packs
         return packs;
 
-    }
-
-    private static boolean generateResourcePackForAwarenessLevel(ClientView.AwarenessLevel awarenessLevel) {
-        return awarenessLevel != ClientView.AwarenessLevel.VANILLA;
     }
 
 }
