@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "quark:diorite_bricks_slab"
+          "name": "quark:diorite_brick_slab"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "quark:blocks/diorite_bricks_slab"
+  "random_sequence": "quark:blocks/diorite_brick_slab"
 }

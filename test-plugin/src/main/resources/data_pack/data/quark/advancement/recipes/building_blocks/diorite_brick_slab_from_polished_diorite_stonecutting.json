@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "quark:diorite_bricks_slab_from_polished_diorite_stonecutting"
+        "recipe": "quark:diorite_brick_slab_from_polished_diorite_stonecutting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "quark:diorite_bricks_slab_from_polished_diorite_stonecutting"
+      "quark:diorite_brick_slab_from_polished_diorite_stonecutting"
     ]
   }
 }

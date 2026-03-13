@@ -59,7 +59,7 @@
                   "function": "minecraft:explosion_decay"
                 }
               ],
-              "name": "quark:clear_shard"
+              "name": "quark:glass_shard"
             }
           ]
         }

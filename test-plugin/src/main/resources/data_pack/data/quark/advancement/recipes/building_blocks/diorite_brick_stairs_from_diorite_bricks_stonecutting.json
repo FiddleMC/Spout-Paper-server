@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "quark:diorite_bricks_stairs_from_diorite_bricks_stonecutting"
+        "recipe": "quark:diorite_brick_stairs_from_diorite_bricks_stonecutting"
       },
       "trigger": "minecraft:recipe_unlocked"
     },
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "quark:diorite_bricks_stairs_from_diorite_bricks_stonecutting"
+      "quark:diorite_brick_stairs_from_diorite_bricks_stonecutting"
     ]
   }
 }

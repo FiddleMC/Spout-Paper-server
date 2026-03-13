@@ -3,15 +3,15 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "quark:diorite_bricks_slab_from_diorite_bricks_stonecutting"
+        "recipe": "quark:diorite_brick_slab_from_diorite_stonecutting"
       },
       "trigger": "minecraft:recipe_unlocked"
     },
-    "has_diorite_bricks": {
+    "has_diorite": {
       "conditions": {
         "items": [
           {
-            "items": "quark:diorite_bricks"
+            "items": "minecraft:diorite"
           }
         ]
       },
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_diorite_bricks"
+      "has_diorite"
     ]
   ],
   "rewards": {
     "recipes": [
-      "quark:diorite_bricks_slab_from_diorite_bricks_stonecutting"
+      "quark:diorite_brick_slab_from_diorite_stonecutting"
     ]
   }
 }

@@ -2,7 +2,7 @@
   "type": "minecraft:stonecutting",
   "ingredient": "minecraft:polished_diorite",
   "result": {
-    "count": 1,
-    "id": "quark:diorite_bricks_stairs"
+    "count": 2,
+    "id": "quark:diorite_brick_slab"
   }
 }

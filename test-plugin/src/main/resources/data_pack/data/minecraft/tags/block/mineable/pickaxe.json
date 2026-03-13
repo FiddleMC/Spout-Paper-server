@@ -1,7 +1,7 @@
 {
   "values": [
     "quark:diorite_bricks",
-    "quark:diorite_bricks_slab",
-    "quark:diorite_bricks_stairs"
+    "quark:diorite_brick_slab",
+    "quark:diorite_brick_stairs"
   ]
 }

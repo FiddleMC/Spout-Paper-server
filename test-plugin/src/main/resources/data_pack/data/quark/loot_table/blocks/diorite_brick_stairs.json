@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "quark:diorite_bricks_stairs"
+          "name": "quark:diorite_brick_stairs"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "quark:blocks/diorite_bricks_stairs"
+  "random_sequence": "quark:blocks/diorite_brick_stairs"
 }

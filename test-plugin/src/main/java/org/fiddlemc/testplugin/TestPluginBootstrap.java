@@ -75,7 +75,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
                     .explosionResistance(6.0f);
             });
 
-            event.registry().register(TypedKey.create(RegistryKey.BLOCK, Key.key("quark:diorite_bricks_slab")), builder -> {
+            event.registry().register(TypedKey.create(RegistryKey.BLOCK, Key.key("quark:diorite_brick_slab")), builder -> {
                 builder
                     .inheritsFromSlab()
                     .mapColor(BlockType.DIORITE)
@@ -85,7 +85,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
                     .explosionResistance(6.0f);
             });
 
-            event.registry().register(TypedKey.create(RegistryKey.BLOCK, Key.key("quark:diorite_bricks_stairs")), builder -> {
+            event.registry().register(TypedKey.create(RegistryKey.BLOCK, Key.key("quark:diorite_brick_stairs")), builder -> {
                 builder
                     .inheritsFromStairs(PluginBlockTypes.DIORITE_BRICKS.get()) // It's a stair block
                     .mapColor(BlockType.DIORITE)
@@ -104,12 +104,12 @@ public class TestPluginBootstrap implements PluginBootstrap {
     private void addCustomItems(@NotNull BootstrapContext context) {
         context.getLifecycleManager().registerEventHandler(FiddleEvents.ITEM, event -> {
 
-            event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("quark:clear_shard")), builder -> {
+            event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("quark:glass_shard")), builder -> {
             });
             event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("quark:birch_bookshelf")), ItemRegistryEntry.Builder::inheritsFromBlock);
             event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("quark:diorite_bricks")), ItemRegistryEntry.Builder::inheritsFromBlock);
-            event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("quark:diorite_bricks_slab")), ItemRegistryEntry.Builder::inheritsFromBlock);
-            event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("quark:diorite_bricks_stairs")), ItemRegistryEntry.Builder::inheritsFromBlock);
+            event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("quark:diorite_brick_slab")), ItemRegistryEntry.Builder::inheritsFromBlock);
+            event.registry().register(TypedKey.create(RegistryKey.ITEM, Key.key("quark:diorite_brick_stairs")), ItemRegistryEntry.Builder::inheritsFromBlock);
 
         });
     }
@@ -145,12 +145,12 @@ public class TestPluginBootstrap implements PluginBootstrap {
             });
             event.registerStateToState(
                 ClientView.AwarenessLevel.VANILLA,
-                PluginBlockTypes.DIORITE_BRICKS_SLAB.get(),
+                PluginBlockTypes.DIORITE_BRICK_SLAB.get(),
                 BlockType.POLISHED_DIORITE_SLAB
             );
             event.registerStateToState(
                 ClientView.AwarenessLevel.RESOURCE_PACK,
-                PluginBlockTypes.DIORITE_BRICKS_SLAB.get(),
+                PluginBlockTypes.DIORITE_BRICK_SLAB.get(),
                 BlockType.WAXED_CUT_COPPER_SLAB
             );
             event.registerStateToState(
@@ -160,12 +160,12 @@ public class TestPluginBootstrap implements PluginBootstrap {
             );
             event.registerStateToState(
                 ClientView.AwarenessLevel.VANILLA,
-                PluginBlockTypes.DIORITE_BRICKS_STAIRS.get(),
+                PluginBlockTypes.DIORITE_BRICK_STAIRS.get(),
                 BlockType.POLISHED_DIORITE_STAIRS
             );
             event.registerStateToState(
                 ClientView.AwarenessLevel.RESOURCE_PACK,
-                PluginBlockTypes.DIORITE_BRICKS_STAIRS.get(),
+                PluginBlockTypes.DIORITE_BRICK_STAIRS.get(),
                 BlockType.WAXED_CUT_COPPER_STAIRS
             );
             event.registerStateToState(
@@ -184,7 +184,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
         context.getLifecycleManager().registerEventHandler(FiddleEvents.ITEM_MAPPING, event -> {
 
             event.register(builder -> {
-                builder.from(PluginItemTypes.CLEAR_SHARD.get());
+                builder.from(PluginItemTypes.GLASS_SHARD.get());
                 builder.to(ItemType.PRISMARINE_SHARD);
             });
             event.register(builder -> {
@@ -208,11 +208,11 @@ public class TestPluginBootstrap implements PluginBootstrap {
                 builder.to(ItemType.BARRIER);
             });
             event.register(builder -> {
-                builder.from(PluginItemTypes.DIORITE_BRICKS_SLAB.get());
+                builder.from(PluginItemTypes.DIORITE_BRICK_SLAB.get());
                 builder.to(ItemType.POLISHED_DIORITE_SLAB);
             });
             event.register(builder -> {
-                builder.from(PluginItemTypes.DIORITE_BRICKS_STAIRS.get());
+                builder.from(PluginItemTypes.DIORITE_BRICK_STAIRS.get());
                 builder.to(ItemType.POLISHED_DIORITE_STAIRS);
             });
 
@@ -225,16 +225,16 @@ public class TestPluginBootstrap implements PluginBootstrap {
     private void setTranslations(@NotNull BootstrapContext context) {
         context.getLifecycleManager().registerEventHandler(FiddleEvents.SERVER_SIDE_TRANSLATION, event -> {
 
-            event.register(PluginItemTypes.CLEAR_SHARD.get().translationKey(), "Glass Shard");
-            event.register(PluginItemTypes.CLEAR_SHARD.get().translationKey(), "ガラスの破片", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
+            event.register(PluginItemTypes.GLASS_SHARD.get().translationKey(), "Glass Shard");
+            event.register(PluginItemTypes.GLASS_SHARD.get().translationKey(), "ガラスの破片", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
             event.register(PluginBlockTypes.BIRCH_BOOKSHELF.get().translationKey(), "Birch Bookshelf");
             event.register(PluginBlockTypes.BIRCH_BOOKSHELF.get().translationKey(), "シラカバの本棚", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
             event.register(PluginBlockTypes.DIORITE_BRICKS.get().translationKey(), "Diorite Bricks");
             event.register(PluginBlockTypes.DIORITE_BRICKS.get().translationKey(), "閃緑岩レンガ", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
-            event.register(PluginBlockTypes.DIORITE_BRICKS_SLAB.get().translationKey(), "Diorite Brick Slab");
-            event.register(PluginBlockTypes.DIORITE_BRICKS_SLAB.get().translationKey(), "閃緑岩レンガのハーフブロック", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
-            event.register(PluginBlockTypes.DIORITE_BRICKS_STAIRS.get().translationKey(), "Diorite Brick Stairs");
-            event.register(PluginBlockTypes.DIORITE_BRICKS_STAIRS.get().translationKey(), "閃緑岩レンガの階段", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
+            event.register(PluginBlockTypes.DIORITE_BRICK_SLAB.get().translationKey(), "Diorite Brick Slab");
+            event.register(PluginBlockTypes.DIORITE_BRICK_SLAB.get().translationKey(), "閃緑岩レンガのハーフブロック", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
+            event.register(PluginBlockTypes.DIORITE_BRICK_STAIRS.get().translationKey(), "Diorite Brick Stairs");
+            event.register(PluginBlockTypes.DIORITE_BRICK_STAIRS.get().translationKey(), "閃緑岩レンガの階段", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
 
             event.register(BlockType.BOOKSHELF.translationKey(), "Oak Bookshelf");
             event.register(BlockType.BOOKSHELF.translationKey(), "オークの本棚", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);

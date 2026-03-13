@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "quark:diorite_bricks_slab"
+        "recipe": "quark:diorite_brick_slab"
       },
       "trigger": "minecraft:recipe_unlocked"
     },
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "quark:diorite_bricks_slab"
+      "quark:diorite_brick_slab"
     ]
   }
 }
