@@ -23,8 +23,6 @@ import org.fiddlemc.testplugin.data.PluginItemTypes;
 import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -333,14 +331,6 @@ public class TestPluginBootstrap implements PluginBootstrap {
                 event.copyPluginResource(this, ClientView.AwarenessLevel.RESOURCE_PACK, "resource_pack_indirect/assets/quark/blockstates/diorite_brick_stairs.json", "assets/minecraft/blockstates/waxed_cut_copper_stairs.json");
                 event.copyPluginResources(context, ClientView.AwarenessLevel.CLIENT_MOD, "resource_pack_indirect", "");
             } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
-        context.getLifecycleManager().registerEventHandler(FiddleEvents.RESOURCE_PACK_CONSTRUCT_FINISH, event -> {
-            try {
-                Files.write(Path.of("resource_pack.zip"), event.get(ClientView.AwarenessLevel.RESOURCE_PACK).getBytes());
-                Files.write(Path.of("client_mod.zip"), event.get(ClientView.AwarenessLevel.CLIENT_MOD).getBytes());
-            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
