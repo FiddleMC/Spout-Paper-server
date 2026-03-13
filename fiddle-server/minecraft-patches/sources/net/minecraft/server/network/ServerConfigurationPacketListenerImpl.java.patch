@@ -5,7 +5,7 @@
          new io.papermc.paper.event.connection.configuration.PlayerConnectionInitialConfigureEvent(this.paperConnection).callEvent(); // Paper
          this.send(new ClientboundCustomPayloadPacket(new BrandPayload(this.server.getServerModName())));
 +        // Fiddle start - Client view - Set - Offer resource pack
-+        net.minecraft.network.protocol.common.@Nullable ClientboundResourcePackPushPacket fiddleResourcePackPacket = this.connection.clientViewSetter.getPacket();
++        net.minecraft.network.protocol.common.@Nullable ClientboundResourcePackPushPacket fiddleResourcePackPacket = this.connection.clientViewSetter.getResourcePackPacket();
 +        if (fiddleResourcePackPacket != null) {
 +            this.connection.clientViewSetter.isWaitingForResourcePackPacketResponse = true;
 +            this.send(fiddleResourcePackPacket);

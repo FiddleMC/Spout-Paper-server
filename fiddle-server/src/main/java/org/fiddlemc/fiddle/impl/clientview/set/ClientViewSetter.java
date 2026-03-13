@@ -1,8 +1,14 @@
 package org.fiddlemc.fiddle.impl.clientview.set;
 
 import net.minecraft.network.Connection;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
+import net.minecraft.network.protocol.login.ClientboundCustomQueryPacket;
+import net.minecraft.network.protocol.login.ServerboundCustomQueryAnswerPacket;
+import net.minecraft.network.protocol.login.custom.CustomQueryPayload;
+import net.minecraft.resources.Identifier;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
+import org.fiddlemc.fiddle.impl.branding.FiddleNamespace;
 import org.fiddlemc.fiddle.impl.clientview.JavaVanillaClientViewImpl;
 import org.fiddlemc.fiddle.impl.clientview.JavaWithClientModClientViewImpl;
 import org.fiddlemc.fiddle.impl.clientview.JavaWithResourcePackClientViewImpl;
@@ -14,6 +20,28 @@ import org.jspecify.annotations.Nullable;
  */
 public final class ClientViewSetter {
 
+    private static final int CLIENT_MOD_PACKET_TRANSACTION_ID = -721055663;
+    private static final Identifier CLIENT_MOD_PACKET_ID = Identifier.fromNamespaceAndPath(FiddleNamespace.FIDDLE, "detect_client_mod");
+    private static final int MIN_CLIENT_MOD_PROTOCOL_VERSION = 1;
+    private static final int MAX_CLIENT_MOD_PROTOCOL_VERSION = 1;
+    private static final ClientboundCustomQueryPacket CLIENT_MOD_PACKET = new ClientboundCustomQueryPacket(CLIENT_MOD_PACKET_TRANSACTION_ID, new CustomQueryPayload() {
+
+        @Override
+        public Identifier id() {
+            return CLIENT_MOD_PACKET_ID;
+        }
+
+        @Override
+        public void write(final FriendlyByteBuf buffer) {
+            // First write a 0 (can be changed later if protocol for this packet changes)
+            buffer.writeVarInt(0);
+            // Write compatible versions
+            buffer.writeVarInt(MIN_CLIENT_MOD_PROTOCOL_VERSION);
+            buffer.writeVarInt(MAX_CLIENT_MOD_PROTOCOL_VERSION);
+        }
+
+    });
+
     private final Connection connection;
     private boolean hasClientMod = false;
     public boolean isWaitingForResourcePackPacketResponse = false;
@@ -22,22 +50,62 @@ public final class ClientViewSetter {
         this.connection = connection;
     }
 
-    /**
-     * @return A {@link ClientboundResourcePackPushPacket} for sending the generated resource pack,
-     * or null if not applicable.
-     */
-    public @Nullable ClientboundResourcePackPushPacket getPacket() {
-        if (this.hasClientMod) {
-            return FiddleResourcePackSending.getClientModPacket();
-        }
-        return FiddleResourcePackSending.getVanillaPacket();
+    public void sendClientModPacket() {
+        this.connection.send(CLIENT_MOD_PACKET);
     }
 
-    public void markHasClientMod() { // TODO implement calling if packet received (during login phase, client must send before it sends ServerboundLoginAcknowledgedPacket)
+    public boolean handleClientModPacket(ServerboundCustomQueryAnswerPacket packet) {
+        if (packet.transactionId() != CLIENT_MOD_PACKET_TRANSACTION_ID) {
+            return false;
+        }
+        try {
+            if (packet.payload() instanceof ServerboundCustomQueryAnswerPacket.QueryAnswerPayload payload) {
+                // Read payload to confirm
+                boolean clientModConfirmed = false;
+                payload.buffer.markReaderIndex();
+                try {
+                    payload.buffer.readerIndex(0);
+                    // First there must be a 0
+                    int protocolMarker = payload.buffer.readVarInt();
+                    if (protocolMarker == 0) {
+                        // Then comes the transaction id to confirm the packet isn't a fluke
+                        int transactionId = payload.buffer.readVarInt();
+                        if (transactionId == CLIENT_MOD_PACKET_TRANSACTION_ID) {
+                            // Then comes the version that the client wishes to use
+                            int version = payload.buffer.readVarInt();
+                            if (version >= MIN_CLIENT_MOD_PROTOCOL_VERSION && version <= MAX_CLIENT_MOD_PROTOCOL_VERSION) {
+                                clientModConfirmed = true;
+                            }
+                        }
+                    }
+                } finally {
+                    payload.buffer.resetReaderIndex();
+                }
+                if (clientModConfirmed) {
+                    this.markHasClientMod();
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return true;
+    }
+
+    private void markHasClientMod() {
         if (this.connection.clientView == null) {
             this.hasClientMod = true;
             this.connection.clientView = new JavaWithClientModClientViewImpl(this.connection);
         }
+    }
+
+    /**
+     * @return A {@link ClientboundResourcePackPushPacket} for sending the generated resource pack,
+     * or null if not applicable.
+     */
+    public @Nullable ClientboundResourcePackPushPacket getResourcePackPacket() {
+        if (this.hasClientMod) {
+            return FiddleResourcePackSending.getClientModPacket();
+        }
+        return FiddleResourcePackSending.getVanillaPacket();
     }
 
     public void markAcceptedResourcePack() {
