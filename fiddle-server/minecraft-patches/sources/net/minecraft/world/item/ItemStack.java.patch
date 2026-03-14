@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/item/ItemStack.java
 +++ b/net/minecraft/world/item/ItemStack.java
-@@ -190,18 +_,67 @@
+@@ -190,23 +_,72 @@
          return new StreamCodec<RegistryFriendlyByteBuf, ItemStack>() {
              @Override
              public ItemStack decode(RegistryFriendlyByteBuf buffer) {
@@ -69,3 +69,9 @@
                  if (value.isEmpty() || value.getItem() == null) { // CraftBukkit - NPE fix itemstack.getItem()
                      buffer.writeVarInt(0);
                  } else {
+                     buffer.writeVarInt(io.papermc.paper.util.sanitizer.ItemComponentSanitizer.sanitizeCount(io.papermc.paper.util.sanitizer.ItemObfuscationSession.currentSession(), value, value.getCount())); // Paper - potentially sanitize count
+-                    Item.STREAM_CODEC.encode(buffer, value.getItemHolder());
++                    Item.UNMAPPED_STREAM_CODEC.encode(buffer, value.getItemHolder()); // Fiddle - Item mapping - Wrap codec for items - Use original for unmapped item stacks
+                     // Paper start - adventure; conditionally render translatable components
+                     boolean prev = net.minecraft.network.chat.ComponentSerialization.DONT_RENDER_TRANSLATABLES.get();
+                     try (final io.papermc.paper.util.SafeAutoClosable ignored = io.papermc.paper.util.sanitizer.ItemObfuscationSession.withContext(c -> c.itemStack(value))) { // pass the itemstack as context to the obfuscation session

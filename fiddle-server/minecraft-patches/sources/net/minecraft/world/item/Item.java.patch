@@ -21,7 +21,7 @@
 +        }
 +
 +    };
-+    private static final StreamCodec<RegistryFriendlyByteBuf, Holder<Item>> UNMAPPED_STREAM_CODEC = ByteBufCodecs.holderRegistry(Registries.ITEM);
++    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Item>> UNMAPPED_STREAM_CODEC = ByteBufCodecs.holderRegistry(Registries.ITEM);
 +    // Fiddle end - Item mapping - Wrap codec for items
      private static final Logger LOGGER = LogUtils.getLogger();
      public static final Map<Block, Item> BY_BLOCK = Maps.newHashMap();
