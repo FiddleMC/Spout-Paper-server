@@ -17,15 +17,19 @@ import java.util.Map;
 /**
  * A {@link Codec} for a type, which is like an enum,
  * but has its possible values stored in public static final fields in its class.
+ *
+ * <p>
+ * Values are encoded as a {@link Identifier#DEFAULT_NAMESPACE} identifier.
+ * </p>
  */
-public class StaticFieldCodec<A> implements Codec<A> {
+public class StaticFieldViaIdentifierCodec<A> implements Codec<A> {
 
     private final Class<A> typeClass;
 
     private @Nullable Map<Identifier, A> fromKey;
     private @Nullable Map<A, Identifier> toKey;
 
-    public StaticFieldCodec(Class<A> typeClass) {
+    public StaticFieldViaIdentifierCodec(Class<A> typeClass) {
         this.typeClass = typeClass;
     }
 

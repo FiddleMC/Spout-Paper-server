@@ -5,9 +5,13 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.RecordBuilder;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
-import org.fiddlemc.fiddle.impl.util.mojang.codec.StaticFieldCodec;
+import net.minecraft.world.level.material.PushReaction;
+import org.fiddlemc.fiddle.impl.util.mojang.codec.EnumViaIdentifierCodec;
+import org.fiddlemc.fiddle.impl.util.mojang.codec.StaticFieldViaIdentifierCodec;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,10 +21,12 @@ import java.util.stream.Collectors;
  */
 public final class BlockCodecs {
 
-    public static final Codec<MapColor> MAP_COLOR_CODEC = new StaticFieldCodec<>(MapColor.class);
+    public static final Codec<MapColor> MAP_COLOR_CODEC = new StaticFieldViaIdentifierCodec<>(MapColor.class);
+    public static final Codec<SoundType> SOUND_TYPE_CODEC = new StaticFieldViaIdentifierCodec<>(SoundType.class);
+    public static final Codec<PushReaction> PUSH_REACTION_CODEC = new EnumViaIdentifierCodec<>(PushReaction.class);
+    public static final Codec<NoteBlockInstrument> NOTE_BLOCK_INSTRUMENT_CODEC = new EnumViaIdentifierCodec<>(NoteBlockInstrument.class);
 
     public static final Codec<MapColorFunction.Single> SINGLE_MAP_COLOR_FUNCTION_CODEC = MAP_COLOR_CODEC.xmap(MapColorFunction.Single::new, MapColorFunction.Single::mapColor);
-
     public static final Codec<MapColorFunction.ByProperties> BY_PROPERTIES_MAP_COLOR_FUNCTION_CODEC = new Codec<>() {
 
         @Override
@@ -79,6 +85,7 @@ public final class BlockCodecs {
             RecordBuilder<T> builder = ops.mapBuilder();
             builder.add("map_color", input.mapColor, MAP_COLOR_FUNCTION_CODEC);
             builder.add("has_collision", ops.createBoolean(input.hasCollision));
+            builder.add("sound_type", input.soundType, SOUND_TYPE_CODEC);
             if (input.wasExplosionResistanceSet) {
                 builder.add("explosion_resistance", ops.createFloat(input.explosionResistance));
             }
@@ -94,7 +101,9 @@ public final class BlockCodecs {
             builder.add("liquid", ops.createBoolean(input.liquid));
             builder.add("force_solid_off", ops.createBoolean(input.forceSolidOff));
             builder.add("force_solid_on", ops.createBoolean(input.forceSolidOn));
+            builder.add("push_reaction", input.pushReaction, PUSH_REACTION_CODEC);
             builder.add("spawn_terrain_particles", ops.createBoolean(input.spawnTerrainParticles));
+            builder.add("instrument", input.instrument, NOTE_BLOCK_INSTRUMENT_CODEC);
             builder.add("replaceable", ops.createBoolean(input.replaceable));
             builder.add("is_redstone_conductor", input.isRedstoneConductor, KnownStatePredicate.CODEC);
             builder.add("is_suffocating", input.isSuffocating, KnownStatePredicate.CODEC);
@@ -124,6 +133,14 @@ public final class BlockCodecs {
                         return hasCollision.map($ -> null);
                     }
                     properties.hasCollision = hasCollision.getOrThrow();
+                }
+                T soundTypeInput = mapLike.get("sound_type");
+                if (soundTypeInput != null) {
+                    DataResult<SoundType> soundType = SOUND_TYPE_CODEC.decode(ops, soundTypeInput).map(Pair::getFirst);
+                    if (soundType.isError()) {
+                        return soundType.map($ -> null);
+                    }
+                    properties.soundType = soundType.getOrThrow();
                 }
                 T explosionResistanceInput = mapLike.get("explosion_resistance");
                 if (explosionResistanceInput != null) {
@@ -230,6 +247,14 @@ public final class BlockCodecs {
                     }
                     properties.forceSolidOn = forceSolidOn.getOrThrow();
                 }
+                T pushReactionInput = mapLike.get("push_reaction");
+                if (pushReactionInput != null) {
+                    DataResult<PushReaction> pushReaction = PUSH_REACTION_CODEC.decode(ops, pushReactionInput).map(Pair::getFirst);
+                    if (pushReaction.isError()) {
+                        return pushReaction.map($ -> null);
+                    }
+                    properties.pushReaction = pushReaction.getOrThrow();
+                }
                 T spawnTerrainParticlesInput = mapLike.get("spawn_terrain_particles");
                 if (spawnTerrainParticlesInput != null) {
                     DataResult<Boolean> spawnTerrainParticles = ops.getBooleanValue(spawnTerrainParticlesInput);
@@ -237,6 +262,14 @@ public final class BlockCodecs {
                         return spawnTerrainParticles.map($ -> null);
                     }
                     properties.spawnTerrainParticles = spawnTerrainParticles.getOrThrow();
+                }
+                T instrumentInput = mapLike.get("instrument");
+                if (instrumentInput != null) {
+                    DataResult<NoteBlockInstrument> instrument = NOTE_BLOCK_INSTRUMENT_CODEC.decode(ops, instrumentInput).map(Pair::getFirst);
+                    if (instrument.isError()) {
+                        return instrument.map($ -> null);
+                    }
+                    properties.instrument = instrument.getOrThrow();
                 }
                 T replaceableInput = mapLike.get("replaceable");
                 if (replaceableInput != null) {

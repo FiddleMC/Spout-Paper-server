@@ -103,11 +103,12 @@
 -        public static final Codec<BlockBehaviour.Properties> CODEC = MapCodec.unitCodec(() -> of());
 -        Function<BlockState, MapColor> mapColor = state -> MapColor.NONE;
 -        boolean hasCollision = true;
+-        SoundType soundType = SoundType.STONE;
 +        public static final Codec<BlockBehaviour.Properties> CODEC = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockCodecs.PROPERTIES_CODEC; // Fiddle - More data-driven - Minecraft registries - Types - Adapt existing block type registry - Add missing properties codec implementation
 +        // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make properties fields public
 +        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.MapColorFunction mapColor = new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.MapColorFunction.Single(MapColor.NONE);
 +        public boolean hasCollision = true;
-         SoundType soundType = SoundType.STONE;
++        public SoundType soundType = SoundType.STONE;
          ToIntFunction<BlockState> lightEmission = state -> 0;
 -        float explosionResistance;
 -        float destroyTime;
@@ -137,6 +138,10 @@
 -        @Deprecated
 -        boolean forceSolidOff;
 -        boolean forceSolidOn;
+-        PushReaction pushReaction = PushReaction.NORMAL;
+-        boolean spawnTerrainParticles = true;
+-        NoteBlockInstrument instrument = NoteBlockInstrument.HARP;
+-        boolean replaceable;
 +        public boolean canOcclude = true;
 +        public boolean isAir;
 +        public boolean ignitedByLava;
@@ -145,11 +150,9 @@
 +        @Deprecated
 +        public boolean forceSolidOff;
 +        public boolean forceSolidOn;
-         PushReaction pushReaction = PushReaction.NORMAL;
--        boolean spawnTerrainParticles = true;
++        public PushReaction pushReaction = PushReaction.NORMAL;
 +        public boolean spawnTerrainParticles = true;
-         NoteBlockInstrument instrument = NoteBlockInstrument.HARP;
--        boolean replaceable;
++        public NoteBlockInstrument instrument = NoteBlockInstrument.HARP;
 +        public boolean replaceable;
          BlockBehaviour.StateArgumentPredicate<EntityType<?>> isValidSpawn = (state, level, pos, random) -> state.isFaceSturdy(level, pos, Direction.UP)
              && state.getLightEmission() < 14;
