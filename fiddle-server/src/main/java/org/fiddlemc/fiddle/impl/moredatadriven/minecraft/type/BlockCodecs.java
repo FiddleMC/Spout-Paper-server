@@ -5,16 +5,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.RecordBuilder;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
-import org.jspecify.annotations.Nullable;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.HashMap;
+import org.fiddlemc.fiddle.impl.util.mojang.codec.StaticFieldCodec;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -23,45 +17,7 @@ import java.util.stream.Collectors;
  */
 public final class BlockCodecs {
 
-    private static @Nullable Map<Identifier, MapColor> MAP_COLOR_FROM_KEY;
-    private static @Nullable Map<MapColor, Identifier> MAP_COLOR_TO_KEY;
-
-    private static void initializeMapColors() {
-        if (MAP_COLOR_FROM_KEY == null) {
-            List<Field> fields = Arrays.stream(MapColor.class.getDeclaredFields())
-                .filter(field -> Modifier.isPublic(field.getModifiers()) && Modifier.isStatic(field.getModifiers()) && Modifier.isFinal(field.getModifiers()))
-                .filter(field -> field.getType() == MapColor.class)
-                .toList();
-            MAP_COLOR_FROM_KEY = new HashMap<>(fields.size());
-            MAP_COLOR_TO_KEY = new HashMap<>(fields.size());
-            for (Field field : fields) {
-                Identifier key = Identifier.parse(field.getName().toLowerCase(Locale.ROOT));
-                MapColor mapColor;
-                try {
-                    field.trySetAccessible();
-                    mapColor = (MapColor) field.get(null);
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                }
-                MAP_COLOR_FROM_KEY.put(key, mapColor);
-                MAP_COLOR_TO_KEY.put(mapColor, key);
-            }
-        }
-    }
-
-    private static DataResult<MapColor> mapColorFromKey(Identifier key) {
-        initializeMapColors();
-        MapColor mapColor = MAP_COLOR_FROM_KEY.get(key);
-        return mapColor != null ? DataResult.success(mapColor) : DataResult.error(() -> "Unknown map color: " + key);
-    }
-
-
-    private static Identifier mapColorToKey(MapColor mapColor) {
-        initializeMapColors();
-        return MAP_COLOR_TO_KEY.get(mapColor);
-    }
-
-    public static final Codec<MapColor> MAP_COLOR_CODEC = Identifier.CODEC.comapFlatMap(BlockCodecs::mapColorFromKey, BlockCodecs::mapColorToKey);
+    public static final Codec<MapColor> MAP_COLOR_CODEC = new StaticFieldCodec<>(MapColor.class);
 
     public static final Codec<MapColorFunction.Single> SINGLE_MAP_COLOR_FUNCTION_CODEC = MAP_COLOR_CODEC.xmap(MapColorFunction.Single::new, MapColorFunction.Single::mapColor);
 
