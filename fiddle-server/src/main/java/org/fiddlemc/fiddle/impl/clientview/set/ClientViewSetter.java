@@ -20,21 +20,24 @@ import org.jspecify.annotations.Nullable;
  */
 public final class ClientViewSetter {
 
-    private static final int CLIENT_MOD_PACKET_TRANSACTION_ID = -721055663;
-    private static final Identifier CLIENT_MOD_PACKET_ID = Identifier.fromNamespaceAndPath(FiddleNamespace.FIDDLE, "detect_client_mod");
+    private static final int CLIENT_MOD_DETECTION_PACKET_TRANSACTION_ID = -721055663;
+    private static final int CLIENT_MOD_DETECTION_PACKET_NONCE = 345890285;
+    private static final Identifier CLIENT_MOD_DETECTION_PACKET_ID = Identifier.fromNamespaceAndPath(FiddleNamespace.FIDDLE, "detect_client_mod");
     private static final int MIN_CLIENT_MOD_PROTOCOL_VERSION = 1;
     private static final int MAX_CLIENT_MOD_PROTOCOL_VERSION = 1;
-    private static final ClientboundCustomQueryPacket CLIENT_MOD_PACKET = new ClientboundCustomQueryPacket(CLIENT_MOD_PACKET_TRANSACTION_ID, new CustomQueryPayload() {
+    private static final ClientboundCustomQueryPacket CLIENT_MOD_DETECTION_PACKET = new ClientboundCustomQueryPacket(CLIENT_MOD_DETECTION_PACKET_TRANSACTION_ID, new CustomQueryPayload() {
 
         @Override
         public Identifier id() {
-            return CLIENT_MOD_PACKET_ID;
+            return CLIENT_MOD_DETECTION_PACKET_ID;
         }
 
         @Override
         public void write(final FriendlyByteBuf buffer) {
             // First write a 0 (can be changed later if protocol for this packet changes)
             buffer.writeVarInt(0);
+            // Write the transaction id as a nonce
+            buffer.writeVarInt(CLIENT_MOD_DETECTION_PACKET_NONCE);
             // Write compatible versions
             buffer.writeVarInt(MIN_CLIENT_MOD_PROTOCOL_VERSION);
             buffer.writeVarInt(MAX_CLIENT_MOD_PROTOCOL_VERSION);
@@ -50,12 +53,12 @@ public final class ClientViewSetter {
         this.connection = connection;
     }
 
-    public void sendClientModPacket() {
-        this.connection.send(CLIENT_MOD_PACKET);
+    public void sendClientModDetectionPacket() {
+        this.connection.send(CLIENT_MOD_DETECTION_PACKET);
     }
 
-    public boolean handleClientModPacket(ServerboundCustomQueryAnswerPacket packet) {
-        if (packet.transactionId() != CLIENT_MOD_PACKET_TRANSACTION_ID) {
+    public boolean handleClientModDetectionPacket(ServerboundCustomQueryAnswerPacket packet) {
+        if (packet.transactionId() != CLIENT_MOD_DETECTION_PACKET_TRANSACTION_ID) {
             return false;
         }
         try {
@@ -68,14 +71,16 @@ public final class ClientViewSetter {
                     // First there must be a 0
                     int protocolMarker = payload.buffer.readVarInt();
                     if (protocolMarker == 0) {
-                        // Then comes the transaction id to confirm the packet isn't a fluke
-                        int transactionId = payload.buffer.readVarInt();
-                        if (transactionId == CLIENT_MOD_PACKET_TRANSACTION_ID) {
+                        // Then comes the nonce to confirm the packet isn't a fluke
+                        int nonce = payload.buffer.readVarInt();
+                        System.out.println("Received nonce " + nonce);
+                        if (nonce == CLIENT_MOD_DETECTION_PACKET_NONCE) {
                             // Then comes the version that the client wishes to use
                             int version = payload.buffer.readVarInt();
                             if (version >= MIN_CLIENT_MOD_PROTOCOL_VERSION && version <= MAX_CLIENT_MOD_PROTOCOL_VERSION) {
                                 clientModConfirmed = true;
                             }
+                            System.out.println("Confirmed: " + clientModConfirmed);
                         }
                     }
                 } finally {
@@ -88,6 +93,10 @@ public final class ClientViewSetter {
         } catch (Exception ignored) {
         }
         return true;
+    }
+
+    public boolean hasClientMod() {
+        return this.hasClientMod;
     }
 
     private void markHasClientMod() {

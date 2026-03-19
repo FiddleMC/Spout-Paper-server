@@ -1,7 +1,6 @@
-
 <div align="center">
 
-  <img src="logo.png" alt="Gale logo" width="21%" align="right">
+  <img src="logo.png" alt="Fiddle logo" width="21%" align="right">
   <h1>
     Fiddle
   </h1>

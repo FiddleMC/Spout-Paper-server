@@ -37,7 +37,7 @@ ij_java_class_names_in_javadoc = 1
 [fiddle-server/src/minecraft/java/**/*.java]
 ij_java_use_fq_class_names = true
 
-[fiddle-server/src/minecraft/resources/data/**/*.json]
+[fiddle-server/src/*/resources/data/**/*.json]
 indent_size = 2
 
 [test-plugin/src/main/resources/*pack*/**/*.json]
