@@ -73,14 +73,12 @@ public final class ClientViewSetter {
                     if (protocolMarker == 0) {
                         // Then comes the nonce to confirm the packet isn't a fluke
                         int nonce = payload.buffer.readVarInt();
-                        System.out.println("Received nonce " + nonce);
                         if (nonce == CLIENT_MOD_DETECTION_PACKET_NONCE) {
                             // Then comes the version that the client wishes to use
                             int version = payload.buffer.readVarInt();
                             if (version >= MIN_CLIENT_MOD_PROTOCOL_VERSION && version <= MAX_CLIENT_MOD_PROTOCOL_VERSION) {
                                 clientModConfirmed = true;
                             }
-                            System.out.println("Confirmed: " + clientModConfirmed);
                         }
                     }
                 } finally {

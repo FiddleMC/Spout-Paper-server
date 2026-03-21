@@ -165,8 +165,8 @@ public sealed interface BlockStateFunction<T> extends Function<BlockState, T> pe
 
             @Override
             public <T> DataResult<com.mojang.datafixers.util.Pair<BlockStateFunction<A>, T>> decode(DynamicOps<T> ops, T input) {
-                DataResult<String> stringInput = ops.getStringValue(input);
-                if (stringInput.isSuccess()) {
+                boolean isSingleValue = ops.getStringValue(input).isSuccess() || ops.getNumberValue(input).isSuccess() || ops.getBooleanValue(input).isSuccess();
+                if (isSingleValue) {
                     return (DataResult) singleCodec.decode(ops, input);
                 }
                 return (DataResult) byPropertiesCodec.decode(ops, input);

@@ -1,12 +1,11 @@
 --- a/net/minecraft/server/network/ServerConfigurationPacketListenerImpl.java
 +++ b/net/minecraft/server/network/ServerConfigurationPacketListenerImpl.java
-@@ -102,6 +_,24 @@
+@@ -102,6 +_,23 @@
      public void startConfiguration() {
          new io.papermc.paper.event.connection.configuration.PlayerConnectionInitialConfigureEvent(this.paperConnection).callEvent(); // Paper
          this.send(new ClientboundCustomPayloadPacket(new BrandPayload(this.server.getServerModName())));
 +        // Fiddle start - Client view - Set - Send custom content - Send packet
 +        if (this.connection.clientViewSetter.hasClientMod()) {
-+            System.out.println("Sending custom content");
 +            org.fiddlemc.fiddle.impl.moredatadriven.clientmod.ClientModCustomContentPacketPayload.send(this.connection);
 +        }
 +        // Fiddle end - Client view - Set - Send custom content - Send packet

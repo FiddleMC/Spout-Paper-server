@@ -22,19 +22,23 @@ import org.fiddlemc.fiddle.impl.util.mojang.codec.StaticFieldViaIdentifierCodec;
  */
 public final class BlockCodecs {
 
+    private static final Codec<ChunkSectionLayer> CHUNK_SECTION_LAYER_CODEC = new EnumViaIdentifierCodec<>(ChunkSectionLayer.class);
     private static final Codec<MapColor> MAP_COLOR_CODEC = new StaticFieldViaIdentifierCodec<>(MapColor.class);
-    public static final Codec<BlockStateFunction<MapColor>> MAP_COLOR_FUNCTION_CODEC = BlockStateFunction.codec(MAP_COLOR_CODEC);
-    public static final Codec<SoundType> SOUND_TYPE_CODEC = new StaticFieldViaIdentifierCodec<>(SoundType.class);
-    public static final Codec<BlockStateFunction<Integer>> LIGHT_EMISSION_CODEC = BlockStateFunction.codec(Codec.INT);
-    public static final Codec<PushReaction> PUSH_REACTION_CODEC = new EnumViaIdentifierCodec<>(PushReaction.class);
-    public static final Codec<NoteBlockInstrument> NOTE_BLOCK_INSTRUMENT_CODEC = new EnumViaIdentifierCodec<>(NoteBlockInstrument.class);
-    public static final Codec<BlockBehaviour.OffsetType> OFFSET_TYPE_CODEC = new EnumViaIdentifierCodec<>(BlockBehaviour.OffsetType.class);
+    private static final Codec<BlockStateFunction<MapColor>> MAP_COLOR_FUNCTION_CODEC = BlockStateFunction.codec(MAP_COLOR_CODEC);
+    private static final Codec<SoundType> SOUND_TYPE_CODEC = new StaticFieldViaIdentifierCodec<>(SoundType.class);
+    private static final Codec<BlockStateFunction<Integer>> LIGHT_EMISSION_CODEC = BlockStateFunction.codec(Codec.INT);
+    private static final Codec<PushReaction> PUSH_REACTION_CODEC = new EnumViaIdentifierCodec<>(PushReaction.class);
+    private static final Codec<NoteBlockInstrument> NOTE_BLOCK_INSTRUMENT_CODEC = new EnumViaIdentifierCodec<>(NoteBlockInstrument.class);
+    private static final Codec<BlockBehaviour.OffsetType> OFFSET_TYPE_CODEC = new EnumViaIdentifierCodec<>(BlockBehaviour.OffsetType.class);
 
     public static final Codec<BlockBehaviour.Properties> PROPERTIES_CODEC = new Codec<>() {
 
         @Override
         public <T> DataResult<T> encode(BlockBehaviour.Properties input, DynamicOps<T> ops, T prefix) {
             RecordBuilder<T> builder = ops.mapBuilder();
+            if (input.chunkSectionLayer != null) {
+                builder.add("chunk_section_layer", input.chunkSectionLayer, CHUNK_SECTION_LAYER_CODEC);
+            }
             builder.add("map_color", input.mapColor, MAP_COLOR_FUNCTION_CODEC);
             builder.add("has_collision", ops.createBoolean(input.hasCollision));
             builder.add("sound_type", input.soundType, SOUND_TYPE_CODEC);
@@ -78,9 +82,17 @@ public final class BlockCodecs {
         public <T> DataResult<Pair<BlockBehaviour.Properties, T>> decode(DynamicOps<T> ops, T input) {
             return ops.getMap(input).flatMap(mapLike -> {
                 BlockBehaviour.Properties properties = BlockBehaviour.Properties.of();
+                T chunkSectionLayerInput = mapLike.get("chunk_section_layer");
+                if (chunkSectionLayerInput != null) {
+                    DataResult<ChunkSectionLayer> chunkSectionLayer = CHUNK_SECTION_LAYER_CODEC.decode(ops, chunkSectionLayerInput).map(Pair::getFirst);
+                    if (chunkSectionLayer.isError()) {
+                        return chunkSectionLayer.map($ -> null);
+                    }
+                    properties.chunkSectionLayer = chunkSectionLayer.getOrThrow();
+                }
                 T mapColorInput = mapLike.get("map_color");
                 if (mapColorInput != null) {
-                    DataResult<BlockStateFunction> mapColor = MAP_COLOR_FUNCTION_CODEC.decode(ops, mapColorInput).map(Pair::getFirst);
+                    DataResult<BlockStateFunction<MapColor>> mapColor = MAP_COLOR_FUNCTION_CODEC.decode(ops, mapColorInput).map(Pair::getFirst);
                     if (mapColor.isError()) {
                         return mapColor.map($ -> null);
                     }
@@ -101,6 +113,14 @@ public final class BlockCodecs {
                         return soundType.map($ -> null);
                     }
                     properties.soundType = soundType.getOrThrow();
+                }
+                T lightEmissionInput = mapLike.get("light_emission");
+                if (lightEmissionInput != null) {
+                    DataResult<BlockStateFunction<Integer>> lightEmission = LIGHT_EMISSION_CODEC.decode(ops, lightEmissionInput).map(Pair::getFirst);
+                    if (lightEmission.isError()) {
+                        return lightEmission.map($ -> null);
+                    }
+                    properties.lightEmission = lightEmission.getOrThrow();
                 }
                 T explosionResistanceInput = mapLike.get("explosion_resistance");
                 if (explosionResistanceInput != null) {

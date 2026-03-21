@@ -1,4 +1,5 @@
 The following files (referenced relative to the parent folder of the folder this file is in) are/were part of [Quark](https://quarkmod.net/), which is/was maintained by [Violet Moon](https://violetmoon.org/):
+* `assets/quark/texture/block/azalea_planks.png`
 * `assets/quark/texture/block/birch_bookshelf.png`
 * `assets/quark/texture/block/diorite_bricks.png`
 * `assets/quark/texture/block/glass_shard.png`

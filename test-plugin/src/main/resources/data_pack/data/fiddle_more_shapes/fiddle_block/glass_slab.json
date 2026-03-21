@@ -1,0 +1,14 @@
+{
+  "type": "fiddle:transparent_slab",
+  "properties": {
+    "chunk_section_layer": "minecraft:translucent",
+    "sound_type": "minecraft:glass",
+    "explosion_resistance": 0.3,
+    "destroy_time": 0.3,
+    "can_occlude": false,
+    "instrument": "minecraft:hat",
+    "is_redstone_conductor": "minecraft:never",
+    "is_suffocating": "minecraft:never",
+    "is_view_blocking": "minecraft:never"
+  }
+}

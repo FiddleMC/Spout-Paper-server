@@ -48,6 +48,13 @@ public class TestPluginBootstrap implements PluginBootstrap {
         });
     }
 
+    private static NoteBlock getAzaleaPlanksNoteBlockState() {
+        NoteBlock state = BlockType.NOTE_BLOCK.createBlockData();
+        state.setInstrument(Instrument.BELL);
+        state.setNote(Note.sharp(1, Note.Tone.G));
+        return state;
+    }
+
     private static NoteBlock getBirchBookshelfNoteBlockState() {
         NoteBlock state = BlockType.NOTE_BLOCK.createBlockData();
         state.setInstrument(Instrument.BELL);
@@ -68,6 +75,37 @@ public class TestPluginBootstrap implements PluginBootstrap {
     private void setBlockMappings(@NotNull BootstrapContext context) {
         context.getLifecycleManager().registerEventHandler(FiddleEvents.BLOCK_MAPPING, event -> {
 
+            // Glass slab
+            event.registerStateToState(
+                ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks(),
+                PluginBlockTypes.GLASS_SLAB.get(),
+                BlockType.QUARTZ_SLAB
+            );
+
+            // Glass stairs
+            event.registerStateToState(
+                ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks(),
+                PluginBlockTypes.GLASS_STAIRS.get(),
+                BlockType.QUARTZ_STAIRS
+            );
+
+            // Azalea planks
+            event.registerStateToState(
+                ClientView.AwarenessLevel.VANILLA,
+                PluginBlockTypes.AZALEA_PLANKS.get(),
+                BlockType.WARPED_PLANKS
+            );
+            event.register(builder -> {
+                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
+                builder.fromEveryStateOf(PluginBlockTypes.AZALEA_PLANKS.get());
+                builder.to(getAzaleaPlanksNoteBlockState());
+            });
+            event.register(builder -> {
+                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
+                builder.from(getAzaleaPlanksNoteBlockState());
+                builder.to(BlockType.NOTE_BLOCK.createBlockData());
+            });
+
             // Birch bookshelf
             event.registerStateToState(
                 ClientView.AwarenessLevel.VANILLA,
@@ -82,23 +120,6 @@ public class TestPluginBootstrap implements PluginBootstrap {
             event.register(builder -> {
                 builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
                 builder.from(getBirchBookshelfNoteBlockState());
-                builder.to(BlockType.NOTE_BLOCK.createBlockData());
-            });
-
-            // Diorite bricks
-            event.registerStateToState(
-                ClientView.AwarenessLevel.VANILLA,
-                PluginBlockTypes.DIORITE_BRICKS.get(),
-                BlockType.POLISHED_DIORITE
-            );
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.fromEveryStateOf(PluginBlockTypes.DIORITE_BRICKS.get());
-                builder.to(getDioriteBricksNoteBlockState());
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(getDioriteBricksNoteBlockState());
                 builder.to(BlockType.NOTE_BLOCK.createBlockData());
             });
 
@@ -136,6 +157,23 @@ public class TestPluginBootstrap implements PluginBootstrap {
                 BlockType.CUT_COPPER_STAIRS
             );
 
+            // Diorite bricks
+            event.registerStateToState(
+                ClientView.AwarenessLevel.VANILLA,
+                PluginBlockTypes.DIORITE_BRICKS.get(),
+                BlockType.POLISHED_DIORITE
+            );
+            event.register(builder -> {
+                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
+                builder.fromEveryStateOf(PluginBlockTypes.DIORITE_BRICKS.get());
+                builder.to(getDioriteBricksNoteBlockState());
+            });
+            event.register(builder -> {
+                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
+                builder.from(getDioriteBricksNoteBlockState());
+                builder.to(BlockType.NOTE_BLOCK.createBlockData());
+            });
+
         });
     }
 
@@ -145,18 +183,51 @@ public class TestPluginBootstrap implements PluginBootstrap {
     private void setItemMappings(@NotNull BootstrapContext context) {
         context.getLifecycleManager().registerEventHandler(FiddleEvents.ITEM_MAPPING, event -> {
 
-            // Glass shard
+            // Glass slab
             event.register(builder -> {
                 builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
-                builder.from(PluginItemTypes.GLASS_SHARD.get());
-                builder.to(ItemType.PRISMARINE_SHARD);
+                builder.from(PluginItemTypes.GLASS_SLAB.get());
+                builder.to(ItemType.QUARTZ_SLAB);
             });
             event.register(builder -> {
                 builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(PluginItemTypes.GLASS_SHARD.get());
+                builder.from(PluginItemTypes.GLASS_SLAB.get());
                 builder.to(handle -> {
-                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.PRISMARINE_SHARD);
-                    handle.getMutable().editMeta(meta -> meta.setItemModel(NamespacedKey.fromString("quark:glass_shard")));
+                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.QUARTZ_SLAB);
+                    handle.getMutable().editMeta(meta -> meta.setItemModel(NamespacedKey.fromString("fiddle_more_shapes:glass_slab")));
+                });
+            });
+
+            // Glass stairs
+            event.register(builder -> {
+                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
+                builder.from(PluginItemTypes.GLASS_STAIRS.get());
+                builder.to(ItemType.QUARTZ_STAIRS);
+            });
+            event.register(builder -> {
+                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
+                builder.from(PluginItemTypes.GLASS_STAIRS.get());
+                builder.to(handle -> {
+                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.QUARTZ_STAIRS);
+                    handle.getMutable().editMeta(meta -> meta.setItemModel(NamespacedKey.fromString("fiddle_more_shapes:glass_stairs")));
+                });
+            });
+
+            // Azalea planks
+            event.register(builder -> {
+                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
+                builder.from(PluginItemTypes.AZALEA_PLANKS.get());
+                builder.to(ItemType.WARPED_PLANKS);
+            });
+            event.register(builder -> {
+                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
+                builder.from(PluginItemTypes.AZALEA_PLANKS.get());
+                builder.to(handle -> {
+                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.NOTE_BLOCK);
+                    handle.getMutable().editMeta(meta -> {
+                        meta.setItemModel(NamespacedKey.fromString("quark:azalea_planks"));
+                        ((BlockDataMeta) meta).setBlockData(getAzaleaPlanksNoteBlockState());
+                    });
                 });
             });
 
@@ -174,24 +245,6 @@ public class TestPluginBootstrap implements PluginBootstrap {
                     handle.getMutable().editMeta(meta -> {
                         meta.setItemModel(NamespacedKey.fromString("quark:birch_bookshelf"));
                         ((BlockDataMeta) meta).setBlockData(getBirchBookshelfNoteBlockState());
-                    });
-                });
-            });
-
-            // Diorite bricks
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
-                builder.from(PluginItemTypes.DIORITE_BRICKS.get());
-                builder.to(ItemType.POLISHED_DIORITE);
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(PluginItemTypes.DIORITE_BRICKS.get());
-                builder.to(handle -> {
-                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.NOTE_BLOCK);
-                    handle.getMutable().editMeta(meta -> {
-                        meta.setItemModel(NamespacedKey.fromString("quark:diorite_bricks"));
-                        ((BlockDataMeta) meta).setBlockData(getDioriteBricksNoteBlockState());
                     });
                 });
             });
@@ -236,6 +289,39 @@ public class TestPluginBootstrap implements PluginBootstrap {
                 builder.to(ItemType.CUT_COPPER_STAIRS);
             });
 
+            // Diorite bricks
+            event.register(builder -> {
+                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
+                builder.from(PluginItemTypes.DIORITE_BRICKS.get());
+                builder.to(ItemType.POLISHED_DIORITE);
+            });
+            event.register(builder -> {
+                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
+                builder.from(PluginItemTypes.DIORITE_BRICKS.get());
+                builder.to(handle -> {
+                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.NOTE_BLOCK);
+                    handle.getMutable().editMeta(meta -> {
+                        meta.setItemModel(NamespacedKey.fromString("quark:diorite_bricks"));
+                        ((BlockDataMeta) meta).setBlockData(getDioriteBricksNoteBlockState());
+                    });
+                });
+            });
+
+            // Glass shard
+            event.register(builder -> {
+                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
+                builder.from(PluginItemTypes.GLASS_SHARD.get());
+                builder.to(ItemType.PRISMARINE_SHARD);
+            });
+            event.register(builder -> {
+                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
+                builder.from(PluginItemTypes.GLASS_SHARD.get());
+                builder.to(handle -> {
+                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.PRISMARINE_SHARD);
+                    handle.getMutable().editMeta(meta -> meta.setItemModel(NamespacedKey.fromString("quark:glass_shard")));
+                });
+            });
+
         });
     }
 
@@ -245,16 +331,22 @@ public class TestPluginBootstrap implements PluginBootstrap {
     private void setTranslations(@NotNull BootstrapContext context) {
         context.getLifecycleManager().registerEventHandler(FiddleEvents.SERVER_SIDE_TRANSLATION, event -> {
 
-            event.register(PluginItemTypes.GLASS_SHARD.get().translationKey(), "Glass Shard");
-            event.register(PluginItemTypes.GLASS_SHARD.get().translationKey(), "ガラスの破片", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
+            event.register(PluginBlockTypes.GLASS_SLAB.get().translationKey(), "Glass Slab");
+            event.register(PluginBlockTypes.GLASS_SLAB.get().translationKey(), "ガラスのハーフブロック", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
+            event.register(PluginBlockTypes.GLASS_STAIRS.get().translationKey(), "Glass Stairs");
+            event.register(PluginBlockTypes.GLASS_STAIRS.get().translationKey(), "ガラスの階段", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
+            event.register(PluginBlockTypes.AZALEA_PLANKS.get().translationKey(), "Azalea Planks");
+            event.register(PluginBlockTypes.AZALEA_PLANKS.get().translationKey(), "ツツジの板材", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
             event.register(PluginBlockTypes.BIRCH_BOOKSHELF.get().translationKey(), "Birch Bookshelf");
             event.register(PluginBlockTypes.BIRCH_BOOKSHELF.get().translationKey(), "シラカバの本棚", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
-            event.register(PluginBlockTypes.DIORITE_BRICKS.get().translationKey(), "Diorite Bricks");
-            event.register(PluginBlockTypes.DIORITE_BRICKS.get().translationKey(), "閃緑岩レンガ", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
             event.register(PluginBlockTypes.DIORITE_BRICK_SLAB.get().translationKey(), "Diorite Brick Slab");
             event.register(PluginBlockTypes.DIORITE_BRICK_SLAB.get().translationKey(), "閃緑岩レンガのハーフブロック", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
             event.register(PluginBlockTypes.DIORITE_BRICK_STAIRS.get().translationKey(), "Diorite Brick Stairs");
             event.register(PluginBlockTypes.DIORITE_BRICK_STAIRS.get().translationKey(), "閃緑岩レンガの階段", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
+            event.register(PluginBlockTypes.DIORITE_BRICKS.get().translationKey(), "Diorite Bricks");
+            event.register(PluginBlockTypes.DIORITE_BRICKS.get().translationKey(), "閃緑岩レンガ", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
+            event.register(PluginItemTypes.GLASS_SHARD.get().translationKey(), "Glass Shard");
+            event.register(PluginItemTypes.GLASS_SHARD.get().translationKey(), "ガラスの破片", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
 
             event.register(BlockType.BOOKSHELF.translationKey(), "Oak Bookshelf");
             event.register(BlockType.BOOKSHELF.translationKey(), "オークの本棚", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
@@ -269,6 +361,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
                 event.asset(ClientView.AwarenessLevel.RESOURCE_PACK, "blockstates", BlockType.NOTE_BLOCK.getKey(), "json").asJsonObject().setParsedFromString("""
                     {
                       "variants": {
+                           "instrument=bell,note=14,powered=false": { "model": "quark:block/azalea_planks" },
                            "instrument=bell,note=13,powered=false": { "model": "quark:block/birch_bookshelf" },
                            "instrument=bell,note=1,powered=false": { "model": "quark:block/diorite_bricks" }
                          }
