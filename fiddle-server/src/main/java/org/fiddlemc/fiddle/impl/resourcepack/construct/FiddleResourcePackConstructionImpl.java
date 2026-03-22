@@ -18,6 +18,8 @@ import org.fiddlemc.fiddle.impl.resourcepack.serve.FiddleResourcePackServing;
 import org.fiddlemc.fiddle.impl.util.composable.ComposableImpl;
 import org.fiddlemc.fiddle.impl.util.java.serviceloader.NoArgsConstructorServiceProviderImpl;
 import org.jspecify.annotations.Nullable;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -51,23 +53,19 @@ public final class FiddleResourcePackConstructionImpl extends ComposableImpl<Fid
         // Create the event
         FiddleResourcePackConstructEventImpl event = new FiddleResourcePackConstructEventImpl();
         // Initialize built-in resources
-        // Initialize shared pack.mcmeta
-        JsonObject packMetaJSON = JsonParser.parseString("""
-            {
-              "pack": {
-                "min_format": 75,
-                "max_format": 75,
-                "description": "Fiddle server resource pack"
-              }
+        // Add default contents
+        for (String path : DEFAULT_RESOURCE_PACK_CONTENTS_PATHS) {
+            try {
+                event.copyPluginResource((Class) this.getClass(), Arrays.stream(ClientView.AwarenessLevel.getAll()).filter(FiddleResourcePackConstructionImpl::generateForAwarenessLevel).toList(), "default_resource_pack_contents/" + path, path);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-            """).getAsJsonObject();
+        }
         // Initialize shared language files
         Map<String, JsonObject> languageFiles = ServerSideTranslationsImpl.get().exportForResourcePackAsJSONs();
         for (ClientView.AwarenessLevel awarenessLevel : ClientView.AwarenessLevel.getAll()) {
             // Skip if the awareness level is not relevant
             if (!generateForAwarenessLevel(awarenessLevel)) continue;
-            // Add pack.mcmeta
-            event.path(awarenessLevel, "pack.mcmeta").asJsonObject().setMutable(packMetaJSON);
             // Add the language files
             for (Map.Entry<String, JsonObject> entry : languageFiles.entrySet()) {
                 event.path(awarenessLevel, "assets/minecraft/lang/" + entry.getKey() + ".json").asJsonObject().setMutable(entry.getValue());
@@ -137,5 +135,81 @@ public final class FiddleResourcePackConstructionImpl extends ComposableImpl<Fid
     public static boolean generateForAwarenessLevel(ClientView.AwarenessLevel awarenessLevel) {
         return awarenessLevel != ClientView.AwarenessLevel.VANILLA;
     }
+    
+    private static final String[] DEFAULT_RESOURCE_PACK_CONTENTS_PATHS = {
+        "pack.mcmeta",
+        "assets/fiddle/models/block/bevel_middle.json",
+        "assets/fiddle/models/block/bevel_nnnnnnnn.json",
+        "assets/fiddle/models/block/bevel_nnnynnyn.json",
+        "assets/fiddle/models/block/bevel_nnnyynnn.json",
+        "assets/fiddle/models/block/bevel_nnynnnnn.json",
+        "assets/fiddle/models/block/bevel_nnyynnnn.json",
+        "assets/fiddle/models/block/bevel_nnyynnyn.json",
+        "assets/fiddle/models/block/bevel_nnyynnyy.json",
+        "assets/fiddle/models/block/bevel_nnyynynn.json",
+        "assets/fiddle/models/block/bevel_nnyynyyn.json",
+        "assets/fiddle/models/block/bevel_nnyyynnn.json",
+        "assets/fiddle/models/block/bevel_nnyyynyn.json",
+        "assets/fiddle/models/block/bevel_nnyyyynn.json",
+        "assets/fiddle/models/block/bevel_nnyyyyyn.json",
+        "assets/fiddle/models/block/bevel_nynnynnn.json",
+        "assets/fiddle/models/block/bevel_nynynnyn.json",
+        "assets/fiddle/models/block/bevel_nynyynnn.json",
+        "assets/fiddle/models/block/bevel_nynyynyn.json",
+        "assets/fiddle/models/block/bevel_nyynnnnn.json",
+        "assets/fiddle/models/block/bevel_nyynnynn.json",
+        "assets/fiddle/models/block/bevel_nyynynnn.json",
+        "assets/fiddle/models/block/bevel_nyynyynn.json",
+        "assets/fiddle/models/block/bevel_nyyynnnn.json",
+        "assets/fiddle/models/block/bevel_nyyynnyn.json",
+        "assets/fiddle/models/block/bevel_nyyynynn.json",
+        "assets/fiddle/models/block/bevel_nyyynyyn.json",
+        "assets/fiddle/models/block/bevel_nyyyynnn.json",
+        "assets/fiddle/models/block/bevel_nyyyynyn.json",
+        "assets/fiddle/models/block/bevel_nyyyynyy.json",
+        "assets/fiddle/models/block/bevel_nyyyyynn.json",
+        "assets/fiddle/models/block/bevel_nyyyyyyn.json",
+        "assets/fiddle/models/block/bevel_ynnnnnnn.json",
+        "assets/fiddle/models/block/bevel_ynnynnnn.json",
+        "assets/fiddle/models/block/bevel_ynnynnyn.json",
+        "assets/fiddle/models/block/bevel_ynnynyyn.json",
+        "assets/fiddle/models/block/bevel_ynnyynnn.json",
+        "assets/fiddle/models/block/bevel_ynnyynyn.json",
+        "assets/fiddle/models/block/bevel_ynynnnnn.json",
+        "assets/fiddle/models/block/bevel_ynyynnnn.json",
+        "assets/fiddle/models/block/bevel_ynyynnyn.json",
+        "assets/fiddle/models/block/bevel_ynyynnyy.json",
+        "assets/fiddle/models/block/bevel_ynyynynn.json",
+        "assets/fiddle/models/block/bevel_ynyynyyn.json",
+        "assets/fiddle/models/block/bevel_ynyyynnn.json",
+        "assets/fiddle/models/block/bevel_ynyyynyn.json",
+        "assets/fiddle/models/block/bevel_ynyyyynn.json",
+        "assets/fiddle/models/block/bevel_ynyyyyyn.json",
+        "assets/fiddle/models/block/bevel_yynnnnnn.json",
+        "assets/fiddle/models/block/bevel_yynnynnn.json",
+        "assets/fiddle/models/block/bevel_yynnyynn.json",
+        "assets/fiddle/models/block/bevel_yynynnnn.json",
+        "assets/fiddle/models/block/bevel_yynynnyn.json",
+        "assets/fiddle/models/block/bevel_yynynyyn.json",
+        "assets/fiddle/models/block/bevel_yynyynnn.json",
+        "assets/fiddle/models/block/bevel_yynyynyn.json",
+        "assets/fiddle/models/block/bevel_yynyyyyn.json",
+        "assets/fiddle/models/block/bevel_yyynnnnn.json",
+        "assets/fiddle/models/block/bevel_yyynnynn.json",
+        "assets/fiddle/models/block/bevel_yyynynnn.json",
+        "assets/fiddle/models/block/bevel_yyynyynn.json",
+        "assets/fiddle/models/block/bevel_yyyynnnn.json",
+        "assets/fiddle/models/block/bevel_yyyynnyn.json",
+        "assets/fiddle/models/block/bevel_yyyynnyy.json",
+        "assets/fiddle/models/block/bevel_yyyynynn.json",
+        "assets/fiddle/models/block/bevel_yyyynyyn.json",
+        "assets/fiddle/models/block/bevel_yyyyynnn.json",
+        "assets/fiddle/models/block/bevel_yyyyynyn.json",
+        "assets/fiddle/models/block/bevel_yyyyynyy.json",
+        "assets/fiddle/models/block/bevel_yyyyyynn.json",
+        "assets/fiddle/models/block/bevel_yyyyyyyn.json",
+        "assets/fiddle/models/block/bevel_yyyyyyyy.json",
+        "assets/fiddle/models/block/top_half_texture_bottom_slab.json",
+    };
 
 }
