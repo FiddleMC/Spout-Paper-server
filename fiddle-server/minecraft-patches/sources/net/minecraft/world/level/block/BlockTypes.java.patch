@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/BlockTypes.java
 +++ b/net/minecraft/world/level/block/BlockTypes.java
-@@ -9,9 +_,22 @@
+@@ -9,9 +_,23 @@
  import net.minecraft.world.level.block.piston.PistonHeadBlock;
  
  public class BlockTypes {
@@ -17,6 +17,7 @@
 +        }
 +        // Fiddle end - More data-driven - Minecraft registries - Types - Adapt existing block type registry
 +        // Fiddle start - Built-in content - Blocks - Register block types
++        Registry.register(registry, "fiddle:bevel", org.fiddlemc.fiddle.impl.content.block.BevelBlock.CODEC);
 +        Registry.register(registry, "fiddle:half_transparent_slab", org.fiddlemc.fiddle.impl.content.block.HalfTransparentSlabBlock.CODEC);
 +        Registry.register(registry, "fiddle:half_transparent_stair", org.fiddlemc.fiddle.impl.content.block.HalfTransparentStairBlock.CODEC);
 +        Registry.register(registry, "fiddle:transparent_slab", org.fiddlemc.fiddle.impl.content.block.TransparentSlabBlock.CODEC);

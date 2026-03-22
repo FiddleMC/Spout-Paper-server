@@ -1,0 +1,29 @@
+--- a/net/minecraft/world/level/block/SnowLayerBlock.java
++++ b/net/minecraft/world/level/block/SnowLayerBlock.java
+@@ -115,7 +_,11 @@
+ 
+     @Override
+     protected boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
++        System.out.println("Can be replaced? " + state + " \\ " + useContext.getItemInHand() + " / " + useContext.getClickedPos() + " / " + useContext.getClickedFace() + " / " + useContext.getClickLocation() + " / " + useContext.getHorizontalDirection() + " / " + useContext.replacingClickedOnBlock());
+         int layersValue = state.getValue(LAYERS);
++        System.out.println("Returning (" + layersValue + ") " + (!useContext.getItemInHand().is(this.asItem()) || layersValue >= 8
++            ? layersValue == 1
++            : !useContext.replacingClickedOnBlock() || useContext.getClickedFace() == Direction.UP));
+         return !useContext.getItemInHand().is(this.asItem()) || layersValue >= 8
+             ? layersValue == 1
+             : !useContext.replacingClickedOnBlock() || useContext.getClickedFace() == Direction.UP;
+@@ -123,11 +_,14 @@
+ 
+     @Override
+     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
++        System.out.println("Get state for placement? " + context.getItemInHand() + " / " + context.getClickedPos() + " / " + context.getClickedFace() + " / " + context.getClickLocation() + " / " + context.getHorizontalDirection() + " / " + context.replacingClickedOnBlock());
+         BlockState blockState = context.getLevel().getBlockState(context.getClickedPos());
+         if (blockState.is(this)) {
+             int layersValue = blockState.getValue(LAYERS);
++            System.out.println("Returning increment: " + blockState.setValue(LAYERS, Math.min(8, layersValue + 1)));
+             return blockState.setValue(LAYERS, Math.min(8, layersValue + 1));
+         } else {
++            System.out.println("Returning super: " + super.getStateForPlacement(context));
+             return super.getStateForPlacement(context);
+         }
+     }

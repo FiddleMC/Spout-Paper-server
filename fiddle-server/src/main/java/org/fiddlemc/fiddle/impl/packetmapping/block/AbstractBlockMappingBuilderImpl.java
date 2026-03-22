@@ -32,7 +32,7 @@ public abstract class AbstractBlockMappingBuilderImpl<T, H> {
         this.awarenessLevels.add(awarenessLevel);
     }
 
-    public void from(Collection<T> from) {
+    public void from(Collection<? extends T> from) {
         this.from = new ArrayList<>(from);
     }
 

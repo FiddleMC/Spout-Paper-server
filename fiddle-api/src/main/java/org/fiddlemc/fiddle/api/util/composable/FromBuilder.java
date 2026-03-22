@@ -31,7 +31,7 @@ public interface FromBuilder<T> {
     /**
      * @see #from(T)
      */
-    void from(Collection<T> from);
+    void from(Collection<? extends T> from);
 
     /**
      * Adds a {@link T} as target for this builder.

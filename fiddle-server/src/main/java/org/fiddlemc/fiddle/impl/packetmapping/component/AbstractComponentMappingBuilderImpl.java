@@ -27,7 +27,7 @@ public abstract class AbstractComponentMappingBuilderImpl<H> {
         this.awarenessLevels.add(awarenessLevel);
     }
 
-    public void from(Collection<ComponentTarget> from) {
+    public void from(Collection<? extends ComponentTarget> from) {
         this.from = new ArrayList<>(from);
     }
 

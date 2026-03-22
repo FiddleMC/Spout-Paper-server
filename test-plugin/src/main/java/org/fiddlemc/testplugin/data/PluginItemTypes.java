@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 public final class PluginItemTypes {
     public static Supplier<ItemType> GLASS_SLAB = itemType("fiddle_more_shapes:glass_slab");
     public static Supplier<ItemType> GLASS_STAIRS = itemType("fiddle_more_shapes:glass_stairs");
+    public static Supplier<ItemType> STONE_BRICK_BEVEL = itemType("fiddle_more_shapes:stone_brick_bevel");
     public static Supplier<ItemType> AZALEA_PLANKS = itemType("quark:azalea_planks");
     public static Supplier<ItemType> BIRCH_BOOKSHELF = itemType("quark:birch_bookshelf");
     public static Supplier<ItemType> DIORITE_BRICK_SLAB = itemType("quark:diorite_brick_slab");

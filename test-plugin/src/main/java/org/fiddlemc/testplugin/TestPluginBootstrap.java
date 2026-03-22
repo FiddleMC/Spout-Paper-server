@@ -7,7 +7,9 @@ import org.bukkit.Instrument;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Note;
 import org.bukkit.block.BlockType;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.NoteBlock;
+import org.bukkit.block.data.type.Slab;
 import org.bukkit.inventory.ItemType;
 import org.bukkit.inventory.meta.BlockDataMeta;
 import org.fiddlemc.fiddle.api.FiddleEvents;
@@ -81,6 +83,11 @@ public class TestPluginBootstrap implements PluginBootstrap {
                 PluginBlockTypes.GLASS_SLAB.get(),
                 BlockType.QUARTZ_SLAB
             );
+            // event.register(builder -> {
+            //     builder.awarenessLevel(ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks());
+            //     builder.from(PluginBlockTypes.GLASS_SLAB.get().createBlockDataStates().stream().filter(data -> ((Slab) data).getType() == Slab.Type.DOUBLE).toList());
+            //     builder.toDefaultStateOf(BlockType.GLASS);
+            // });
 
             // Glass stairs
             event.registerStateToState(
@@ -88,6 +95,13 @@ public class TestPluginBootstrap implements PluginBootstrap {
                 PluginBlockTypes.GLASS_STAIRS.get(),
                 BlockType.QUARTZ_STAIRS
             );
+
+            // Stone brick bevel
+            event.register(builder -> {
+                builder.awarenessLevel(ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks());
+                builder.fromEveryStateOf(PluginBlockTypes.STONE_BRICK_BEVEL.get());
+                builder.toDefaultStateOf(BlockType.TEST_BLOCK);
+            });
 
             // Azalea planks
             event.registerStateToState(
@@ -213,6 +227,21 @@ public class TestPluginBootstrap implements PluginBootstrap {
                 });
             });
 
+            // Stone brick bevel
+            event.register(builder -> {
+                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
+                builder.from(PluginItemTypes.STONE_BRICK_BEVEL.get());
+                builder.to(ItemType.TEST_BLOCK);
+            });
+            event.register(builder -> {
+                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
+                builder.from(PluginItemTypes.STONE_BRICK_BEVEL.get());
+                builder.to(handle -> {
+                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.TEST_BLOCK);
+                    handle.getMutable().editMeta(meta -> meta.setItemModel(NamespacedKey.fromString("fiddle_more_shapes:stone_brick_bevel")));
+                });
+            });
+
             // Azalea planks
             event.register(builder -> {
                 builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
@@ -335,6 +364,8 @@ public class TestPluginBootstrap implements PluginBootstrap {
             event.register(PluginBlockTypes.GLASS_SLAB.get().translationKey(), "ガラスのハーフブロック", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
             event.register(PluginBlockTypes.GLASS_STAIRS.get().translationKey(), "Glass Stairs");
             event.register(PluginBlockTypes.GLASS_STAIRS.get().translationKey(), "ガラスの階段", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
+            event.register(PluginBlockTypes.STONE_BRICK_BEVEL.get().translationKey(), "Stone Brick Mini");
+            event.register(PluginBlockTypes.STONE_BRICK_BEVEL.get().translationKey(), "石レンガのミニ", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
             event.register(PluginBlockTypes.AZALEA_PLANKS.get().translationKey(), "Azalea Planks");
             event.register(PluginBlockTypes.AZALEA_PLANKS.get().translationKey(), "ツツジの板材", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
             event.register(PluginBlockTypes.BIRCH_BOOKSHELF.get().translationKey(), "Birch Bookshelf");

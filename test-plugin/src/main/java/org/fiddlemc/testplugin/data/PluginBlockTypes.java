@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 public final class PluginBlockTypes {
     public static Supplier<BlockType> GLASS_SLAB = blockType("fiddle_more_shapes:glass_slab");
     public static Supplier<BlockType> GLASS_STAIRS = blockType("fiddle_more_shapes:glass_stairs");
+    public static Supplier<BlockType> STONE_BRICK_BEVEL = blockType("fiddle_more_shapes:stone_brick_bevel");
     public static Supplier<BlockType> AZALEA_PLANKS = blockType("quark:azalea_planks");
     public static Supplier<BlockType> BIRCH_BOOKSHELF = blockType("quark:birch_bookshelf");
     public static Supplier<BlockType> DIORITE_BRICK_SLAB = blockType("quark:diorite_brick_slab");
