@@ -28,20 +28,22 @@ public final class TestPlugin extends JavaPlugin implements Listener {
     }
 
     /**
-     * Ops each player and gives them all custom items on join.
+     * Ops each test player and gives them all custom items on join.
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onEntityPickupItem(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        player.setOp(true);
-        Registry.ITEM.stream().filter(item -> !item.isVanilla()).forEach(itemType -> {
-            int hasAmount = Arrays.stream(player.getInventory().getContents())
-                .filter(itemStack -> itemStack != null && itemStack.getType().asItemType() == itemType)
-                .mapToInt(ItemStack::getAmount).sum();
-            if (hasAmount < 64) {
-                player.give(itemType.createItemStack(64 - hasAmount));
-            }
-        });
+        if (player.getName().startsWith("Player") || player.getName().equals("Martijn") || player.getName().equals("Infima")) {
+            player.setOp(true);
+            Registry.ITEM.stream().filter(item -> !item.isVanilla()).forEach(itemType -> {
+                int hasAmount = Arrays.stream(player.getInventory().getContents())
+                    .filter(itemStack -> itemStack != null && itemStack.getType().asItemType() == itemType)
+                    .mapToInt(ItemStack::getAmount).sum();
+                if (hasAmount < 64) {
+                    player.give(itemType.createItemStack(64 - hasAmount));
+                }
+            });
+        }
     }
 
 }

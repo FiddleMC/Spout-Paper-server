@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_torch": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:torch"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_paper_lamp": {
+      "conditions": {
+        "items": [
+          {
+            "items": "chinese_mythology_mashup:paper_lamp"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "chinese_mythology_mashup:lit_paper_lamp_from_paper_lamp"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_torch",
+      "has_paper_lamp"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "chinese_mythology_mashup:lit_paper_lamp_from_paper_lamp"
+    ]
+  }
+}

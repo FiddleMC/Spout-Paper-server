@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:stone_bricks",
+    "minecraft:snowball"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft_dungeons:snowed_stone_bricks"
+  }
+}

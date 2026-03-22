@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:block",
+  "properties": {
+    "map_color": "minecraft:gold",
+    "sound_type": "minecraft:big_dripleaf",
+    "light_emission": 15,
+    "explosion_resistance": 0.2,
+    "destroy_time": 0.1,
+    "instrument": "minecraft:snare"
+  }
+}

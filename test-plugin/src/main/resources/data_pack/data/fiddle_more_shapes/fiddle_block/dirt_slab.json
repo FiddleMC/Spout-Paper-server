@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:slab",
+  "properties": {
+    "map_color": "minecraft:dirt",
+    "sound_type": "minecraft:gravel",
+    "explosion_resistance": 0.5,
+    "destroy_time": 0.5
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "chinese_mythology_mashup:block/lit_paper_lamp"
+  }
+}

@@ -25,6 +25,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -262,44 +263,72 @@ public class BevelBlock extends Block implements SimpleWaterloggedBlock {
             (state.getValue(EAST_UP_SOUTH) ? (1 << 7) : 0)];
     }
 
-    /**
-     * @see SlabBlock#getStateForPlacement
-     */
+    private static BooleanProperty getTargetProperty(BlockPlaceContext context, BlockPos pos) {
+        Vec3 hit = context.getClickLocation();
+        Direction face = context.getClickedFace();
+
+        // Push the hit slightly inside the block to avoid boundary ambiguity
+        double epsilon = 1e-6;
+        double localX = hit.x - pos.getX() + face.getStepX() * epsilon;
+        double localY = hit.y - pos.getY() + face.getStepY() * epsilon;
+        double localZ = hit.z - pos.getZ() + face.getStepZ() * epsilon;
+
+        int x = localX < 0.5 ? 0 : 1;
+        int y = localY < 0.5 ? 0 : 1;
+        int z = localZ < 0.5 ? 0 : 1;
+
+        return switch ((x << 2) | (y << 1) | z) {
+            case 0b000 -> WEST_DOWN_NORTH;
+            case 0b001 -> WEST_DOWN_SOUTH;
+            case 0b010 -> WEST_UP_NORTH;
+            case 0b011 -> WEST_UP_SOUTH;
+            case 0b100 -> EAST_DOWN_NORTH;
+            case 0b101 -> EAST_DOWN_SOUTH;
+            case 0b110 -> EAST_UP_NORTH;
+            case 0b111 -> EAST_UP_SOUTH;
+            default -> throw new IllegalStateException();
+        };
+    }
     @Override
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context) {
         LevelAccessor level = context.getLevel();
         BlockPos pos = context.getClickedPos();
-        BlockState existing = level.getBlockState(pos);
+        Direction face = context.getClickedFace();
 
-        // Determine which sub-cube (0 or 1 per axis) is targeted
-        double hitX = context.getClickLocation().x - pos.getX();
-        double hitY = context.getClickLocation().y - pos.getY();
-        double hitZ = context.getClickLocation().z - pos.getZ();
+        BlockState stateAtPos = level.getBlockState(pos);
 
-        int x = hitX < 0.5 ? 0 : 1;
-        int y = hitY < 0.5 ? 0 : 1;
-        int z = hitZ < 0.5 ? 0 : 1;
-
-        BooleanProperty targetProp =
-            (x == 0 && y == 0 && z == 0) ? WEST_DOWN_NORTH :
-                (x == 0 && y == 0 && z == 1) ? WEST_DOWN_SOUTH :
-                    (x == 0 && y == 1 && z == 0) ? WEST_UP_NORTH :
-                        (x == 0 && y == 1 && z == 1) ? WEST_UP_SOUTH :
-                            (x == 1 && y == 0 && z == 0) ? EAST_DOWN_NORTH :
-                                (x == 1 && y == 0 && z == 1) ? EAST_DOWN_SOUTH :
-                                    (x == 1 && y == 1 && z == 0) ? EAST_UP_NORTH :
-                                        EAST_UP_SOUTH;
-
-        // If placing into an existing bevel block, try to add to it
-        if (existing.is(this)) {
-            if (!existing.getValue(targetProp)) {
-                return existing.setValue(targetProp, true);
+        // CASE 1: clicking an existing bevel block → always try to fill it
+        if (stateAtPos.is(this)) {
+            BooleanProperty prop = getTargetProperty(context, pos);
+            if (!stateAtPos.getValue(prop)) {
+                return stateAtPos.setValue(prop, true);
             }
             return null;
         }
 
-        // Otherwise create new state with only that sub-cube filled
-        FluidState fluid = level.getFluidState(pos);
+        // CASE 2: normal placement logic (like slabs)
+        BlockPos placePos;
+        if (stateAtPos.canBeReplaced(context)) {
+            placePos = pos;
+        } else {
+            placePos = pos.relative(face);
+        }
+
+        BlockState existing = level.getBlockState(placePos);
+
+        // If placing into another bevel → merge
+        if (existing.is(this)) {
+            BooleanProperty prop = getTargetProperty(context, placePos);
+            if (!existing.getValue(prop)) {
+                return existing.setValue(prop, true);
+            }
+            return null;
+        }
+
+        // Otherwise create new bevel block
+        FluidState fluid = level.getFluidState(placePos);
+
+        BooleanProperty prop = getTargetProperty(context, placePos);
 
         return this.defaultBlockState()
             .setValue(WEST_DOWN_NORTH, false)
@@ -310,38 +339,24 @@ public class BevelBlock extends Block implements SimpleWaterloggedBlock {
             .setValue(EAST_DOWN_SOUTH, false)
             .setValue(EAST_UP_NORTH, false)
             .setValue(EAST_UP_SOUTH, false)
-            .setValue(targetProp, true)
+            .setValue(prop, true)
             .setValue(WATERLOGGED, fluid.getType() == Fluids.WATER);
     }
 
-    /**
-     * @see SlabBlock#canBeReplaced(BlockState, BlockPlaceContext)
-     */
     @Override
-    protected boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
-        // Determine which sub-cube is targeted
-        BlockPos pos = useContext.getClickedPos();
+    protected boolean canBeReplaced(BlockState state, BlockPlaceContext context) {
+        BlockPos pos = context.getClickedPos();
+        Direction face = context.getClickedFace();
 
-        double hitX = useContext.getClickLocation().x - pos.getX();
-        double hitY = useContext.getClickLocation().y - pos.getY();
-        double hitZ = useContext.getClickLocation().z - pos.getZ();
+        BlockState stateAtPos = context.getLevel().getBlockState(pos);
 
-        int x = hitX < 0.5 ? 0 : 1;
-        int y = hitY < 0.5 ? 0 : 1;
-        int z = hitZ < 0.5 ? 0 : 1;
+        // If this block isn't actually the target, don't allow replacement
+        if (!stateAtPos.is(this)) {
+            return false;
+        }
 
-        BooleanProperty targetProp =
-            (x == 0 && y == 0 && z == 0) ? WEST_DOWN_NORTH :
-                (x == 0 && y == 0 && z == 1) ? WEST_DOWN_SOUTH :
-                    (x == 0 && y == 1 && z == 0) ? WEST_UP_NORTH :
-                        (x == 0 && y == 1 && z == 1) ? WEST_UP_SOUTH :
-                            (x == 1 && y == 0 && z == 0) ? EAST_DOWN_NORTH :
-                                (x == 1 && y == 0 && z == 1) ? EAST_DOWN_SOUTH :
-                                    (x == 1 && y == 1 && z == 0) ? EAST_UP_NORTH :
-                                        EAST_UP_SOUTH;
-
-        // Can replace if that specific sub-cube is still empty
-        return !state.getValue(targetProp);
+        BooleanProperty prop = getTargetProperty(context, pos);
+        return !state.getValue(prop);
     }
 
     /**

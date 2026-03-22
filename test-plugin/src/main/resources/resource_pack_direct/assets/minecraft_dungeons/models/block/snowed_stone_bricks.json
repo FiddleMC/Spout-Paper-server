@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "minecraft_dungeons:block/snowed_stone_bricks"
+  }
+}

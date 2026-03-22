@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "chinese_mythology_mashup:paper_lamp",
+    "minecraft:torch"
+  ],
+  "result": {
+    "count": 1,
+    "id": "chinese_mythology_mashup:lit_paper_lamp"
+  }
+}

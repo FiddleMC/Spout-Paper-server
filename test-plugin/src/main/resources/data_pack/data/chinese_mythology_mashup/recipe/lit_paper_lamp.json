@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "T": "minecraft:torch",
+    "P": "minecraft:paper"
+  },
+  "pattern": [
+    " P ",
+    "PTP",
+    " P "
+  ],
+  "result": {
+    "count": 1,
+    "id": "chinese_mythology_mashup:lit_paper_lamp"
+  }
+}
