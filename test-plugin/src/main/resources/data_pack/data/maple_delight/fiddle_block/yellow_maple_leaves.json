@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:untinted_particle_leaves",
+  "leaf_particle_chance": 0.05,
+  "leaf_particle": {
+    "type": "dust",
+    "color": 16109122,
+    "scale": 1
+  },
+  "properties": {
+    "map_color": "minecraft:plant",
+    "sound_type": "minecraft:grass",
+    "explosion_resistance": 0.2,
+    "destroy_time": 0.2,
+    "is_randomly_ticking": true,
+    "can_occlude": false,
+    "ignited_by_lava": true,
+    "push_reaction": "minecraft:destroy",
+    "is_redstone_conductor": "minecraft:never",
+    "is_suffocating": "minecraft:never",
+    "is_view_blocking": "minecraft:never"
+  }
+}

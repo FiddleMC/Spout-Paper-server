@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/leaves",
+  "textures": {
+    "all": "maple_delight:block/yellow_maple_leaves"
+  }
+}

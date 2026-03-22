@@ -96,9 +96,9 @@ public final class BlockBreakSpeedFactorUpdater {
         if (factor <= 0.001f) {
             return 0.001f;
         }
-        // Don't return a crazy large factor
-        if (factor >= 1000f) {
-            return 1000f;
+        // Don't return a large factor
+        if (factor >= 4f) {
+            return 4f;
         }
         // Just return 1 if the factor is close enough
         if (0.9999 <= factor && factor <= 1.0001) {

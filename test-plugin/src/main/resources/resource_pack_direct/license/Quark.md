@@ -4,7 +4,7 @@ The following files (referenced relative to the parent folder of the folder this
 * `assets/quark/texture/block/diorite_bricks.png`
 * `assets/quark/texture/block/glass_shard.png`
 
-These files are provided under the `Attribution-NonCommercial-ShareAlike 3.0 Unported` license, which is included below.
+These files are provided under an `Attribution-NonCommercial-ShareAlike 3.0 Unported` license, which is included below.
 
 Fiddle's authors are very grateful to Quark's authors for their amazing creations, and the creativity they have inspired in others.
 Quark is really fun, you should check it out!

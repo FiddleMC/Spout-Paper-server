@@ -18,6 +18,7 @@ public final class PluginBlockTypes {
     public static Supplier<BlockType> GLASS_STAIRS = blockType("fiddle_more_shapes:glass_stairs");
     public static Supplier<BlockType> GRASS_SLAB = blockType("fiddle_more_shapes:grass_slab");
     public static Supplier<BlockType> STONE_BRICK_BEVEL = blockType("fiddle_more_shapes:stone_brick_bevel");
+    public static Supplier<BlockType> YELLOW_MAPLE_LEAVES = blockType("maple_delight:yellow_maple_leaves");
     public static Supplier<BlockType> SNOWED_STONE_BRICKS = blockType("minecraft_dungeons:snowed_stone_bricks");
     public static Supplier<BlockType> AZALEA_PLANKS = blockType("quark:azalea_planks");
     public static Supplier<BlockType> BIRCH_BOOKSHELF = blockType("quark:birch_bookshelf");
