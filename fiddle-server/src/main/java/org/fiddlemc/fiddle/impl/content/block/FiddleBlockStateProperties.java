@@ -12,13 +12,13 @@ public final class FiddleBlockStateProperties {
         throw new UnsupportedOperationException();
     }
 
-    public static final BooleanProperty WEST_DOWN_NORTH = BooleanProperty.create("west_down_north");
-    public static final BooleanProperty WEST_DOWN_SOUTH = BooleanProperty.create("west_down_south");
-    public static final BooleanProperty WEST_UP_NORTH = BooleanProperty.create("west_up_north");
-    public static final BooleanProperty WEST_UP_SOUTH = BooleanProperty.create("west_up_south");
-    public static final BooleanProperty EAST_DOWN_NORTH = BooleanProperty.create("east_down_north");
-    public static final BooleanProperty EAST_DOWN_SOUTH = BooleanProperty.create("east_down_south");
-    public static final BooleanProperty EAST_UP_NORTH = BooleanProperty.create("east_up_north");
-    public static final BooleanProperty EAST_UP_SOUTH = BooleanProperty.create("east_up_south");
+    public static final BooleanProperty NORTH_WEST_BOTTOM = BooleanProperty.create("west_down_north");
+    public static final BooleanProperty SOUTH_WEST_BOTTOM = BooleanProperty.create("west_down_south");
+    public static final BooleanProperty NORTH_WEST_TOP = BooleanProperty.create("west_up_north");
+    public static final BooleanProperty SOUTH_WEST_TOP = BooleanProperty.create("west_up_south");
+    public static final BooleanProperty NORTH_EAST_BOTTOM = BooleanProperty.create("east_down_north");
+    public static final BooleanProperty SOUTH_EAST_BOTTOM = BooleanProperty.create("east_down_south");
+    public static final BooleanProperty NORTH_EAST_TOP = BooleanProperty.create("east_up_north");
+    public static final BooleanProperty SOUTH_EAST_TOP = BooleanProperty.create("east_up_south");
 
 }

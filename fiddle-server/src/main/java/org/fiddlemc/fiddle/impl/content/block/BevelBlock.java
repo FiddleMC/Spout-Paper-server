@@ -6,7 +6,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
@@ -20,7 +19,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
@@ -38,28 +36,28 @@ import java.util.Arrays;
 public class BevelBlock extends Block implements SimpleWaterloggedBlock {
 
     public static final MapCodec<BevelBlock> CODEC = simpleCodec(BevelBlock::new);
-    public static final BooleanProperty WEST_DOWN_NORTH = FiddleBlockStateProperties.WEST_DOWN_NORTH;
-    public static final BooleanProperty WEST_DOWN_SOUTH = FiddleBlockStateProperties.WEST_DOWN_SOUTH;
-    public static final BooleanProperty WEST_UP_NORTH = FiddleBlockStateProperties.WEST_UP_NORTH;
-    public static final BooleanProperty WEST_UP_SOUTH = FiddleBlockStateProperties.WEST_UP_SOUTH;
-    public static final BooleanProperty EAST_DOWN_NORTH = FiddleBlockStateProperties.EAST_DOWN_NORTH;
-    public static final BooleanProperty EAST_DOWN_SOUTH = FiddleBlockStateProperties.EAST_DOWN_SOUTH;
-    public static final BooleanProperty EAST_UP_NORTH = FiddleBlockStateProperties.EAST_UP_NORTH;
-    public static final BooleanProperty EAST_UP_SOUTH = FiddleBlockStateProperties.EAST_UP_SOUTH;
+    public static final BooleanProperty NORTH_WEST_BOTTOM = FiddleBlockStateProperties.NORTH_WEST_BOTTOM;
+    public static final BooleanProperty SOUTH_WEST_BOTTOM = FiddleBlockStateProperties.SOUTH_WEST_BOTTOM;
+    public static final BooleanProperty NORTH_WEST_TOP = FiddleBlockStateProperties.NORTH_WEST_TOP;
+    public static final BooleanProperty SOUTH_WEST_TOP = FiddleBlockStateProperties.SOUTH_WEST_TOP;
+    public static final BooleanProperty NORTH_EAST_BOTTOM = FiddleBlockStateProperties.NORTH_EAST_BOTTOM;
+    public static final BooleanProperty SOUTH_EAST_BOTTOM = FiddleBlockStateProperties.SOUTH_EAST_BOTTOM;
+    public static final BooleanProperty NORTH_EAST_TOP = FiddleBlockStateProperties.NORTH_EAST_TOP;
+    public static final BooleanProperty SOUTH_EAST_TOP = FiddleBlockStateProperties.SOUTH_EAST_TOP;
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
     /**
      * An array of {@link VoxelShape} that can be efficiently queried by a bitset index,
      * with the bits indicating:
      * <ul>
-     *     <li>1 ({@code 1 << 0}): {@link #WEST_DOWN_NORTH}</li>
-     *     <li>2 ({@code 1 << 1}): {@link #WEST_DOWN_SOUTH}</li>
-     *     <li>4 ({@code 1 << 2}): {@link #WEST_UP_NORTH}</li>
-     *     <li>8 ({@code 1 << 3}): {@link #WEST_UP_SOUTH}</li>
-     *     <li>16 ({@code 1 << 4}): {@link #EAST_DOWN_NORTH}</li>
-     *     <li>32 ({@code 1 << 5}): {@link #EAST_DOWN_SOUTH}</li>
-     *     <li>64 ({@code 1 << 6}): {@link #EAST_UP_NORTH}</li>
-     *     <li>128 ({@code 1 << 7}): {@link #EAST_UP_SOUTH}</li>
+     *     <li>1 ({@code 1 << 0}): {@link #NORTH_WEST_BOTTOM}</li>
+     *     <li>2 ({@code 1 << 1}): {@link #SOUTH_WEST_BOTTOM}</li>
+     *     <li>4 ({@code 1 << 2}): {@link #NORTH_WEST_TOP}</li>
+     *     <li>8 ({@code 1 << 3}): {@link #SOUTH_WEST_TOP}</li>
+     *     <li>16 ({@code 1 << 4}): {@link #NORTH_EAST_BOTTOM}</li>
+     *     <li>32 ({@code 1 << 5}): {@link #SOUTH_EAST_BOTTOM}</li>
+     *     <li>64 ({@code 1 << 6}): {@link #NORTH_EAST_TOP}</li>
+     *     <li>128 ({@code 1 << 7}): {@link #SOUTH_EAST_TOP}</li>
      * </ul>
      */
     private static final VoxelShape[] SHAPES;
@@ -208,14 +206,14 @@ public class BevelBlock extends Block implements SimpleWaterloggedBlock {
         super(properties);
         this.registerDefaultState(
             this.defaultBlockState()
-                .setValue(WEST_DOWN_NORTH, true)
-                .setValue(WEST_DOWN_SOUTH, false)
-                .setValue(WEST_UP_NORTH, false)
-                .setValue(WEST_UP_SOUTH, false)
-                .setValue(EAST_DOWN_NORTH, false)
-                .setValue(EAST_DOWN_SOUTH, false)
-                .setValue(EAST_UP_NORTH, false)
-                .setValue(EAST_UP_SOUTH, false)
+                .setValue(NORTH_WEST_BOTTOM, true)
+                .setValue(SOUTH_WEST_BOTTOM, false)
+                .setValue(NORTH_WEST_TOP, false)
+                .setValue(SOUTH_WEST_TOP, false)
+                .setValue(NORTH_EAST_BOTTOM, false)
+                .setValue(SOUTH_EAST_BOTTOM, false)
+                .setValue(NORTH_EAST_TOP, false)
+                .setValue(SOUTH_EAST_TOP, false)
                 .setValue(WATERLOGGED, false)
         );
     }
@@ -239,28 +237,28 @@ public class BevelBlock extends Block implements SimpleWaterloggedBlock {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(
-            WEST_DOWN_NORTH,
-            WEST_DOWN_SOUTH,
-            WEST_UP_NORTH,
-            WEST_UP_SOUTH,
-            EAST_DOWN_NORTH,
-            EAST_DOWN_SOUTH,
-            EAST_UP_NORTH,
-            EAST_UP_SOUTH,
+            NORTH_WEST_BOTTOM,
+            SOUTH_WEST_BOTTOM,
+            NORTH_WEST_TOP,
+            SOUTH_WEST_TOP,
+            NORTH_EAST_BOTTOM,
+            SOUTH_EAST_BOTTOM,
+            NORTH_EAST_TOP,
+            SOUTH_EAST_TOP,
             WATERLOGGED
         );
     }
 
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return SHAPES[(state.getValue(WEST_DOWN_NORTH) ? (1 << 0) : 0) +
-            (state.getValue(WEST_DOWN_SOUTH) ? (1 << 1) : 0) +
-            (state.getValue(WEST_UP_NORTH) ? (1 << 2) : 0) +
-            (state.getValue(WEST_UP_SOUTH) ? (1 << 3) : 0) +
-            (state.getValue(EAST_DOWN_NORTH) ? (1 << 4) : 0) +
-            (state.getValue(EAST_DOWN_SOUTH) ? (1 << 5) : 0) +
-            (state.getValue(EAST_UP_NORTH) ? (1 << 6) : 0) +
-            (state.getValue(EAST_UP_SOUTH) ? (1 << 7) : 0)];
+        return SHAPES[(state.getValue(NORTH_WEST_BOTTOM) ? (1 << 0) : 0) +
+            (state.getValue(SOUTH_WEST_BOTTOM) ? (1 << 1) : 0) +
+            (state.getValue(NORTH_WEST_TOP) ? (1 << 2) : 0) +
+            (state.getValue(SOUTH_WEST_TOP) ? (1 << 3) : 0) +
+            (state.getValue(NORTH_EAST_BOTTOM) ? (1 << 4) : 0) +
+            (state.getValue(SOUTH_EAST_BOTTOM) ? (1 << 5) : 0) +
+            (state.getValue(NORTH_EAST_TOP) ? (1 << 6) : 0) +
+            (state.getValue(SOUTH_EAST_TOP) ? (1 << 7) : 0)];
     }
 
     private static BooleanProperty getTargetProperty(BlockPlaceContext context, BlockPos pos) {
@@ -278,14 +276,14 @@ public class BevelBlock extends Block implements SimpleWaterloggedBlock {
         int z = localZ < 0.5 ? 0 : 1;
 
         return switch ((x << 2) | (y << 1) | z) {
-            case 0b000 -> WEST_DOWN_NORTH;
-            case 0b001 -> WEST_DOWN_SOUTH;
-            case 0b010 -> WEST_UP_NORTH;
-            case 0b011 -> WEST_UP_SOUTH;
-            case 0b100 -> EAST_DOWN_NORTH;
-            case 0b101 -> EAST_DOWN_SOUTH;
-            case 0b110 -> EAST_UP_NORTH;
-            case 0b111 -> EAST_UP_SOUTH;
+            case 0b000 -> NORTH_WEST_BOTTOM;
+            case 0b001 -> SOUTH_WEST_BOTTOM;
+            case 0b010 -> NORTH_WEST_TOP;
+            case 0b011 -> SOUTH_WEST_TOP;
+            case 0b100 -> NORTH_EAST_BOTTOM;
+            case 0b101 -> SOUTH_EAST_BOTTOM;
+            case 0b110 -> NORTH_EAST_TOP;
+            case 0b111 -> SOUTH_EAST_TOP;
             default -> throw new IllegalStateException();
         };
     }
@@ -331,14 +329,14 @@ public class BevelBlock extends Block implements SimpleWaterloggedBlock {
         BooleanProperty prop = getTargetProperty(context, placePos);
 
         return this.defaultBlockState()
-            .setValue(WEST_DOWN_NORTH, false)
-            .setValue(WEST_DOWN_SOUTH, false)
-            .setValue(WEST_UP_NORTH, false)
-            .setValue(WEST_UP_SOUTH, false)
-            .setValue(EAST_DOWN_NORTH, false)
-            .setValue(EAST_DOWN_SOUTH, false)
-            .setValue(EAST_UP_NORTH, false)
-            .setValue(EAST_UP_SOUTH, false)
+            .setValue(NORTH_WEST_BOTTOM, false)
+            .setValue(SOUTH_WEST_BOTTOM, false)
+            .setValue(NORTH_WEST_TOP, false)
+            .setValue(SOUTH_WEST_TOP, false)
+            .setValue(NORTH_EAST_BOTTOM, false)
+            .setValue(SOUTH_EAST_BOTTOM, false)
+            .setValue(NORTH_EAST_TOP, false)
+            .setValue(SOUTH_EAST_TOP, false)
             .setValue(prop, true)
             .setValue(WATERLOGGED, fluid.getType() == Fluids.WATER);
     }
@@ -425,14 +423,14 @@ public class BevelBlock extends Block implements SimpleWaterloggedBlock {
      * @return Whether every 1/8th cube of the given block state is filled.
      */
     public static boolean isFull(BlockState state) {
-        return state.getValue(WEST_DOWN_NORTH) &&
-            state.getValue(WEST_DOWN_SOUTH) &&
-            state.getValue(WEST_UP_NORTH) &&
-            state.getValue(WEST_UP_SOUTH) &&
-            state.getValue(EAST_DOWN_NORTH) &&
-            state.getValue(EAST_DOWN_SOUTH) &&
-            state.getValue(EAST_UP_NORTH) &&
-            state.getValue(EAST_UP_SOUTH);
+        return state.getValue(NORTH_WEST_BOTTOM) &&
+            state.getValue(SOUTH_WEST_BOTTOM) &&
+            state.getValue(NORTH_WEST_TOP) &&
+            state.getValue(SOUTH_WEST_TOP) &&
+            state.getValue(NORTH_EAST_BOTTOM) &&
+            state.getValue(SOUTH_EAST_BOTTOM) &&
+            state.getValue(NORTH_EAST_TOP) &&
+            state.getValue(SOUTH_EAST_TOP);
     }
 
 }

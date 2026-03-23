@@ -236,14 +236,14 @@ public class TestPluginBootstrap implements PluginBootstrap {
             // Glass slab
             event.registerStateToState(
                 ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks(),
-                PluginBlockTypes.GLASS_SLAB.get(),
+                PluginBlockTypes.GLASS_SLAB.get().createBlockDataStates().stream().filter(data -> ((Slab) data).getType() != Slab.Type.DOUBLE).toList(),
                 BlockType.QUARTZ_SLAB
             );
-            // event.register(builder -> {
-            //     builder.awarenessLevel(ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks());
-            //     builder.from(PluginBlockTypes.GLASS_SLAB.get().createBlockDataStates().stream().filter(data -> ((Slab) data).getType() == Slab.Type.DOUBLE).toList());
-            //     builder.toDefaultStateOf(BlockType.GLASS);
-            // });
+            event.register(builder -> {
+                builder.awarenessLevel(ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks());
+                builder.from(PluginBlockTypes.GLASS_SLAB.get().createBlockDataStates().stream().filter(data -> ((Slab) data).getType() == Slab.Type.DOUBLE).toList());
+                builder.toDefaultStateOf(BlockType.GLASS);
+            });
 
             // Glass stairs
             event.registerStateToState(

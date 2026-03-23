@@ -1,5 +1,5 @@
 /**
- * <h1>Built-in content - Block</h1>
+ * <h1>Built-in content - Blocks</h1>
  *
  * <p>
  * Adds {@link net.minecraft.world.level.block.Block}

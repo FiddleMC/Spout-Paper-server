@@ -1,5 +1,19 @@
 --- a/src/main/java/org/bukkit/craftbukkit/block/data/CraftBlockData.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/data/CraftBlockData.java
+@@ -362,6 +_,13 @@
+     static {
+         //<editor-fold desc="CraftBlockData Registration" defaultstate="collapsed">
+         // Start generate - CraftBlockData#MAP
++        // Fiddle start - Built-in content - Blocks - API - Implementation part - Register BlockData translations
++        register(org.fiddlemc.fiddle.impl.content.block.BevelBlock.class, org.fiddlemc.fiddle.impl.content.block.api.CraftBevel::new);
++        register(org.fiddlemc.fiddle.impl.content.block.HalfTransparentSlabBlock.class, org.bukkit.craftbukkit.block.impl.CraftSlab::new);
++        register(org.fiddlemc.fiddle.impl.content.block.HalfTransparentStairBlock.class, org.bukkit.craftbukkit.block.impl.CraftStair::new);
++        register(org.fiddlemc.fiddle.impl.content.block.TransparentSlabBlock.class, org.bukkit.craftbukkit.block.impl.CraftSlab::new);
++        register(org.fiddlemc.fiddle.impl.content.block.TransparentStairBlock.class, org.bukkit.craftbukkit.block.impl.CraftStair::new);
++        // Fiddle end - Built-in content - Blocks - API - Implementation part - Register BlockData translations
+         register(net.minecraft.world.level.block.AmethystClusterBlock.class, org.bukkit.craftbukkit.block.impl.CraftAmethystCluster::new);
+         register(net.minecraft.world.level.block.AnvilBlock.class, org.bukkit.craftbukkit.block.impl.CraftAnvil::new);
+         register(net.minecraft.world.level.block.AttachedStemBlock.class, org.bukkit.craftbukkit.block.impl.CraftAttachedStem::new);
 @@ -603,7 +_,7 @@
                  }
  

@@ -55,7 +55,37 @@ public interface BlockMappingsComposeEvent<M> extends BuilderComposeEvent<BlockM
      * @see #registerStateToState(ClientView.AwarenessLevel, BlockType, BlockType)
      */
     default void registerStateToState(Collection<ClientView.AwarenessLevel> awarenessLevel, BlockType from, BlockType to) {
-        for (BlockData fromState : from.createBlockDataStates()) {
+        this.registerStateToState(awarenessLevel, from.createBlockDataStates(), to);
+    }
+
+    /**
+     * Calls {@link #registerStateToState} with
+     * {@link ClientView.AwarenessLevel#getThatDoNotAlwaysUnderstandsAllServerSideBlocks()}.
+     */
+    default void registerStateToState(BlockType from, BlockType to) {
+        this.registerStateToState(ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks(), from, to);
+    }
+
+    /**
+     * A convenience function that calls {@link #register}
+     * for each matching {@link BlockData} of the {@code from} and {@code to}.
+     */
+    default void registerStateToState(ClientView.AwarenessLevel awarenessLevel, Iterable<? extends BlockData> from, BlockType to) {
+        this.registerStateToState(List.of(awarenessLevel), from, to);
+    }
+
+    /**
+     * @see #registerStateToState(ClientView.AwarenessLevel, BlockType, BlockType)
+     */
+    default void registerStateToState(ClientView.AwarenessLevel[] awarenessLevel, Iterable<? extends BlockData> from, BlockType to) {
+        this.registerStateToState(Arrays.asList(awarenessLevel), from, to);
+    }
+
+    /**
+     * @see #registerStateToState(ClientView.AwarenessLevel, BlockType, BlockType)
+     */
+    default void registerStateToState(Collection<ClientView.AwarenessLevel> awarenessLevel, Iterable<? extends BlockData> from, BlockType to) {
+        for (BlockData fromState : from) {
             BlockData toState = to.createBlockData();
             fromState.copyTo(toState);
             this.register(builder -> {
@@ -70,7 +100,7 @@ public interface BlockMappingsComposeEvent<M> extends BuilderComposeEvent<BlockM
      * Calls {@link #registerStateToState} with
      * {@link ClientView.AwarenessLevel#getThatDoNotAlwaysUnderstandsAllServerSideBlocks()}.
      */
-    default void registerStateToState(BlockType from, BlockType to) {
+    default void registerStateToState(Iterable<? extends BlockData> from, BlockType to) {
         this.registerStateToState(ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks(), from, to);
     }
 
