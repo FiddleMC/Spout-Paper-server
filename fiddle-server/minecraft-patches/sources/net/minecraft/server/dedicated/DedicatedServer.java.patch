@@ -23,21 +23,21 @@
 +        }
 +        // Fiddle end - Resource pack - Construction - Fire compose event
 +        // TODO Fiddle remove temp debug below
-+        org.fiddlemc.fiddle.impl.clientview.lookup.packethandling.ClientViewLookupThreadLocal.THREAD_LOCAL.set(new java.lang.ref.WeakReference<>(new org.fiddlemc.fiddle.impl.clientview.lookup.ClientViewLookup() {
-+            @Override
-+            public org.fiddlemc.fiddle.api.clientview.ClientView getClientView() {
-+                return new org.fiddlemc.fiddle.impl.clientview.JavaWithClientModClientViewImpl(null);
-+            }
-+        }));
-+        org.fiddlemc.fiddle.impl.moredatadriven.minecraft.BlockRegistry.get().stream().forEach(block -> {
-+            if (block.isVanilla() && block != net.minecraft.world.level.block.Blocks.BARRIER && block != net.minecraft.world.level.block.Blocks.WHEAT && block != net.minecraft.world.level.block.Blocks.SHORT_GRASS) return;
-+            System.out.println("Custom block: " + net.minecraft.world.level.block.BlockTypes.CODEC.codec().encodeStart(com.mojang.serialization.JsonOps.INSTANCE, block).getOrThrow().toString());
-+        });
-+        org.fiddlemc.fiddle.impl.moredatadriven.minecraft.ItemRegistry.get().stream().forEach(item -> {
-+            if (item.isVanilla()) return;
-+            System.out.println("Custom item: " + org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.ItemTypes.CODEC.codec().encodeStart(com.mojang.serialization.JsonOps.INSTANCE, item).getOrThrow().toString());
-+        });
-+        org.fiddlemc.fiddle.impl.clientview.lookup.packethandling.ClientViewLookupThreadLocal.THREAD_LOCAL.remove();
++        // org.fiddlemc.fiddle.impl.clientview.lookup.packethandling.ClientViewLookupThreadLocal.THREAD_LOCAL.set(new java.lang.ref.WeakReference<>(new org.fiddlemc.fiddle.impl.clientview.lookup.ClientViewLookup() {
++        //     @Override
++        //     public org.fiddlemc.fiddle.api.clientview.ClientView getClientView() {
++        //         return new org.fiddlemc.fiddle.impl.clientview.JavaWithClientModClientViewImpl(null);
++        //     }
++        // }));
++        // org.fiddlemc.fiddle.impl.moredatadriven.minecraft.BlockRegistry.get().stream().forEach(block -> {
++        //     if (block.isVanilla() && block != net.minecraft.world.level.block.Blocks.BARRIER && block != net.minecraft.world.level.block.Blocks.WHEAT && block != net.minecraft.world.level.block.Blocks.SHORT_GRASS) return;
++        //     System.out.println("Custom block: " + net.minecraft.world.level.block.BlockTypes.CODEC.codec().encodeStart(com.mojang.serialization.JsonOps.INSTANCE, block).getOrThrow().toString());
++        // });
++        // org.fiddlemc.fiddle.impl.moredatadriven.minecraft.ItemRegistry.get().stream().forEach(item -> {
++        //     if (item.isVanilla()) return;
++        //     System.out.println("Custom item: " + org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.ItemTypes.CODEC.codec().encodeStart(com.mojang.serialization.JsonOps.INSTANCE, item).getOrThrow().toString());
++        // });
++        // org.fiddlemc.fiddle.impl.clientview.lookup.packethandling.ClientViewLookupThreadLocal.THREAD_LOCAL.remove();
 +
          // this.worldData.setGameType(properties.gameMode.get()); // CraftBukkit - moved to world loading
          LOGGER.info("Default game type: {}", properties.gameMode.get());
