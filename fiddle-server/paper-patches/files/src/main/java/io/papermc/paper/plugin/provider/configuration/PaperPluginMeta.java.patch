@@ -1,0 +1,10 @@
+--- a/src/main/java/io/papermc/paper/plugin/provider/configuration/PaperPluginMeta.java
++++ b/src/main/java/io/papermc/paper/plugin/provider/configuration/PaperPluginMeta.java
+@@ -64,6 +_,7 @@
+     private PermissionConfiguration permissionConfiguration = new PermissionConfiguration(PermissionDefault.OP, List.of());
+     @Required
+     private ApiVersion apiVersion;
++    public Map<String, String> namespaces = Map.of(); // Fiddle - Item mapping - Namespace tooltips - Load namespace names in plugin meta
+ 
+     private Map<PluginDependencyLifeCycle, Map<String, DependencyConfiguration>> dependencies = new EnumMap<>(PluginDependencyLifeCycle.class);
+ 

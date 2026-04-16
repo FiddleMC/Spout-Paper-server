@@ -1,12 +1,17 @@
-name: Fiddle-Test-Plugin
+name: Spout-Test-Plugin
 version: ${version}
 main: org.fiddlemc.testplugin.TestPlugin
-description: Fiddle Test Plugin
-author: FiddleMC
+description: Spout test plugin
+author: Spout authors and contributors
 api-version: ${apiversion}
 load: STARTUP
 bootstrapper: org.fiddlemc.testplugin.TestPluginBootstrap
-loader: org.fiddlemc.testplugin.TestPluginLoader
 defaultPerm: FALSE
 permissions:
 dependencies:
+namespaces:
+  chinese_mythology_mashup: Chinese Mythology Mash-up
+  maple_delight: Maple Delight
+  minecraft_dungeons: Minecraft Dungeons
+  more_vanilla_shapes: More Vanilla Shapes
+  quark: Quark

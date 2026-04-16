@@ -87,4 +87,18 @@ public class FiddleGlobalConfiguration extends ConfigurationPart {
 
     }
 
+    public Tooltips tooltips;
+
+    public class Tooltips extends ConfigurationPart {
+
+        public Items items;
+
+        public class Items extends ConfigurationPart {
+
+            public boolean namespace = false;
+
+        }
+
+    }
+
 }

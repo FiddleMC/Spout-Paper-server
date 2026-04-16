@@ -3,15 +3,9 @@ package org.fiddlemc.testplugin;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.Style;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Registry;
 import org.bukkit.block.BlockType;
 import org.bukkit.block.data.Lightable;
-import org.bukkit.block.data.type.Slab;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
 import org.fiddlemc.fiddle.api.FiddleEvents;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
@@ -21,11 +15,8 @@ import org.fiddlemc.fiddle.api.packetmapping.item.ItemMappingUtilities;
 import org.fiddlemc.testplugin.data.PluginBlockTypes;
 import org.fiddlemc.testplugin.data.PluginItemTypes;
 import org.jetbrains.annotations.NotNull;
-import org.jspecify.annotations.Nullable;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @SuppressWarnings("unused")
@@ -37,7 +28,6 @@ public class TestPluginBootstrap implements PluginBootstrap {
         loadIncludedResourcePack(context);
         setBlockMappings(context);
         setItemMappings(context);
-        setItemSourceTooltipMapping(context);
         setTranslations(context);
     }
 
@@ -263,38 +253,6 @@ public class TestPluginBootstrap implements PluginBootstrap {
                 });
             });
 
-        });
-    }
-
-    /**
-     * Adds a tooltip to custom items, letting the player know the source to which the block plugins.
-     */
-    private void setItemSourceTooltipMapping(@NotNull BootstrapContext context) {
-        context.getLifecycleManager().registerEventHandler(FiddleEvents.ITEM_MAPPING, event -> {
-            event.register(builder -> {
-                builder.everyAwarenessLevel();
-                builder.from(Registry.ITEM.stream().filter(item -> !item.isVanilla()).toList());
-                builder.to(handle -> {
-                    String source = switch (handle.getOriginal().getType().key().namespace()) {
-                        case "chinese_mythology_mashup" -> "Chinese Mythology Mash-up";
-                        case "maple_delight" -> "Maple Delight";
-                        case "minecraft_dungeons" -> "Minecraft Dungeons";
-                        case "more_vanilla_shapes" -> "More Vanilla Shapes";
-                        case "quark" -> "Quark";
-                        case "minecraft", "fiddle" -> null;
-                        default ->
-                            throw new IllegalStateException("Unexpected value: " + handle.getOriginal().getType().key().namespace());
-                    };
-                    if (source == null) return;
-                    ItemStack itemStack = handle.getMutable();
-                    @Nullable List<Component> lore = itemStack.lore();
-                    if (lore == null) {
-                        lore = new ArrayList<>(1);
-                    }
-                    lore.add(Component.text(source, Style.empty().color(NamedTextColor.BLUE)));
-                    itemStack.lore(lore);
-                });
-            });
         });
     }
 
