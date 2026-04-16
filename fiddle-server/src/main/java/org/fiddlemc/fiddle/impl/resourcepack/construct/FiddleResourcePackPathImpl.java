@@ -3,11 +3,13 @@ package org.fiddlemc.fiddle.impl.resourcepack.construct;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.fiddlemc.fiddle.api.resourcepack.construct.BlockstatesFiddleResourcePackPath;
 import org.fiddlemc.fiddle.api.resourcepack.construct.BytesFiddleResourcePackPath;
 import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackPath;
 import org.fiddlemc.fiddle.api.resourcepack.construct.JsonElementFiddleResourcePackPath;
 import org.fiddlemc.fiddle.api.resourcepack.construct.JsonObjectFiddleResourcePackPath;
 import org.fiddlemc.fiddle.api.resourcepack.construct.StringFiddleResourcePackPath;
+import org.fiddlemc.fiddle.api.resourcepack.content.Blockstates;
 import org.jspecify.annotations.Nullable;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
@@ -47,6 +49,11 @@ public final class FiddleResourcePackPathImpl implements FiddleResourcePackPath 
         @Override
         public JsonObjectFiddleResourcePackPath asJsonObject() {
             return FiddleResourcePackPathImpl.this.asJsonObject();
+        }
+
+        @Override
+        public BlockstatesFiddleResourcePackPath asBlockstates() {
+            return FiddleResourcePackPathImpl.this.asBlockstates();
         }
 
     }
@@ -106,6 +113,7 @@ public final class FiddleResourcePackPathImpl implements FiddleResourcePackPath 
         this.string = null;
         this.jsonElement = null;
         this.jsonObject = null;
+        this.blockstates = null;
     }
 
     /**
@@ -130,7 +138,7 @@ public final class FiddleResourcePackPathImpl implements FiddleResourcePackPath 
     }
 
     private void setBytesFromContents() {
-        if (this.string != null || this.jsonElement != null || this.jsonObject != null) {
+        if (this.string != null || this.jsonElement != null || this.jsonObject != null || this.blockstates != null) {
             this.bytes = this.getString().getBytes();
         }
     }
@@ -205,7 +213,7 @@ public final class FiddleResourcePackPathImpl implements FiddleResourcePackPath 
             this.string = new String(this.bytes, StandardCharsets.UTF_8);
             return;
         }
-        if (this.jsonElement != null || this.jsonObject != null) {
+        if (this.jsonElement != null || this.jsonObject != null || this.blockstates != null) {
             this.string = this.getJsonElementImmutable().toString();
         }
     }
@@ -276,8 +284,8 @@ public final class FiddleResourcePackPathImpl implements FiddleResourcePackPath 
     }
 
     private void trySetJsonElementFromContents() {
-        if (this.jsonObject != null) {
-            this.jsonElement = this.jsonObject;
+        if (this.jsonObject != null || this.blockstates != null) {
+            this.jsonElement = this.getJsonObjectImmutable();
             return;
         }
         if (this.bytes != null || this.string != null) {
@@ -372,6 +380,10 @@ public final class FiddleResourcePackPathImpl implements FiddleResourcePackPath 
     }
 
     private void trySetJsonObjectFromContents() {
+        if (this.blockstates != null) {
+            this.jsonObject = this.getBlockstatesImmutable().getJson();
+            return;
+        }
         if (this.bytes != null || this.string != null || this.jsonElement != null) {
             if (this.isJsonElement()) {
                 try {
@@ -440,6 +452,91 @@ public final class FiddleResourcePackPathImpl implements FiddleResourcePackPath 
         @Override
         public void setParsedFromString(String json) {
             FiddleResourcePackPathImpl.this.setJsonObjectParsedFromString(json);
+        }
+
+    }
+
+    /**
+     * The file contents as a {@link Blockstates},
+     * or null if it is not up-to-date,
+     * or null if {@link #exists} is false.
+     */
+    @Nullable Blockstates blockstates;
+
+    /**
+     * The {@link BlockstatesFiddleResourcePackPath} view of this instance,
+     * or null if not initialized yet.
+     */
+    private @Nullable BlockstatesView blockstatesView;
+
+    @Override
+    public BlockstatesFiddleResourcePackPath asBlockstates() {
+        if (this.blockstatesView == null) {
+            this.blockstatesView = new BlockstatesView();
+        }
+        return this.blockstatesView;
+    }
+
+    private void trySetBlockstatesFromContents() {
+        if (this.bytes != null || this.string != null || this.jsonElement != null || this.jsonObject != null) {
+            if (this.isJsonObject()) {
+                try {
+                    this.blockstates = Blockstates.ofMutable(this.getJsonObjectImmutable());
+                } catch (Exception ignored) {
+                }
+            }
+        }
+    }
+
+    private boolean isBlockstates() {
+        if (this.blockstates == null) {
+            // Find the contents and turn it into a JsonObject
+            this.trySetBlockstatesFromContents();
+        }
+        return this.blockstates != null;
+    }
+
+    private Blockstates getBlockstatesImmutable() {
+        this.throwExceptionIfNot(this.isBlockstates(), "is not a valid blockstates file");
+        return this.blockstates;
+    }
+
+    private void setBlockstatesMutable(Blockstates blockstates) {
+        this.exists = true;
+        this.clear();
+        this.blockstates = blockstates;
+    }
+
+    private void updateBlockstates(Function<@Nullable Blockstates, @Nullable Blockstates> function) {
+        @Nullable Blockstates oldValue = this.isBlockstates() ? this.getBlockstatesImmutable() : null;
+        @Nullable Blockstates newValue = function.apply(oldValue);
+        if (newValue != null) {
+            this.setBlockstatesMutable(newValue);
+        } else {
+            this.delete();
+        }
+    }
+
+    private class BlockstatesView extends View implements BlockstatesFiddleResourcePackPath {
+
+        @Override
+        public boolean isBlockstates() {
+            return FiddleResourcePackPathImpl.this.isBlockstates();
+        }
+
+        @Override
+        public Blockstates getImmutable() {
+            return FiddleResourcePackPathImpl.this.getBlockstatesImmutable();
+        }
+
+        @Override
+        public void setMutable(Blockstates blockstates) {
+            FiddleResourcePackPathImpl.this.setBlockstatesMutable(blockstates);
+        }
+
+        @Override
+        public void update(Function<@Nullable Blockstates, @Nullable Blockstates> function) {
+            FiddleResourcePackPathImpl.this.updateBlockstates(function);
         }
 
     }

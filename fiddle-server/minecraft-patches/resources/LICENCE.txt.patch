@@ -1,6 +1,78 @@
 --- /dev/null
 +++ b/LICENCE.txt
-@@ -1,0 +_,674 @@
+@@ -1,0 +_,774 @@
++The entirety of this copyrightable work is licensed under a complemented
++GNU General Public License, version 3,
++which is included below under
++"COMPLEMENTED GNU GENERAL PUBLIC LICENSE FOR SPOUT".
++
++Parts of this copyrightable work are also licensed under a
++more permissive license. The GPL-3.0 and MIT licenses are included for
++reference below, under "GNU GENERAL PUBLIC LICENSE" and "MIT License"
++respectively, however, their application to this work is limited
++to the parts that are explicitly licensed under them.
++
++Any element of this copyrightable work that is already licensed under
++GPL-3.0 by its copyright holder, including Bukkit, Spigot, PaperMC or
++any of its authors and contributors, is also licensed under GPL-3.0
++as part of this work, to the extent that it does not affect the
++licensing of any other element of this copyrightable work.
++
++Any element of this copyrightable work that is already licensed under
++MIT by its copyright holder, including Bukkit, Spigot, PaperMC or
++any of its authors and contributors, is also licensed under MIT
++as part of this work, to the extent that it does not affect the
++licensing of any other element of this copyrightable work.
++
++------------------------------------------------------------------------------
++
++           COMPLEMENTED GNU GENERAL PUBLIC LICENSE FOR SPOUT
++
++This license is an extension of the
++GNU General Public License, version 3 (GPL-3.0),
++with additional terms as defined in GPL-3.0 section 7.
++
++These additional terms are:
++a) Under subsection 7b, you must preserve all author attributions in
++   all licensed material, unless you are the natural person that
++   originally added the attribution, or the attribution is towards you
++   or an organization you represent.
++b) Under subsection 7b, you must preserve all licensing details and
++   author attributions shown to end users of a covered work, including
++   end users of software that communicates with a covered work,
++   including but not limited to users of Minecraft client software,
++   including but not limited to Minecraft command responses and
++   in-game notices, unless you are the natural person that originally
++   added the reference or attribution, or the attribution is towards
++   you or an organization you represent.
++c) The original Program that this license applies to was published and
++   promoted under the name Spout. Under subsection 7c, in order to
++   avoid misrepresentation of the origin of a propagated covered work,
++   you may not propagate a covered work, or the modifications to produce
++   it from a covered work, in the form of source code or object code,
++   using the name Spout, or any variations or derivatives thereof, or
++   any other recognizable name or identifier associated with the
++   Program, as part of the propagated material, or in the publication
++   or promotion thereof, unless you doing so is explicitly endorsed,
++   or under an explicit and unrevoked continuing state of endorsement,
++   by Martijn Muijsers, at the time of propagation.
++d) Under subsections 7b and 7c, you must propagate a covered work,
++   or the modifications to produce it from a covered work, in the form
++   of source code or object code, only while explicitly and clearly
++   including, in the form most appropriate for the method of
++   propagation, a mention of the original author being Martijn Muijsers,
++   and without any other claims to original authorship.
++
++The entirety of the GNU General Public License, version 3
++can be found below, under "GNU GENERAL PUBLIC LICENSE".
++
++------------------------------------------------------------------------------
++
++Below is the GNU General Public License, version 3 (GPL-3.0),
++which applies only to any part of this copyrightable work that is
++specifically and explicitly released under GPL-3.0 (and not under
++its complemented version specified above).
++
 +                    GNU GENERAL PUBLIC LICENSE
 +                       Version 3, 29 June 2007
 +
@@ -467,8 +539,8 @@
 +rights granted or affirmed under this License.  For example, you may
 +not impose a license fee, royalty, or other charge for exercise of
 +rights granted under this License, and you may not initiate litigation
-+(including a cross-claim or counterclaim in a lawsuit) alleging that
-+any patent claim is infringed by making, using, selling, offering for
++(including a cross-request or counterclaim in a lawsuit) alleging that
++any patent request is infringed by making, using, selling, offering for
 +sale, or importing the Program or any portion of it.
 +
 +  11. Patents.
@@ -675,3 +747,31 @@
 +the library.  If this is what you want to do, use the GNU Lesser General
 +Public License instead of this License.  But first, please read
 +<http://www.gnu.org/philosophy/why-not-lgpl.html>.
++
++------------------------------------------------------------------------------
++
++Below is the MIT License (MIT),
++which applies only to any part of this copyrightable work that is
++specifically and explicitly released under MIT.
++
++                               MIT License
++
++Copyright (c) Respective authors of the copyrightable works
++
++Permission is hereby granted, free of charge, to any person obtaining a copy
++of this software and associated documentation files (the "Software"), to deal
++in the Software without restriction, including without limitation the rights
++to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
++copies of the Software, and to permit persons to whom the Software is
++furnished to do so, subject to the following conditions:
++
++The above copyright notice and this permission notice shall be included in all
++copies or substantial portions of the Software.
++
++THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
++OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
++SOFTWARE.

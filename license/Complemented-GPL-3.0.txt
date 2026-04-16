@@ -1,5 +1,42 @@
-Below is the GNU General Public License, version 3 (GPL-3.0),
-which applies only to parts of Fiddle that are specifically and explicitly released under GPL-3.0.
+Below is a complemented GNU General Public License, version 3 (GPL-3.0),
+which applies only to any included copyrightable works that are
+specifically and explicitly released under it.
+
+"Martijn Muijsers" refers to the natural person that authored
+the original version of the Program,
+and at the time held the GitHub username MartijnMuijsers.
+
+Additional terms under section 7
+of the GNU General Public License, version 3:
+a) Under subsection 7b, you must preserve all author attributions in
+   all licensed material, unless you are the natural person that
+   originally added the attribution, or the attribution is towards you
+   or an organization you represent.
+b) Under subsection 7b, you must preserve all licensing details and
+   author attributions shown to end users of a covered work, including
+   end users of software that communicates with a covered work,
+   including but not limited to users of Minecraft client software,
+   including but not limited to Minecraft command responses and
+   in-game notices, unless you are the natural person that originally
+   added the reference or attribution, or the attribution is towards
+   you or an organization you represent.
+c) The original Program that this license applies to was published and
+   promoted under the name Spout. Under subsection 7c, in order to
+   avoid misrepresentation of the origin of a propagated covered work,
+   you may not propagate a covered work, or the modifications to produce
+   it from a covered work, in the form of source code or object code,
+   using the name Spout, or any variations or derivatives thereof, or
+   any other recognizable name or identifier associated with the
+   Program, as part of the propagated material, or in the publication
+   or promotion thereof, unless you doing so is explicitly endorsed,
+   or under an explicit and unrevoked continuing state of endorsement,
+   by Martijn Muijsers, at the time of propagation.
+d) Under subsections 7b and 7c, you must propagate a covered work,
+   or the modifications to produce it from a covered work, in the form
+   of source code or object code, only while explicitly and clearly
+   including, in the form most appropriate for the method of
+   propagation, a mention of the original author being Martijn Muijsers,
+   and without any other claims to original authorship.
 
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
@@ -467,8 +504,8 @@ the predecessor has it or can get it with reasonable efforts.
 rights granted or affirmed under this License.  For example, you may
 not impose a license fee, royalty, or other charge for exercise of
 rights granted under this License, and you may not initiate litigation
-(including a cross-claim or counterclaim in a lawsuit) alleging that
-any patent claim is infringed by making, using, selling, offering for
+(including a cross-request or counterclaim in a lawsuit) alleging that
+any patent request is infringed by making, using, selling, offering for
 sale, or importing the Program or any portion of it.
 
   11. Patents.

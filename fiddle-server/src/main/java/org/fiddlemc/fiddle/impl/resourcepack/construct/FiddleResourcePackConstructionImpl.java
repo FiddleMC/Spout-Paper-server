@@ -61,16 +61,6 @@ public final class FiddleResourcePackConstructionImpl extends ComposableImpl<Fid
                 throw new RuntimeException(e);
             }
         }
-        // Initialize shared language files
-        Map<String, JsonObject> languageFiles = ServerSideTranslationsImpl.get().exportForResourcePackAsJSONs();
-        for (ClientView.AwarenessLevel awarenessLevel : ClientView.AwarenessLevel.getAll()) {
-            // Skip if the awareness level is not relevant
-            if (!generateForAwarenessLevel(awarenessLevel)) continue;
-            // Add the language files
-            for (Map.Entry<String, JsonObject> entry : languageFiles.entrySet()) {
-                event.path(awarenessLevel, "assets/minecraft/lang/" + entry.getKey() + ".json").asJsonObject().setMutable(entry.getValue());
-            }
-        }
         // Return the event
         return event;
     }
@@ -135,7 +125,7 @@ public final class FiddleResourcePackConstructionImpl extends ComposableImpl<Fid
     public static boolean generateForAwarenessLevel(ClientView.AwarenessLevel awarenessLevel) {
         return awarenessLevel != ClientView.AwarenessLevel.VANILLA;
     }
-    
+
     private static final String[] DEFAULT_RESOURCE_PACK_CONTENTS_PATHS = {
         "pack.mcmeta",
         "assets/fiddle/models/block/bevel_middle.json",

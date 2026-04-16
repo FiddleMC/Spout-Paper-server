@@ -8,6 +8,7 @@ import org.fiddlemc.fiddle.api.packetmapping.block.BlockMappingFunctionContext;
 import org.fiddlemc.fiddle.api.packetmapping.block.BlockMappings;
 import org.fiddlemc.fiddle.api.packetmapping.block.BlockMappingsComposeEvent;
 import org.fiddlemc.fiddle.impl.moredatadriven.minecraft.BlockStateRegistry;
+import org.fiddlemc.fiddle.impl.packetmapping.block.claim.ResourcePackBlockStateClaimsImpl;
 import org.fiddlemc.fiddle.impl.util.composable.ComposableImpl;
 import org.fiddlemc.fiddle.impl.util.java.serviceloader.NoArgsConstructorServiceProviderImpl;
 import org.jspecify.annotations.Nullable;
@@ -20,9 +21,9 @@ import java.util.Map;
 /**
  * A pipeline of block mappings.
  */
-public final class BlockMappingsImpl extends ComposableImpl<BlockMappingsComposeEvent<BlockMappingsStep>, BlockMappingsComposeEventImpl> implements BlockMappings<BlockMappingsStep> {
+public final class BlockMappingsImpl extends ComposableImpl<BlockMappingsComposeEvent, BlockMappingsComposeEventImpl> implements BlockMappings {
 
-    public static final class ServiceProviderImpl extends NoArgsConstructorServiceProviderImpl<BlockMappings<?>, BlockMappingsImpl> implements ServiceProvider {
+    public static final class ServiceProviderImpl extends NoArgsConstructorServiceProviderImpl<BlockMappings, BlockMappingsImpl> implements ServiceProvider {
 
         public ServiceProviderImpl() {
             super(BlockMappingsImpl.class);
@@ -146,7 +147,10 @@ public final class BlockMappingsImpl extends ComposableImpl<BlockMappingsCompose
     }
 
     @Override
-    protected void copyInformationFromEvent(final BlockMappingsComposeEventImpl event) {
+    protected void copyInformationFromEvent(BlockMappingsComposeEventImpl event) {
+
+        // Process the claim requests
+        ResourcePackBlockStateClaimsImpl.get().processRequests();
 
         // Initialize the steps
         int registrySize = BlockStateRegistry.get().size();

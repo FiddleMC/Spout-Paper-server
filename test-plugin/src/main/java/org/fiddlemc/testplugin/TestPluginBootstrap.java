@@ -6,20 +6,16 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
-import org.bukkit.Instrument;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Note;
 import org.bukkit.Registry;
 import org.bukkit.block.BlockType;
 import org.bukkit.block.data.Lightable;
-import org.bukkit.block.data.type.Leaves;
-import org.bukkit.block.data.type.NoteBlock;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
-import org.bukkit.inventory.meta.BlockDataMeta;
 import org.fiddlemc.fiddle.api.FiddleEvents;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
+import org.fiddlemc.fiddle.api.packetmapping.block.automatic.AutomaticBlockMappings;
 import org.fiddlemc.fiddle.api.packetmapping.component.translatable.ServerSideTranslations;
 import org.fiddlemc.fiddle.api.packetmapping.item.ItemMappingUtilities;
 import org.fiddlemc.testplugin.data.PluginBlockTypes;
@@ -59,301 +55,117 @@ public class TestPluginBootstrap implements PluginBootstrap {
         });
     }
 
-    private static Lightable getLitRedstoneLampState() {
-        Lightable state = BlockType.REDSTONE_LAMP.createBlockData();
-        state.setLit(true);
-        return state;
-    }
-
-    private static NoteBlock getLitPaperLampNoteBlockState() {
-        NoteBlock state = BlockType.NOTE_BLOCK.createBlockData();
-        state.setInstrument(Instrument.BELL);
-        state.setNote(Note.natural(1, Note.Tone.A));
-        return state;
-    }
-
-    private static NoteBlock getPaperLampNoteBlockState() {
-        NoteBlock state = BlockType.NOTE_BLOCK.createBlockData();
-        state.setInstrument(Instrument.BELL);
-        state.setNote(Note.sharp(1, Note.Tone.A));
-        return state;
-    }
-
-    private static Leaves getNonWaterloggedYellowMapleLeavesState() {
-        Leaves state = BlockType.CHERRY_LEAVES.createBlockData();
-        state.setDistance(2);
-        return state;
-    }
-
-    private static Leaves getWaterloggedYellowMapleLeavesState() {
-        Leaves state = BlockType.CHERRY_LEAVES.createBlockData();
-        state.setDistance(2);
-        state.setWaterlogged(true);
-        return state;
-    }
-
-    private static NoteBlock getAzaleaPlanksNoteBlockState() {
-        NoteBlock state = BlockType.NOTE_BLOCK.createBlockData();
-        state.setInstrument(Instrument.BELL);
-        state.setNote(Note.sharp(1, Note.Tone.G));
-        return state;
-    }
-
-    private static NoteBlock getBirchBookshelfNoteBlockState() {
-        NoteBlock state = BlockType.NOTE_BLOCK.createBlockData();
-        state.setInstrument(Instrument.BELL);
-        state.setNote(Note.natural(1, Note.Tone.G));
-        return state;
-    }
-
-    private static NoteBlock getDioriteBricksNoteBlockState() {
-        NoteBlock state = BlockType.NOTE_BLOCK.createBlockData();
-        state.setInstrument(Instrument.BELL);
-        state.setNote(Note.natural(0, Note.Tone.G));
-        return state;
-    }
-
     /**
      * Configures the server-to-client mappings for blocks.
      */
     private void setBlockMappings(@NotNull BootstrapContext context) {
         context.getLifecycleManager().registerEventHandler(FiddleEvents.BLOCK_MAPPING, event -> {
+            AutomaticBlockMappings automaticMappings = event.automaticMappings(this);
 
             // Lit paper lamp
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
-                builder.fromEveryStateOf(PluginBlockTypes.LIT_PAPER_LAMP.get());
-                builder.to(getLitRedstoneLampState());
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.fromEveryStateOf(PluginBlockTypes.LIT_PAPER_LAMP.get());
-                builder.to(getLitPaperLampNoteBlockState());
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(getLitPaperLampNoteBlockState());
-                builder.to(BlockType.NOTE_BLOCK.createBlockData());
+            automaticMappings.fullBlock(builder -> {
+                builder.fromDefaultStateOf(PluginBlockTypes.LIT_PAPER_LAMP.get());
+                Lightable litRedstoneLampState = BlockType.REDSTONE_LAMP.createBlockData();
+                litRedstoneLampState.setLit(true);
+                builder.fallback(litRedstoneLampState);
             });
 
             // Paper lamp
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
-                builder.fromEveryStateOf(PluginBlockTypes.PAPER_LAMP.get());
-                builder.to(BlockType.REDSTONE_LAMP.createBlockData());
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.fromEveryStateOf(PluginBlockTypes.PAPER_LAMP.get());
-                builder.to(getPaperLampNoteBlockState());
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(getPaperLampNoteBlockState());
-                builder.to(BlockType.NOTE_BLOCK.createBlockData());
+            automaticMappings.fullBlock(builder -> {
+                builder.fromDefaultStateOf(PluginBlockTypes.PAPER_LAMP.get());
+                builder.fallbackDefaultStateOf(BlockType.REDSTONE_LAMP);
             });
 
             // Yellow maple leaves
-            event.registerStateToState(
-                ClientView.AwarenessLevel.VANILLA,
-                PluginBlockTypes.YELLOW_MAPLE_LEAVES.get(),
-                BlockType.ACACIA_LEAVES
-            );
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(PluginBlockTypes.YELLOW_MAPLE_LEAVES.get().createBlockDataStates().stream().filter(data -> !((Leaves) data).isWaterlogged()).toList());
-                builder.to(getNonWaterloggedYellowMapleLeavesState());
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(getNonWaterloggedYellowMapleLeavesState());
-                builder.to(BlockType.CHERRY_LEAVES.createBlockData());
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(PluginBlockTypes.YELLOW_MAPLE_LEAVES.get().createBlockDataStates().stream().filter(data -> ((Leaves) data).isWaterlogged()).toList());
-                builder.to(getWaterloggedYellowMapleLeavesState());
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(getWaterloggedYellowMapleLeavesState());
-                Leaves waterloggedDefaultBirchLeaves = BlockType.CHERRY_LEAVES.createBlockData();
-                waterloggedDefaultBirchLeaves.setWaterlogged(true);
-                builder.to(waterloggedDefaultBirchLeaves);
+            automaticMappings.leaves(builder -> {
+                builder.from(PluginBlockTypes.YELLOW_MAPLE_LEAVES.get());
+                builder.fallback(BlockType.AZALEA_LEAVES);
             });
 
             // Snowed stone bricks
-            event.registerStateToState(
-                ClientView.AwarenessLevel.VANILLA,
-                PluginBlockTypes.SNOWED_STONE_BRICKS.get(),
-                BlockType.STONE_BRICKS
-            );
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.fromEveryStateOf(PluginBlockTypes.SNOWED_STONE_BRICKS.get());
-                builder.to(BlockType.INFESTED_STONE_BRICKS.createBlockData());
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(BlockType.INFESTED_STONE_BRICKS.createBlockData());
-                builder.to(BlockType.STONE_BRICKS.createBlockData());
+            automaticMappings.fullBlock(builder -> {
+                builder.fromDefaultStateOf(PluginBlockTypes.SNOWED_STONE_BRICKS.get());
+                builder.fallbackDefaultStateOf(BlockType.STONE_BRICKS);
             });
 
             // Dirt slab
-            event.registerStateToState(
-                ClientView.AwarenessLevel.VANILLA,
-                PluginBlockTypes.DIRT_SLAB.get(),
-                BlockType.MUD_BRICK_SLAB
-            );
-            event.registerStateToState(
-                ClientView.AwarenessLevel.RESOURCE_PACK,
-                PluginBlockTypes.DIRT_SLAB.get(),
-                BlockType.WAXED_EXPOSED_CUT_COPPER_SLAB
-            );
-            event.registerStateToState(
-                ClientView.AwarenessLevel.RESOURCE_PACK,
-                BlockType.WAXED_EXPOSED_CUT_COPPER_SLAB,
-                BlockType.EXPOSED_CUT_COPPER_SLAB
-            );
+            automaticMappings.slab(builder -> {
+                builder.from(PluginBlockTypes.DIRT_SLAB.get());
+                builder.fallback(BlockType.MUD_BRICK_SLAB);
+            });
 
-            // Diorite brick stairs
-            event.registerStateToState(
-                ClientView.AwarenessLevel.VANILLA,
-                PluginBlockTypes.DIRT_STAIRS.get(),
-                BlockType.MUD_BRICK_STAIRS
-            );
-            event.registerStateToState(
-                ClientView.AwarenessLevel.RESOURCE_PACK,
-                PluginBlockTypes.DIRT_STAIRS.get(),
-                BlockType.WAXED_EXPOSED_CUT_COPPER_STAIRS
-            );
-            event.registerStateToState(
-                ClientView.AwarenessLevel.RESOURCE_PACK,
-                BlockType.WAXED_EXPOSED_CUT_COPPER_STAIRS,
-                BlockType.EXPOSED_CUT_COPPER_STAIRS
-            );
+            // Dirt stairs
+            automaticMappings.stairs(builder -> {
+                builder.from(PluginBlockTypes.DIRT_STAIRS.get());
+                builder.fallback(BlockType.MUD_BRICK_STAIRS);
+            });
 
             // Glass slab
-            event.registerStateToState(
+            event.manualMappings().registerStateToState(
                 ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks(),
                 PluginBlockTypes.GLASS_SLAB.get().createBlockDataStates().stream().filter(data -> ((Slab) data).getType() != Slab.Type.DOUBLE).toList(),
                 BlockType.QUARTZ_SLAB
             );
-            event.register(builder -> {
+            event.manualMappings().register(builder -> {
                 builder.awarenessLevel(ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks());
                 builder.from(PluginBlockTypes.GLASS_SLAB.get().createBlockDataStates().stream().filter(data -> ((Slab) data).getType() == Slab.Type.DOUBLE).toList());
                 builder.toDefaultStateOf(BlockType.GLASS);
             });
 
             // Glass stairs
-            event.registerStateToState(
+            event.manualMappings().registerStateToState(
                 ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks(),
                 PluginBlockTypes.GLASS_STAIRS.get(),
                 BlockType.QUARTZ_STAIRS
             );
 
             // Grass slab
-            event.registerStateToState(
+            event.manualMappings().registerStateToState(
                 ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks(),
                 PluginBlockTypes.GRASS_SLAB.get(),
                 BlockType.MOSSY_COBBLESTONE_SLAB
             );
-            event.register(builder -> {
+            event.manualMappings().register(builder -> {
                 builder.awarenessLevel(ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks());
                 builder.from(PluginBlockTypes.GRASS_SLAB.get().createBlockDataStates().stream().filter(data -> ((Slab) data).getType() == Slab.Type.DOUBLE).toList());
                 builder.toDefaultStateOf(BlockType.GRASS_BLOCK);
             });
 
             // Stone brick bevel
-            event.register(builder -> {
+            event.manualMappings().register(builder -> {
                 builder.awarenessLevel(ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks());
                 builder.fromEveryStateOf(PluginBlockTypes.STONE_BRICK_BEVEL.get());
                 builder.toDefaultStateOf(BlockType.BARRIER);
             });
 
             // Azalea planks
-            event.registerStateToState(
-                ClientView.AwarenessLevel.VANILLA,
-                PluginBlockTypes.AZALEA_PLANKS.get(),
-                BlockType.WARPED_PLANKS
-            );
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.fromEveryStateOf(PluginBlockTypes.AZALEA_PLANKS.get());
-                builder.to(getAzaleaPlanksNoteBlockState());
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(getAzaleaPlanksNoteBlockState());
-                builder.to(BlockType.NOTE_BLOCK.createBlockData());
+            automaticMappings.fullBlock(builder -> {
+                builder.fromDefaultStateOf(PluginBlockTypes.AZALEA_PLANKS.get());
+                builder.fallbackDefaultStateOf(BlockType.WARPED_PLANKS);
             });
 
             // Birch bookshelf
-            event.registerStateToState(
-                ClientView.AwarenessLevel.VANILLA,
-                PluginBlockTypes.BIRCH_BOOKSHELF.get(),
-                BlockType.BOOKSHELF
-            );
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.fromEveryStateOf(PluginBlockTypes.BIRCH_BOOKSHELF.get());
-                builder.to(getBirchBookshelfNoteBlockState());
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(getBirchBookshelfNoteBlockState());
-                builder.to(BlockType.NOTE_BLOCK.createBlockData());
+            automaticMappings.fullBlock(builder -> {
+                builder.fromDefaultStateOf(PluginBlockTypes.BIRCH_BOOKSHELF.get());
+                builder.fallbackDefaultStateOf(BlockType.BOOKSHELF);
             });
 
             // Diorite brick slab
-            event.registerStateToState(
-                ClientView.AwarenessLevel.VANILLA,
-                PluginBlockTypes.DIORITE_BRICK_SLAB.get(),
-                BlockType.POLISHED_DIORITE_SLAB
-            );
-            event.registerStateToState(
-                ClientView.AwarenessLevel.RESOURCE_PACK,
-                PluginBlockTypes.DIORITE_BRICK_SLAB.get(),
-                BlockType.WAXED_CUT_COPPER_SLAB
-            );
-            event.registerStateToState(
-                ClientView.AwarenessLevel.RESOURCE_PACK,
-                BlockType.WAXED_CUT_COPPER_SLAB,
-                BlockType.CUT_COPPER_SLAB
-            );
+            automaticMappings.slab(builder -> {
+                builder.from(PluginBlockTypes.DIORITE_BRICK_SLAB.get());
+                builder.fallback(BlockType.POLISHED_DIORITE_SLAB);
+            });
 
             // Diorite brick stairs
-            event.registerStateToState(
-                ClientView.AwarenessLevel.VANILLA,
-                PluginBlockTypes.DIORITE_BRICK_STAIRS.get(),
-                BlockType.POLISHED_DIORITE_STAIRS
-            );
-            event.registerStateToState(
-                ClientView.AwarenessLevel.RESOURCE_PACK,
-                PluginBlockTypes.DIORITE_BRICK_STAIRS.get(),
-                BlockType.WAXED_CUT_COPPER_STAIRS
-            );
-            event.registerStateToState(
-                ClientView.AwarenessLevel.RESOURCE_PACK,
-                BlockType.WAXED_CUT_COPPER_STAIRS,
-                BlockType.CUT_COPPER_STAIRS
-            );
+            automaticMappings.stairs(builder -> {
+                builder.from(PluginBlockTypes.DIORITE_BRICK_STAIRS.get());
+                builder.fallback(BlockType.POLISHED_DIORITE_STAIRS);
+            });
 
             // Diorite bricks
-            event.registerStateToState(
-                ClientView.AwarenessLevel.VANILLA,
-                PluginBlockTypes.DIORITE_BRICKS.get(),
-                BlockType.POLISHED_DIORITE
-            );
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.fromEveryStateOf(PluginBlockTypes.DIORITE_BRICKS.get());
-                builder.to(getDioriteBricksNoteBlockState());
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(getDioriteBricksNoteBlockState());
-                builder.to(BlockType.NOTE_BLOCK.createBlockData());
+            automaticMappings.fullBlock(builder -> {
+                builder.fromDefaultStateOf(PluginBlockTypes.DIORITE_BRICKS.get());
+                builder.fallbackDefaultStateOf(BlockType.POLISHED_DIORITE);
             });
 
         });
@@ -364,128 +176,6 @@ public class TestPluginBootstrap implements PluginBootstrap {
      */
     private void setItemMappings(@NotNull BootstrapContext context) {
         context.getLifecycleManager().registerEventHandler(FiddleEvents.ITEM_MAPPING, event -> {
-
-            // Lit paper lamp
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
-                builder.from(PluginItemTypes.LIT_PAPER_LAMP.get());
-                builder.to(handle -> {
-                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.REDSTONE_LAMP);
-                    handle.getMutable().editMeta(meta -> {
-                        ((BlockDataMeta) meta).setBlockData(getLitRedstoneLampState());
-                    });
-                });
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(PluginItemTypes.LIT_PAPER_LAMP.get());
-                builder.to(handle -> {
-                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.NOTE_BLOCK);
-                    handle.getMutable().editMeta(meta -> {
-                        meta.setItemModel(NamespacedKey.fromString("chinese_mythology_mashup:lit_paper_lamp"));
-                        ((BlockDataMeta) meta).setBlockData(getLitPaperLampNoteBlockState());
-                    });
-                });
-            });
-
-            // Paper lamp
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
-                builder.from(PluginItemTypes.PAPER_LAMP.get());
-                builder.to(ItemType.REDSTONE_LAMP);
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(PluginItemTypes.PAPER_LAMP.get());
-                builder.to(handle -> {
-                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.NOTE_BLOCK);
-                    handle.getMutable().editMeta(meta -> {
-                        meta.setItemModel(NamespacedKey.fromString("chinese_mythology_mashup:paper_lamp"));
-                        ((BlockDataMeta) meta).setBlockData(getPaperLampNoteBlockState());
-                    });
-                });
-            });
-
-            // Yellow maple leaves
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
-                builder.from(PluginItemTypes.YELLOW_MAPLE_LEAVES.get());
-                builder.to(ItemType.ACACIA_LEAVES);
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(PluginItemTypes.YELLOW_MAPLE_LEAVES.get());
-                builder.to(handle -> {
-                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.CHERRY_LEAVES);
-                    handle.getMutable().editMeta(meta -> {
-                        meta.setItemModel(NamespacedKey.fromString("maple_delight:yellow_maple_leaves"));
-                        ((BlockDataMeta) meta).setBlockData(getNonWaterloggedYellowMapleLeavesState());
-                    });
-                });
-            });
-
-            // Snowed stone bricks
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
-                builder.from(PluginItemTypes.SNOWED_STONE_BRICKS.get());
-                builder.to(ItemType.STONE_BRICKS);
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(PluginItemTypes.SNOWED_STONE_BRICKS.get());
-                builder.to(handle -> {
-                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.INFESTED_STONE_BRICKS);
-                    handle.getMutable().editMeta(meta -> {
-                        meta.setItemModel(NamespacedKey.fromString("minecraft_dungeons:snowed_stone_bricks"));
-                        ((BlockDataMeta) meta).setBlockData(BlockType.INFESTED_STONE_BRICKS.createBlockData());
-                    });
-                });
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(ItemType.INFESTED_STONE_BRICKS);
-                builder.to(ItemType.STONE_BRICKS);
-            });
-
-            // Dirt slab
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
-                builder.from(PluginItemTypes.DIRT_SLAB.get());
-                builder.to(ItemType.MUD_BRICK_SLAB);
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(PluginItemTypes.DIRT_SLAB.get());
-                builder.to(handle -> {
-                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.WAXED_EXPOSED_CUT_COPPER_SLAB);
-                    handle.getMutable().editMeta(meta -> meta.setItemModel(NamespacedKey.fromString("more_vanilla_shapes:dirt_slab")));
-                });
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(ItemType.WAXED_EXPOSED_CUT_COPPER_SLAB);
-                builder.to(ItemType.EXPOSED_CUT_COPPER_SLAB);
-            });
-
-            // Dirt stairs
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
-                builder.from(PluginItemTypes.DIRT_STAIRS.get());
-                builder.to(ItemType.MUD_BRICK_STAIRS);
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(PluginItemTypes.DIRT_STAIRS.get());
-                builder.to(handle -> {
-                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.WAXED_EXPOSED_CUT_COPPER_STAIRS);
-                    handle.getMutable().editMeta(meta -> meta.setItemModel(NamespacedKey.fromString("more_vanilla_shapes:dirt_stairs")));
-                });
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(ItemType.WAXED_EXPOSED_CUT_COPPER_STAIRS);
-                builder.to(ItemType.EXPOSED_CUT_COPPER_STAIRS);
-            });
 
             // Glass slab
             event.register(builder -> {
@@ -545,100 +235,6 @@ public class TestPluginBootstrap implements PluginBootstrap {
                     ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.STONE_BUTTON);
                     // ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.BARRIER);
                     // handle.getMutable().editMeta(meta -> meta.setItemModel(NamespacedKey.fromString("more_vanilla_shapes:stone_brick_bevel")));
-                });
-            });
-
-            // Azalea planks
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
-                builder.from(PluginItemTypes.AZALEA_PLANKS.get());
-                builder.to(ItemType.WARPED_PLANKS);
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(PluginItemTypes.AZALEA_PLANKS.get());
-                builder.to(handle -> {
-                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.NOTE_BLOCK);
-                    handle.getMutable().editMeta(meta -> {
-                        meta.setItemModel(NamespacedKey.fromString("quark:azalea_planks"));
-                        ((BlockDataMeta) meta).setBlockData(getAzaleaPlanksNoteBlockState());
-                    });
-                });
-            });
-
-            // Birch bookshelf
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
-                builder.from(PluginItemTypes.BIRCH_BOOKSHELF.get());
-                builder.to(ItemType.BOOKSHELF);
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(PluginItemTypes.BIRCH_BOOKSHELF.get());
-                builder.to(handle -> {
-                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.NOTE_BLOCK);
-                    handle.getMutable().editMeta(meta -> {
-                        meta.setItemModel(NamespacedKey.fromString("quark:birch_bookshelf"));
-                        ((BlockDataMeta) meta).setBlockData(getBirchBookshelfNoteBlockState());
-                    });
-                });
-            });
-
-            // Diorite brick slab
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
-                builder.from(PluginItemTypes.DIORITE_BRICK_SLAB.get());
-                builder.to(ItemType.POLISHED_DIORITE_SLAB);
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(PluginItemTypes.DIORITE_BRICK_SLAB.get());
-                builder.to(handle -> {
-                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.WAXED_CUT_COPPER_SLAB);
-                    handle.getMutable().editMeta(meta -> meta.setItemModel(NamespacedKey.fromString("quark:diorite_brick_slab")));
-                });
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(ItemType.WAXED_CUT_COPPER_SLAB);
-                builder.to(ItemType.CUT_COPPER_SLAB);
-            });
-
-            // Diorite brick stairs
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
-                builder.from(PluginItemTypes.DIORITE_BRICK_STAIRS.get());
-                builder.to(ItemType.POLISHED_DIORITE_STAIRS);
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(PluginItemTypes.DIORITE_BRICK_STAIRS.get());
-                builder.to(handle -> {
-                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.WAXED_CUT_COPPER_STAIRS);
-                    handle.getMutable().editMeta(meta -> meta.setItemModel(NamespacedKey.fromString("quark:diorite_brick_stairs")));
-                });
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(ItemType.WAXED_CUT_COPPER_STAIRS);
-                builder.to(ItemType.CUT_COPPER_STAIRS);
-            });
-
-            // Diorite bricks
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
-                builder.from(PluginItemTypes.DIORITE_BRICKS.get());
-                builder.to(ItemType.POLISHED_DIORITE);
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(PluginItemTypes.DIORITE_BRICKS.get());
-                builder.to(handle -> {
-                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.NOTE_BLOCK);
-                    handle.getMutable().editMeta(meta -> {
-                        meta.setItemModel(NamespacedKey.fromString("quark:diorite_bricks"));
-                        ((BlockDataMeta) meta).setBlockData(getDioriteBricksNoteBlockState());
-                    });
                 });
             });
 
@@ -741,30 +337,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
         context.getLifecycleManager().registerEventHandler(FiddleEvents.RESOURCE_PACK_CONSTRUCT, event -> {
             try {
                 event.copyPluginResources(context, List.of(ClientView.AwarenessLevel.RESOURCE_PACK, ClientView.AwarenessLevel.CLIENT_MOD), "resource_pack_direct", "");
-                event.asset(ClientView.AwarenessLevel.RESOURCE_PACK, "blockstates", BlockType.CHERRY_LEAVES.getKey(), "json").asJsonObject().setParsedFromString("""
-                    {
-                      "variants": {
-                           "distance=2,persistent=false": { "model": "maple_delight:block/yellow_maple_leaves" }
-                         }
-                    }
-                    """);
-                event.asset(ClientView.AwarenessLevel.RESOURCE_PACK, "blockstates", BlockType.NOTE_BLOCK.getKey(), "json").asJsonObject().setParsedFromString("""
-                    {
-                      "variants": {
-                           "instrument=bell,note=15,powered=false": { "model": "chinese_mythology_mashup:block/lit_paper_lamp" },
-                           "instrument=bell,note=16,powered=false": { "model": "chinese_mythology_mashup:block/paper_lamp" },
-                           "instrument=bell,note=14,powered=false": { "model": "quark:block/azalea_planks" },
-                           "instrument=bell,note=13,powered=false": { "model": "quark:block/birch_bookshelf" },
-                           "instrument=bell,note=1,powered=false": { "model": "quark:block/diorite_bricks" }
-                         }
-                    }
-                    """);
-                event.copyPluginResource(this, ClientView.AwarenessLevel.RESOURCE_PACK, "resource_pack_indirect/assets/minecraft_dungeons/blockstates/snowed_stone_bricks.json", "assets/minecraft/blockstates/infested_stone_bricks.json");
-                event.copyPluginResource(this, ClientView.AwarenessLevel.RESOURCE_PACK, "resource_pack_indirect/assets/more_vanilla_shapes/blockstates/dirt_slab.json", "assets/minecraft/blockstates/waxed_exposed_cut_copper_slab.json");
-                event.copyPluginResource(this, ClientView.AwarenessLevel.RESOURCE_PACK, "resource_pack_indirect/assets/more_vanilla_shapes/blockstates/dirt_stairs.json", "assets/minecraft/blockstates/waxed_exposed_cut_copper_stairs.json");
-                event.copyPluginResource(this, ClientView.AwarenessLevel.RESOURCE_PACK, "resource_pack_indirect/assets/quark/blockstates/diorite_brick_slab.json", "assets/minecraft/blockstates/waxed_cut_copper_slab.json");
-                event.copyPluginResource(this, ClientView.AwarenessLevel.RESOURCE_PACK, "resource_pack_indirect/assets/quark/blockstates/diorite_brick_stairs.json", "assets/minecraft/blockstates/waxed_cut_copper_stairs.json");
-                event.copyPluginResources(context, ClientView.AwarenessLevel.CLIENT_MOD, "resource_pack_indirect", "");
+                event.copyPluginResources(context, ClientView.AwarenessLevel.CLIENT_MOD, "resource_pack", "");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

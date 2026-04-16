@@ -45,7 +45,7 @@ public final class FiddleEvents {
     public static final LifecycleEventType.Prioritizable<BootstrapContext, RegistryComposeEvent<ItemType, ItemRegistryEntry.Builder>> ITEM = RegistryEvents.ITEM.compose();
     public static final ComposableEventType<FiddleResourcePackConstructEvent> RESOURCE_PACK_CONSTRUCT = FiddleResourcePackConstruction.get().compose();
     public static final LifecycleEventType<BootstrapContext, FiddleResourcePackConstructFinishEvent, PrioritizedLifecycleEventHandlerConfiguration<BootstrapContext>> RESOURCE_PACK_CONSTRUCT_FINISH = FiddleResourcePackConstruction.get().finish();
-    public static final ComposableEventType<BlockMappingsComposeEvent<?>> BLOCK_MAPPING = ((BlockMappings) BlockMappings.get()).compose();
+    public static final ComposableEventType<BlockMappingsComposeEvent> BLOCK_MAPPING = ((BlockMappings) BlockMappings.get()).compose();
     public static final ComposableEventType<ItemMappingsComposeEvent<?>> ITEM_MAPPING = ((ItemMappings) ItemMappings.get()).compose();
     public static final ComposableEventType<ComponentMappingsComposeEvent<?>> COMPONENT_MAPPING = ((ComponentMappings) ComponentMappings.get()).compose();
     public static final ComposableEventType<ServerSideTranslationsComposeEvent> SERVER_SIDE_TRANSLATION = ServerSideTranslations.get().compose();

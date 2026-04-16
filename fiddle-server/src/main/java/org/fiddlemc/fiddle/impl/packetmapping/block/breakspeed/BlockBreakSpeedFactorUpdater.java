@@ -1,7 +1,6 @@
 package org.fiddlemc.fiddle.impl.packetmapping.block.breakspeed;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,6 +29,9 @@ public final class BlockBreakSpeedFactorUpdater {
     private BlockBreakSpeedFactorUpdater() {
         throw new UnsupportedOperationException();
     }
+
+    private static final float MAX_FACTOR = 10f; // TODO make dependent on ping: lower ping means higher allowed max factor (since less risk of overshooting after breaking)
+    private static final float MIN_FACTOR = 0.0001f;
 
     public static void setFactorAndSendPacket(ServerPlayer player, float factor) {
         player.serverToClientSideBlockBreakSpeedFactorHistory.storeNewValue(player, factor);
@@ -84,24 +86,51 @@ public final class BlockBreakSpeedFactorUpdater {
         // Compute the server and client destroy progress
         float serverDestroyProgress = serverBlockState.getDestroyProgress(player, level, blockPos);
         float clientDestroyProgress = clientBlockState.getDestroyProgress(player, level, blockPos, clientItemStack);
+        boolean serverDestroyProgressIsInstant = Float.isNaN(serverDestroyProgress) || serverDestroyProgress > 0 && Float.isInfinite(serverDestroyProgress);
+        boolean clientDestroyProgressIsInstant = Float.isNaN(clientDestroyProgress) || clientDestroyProgress > 0 && Float.isInfinite(clientDestroyProgress);
+        if (serverDestroyProgressIsInstant) {
+            // The block is instabreak server-side
+            if (clientDestroyProgressIsInstant) {
+                // The client knows
+                return 1;
+            } else {
+                // Just set a high factor
+                return MAX_FACTOR;
+            }
+        } else if (clientDestroyProgressIsInstant) {
+            // The client thinks it's instabreak: this shouldn't happen if plugins choose their mappings properly, all we can do now is set a slow factor and pray it does something
+            return MIN_FACTOR;
+        }
+        if (serverDestroyProgress == 0) {
+            // The block cannot be broken server-side
+            if (clientDestroyProgress == 0) {
+                // The client knows
+                return 1;
+            }
+            // We return a very small number
+            return MIN_FACTOR;
+        } else if (clientDestroyProgress == 0) {
+            // The client thinks the block cannot be broken: this shouldn't happen if plugins choose their mappings properly, we can not do anything about it
+            return 1;
+        }
 
         // Compute the desired factor
         float factor = serverDestroyProgress / clientDestroyProgress;
 
-        // Fix invalid results (like division by zero)
+        // Fallback in case of invalid results (like division by zero)
         if (Float.isNaN(factor)) {
             return 1;
         }
         // Don't return a crazy small factor
-        if (factor <= 0.001f) {
-            return 0.001f;
+        if (factor < MIN_FACTOR) {
+            return MIN_FACTOR;
         }
         // Don't return a large factor
-        if (factor >= 4f) {
-            return 4f;
+        if (factor > MAX_FACTOR) {
+            return MAX_FACTOR;
         }
         // Just return 1 if the factor is close enough
-        if (0.9999 <= factor && factor <= 1.0001) {
+        if (0.999 <= factor && factor <= 1.001) {
             return 1;
         }
 

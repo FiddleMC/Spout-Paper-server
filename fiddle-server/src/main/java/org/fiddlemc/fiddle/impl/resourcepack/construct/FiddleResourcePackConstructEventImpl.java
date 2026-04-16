@@ -4,8 +4,10 @@ import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.lifecycle.event.PaperLifecycleEvent;
 import net.kyori.adventure.key.Key;
+import net.minecraft.resources.Identifier;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
+import org.bukkit.craftbukkit.util.CraftNamespacedKey;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
 import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackConstructEvent;
 import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackPath;
@@ -94,6 +96,13 @@ public final class FiddleResourcePackConstructEventImpl implements PaperLifecycl
     @Override
     public FiddleResourcePackPath asset(ClientView.AwarenessLevel awarenessLevel, String directoryName, net.kyori.adventure.key.Keyed keyed, @Nullable String extension) {
         return this.asset(awarenessLevel, directoryName, keyed.key(), extension);
+    }
+
+    /**
+     * @see #asset(ClientView.AwarenessLevel, String, NamespacedKey, String)
+     */
+    public FiddleResourcePackPath asset(ClientView.AwarenessLevel awarenessLevel, String directoryName, Identifier identifier, @Nullable String extension) {
+        return this.asset(awarenessLevel, directoryName, CraftNamespacedKey.fromMinecraft(identifier), extension);
     }
 
     @Override

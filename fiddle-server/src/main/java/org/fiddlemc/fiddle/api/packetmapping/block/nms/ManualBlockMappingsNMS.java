@@ -9,6 +9,7 @@ import org.bukkit.block.BlockType;
 import org.bukkit.block.data.BlockData;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
 import org.fiddlemc.fiddle.api.packetmapping.block.BlockMappingsComposeEvent;
+import org.fiddlemc.fiddle.api.packetmapping.block.ManualBlockMappings;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.function.Consumer;
 /**
  * An extension to {@link BlockMappingsComposeEvent} using Minecraft internals.
  */
-public interface BlockMappingsComposeEventNMS<M> extends BlockMappingsComposeEvent<M> {
+public interface ManualBlockMappingsNMS<M> extends ManualBlockMappings<M> {
 
     /**
      * @see #register(Consumer)
@@ -71,6 +72,48 @@ public interface BlockMappingsComposeEventNMS<M> extends BlockMappingsComposeEve
      */
     default void registerStateToStateNMS(Collection<ClientView.AwarenessLevel> awarenessLevel, Block from, Block to) {
         this.registerStateToState(awarenessLevel, Registry.BLOCK.getOrThrow(Key.key(from.keyInBlockRegistry.getNamespace(), from.keyInBlockRegistry.getPath())), Registry.BLOCK.getOrThrow(Key.key(to.keyInBlockRegistry.getNamespace(), to.keyInBlockRegistry.getPath())));
+    }
+
+    /**
+     * Calls {@link #registerNMS(Consumer)} with
+     * {@link BlockMappingBuilderNMS#awarenessLevel} set to {@code awarenessLevel},
+     * {@link BlockMappingBuilderNMS#from} set to {@code from}
+     * and {@link BlockMappingBuilderNMS#to} set to {@code to}.
+     */
+    default void registerNMS(ClientView.AwarenessLevel awarenessLevel, BlockState from, BlockState to) {
+        this.registerNMS(builder -> {
+            builder.awarenessLevel(awarenessLevel);
+            builder.from(from);
+            builder.to(to);
+        });
+    }
+
+    /**
+     * Calls {@link #registerNMS(Consumer)} with
+     * {@link BlockMappingBuilderNMS#awarenessLevel} set to {@code awarenessLevels},
+     * {@link BlockMappingBuilderNMS#from} set to {@code from}
+     * and {@link BlockMappingBuilderNMS#to} set to {@code to}.
+     */
+    default void registerNMS(ClientView.AwarenessLevel[] awarenessLevels, BlockState from, BlockState to) {
+        this.registerNMS(builder -> {
+            builder.awarenessLevel(awarenessLevels);
+            builder.from(from);
+            builder.to(to);
+        });
+    }
+
+    /**
+     * Calls {@link #registerNMS(Consumer)} with
+     * {@link BlockMappingBuilderNMS#awarenessLevel} set to {@code awarenessLevels},
+     * {@link BlockMappingBuilderNMS#from} set to {@code from}
+     * and {@link BlockMappingBuilderNMS#to} set to {@code to}.
+     */
+    default void registerNMS(Collection<ClientView.AwarenessLevel> awarenessLevels, BlockState from, BlockState to) {
+        this.registerNMS(builder -> {
+            builder.awarenessLevel(awarenessLevels);
+            builder.from(from);
+            builder.to(to);
+        });
     }
 
 }

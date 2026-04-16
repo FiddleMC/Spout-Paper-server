@@ -2,6 +2,7 @@ package org.fiddlemc.fiddle.api.resourcepack.construct;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.fiddlemc.fiddle.api.resourcepack.content.Blockstates;
 
 /**
  * A path in the Fiddle server resource pack.
@@ -37,5 +38,10 @@ public interface FiddleResourcePackPath {
      * @return A view that allows treating the file contents at this path as a {@link JsonObject}.
      */
     JsonObjectFiddleResourcePackPath asJsonObject();
+
+    /**
+     * @return A view that allows treating the file contents at this path as a {@link Blockstates}.
+     */
+    BlockstatesFiddleResourcePackPath asBlockstates();
 
 }

@@ -7,18 +7,18 @@ import java.util.ServiceLoader;
 /**
  * A service for the block mappings that Fiddle applies.
  */
-public interface BlockMappings<M> extends Composable<BlockMappingsComposeEvent<M>> {
+public interface BlockMappings extends Composable<BlockMappingsComposeEvent> {
 
     /**
      * An internal interface to get the {@link BlockMappings} instance.
      */
-    interface ServiceProvider extends GenericServiceProvider<BlockMappings<?>> {
+    interface ServiceProvider extends GenericServiceProvider<BlockMappings> {
     }
 
     /**
      * @return The {@link BlockMappings} instance.
      */
-    static BlockMappings<?> get() {
+    static BlockMappings get() {
         return ServiceLoader.load(BlockMappings.ServiceProvider.class, BlockMappings.ServiceProvider.class.getClassLoader()).findFirst().get().get();
     }
 

@@ -8,11 +8,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.fiddlemc.testplugin.data.PluginItemTypes;
 import java.util.Arrays;
-import java.util.function.Supplier;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 
 @SuppressWarnings("unused")
 public final class TestPlugin extends JavaPlugin implements Listener {
@@ -31,7 +28,7 @@ public final class TestPlugin extends JavaPlugin implements Listener {
      * Ops each test player and gives them all custom items on join.
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onEntityPickupItem(PlayerJoinEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         if (player.getName().startsWith("Player") || player.getName().equals("Martijn") || player.getName().equals("Infima")) {
             player.setOp(true);

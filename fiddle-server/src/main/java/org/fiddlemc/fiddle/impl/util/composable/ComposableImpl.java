@@ -10,6 +10,9 @@ import io.papermc.paper.plugin.lifecycle.event.types.PrioritizableLifecycleEvent
 import org.fiddlemc.fiddle.api.util.composable.Composable;
 import org.fiddlemc.fiddle.api.util.composable.ComposableEventType;
 import org.jspecify.annotations.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * A base implementation of {@link Composable}.
@@ -32,6 +35,12 @@ public abstract class ComposableImpl<E extends LifecycleEvent, EI extends PaperL
      * or null if not cached yet.
      */
     private @Nullable ComposableEventTypeImpl composeEventType;
+
+    /**
+     * Any registered event initializers,
+     * or null if none.
+     */
+    protected @Nullable List<Consumer<EI>> eventInitializers;
 
     /**
      * The prefix for the {@link LifecycleEventType#name()} of events for this composable.
@@ -63,6 +72,7 @@ public abstract class ComposableImpl<E extends LifecycleEvent, EI extends PaperL
      */
     public void fireComposeEvent() {
         EI event = this.createComposeEvent();
+        this.runEventInitializers(event);
         LifecycleEventRunner.INSTANCE.callEvent((ComposableEventType<EI>) this.compose(), event);
         this.copyInformationFromEvent(event);
     }
@@ -72,6 +82,22 @@ public abstract class ComposableImpl<E extends LifecycleEvent, EI extends PaperL
      */
     protected void copyInformationFromEvent(EI event) {
         // To be overridden if desired
+    }
+
+    public void addEventInitializer(Consumer<EI> eventInitializer) {
+        if (this.eventInitializers == null) {
+            this.eventInitializers = new ArrayList<>(1);
+        }
+        this.eventInitializers.add(eventInitializer);
+    }
+
+    /**
+     * Apply any registered event initializers to the event.
+     */
+    protected void runEventInitializers(EI event) {
+        if (this.eventInitializers != null) {
+            this.eventInitializers.forEach(consumer -> consumer.accept(event));
+        }
     }
 
 }
