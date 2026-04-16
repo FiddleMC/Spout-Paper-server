@@ -1,16 +1,22 @@
 package org.fiddlemc.fiddle.impl.packetmapping.item;
 
 import net.kyori.adventure.key.Key;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
 import org.bukkit.Registry;
 import org.bukkit.craftbukkit.inventory.CraftItemType;
 import org.bukkit.inventory.ItemType;
+import org.fiddlemc.fiddle.api.clientview.ClientView;
 import org.fiddlemc.fiddle.api.packetmapping.item.ItemMappingBuilder;
+import org.fiddlemc.fiddle.api.packetmapping.item.ItemMappingUtilities;
 import org.fiddlemc.fiddle.api.packetmapping.item.ItemMappingsComposeEvent;
 import org.fiddlemc.fiddle.api.packetmapping.item.nms.ItemMappingBuilderNMS;
+import org.fiddlemc.fiddle.api.packetmapping.item.nms.ItemMappingUtilitiesNMS;
 import org.fiddlemc.fiddle.api.packetmapping.item.nms.ItemMappingsComposeEventNMS;
 import org.fiddlemc.fiddle.impl.moredatadriven.minecraft.ItemRegistry;
 import org.fiddlemc.fiddle.impl.util.composable.AwarenessLevelPairKeyedBuilderComposeEventImpl;
+import org.jspecify.annotations.Nullable;
 import java.util.function.Consumer;
 
 /**
@@ -30,6 +36,25 @@ public final class ItemMappingsComposeEventImpl extends AwarenessLevelPairKeyedB
         ItemMappingBuilderNMSImpl builder = new ItemMappingBuilderNMSImpl();
         builderConsumer.accept(builder);
         builder.registerWith(this);
+    }
+
+    @Override
+    public void registerAutomaticNMS(Item from, Item proxy, Item fallback, @Nullable Identifier itemModel) {
+        this.registerNMS(builder -> {
+            builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
+            builder.from(from);
+            builder.to(fallback);
+        });
+        this.registerNMS(builder -> {
+            builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
+            builder.from(from);
+            builder.to(handle -> {
+                ItemMappingUtilitiesNMS.get().setItemWhilePreservingRest(handle, proxy);
+                if (itemModel != null) {
+                    handle.getMutable().set(DataComponents.ITEM_MODEL, itemModel);
+                }
+            });
+        });
     }
 
     @Override

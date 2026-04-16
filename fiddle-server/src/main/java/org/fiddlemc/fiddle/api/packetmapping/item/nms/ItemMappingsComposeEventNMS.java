@@ -2,11 +2,16 @@ package org.fiddlemc.fiddle.api.packetmapping.item.nms;
 
 import it.unimi.dsi.fastutil.Pair;
 import net.kyori.adventure.key.Key;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
+import org.bukkit.craftbukkit.inventory.CraftItemType;
+import org.bukkit.craftbukkit.util.CraftNamespacedKey;
 import org.bukkit.inventory.ItemType;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
 import org.fiddlemc.fiddle.api.packetmapping.item.ItemMappingsComposeEvent;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -48,5 +53,24 @@ public interface ItemMappingsComposeEventNMS<M> extends ItemMappingsComposeEvent
     default void changeRegisteredNMS(ClientView.AwarenessLevel awarenessLevel, Item from, Consumer<List<M>> listConsumer) {
         this.changeRegistered(awarenessLevel, Registry.ITEM.get(Key.key(from.keyInItemRegistry.getNamespace(), from.keyInItemRegistry.getPath())), listConsumer);
     }
+
+    @Override
+    default void registerAutomatic(ItemType from, ItemType proxy, ItemType fallback, @Nullable NamespacedKey itemModel) {
+        this.registerAutomaticNMS(CraftItemType.bukkitToMinecraftNew(from), CraftItemType.bukkitToMinecraftNew(proxy), CraftItemType.bukkitToMinecraftNew(fallback), itemModel == null ? null : CraftNamespacedKey.toMinecraft(itemModel));
+    }
+
+    default void registerAutomaticNMS(Item from, Item fallback) {
+        this.registerAutomaticNMS(from, fallback, fallback);
+    }
+
+    default void registerAutomaticNMS(Item from, Item proxy, Item fallback) {
+        this.registerAutomaticNMS(from, proxy, fallback, from.keyInItemRegistry);
+    }
+
+    default void registerAutomaticNMS(Item from, Item fallback, @Nullable Identifier itemModel) {
+        this.registerAutomaticNMS(from, fallback, fallback, itemModel);
+    }
+
+    void registerAutomaticNMS(Item from, Item proxy, Item fallback, @Nullable Identifier itemModel);
 
 }

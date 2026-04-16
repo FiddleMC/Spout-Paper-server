@@ -3,7 +3,6 @@ package org.fiddlemc.testplugin;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import org.bukkit.NamespacedKey;
 import org.bukkit.block.BlockType;
 import org.bukkit.block.data.Lightable;
 import org.bukkit.inventory.ItemType;
@@ -11,7 +10,6 @@ import org.fiddlemc.fiddle.api.FiddleEvents;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
 import org.fiddlemc.fiddle.api.packetmapping.block.automatic.AutomaticBlockMappings;
 import org.fiddlemc.fiddle.api.packetmapping.component.translatable.ServerSideTranslations;
-import org.fiddlemc.fiddle.api.packetmapping.item.ItemMappingUtilities;
 import org.fiddlemc.testplugin.data.PluginBlockTypes;
 import org.fiddlemc.testplugin.data.PluginItemTypes;
 import org.jetbrains.annotations.NotNull;
@@ -161,35 +159,10 @@ public class TestPluginBootstrap implements PluginBootstrap {
         context.getLifecycleManager().registerEventHandler(FiddleEvents.ITEM_MAPPING, event -> {
 
             // Stone brick bevel
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
-                builder.from(PluginItemTypes.STONE_BRICK_BEVEL.get());
-                builder.to(ItemType.STONE);
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(PluginItemTypes.STONE_BRICK_BEVEL.get());
-                builder.to(handle -> {
-                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.STONE_BUTTON);
-                    // ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.BARRIER);
-                    // handle.getMutable().editMeta(meta -> meta.setItemModel(NamespacedKey.fromString("more_vanilla_shapes:stone_brick_bevel")));
-                });
-            });
+            event.registerAutomatic(PluginItemTypes.STONE_BRICK_BEVEL.get(), ItemType.STONE_BUTTON);
 
             // Glass shard
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
-                builder.from(PluginItemTypes.GLASS_SHARD.get());
-                builder.to(ItemType.PRISMARINE_SHARD);
-            });
-            event.register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
-                builder.from(PluginItemTypes.GLASS_SHARD.get());
-                builder.to(handle -> {
-                    ItemMappingUtilities.get().setItemTypeWhilePreservingRest(handle, ItemType.PRISMARINE_SHARD);
-                    handle.getMutable().editMeta(meta -> meta.setItemModel(NamespacedKey.fromString("quark:glass_shard")));
-                });
-            });
+            event.registerAutomatic(PluginItemTypes.GLASS_SHARD.get(), ItemType.PRISMARINE_SHARD);
 
         });
     }
