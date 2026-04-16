@@ -1,11 +1,10 @@
 package org.fiddlemc.fiddle.impl.packetmapping.component.translatable;
 
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
 import org.fiddlemc.fiddle.api.packetmapping.component.translatable.ServerSideTranslations;
 import org.fiddlemc.fiddle.api.packetmapping.component.translatable.ServerSideTranslationsComposeEvent;
-import org.fiddlemc.fiddle.impl.resourcepack.construct.FiddleResourcePackConstructEventImpl;
+import org.fiddlemc.fiddle.api.resourcepack.content.Lang;
 import org.fiddlemc.fiddle.impl.resourcepack.construct.FiddleResourcePackConstructionImpl;
 import org.fiddlemc.fiddle.impl.util.composable.ComposableImpl;
 import org.fiddlemc.fiddle.impl.util.java.serviceloader.NoArgsConstructorServiceProviderImpl;
@@ -134,13 +133,13 @@ public final class ServerSideTranslationsImpl extends ComposableImpl<ServerSideT
     protected void copyInformationFromEvent(ServerSideTranslationsComposeEventImpl event) {
         // Add language files to resource pack
         FiddleResourcePackConstructionImpl.get().addEventInitializer(resourcePackConstructEvent -> {
-            Map<String, JsonObject> languageFiles = ServerSideTranslationsImpl.get().exportForResourcePackAsJSONs();
+            Map<String, Lang> languageFiles = ServerSideTranslationsImpl.get().exportForResourcePackAsLangs();
             for (ClientView.AwarenessLevel awarenessLevel : ClientView.AwarenessLevel.getAll()) {
                 // Skip if the awareness level is not relevant
                 if (!FiddleResourcePackConstructionImpl.generateForAwarenessLevel(awarenessLevel)) continue;
                 // Add the language files
-                for (Map.Entry<String, JsonObject> entry : languageFiles.entrySet()) {
-                    resourcePackConstructEvent.path(awarenessLevel, "assets/minecraft/lang/" + entry.getKey() + ".json").asJsonObject().setMutable(entry.getValue());
+                for (Map.Entry<String, Lang> entry : languageFiles.entrySet()) {
+                    resourcePackConstructEvent.path(awarenessLevel, "assets/minecraft/lang/" + entry.getKey() + ".json").asLang().setMutable(entry.getValue());
                 }
             }
         });
@@ -233,13 +232,13 @@ public final class ServerSideTranslationsImpl extends ComposableImpl<ServerSideT
         return exported;
     }
 
-    private Map<String, JsonObject> exportForResourcePackAsJSONs() {
+    private Map<String, Lang> exportForResourcePackAsLangs() {
         return this.exportForResourcePackAsMaps().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> {
-            JsonObject json = new JsonObject();
+            Lang lang = Lang.create();
             for (Map.Entry<String, String> mapsEntry : entry.getValue().entrySet()) {
-                json.addProperty(mapsEntry.getKey(), mapsEntry.getValue());
+                lang.putTranslation(mapsEntry.getKey(), mapsEntry.getValue());
             }
-            return json;
+            return lang;
         }));
     }
 

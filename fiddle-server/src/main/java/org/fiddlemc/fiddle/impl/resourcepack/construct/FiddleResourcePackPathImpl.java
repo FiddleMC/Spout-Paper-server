@@ -8,8 +8,10 @@ import org.fiddlemc.fiddle.api.resourcepack.construct.BytesFiddleResourcePackPat
 import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackPath;
 import org.fiddlemc.fiddle.api.resourcepack.construct.JsonElementFiddleResourcePackPath;
 import org.fiddlemc.fiddle.api.resourcepack.construct.JsonObjectFiddleResourcePackPath;
+import org.fiddlemc.fiddle.api.resourcepack.construct.LangFiddleResourcePackPath;
 import org.fiddlemc.fiddle.api.resourcepack.construct.StringFiddleResourcePackPath;
 import org.fiddlemc.fiddle.api.resourcepack.content.Blockstates;
+import org.fiddlemc.fiddle.api.resourcepack.content.Lang;
 import org.jspecify.annotations.Nullable;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
@@ -54,6 +56,11 @@ public final class FiddleResourcePackPathImpl implements FiddleResourcePackPath 
         @Override
         public BlockstatesFiddleResourcePackPath asBlockstates() {
             return FiddleResourcePackPathImpl.this.asBlockstates();
+        }
+
+        @Override
+        public LangFiddleResourcePackPath asLang() {
+            return FiddleResourcePackPathImpl.this.asLang();
         }
 
     }
@@ -114,6 +121,7 @@ public final class FiddleResourcePackPathImpl implements FiddleResourcePackPath 
         this.jsonElement = null;
         this.jsonObject = null;
         this.blockstates = null;
+        this.lang = null;
     }
 
     /**
@@ -138,7 +146,7 @@ public final class FiddleResourcePackPathImpl implements FiddleResourcePackPath 
     }
 
     private void setBytesFromContents() {
-        if (this.string != null || this.jsonElement != null || this.jsonObject != null || this.blockstates != null) {
+        if (this.string != null || this.jsonElement != null || this.jsonObject != null || this.blockstates != null || this.lang != null) {
             this.bytes = this.getString().getBytes();
         }
     }
@@ -213,7 +221,7 @@ public final class FiddleResourcePackPathImpl implements FiddleResourcePackPath 
             this.string = new String(this.bytes, StandardCharsets.UTF_8);
             return;
         }
-        if (this.jsonElement != null || this.jsonObject != null || this.blockstates != null) {
+        if (this.jsonElement != null || this.jsonObject != null || this.blockstates != null || this.lang != null) {
             this.string = this.getJsonElementImmutable().toString();
         }
     }
@@ -284,7 +292,7 @@ public final class FiddleResourcePackPathImpl implements FiddleResourcePackPath 
     }
 
     private void trySetJsonElementFromContents() {
-        if (this.jsonObject != null || this.blockstates != null) {
+        if (this.jsonObject != null || this.blockstates != null || this.lang != null) {
             this.jsonElement = this.getJsonObjectImmutable();
             return;
         }
@@ -380,8 +388,12 @@ public final class FiddleResourcePackPathImpl implements FiddleResourcePackPath 
     }
 
     private void trySetJsonObjectFromContents() {
-        if (this.blockstates != null) {
+        if (this.blockstates != null ) {
             this.jsonObject = this.getBlockstatesImmutable().getJson();
+            return;
+        }
+        if (this.lang != null) {
+            this.jsonObject = this.getLangImmutable().getJson();
             return;
         }
         if (this.bytes != null || this.string != null || this.jsonElement != null) {
@@ -490,7 +502,7 @@ public final class FiddleResourcePackPathImpl implements FiddleResourcePackPath 
 
     private boolean isBlockstates() {
         if (this.blockstates == null) {
-            // Find the contents and turn it into a JsonObject
+            // Find the contents and turn it into a Blockstates
             this.trySetBlockstatesFromContents();
         }
         return this.blockstates != null;
@@ -537,6 +549,91 @@ public final class FiddleResourcePackPathImpl implements FiddleResourcePackPath 
         @Override
         public void update(Function<@Nullable Blockstates, @Nullable Blockstates> function) {
             FiddleResourcePackPathImpl.this.updateBlockstates(function);
+        }
+
+    }
+
+    /**
+     * The file contents as a {@link Lang},
+     * or null if it is not up-to-date,
+     * or null if {@link #exists} is false.
+     */
+    @Nullable Lang lang;
+
+    /**
+     * The {@link LangFiddleResourcePackPath} view of this instance,
+     * or null if not initialized yet.
+     */
+    private @Nullable LangView langView;
+
+    @Override
+    public LangFiddleResourcePackPath asLang() {
+        if (this.langView == null) {
+            this.langView = new LangView();
+        }
+        return this.langView;
+    }
+
+    private void trySetLangFromContents() {
+        if (this.bytes != null || this.string != null || this.jsonElement != null || this.jsonObject != null) {
+            if (this.isJsonObject()) {
+                try {
+                    this.lang = Lang.ofMutable(this.getJsonObjectImmutable());
+                } catch (Exception ignored) {
+                }
+            }
+        }
+    }
+
+    private boolean isLang() {
+        if (this.lang == null) {
+            // Find the contents and turn it into a Lang
+            this.trySetLangFromContents();
+        }
+        return this.lang != null;
+    }
+
+    private Lang getLangImmutable() {
+        this.throwExceptionIfNot(this.isLang(), "is not a valid lang file");
+        return this.lang;
+    }
+
+    private void setLangMutable(Lang lang) {
+        this.exists = true;
+        this.clear();
+        this.lang = lang;
+    }
+
+    private void updateLang(Function<@Nullable Lang, @Nullable Lang> function) {
+        @Nullable Lang oldValue = this.isLang() ? this.getLangImmutable() : null;
+        @Nullable Lang newValue = function.apply(oldValue);
+        if (newValue != null) {
+            this.setLangMutable(newValue);
+        } else {
+            this.delete();
+        }
+    }
+
+    private class LangView extends View implements LangFiddleResourcePackPath {
+
+        @Override
+        public boolean isLang() {
+            return FiddleResourcePackPathImpl.this.isLang();
+        }
+
+        @Override
+        public Lang getImmutable() {
+            return FiddleResourcePackPathImpl.this.getLangImmutable();
+        }
+
+        @Override
+        public void setMutable(Lang lang) {
+            FiddleResourcePackPathImpl.this.setLangMutable(lang);
+        }
+
+        @Override
+        public void update(Function<@Nullable Lang, @Nullable Lang> function) {
+            FiddleResourcePackPathImpl.this.updateLang(function);
         }
 
     }
