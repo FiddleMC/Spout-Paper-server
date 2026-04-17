@@ -9,7 +9,6 @@ import org.bukkit.inventory.ItemType;
 import org.fiddlemc.fiddle.api.FiddleEvents;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
 import org.fiddlemc.fiddle.api.packetmapping.block.automatic.AutomaticBlockMappings;
-import org.fiddlemc.fiddle.api.packetmapping.component.translatable.ServerSideTranslations;
 import org.fiddlemc.testplugin.data.PluginBlockTypes;
 import org.fiddlemc.testplugin.data.PluginItemTypes;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +25,6 @@ public class TestPluginBootstrap implements PluginBootstrap {
         loadIncludedResourcePack(context);
         setBlockMappings(context);
         setItemMappings(context);
-        setTranslations(context);
     }
 
     /**
@@ -131,6 +129,12 @@ public class TestPluginBootstrap implements PluginBootstrap {
                 builder.fallbackDefaultStateOf(BlockType.BOOKSHELF);
             });
 
+            // Diorite bricks
+            automaticMappings.fullBlock(builder -> {
+                builder.fromDefaultStateOf(PluginBlockTypes.DIORITE_BRICKS.get());
+                builder.fallbackDefaultStateOf(BlockType.POLISHED_DIORITE);
+            });
+
             // Diorite brick slab
             automaticMappings.slab(builder -> {
                 builder.from(PluginBlockTypes.DIORITE_BRICK_SLAB.get());
@@ -141,12 +145,6 @@ public class TestPluginBootstrap implements PluginBootstrap {
             automaticMappings.stairs(builder -> {
                 builder.from(PluginBlockTypes.DIORITE_BRICK_STAIRS.get());
                 builder.fallback(BlockType.POLISHED_DIORITE_STAIRS);
-            });
-
-            // Diorite bricks
-            automaticMappings.fullBlock(builder -> {
-                builder.fromDefaultStateOf(PluginBlockTypes.DIORITE_BRICKS.get());
-                builder.fallbackDefaultStateOf(BlockType.POLISHED_DIORITE);
             });
 
         });
@@ -163,49 +161,6 @@ public class TestPluginBootstrap implements PluginBootstrap {
 
             // Glass shard
             event.registerAutomatic(PluginItemTypes.GLASS_SHARD.get(), ItemType.PRISMARINE_SHARD);
-
-        });
-    }
-
-    /**
-     * Configures the translations of names of blocks and items.
-     */
-    private void setTranslations(@NotNull BootstrapContext context) {
-        context.getLifecycleManager().registerEventHandler(FiddleEvents.SERVER_SIDE_TRANSLATION, event -> {
-
-            event.register(PluginBlockTypes.LIT_PAPER_LAMP.get().translationKey(), "Lit Paper Lamp");
-            event.register(PluginBlockTypes.LIT_PAPER_LAMP.get().translationKey(), "点灯した紙ランプ", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
-            event.register(PluginBlockTypes.PAPER_LAMP.get().translationKey(), "Paper Lamp");
-            event.register(PluginBlockTypes.PAPER_LAMP.get().translationKey(), "紙ランプ", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
-            event.register(PluginBlockTypes.YELLOW_MAPLE_LEAVES.get().translationKey(), "Yellow Maple Leaves");
-            event.register(PluginBlockTypes.YELLOW_MAPLE_LEAVES.get().translationKey(), "黄色いカエデの葉", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
-            event.register(PluginBlockTypes.SNOWED_STONE_BRICKS.get().translationKey(), "Snowed Stone Bricks");
-            event.register(PluginBlockTypes.SNOWED_STONE_BRICKS.get().translationKey(), "雪化粧の石レンガ", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
-            event.register(PluginBlockTypes.DIRT_SLAB.get().translationKey(), "Dirt Slab");
-            event.register(PluginBlockTypes.DIRT_SLAB.get().translationKey(), "土のハーフブロック", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
-            event.register(PluginBlockTypes.DIRT_STAIRS.get().translationKey(), "Dirt Stairs");
-            event.register(PluginBlockTypes.DIRT_STAIRS.get().translationKey(), "土の階段", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
-            event.register(PluginBlockTypes.GLASS_SLAB.get().translationKey(), "Glass Slab");
-            event.register(PluginBlockTypes.GLASS_SLAB.get().translationKey(), "ガラスのハーフブロック", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
-            event.register(PluginBlockTypes.GLASS_STAIRS.get().translationKey(), "Glass Stairs");
-            event.register(PluginBlockTypes.GLASS_STAIRS.get().translationKey(), "ガラスの階段", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
-            event.register(PluginBlockTypes.STONE_BRICK_BEVEL.get().translationKey(), "Stone Brick Piece");
-            event.register(PluginBlockTypes.STONE_BRICK_BEVEL.get().translationKey(), "石レンガのミニ", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
-            event.register(PluginBlockTypes.AZALEA_PLANKS.get().translationKey(), "Azalea Planks");
-            event.register(PluginBlockTypes.AZALEA_PLANKS.get().translationKey(), "ツツジの板材", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
-            event.register(PluginBlockTypes.BIRCH_BOOKSHELF.get().translationKey(), "Birch Bookshelf");
-            event.register(PluginBlockTypes.BIRCH_BOOKSHELF.get().translationKey(), "シラカバの本棚", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
-            event.register(PluginBlockTypes.DIORITE_BRICK_SLAB.get().translationKey(), "Diorite Brick Slab");
-            event.register(PluginBlockTypes.DIORITE_BRICK_SLAB.get().translationKey(), "閃緑岩レンガのハーフブロック", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
-            event.register(PluginBlockTypes.DIORITE_BRICK_STAIRS.get().translationKey(), "Diorite Brick Stairs");
-            event.register(PluginBlockTypes.DIORITE_BRICK_STAIRS.get().translationKey(), "閃緑岩レンガの階段", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
-            event.register(PluginBlockTypes.DIORITE_BRICKS.get().translationKey(), "Diorite Bricks");
-            event.register(PluginBlockTypes.DIORITE_BRICKS.get().translationKey(), "閃緑岩レンガ", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
-            event.register(PluginItemTypes.GLASS_SHARD.get().translationKey(), "Glass Shard");
-            event.register(PluginItemTypes.GLASS_SHARD.get().translationKey(), "ガラスの破片", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
-
-            event.register(BlockType.BOOKSHELF.translationKey(), "Oak Bookshelf");
-            event.register(BlockType.BOOKSHELF.translationKey(), "オークの本棚", "ja_jp", ServerSideTranslations.FallbackScope.LANGUAGE_GROUP);
 
         });
     }

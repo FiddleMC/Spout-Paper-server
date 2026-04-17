@@ -1,19 +1,32 @@
 package org.fiddlemc.fiddle.impl.packetmapping.component.translatable;
 
 import com.google.gson.JsonParser;
+import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
+import it.unimi.dsi.fastutil.Pair;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
 import org.fiddlemc.fiddle.api.packetmapping.component.translatable.ServerSideTranslations;
 import org.fiddlemc.fiddle.api.packetmapping.component.translatable.ServerSideTranslationsComposeEvent;
 import org.fiddlemc.fiddle.api.resourcepack.content.Lang;
+import org.fiddlemc.fiddle.impl.configuration.FiddleGlobalConfiguration;
 import org.fiddlemc.fiddle.impl.resourcepack.construct.FiddleResourcePackConstructionImpl;
+import org.fiddlemc.fiddle.impl.resourcepack.plugin.discover.FiddlePluginResourcePackDiscoveryImpl;
 import org.fiddlemc.fiddle.impl.util.composable.ComposableImpl;
 import org.fiddlemc.fiddle.impl.util.java.serviceloader.NoArgsConstructorServiceProviderImpl;
 import org.jspecify.annotations.Nullable;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -41,7 +54,65 @@ public final class ServerSideTranslationsImpl extends ComposableImpl<ServerSideT
 
     @Override
     protected ServerSideTranslationsComposeEventImpl createComposeEvent() {
-        return new ServerSideTranslationsComposeEventImpl(this);
+
+        // Create the event
+        ServerSideTranslationsComposeEventImpl event = new ServerSideTranslationsComposeEventImpl(this);
+
+        // Add translations from included resource packs
+        Comparator<MinecraftLocaleUtil.KnownLocale> localeComparator;
+        {
+            // Create the complete list of locales in preferred order
+            List<MinecraftLocaleUtil.KnownLocale> localesInOrder = new ArrayList<>(MinecraftLocaleUtil.getKnownLocales().length);
+            FiddleGlobalConfiguration.get().serverSideTranslations.preferredLocalesInOrder.stream().map(MinecraftLocaleUtil::getKnownLocale).filter(Objects::nonNull).forEach(localesInOrder::add);
+            Set<MinecraftLocaleUtil.KnownLocale> localesInOrderSet = new HashSet<>(localesInOrder);
+            if (localesInOrderSet.add(MinecraftLocaleUtil.getDefault())) {
+                localesInOrder.add(MinecraftLocaleUtil.getDefault());
+            }
+            for (String languageGroup : MinecraftLocaleUtil.getLanguageGroups()) {
+                MinecraftLocaleUtil.KnownLocale defaultLocale = MinecraftLocaleUtil.getDefaultKnownLocaleForLanguageGroup(languageGroup);
+                if (defaultLocale != null && localesInOrderSet.add(defaultLocale)) {
+                    localesInOrder.add(defaultLocale);
+                }
+            }
+            for (MinecraftLocaleUtil.KnownLocale locale : MinecraftLocaleUtil.getKnownLocales()) {
+                if (localesInOrderSet.add(locale)) {
+                    localesInOrder.add(locale);
+                }
+            }
+            Object2IntMap<MinecraftLocaleUtil.KnownLocale> localeOrdinal = new Object2IntOpenHashMap<>();
+            for (int i = 0; i < localesInOrder.size(); i++) {
+                localeOrdinal.put(localesInOrder.get(i), i);
+            }
+            localeComparator = Comparator.comparingInt(localeOrdinal::getInt);
+        }
+        Map<String, Map<MinecraftLocaleUtil.KnownLocale, String>> translations;
+        {
+            // Collect provided translations per key
+            translations = new HashMap<>();
+            for (Pair<PluginBootstrap, List<Pair<MinecraftLocaleUtil.KnownLocale, Lang>>> resourcePackLangs : FiddlePluginResourcePackDiscoveryImpl.get().getResourcePackLangs()) {
+                for (Pair<MinecraftLocaleUtil.KnownLocale, Lang> lang : resourcePackLangs.right()) {
+                    for (Pair<String, String> translation : lang.right().getTranslations()) {
+                        translations.computeIfAbsent(translation.left(), $ -> new HashMap<>(1)).put(lang.left(), translation.right());
+                    }
+                }
+            }
+        }
+        translations.forEach((key, translationPerLocale) -> {
+            // Add the translations for the key
+            List<Pair<MinecraftLocaleUtil.KnownLocale, String>> translationsSortedByLocale = new ArrayList<>(translationPerLocale.size());
+            translationPerLocale.forEach((locale, translation) -> translationsSortedByLocale.add(Pair.of(locale, translation)));
+            Collections.sort(translationsSortedByLocale, Comparator.comparing(Pair::left, localeComparator));
+            for (int i = translationsSortedByLocale.size() - 1; i > 0; i--) {
+                Pair<MinecraftLocaleUtil.KnownLocale, String> listedTranslation = translationsSortedByLocale.get(i);
+                event.register(key, listedTranslation.right(), listedTranslation.left().lowerCaseLocale, FallbackScope.LANGUAGE_GROUP, true);
+            }
+            Pair<MinecraftLocaleUtil.KnownLocale, String> mostPreferredTranslation = translationsSortedByLocale.get(0);
+            event.register(key, mostPreferredTranslation.right(), mostPreferredTranslation.left().lowerCaseLocale, FallbackScope.ALL, true);
+        });
+
+        // Return the event
+        return event;
+
     }
 
     /**

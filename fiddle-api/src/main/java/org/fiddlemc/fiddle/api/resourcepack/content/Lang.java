@@ -2,7 +2,9 @@ package org.fiddlemc.fiddle.api.resourcepack.content;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import it.unimi.dsi.fastutil.Pair;
 import org.jspecify.annotations.Nullable;
+import java.util.List;
 
 /**
  * The contents of a {@code lang} file in a resource pack.
@@ -21,6 +23,10 @@ public final class Lang {
 
     public void removeTranslation(String key, String value) {
         this.json.remove(key);
+    }
+
+    public List<Pair<String, String>> getTranslations() {
+        return this.json.entrySet().stream().map(entry -> Pair.of(entry.getKey(), entry.getValue().getAsString())).toList();
     }
 
     public @Nullable String getTranslation(String key) {
@@ -47,11 +53,11 @@ public final class Lang {
         return this.json.toString();
     }
 
-    public static Lang ofImmutable(JsonObject jsonObject) {
+    public static Lang wrapCopyOf(JsonObject jsonObject) {
         return new Lang(jsonObject.deepCopy());
     }
 
-    public static Lang ofMutable(JsonObject jsonObject) {
+    public static Lang wrap(JsonObject jsonObject) {
         return new Lang(jsonObject);
     }
 

@@ -7,6 +7,7 @@ import io.papermc.paper.configuration.GlobalConfiguration;
 import io.papermc.paper.configuration.type.number.IntOr;
 import org.slf4j.Logger;
 import org.spongepowered.configurate.objectmapping.meta.Setting;
+import java.util.List;
 
 /**
  * The global configuration for Fiddle.
@@ -98,6 +99,14 @@ public class FiddleGlobalConfiguration extends ConfigurationPart {
             public boolean namespace = false;
 
         }
+
+    }
+
+    public ServerSideTranslations serverSideTranslations;
+
+    public class ServerSideTranslations extends ConfigurationPart {
+
+        public List<String> preferredLocalesInOrder = List.of("en_us");
 
     }
 

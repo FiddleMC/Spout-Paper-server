@@ -578,7 +578,7 @@ public final class FiddleResourcePackPathImpl implements FiddleResourcePackPath 
         if (this.bytes != null || this.string != null || this.jsonElement != null || this.jsonObject != null) {
             if (this.isJsonObject()) {
                 try {
-                    this.lang = Lang.ofMutable(this.getJsonObjectImmutable());
+                    this.lang = Lang.wrap(this.getJsonObjectImmutable());
                 } catch (Exception ignored) {
                 }
             }
