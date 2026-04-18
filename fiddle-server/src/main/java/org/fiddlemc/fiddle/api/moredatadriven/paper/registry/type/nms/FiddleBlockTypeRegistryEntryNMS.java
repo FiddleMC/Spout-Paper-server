@@ -13,11 +13,6 @@ public interface FiddleBlockTypeRegistryEntryNMS extends FiddleBlockTypeRegistry
     @Override
     WrappedBlockCodec<?> getWrappedCodec();
 
-    @Override
-    default MapCodec<? extends Block> getCodec() {
-        return this.getWrappedCodec().getCodec();
-    }
-
     /**
      * A {@link FiddleBlockTypeRegistryEntry.Builder}
      * that allows building a {@link FiddleBlockType} type using Minecraft internals.

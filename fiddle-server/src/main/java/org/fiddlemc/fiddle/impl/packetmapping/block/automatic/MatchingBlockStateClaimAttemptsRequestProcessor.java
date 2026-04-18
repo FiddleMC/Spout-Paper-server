@@ -15,8 +15,8 @@ import java.util.Arrays;
  */
 public abstract class MatchingBlockStateClaimAttemptsRequestProcessor<US extends UsedStates, R extends ProxyStatesRequestBuilderImpl<US> & FromToBlockStatesRequestBuilder> extends ArrayBlockStateClaimAttemptsRequestProcessor<US, R> {
 
-    protected MatchingBlockStateClaimAttemptsRequestProcessor(R request, BlockMappingsComposeEventImpl event, PluginBootstrap bootstrap) {
-        super(request, event, bootstrap);
+    protected MatchingBlockStateClaimAttemptsRequestProcessor(R request, BlockMappingsComposeEventImpl event) {
+        super(request, event);
     }
 
     protected abstract Block[] createBlocksToClaim();

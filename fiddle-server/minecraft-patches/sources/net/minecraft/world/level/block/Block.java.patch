@@ -1,5 +1,13 @@
 --- a/net/minecraft/world/level/block/Block.java
 +++ b/net/minecraft/world/level/block/Block.java
+@@ -25,7 +_,6 @@
+ import net.minecraft.core.BlockPos;
+ import net.minecraft.core.Direction;
+ import net.minecraft.core.Holder;
+-import net.minecraft.core.IdMapper;
+ import net.minecraft.core.registries.BuiltInRegistries;
+ import net.minecraft.network.chat.Component;
+ import net.minecraft.network.chat.MutableComponent;
 @@ -78,7 +_,7 @@
      public static final MapCodec<Block> CODEC = simpleCodec(Block::new);
      private static final Logger LOGGER = LogUtils.getLogger();
@@ -9,10 +17,12 @@
      private static final LoadingCache<VoxelShape, Boolean> SHAPE_FULL_BLOCK_CACHE = CacheBuilder.newBuilder()
          .maximumSize(512L)
          .weakKeys()
-@@ -144,6 +_,71 @@
+@@ -144,6 +_,73 @@
      protected MapCodec<? extends Block> codec() {
          return CODEC;
      }
++
++    public @Nullable List<org.fiddlemc.fiddle.impl.packetmapping.block.datadriven.UnappliedDataDrivenMapping> unappliedDataPackMappings = null; // Fiddle - Block mapping - Load mappings from data pack
 +
 +    // Fiddle start - More data-driven - Minecraft registries - Cache block and item values
 +    /**

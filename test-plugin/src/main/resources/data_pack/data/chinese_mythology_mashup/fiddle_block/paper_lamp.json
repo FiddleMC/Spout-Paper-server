@@ -6,5 +6,11 @@
     "explosion_resistance": 0.1,
     "destroy_time": 0.03,
     "instrument": "minecraft:snare"
-  }
+  },
+  "mappings": [
+    {
+      "type": "full_block",
+      "fallback": "minecraft:redstone_lamp"
+    }
+  ]
 }

@@ -1,27 +1,23 @@
 package org.fiddlemc.fiddle.impl.packetmapping.block;
 
-import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.fiddlemc.fiddle.api.packetmapping.block.BlockMappingBuilder;
 import org.fiddlemc.fiddle.api.packetmapping.block.BlockMappingsComposeEvent;
-import org.fiddlemc.fiddle.api.packetmapping.block.ManualBlockMappings;
-import org.fiddlemc.fiddle.api.packetmapping.block.claim.ClaimRequestPriorityComparator;
-import org.fiddlemc.fiddle.api.packetmapping.block.claim.ResourcePackBlockStateClaims;
 import org.fiddlemc.fiddle.api.packetmapping.block.nms.BlockMappingBuilderNMS;
 import org.fiddlemc.fiddle.api.packetmapping.block.nms.ManualBlockMappingsNMS;
-import org.fiddlemc.fiddle.api.packetmapping.block.automatic.AutomaticBlockMappings;
 import org.fiddlemc.fiddle.impl.moredatadriven.minecraft.BlockStateRegistry;
-import org.fiddlemc.fiddle.impl.packetmapping.block.claim.ResourcePackBlockStateClaimsImpl;
 import org.fiddlemc.fiddle.impl.packetmapping.block.automatic.AutomaticBlockMappingsImpl;
 import org.fiddlemc.fiddle.impl.util.composable.AwarenessLevelPairKeyedBuilderComposeEventImpl;
-import java.util.Collections;
+import org.jspecify.annotations.Nullable;
 import java.util.function.Consumer;
 
 /**
  * The implementation of {@link BlockMappingsComposeEvent}.
  */
 public final class BlockMappingsComposeEventImpl extends AwarenessLevelPairKeyedBuilderComposeEventImpl<BlockData, BlockMappingsStep, BlockMappingBuilder> implements BlockMappingsComposeEvent, ManualBlockMappingsNMS<BlockMappingsStep> {
+
+    private @Nullable AutomaticBlockMappingsImpl automaticMappings;
 
     @Override
     public void register(Consumer<BlockMappingBuilder> builderConsumer) {
@@ -53,8 +49,11 @@ public final class BlockMappingsComposeEventImpl extends AwarenessLevelPairKeyed
     }
 
     @Override
-    public AutomaticBlockMappingsImpl automaticMappings(PluginBootstrap bootstrap) {
-        return new AutomaticBlockMappingsImpl(this, bootstrap);
+    public AutomaticBlockMappingsImpl automaticMappings() {
+        if (this.automaticMappings == null) {
+            this.automaticMappings = new AutomaticBlockMappingsImpl(this);
+        }
+        return this.automaticMappings;
     }
 
 }

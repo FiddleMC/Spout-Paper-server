@@ -12,8 +12,6 @@ public interface FiddleBlockTypeRegistryEntry {
 
     Object getWrappedCodec();
 
-    Object getCodec();
-
     /**
      * A mutable builder for the {@link FiddleBlockTypeRegistryEntry},
      * that plugins may change in applicable registry events.

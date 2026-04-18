@@ -18,5 +18,11 @@
     "is_redstone_conductor": "minecraft:never",
     "is_suffocating": "minecraft:never",
     "is_view_blocking": "minecraft:never"
-  }
+  },
+  "mappings": [
+    {
+      "type": "leaves",
+      "fallback": "minecraft:azalea_leaves"
+    }
+  ]
 }

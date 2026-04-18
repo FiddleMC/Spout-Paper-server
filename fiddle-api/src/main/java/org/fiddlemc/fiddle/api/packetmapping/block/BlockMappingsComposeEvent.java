@@ -1,6 +1,5 @@
 package org.fiddlemc.fiddle.api.packetmapping.block;
 
-import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEvent;
 import org.fiddlemc.fiddle.api.packetmapping.block.automatic.AutomaticBlockMappings;
 
@@ -17,6 +16,6 @@ public interface BlockMappingsComposeEvent extends LifecycleEvent {
     /**
      * @return A {@link AutomaticBlockMappings} instance, to register mappings by choosing proxies.
      */
-    AutomaticBlockMappings automaticMappings(PluginBootstrap bootstrap);
+    AutomaticBlockMappings automaticMappings();
 
 }

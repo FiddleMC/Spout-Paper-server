@@ -29,12 +29,10 @@ import java.util.Arrays;
  */
 public abstract class BlockStateClaimAttemptsRequestProcessor<US extends UsedStates, R extends ProxyStatesRequestBuilderImpl<US> & FromToBlockStatesRequestBuilder> extends MultipleAttemptsRequestProcessor<R, BlockState[]> {
 
-    private final PluginBootstrap bootstrap;
     private @Nullable ClaimRequestPriority priority;
 
-    protected BlockStateClaimAttemptsRequestProcessor(R request, BlockMappingsComposeEventImpl event, PluginBootstrap bootstrap) {
+    protected BlockStateClaimAttemptsRequestProcessor(R request, BlockMappingsComposeEventImpl event) {
         super(request, event);
-        this.bootstrap = bootstrap;
     }
 
     protected abstract BlockState[] nextCandidates();
@@ -160,7 +158,7 @@ public abstract class BlockStateClaimAttemptsRequestProcessor<US extends UsedSta
                         if (blockstates == null) {
                             blockstates = Blockstates.create();
                         }
-                        blockstates.setVariant(proxyStates[finalProxyIndex].createCraftBlockData(), this.request.getBlockstatesVariant(this.mapProxyStatesIndexToFromStatesIndex(finalProxyIndex, proxyStates), this.bootstrap));
+                        blockstates.setVariant(proxyStates[finalProxyIndex].createCraftBlockData(), this.request.getBlockstatesVariant(this.mapProxyStatesIndexToFromStatesIndex(finalProxyIndex, proxyStates)));
                         return blockstates;
                     });
                 }

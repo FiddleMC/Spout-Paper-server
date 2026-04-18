@@ -6,5 +6,11 @@
     "sound_type": "minecraft:gravel",
     "explosion_resistance": 0.5,
     "destroy_time": 0.5
-  }
+  },
+  "mappings": [
+    {
+      "type": "stairs",
+      "fallback": "minecraft:mud_brick_stairs"
+    }
+  ]
 }

@@ -1,10 +1,12 @@
 package org.fiddlemc.fiddle.impl.resourcepack.construct;
 
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
+import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventRunner;
 import io.papermc.paper.plugin.lifecycle.event.handler.configuration.PrioritizedLifecycleEventHandlerConfiguration;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEventType;
 import io.papermc.paper.plugin.lifecycle.event.types.PrioritizableLifecycleEventType;
+import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
@@ -20,7 +22,6 @@ import org.fiddlemc.fiddle.impl.util.composable.ComposableImpl;
 import org.fiddlemc.fiddle.impl.util.java.serviceloader.NoArgsConstructorServiceProviderImpl;
 import org.jspecify.annotations.Nullable;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
@@ -67,41 +68,43 @@ public final class FiddleResourcePackConstructionImpl extends ComposableImpl<Fid
             }
         }
         // Add included plugin contents
-        FiddlePluginResourcePackDiscoveryImpl.get().getIncludedResourcePackPaths().forEach(pair -> {
-            Path pluginSource = pair.right().left();
-            String internalPath = pair.right().right();
-            try {
-                event.copyPluginResources(pluginSource, List.of(ClientView.AwarenessLevel.RESOURCE_PACK), internalPath, "", pathInResourcePack -> {
-                    // Filter out language files
-                    if (isLangFile(pathInResourcePack)) {
-                        return false;
-                    }
-                    // Filter out non-vanilla blockstates
-                    Matcher blockstatesMatcher = BLOCKSTATES_FILE_PATTERN.matcher(pathInResourcePack);
-                    if (blockstatesMatcher.find()) {
-                        try {
-                            String namespace = blockstatesMatcher.group(1);
-                            String path = blockstatesMatcher.group(2);
-                            Identifier identifier = Identifier.fromNamespaceAndPath(namespace, path);
-                            Optional<Block> optionalBlock = BlockRegistry.get().getOptional(identifier);
-                            if (optionalBlock.isEmpty()) {
-                                // The block doesn't exist, don't include it
-                            }
-                            Block block = optionalBlock.get();
-                            return block.isVanilla();
-                        } catch (Exception ignored) {
-                            // Something is weird, let's not include it
-                            return false;
-                        }
-                    }
-                    return true;
-                });
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+        FiddlePluginResourcePackDiscoveryImpl.get().getProvidingPluginsByResourcePackFileRelativePath().forEach(pair -> {
+            List<Pair<PluginBootstrap, String>> providingPlugins = pair.right();
+            if (providingPlugins.isEmpty()) {
+                return;
             }
+            Pair<PluginBootstrap, String> providingPlugin = providingPlugins.getLast();
+            String pathInResourcePack = pair.left();
+            // Filter out language files
+            if (isLangFile(pathInResourcePack)) {
+                return;
+            }
+            // Filter out non-vanilla blockstates for vanilla clients
+            boolean isNonVanillaBlockstates;
+            Matcher blockstatesMatcher = BLOCKSTATES_FILE_PATTERN.matcher(pathInResourcePack);
+            if (blockstatesMatcher.find()) {
+                try {
+                    String namespace = blockstatesMatcher.group(1);
+                    String path = blockstatesMatcher.group(2);
+                    Identifier identifier = Identifier.fromNamespaceAndPath(namespace, path);
+                    Optional<Block> optionalBlock = BlockRegistry.get().getOptional(identifier);
+                    if (optionalBlock.isEmpty()) {
+                        // The block doesn't exist, don't include it
+                    }
+                    Block block = optionalBlock.get();
+                    isNonVanillaBlockstates = !block.isVanilla();
+                } catch (Exception ignored) {
+                    // Something is weird, let's assume we shouldn't include it
+                    isNonVanillaBlockstates = true;
+                }
+            } else {
+                // Not a blockstates file
+                isNonVanillaBlockstates = false;
+            }
+            ClientView.AwarenessLevel[] awarenessLevels = isNonVanillaBlockstates ? new ClientView.AwarenessLevel[]{ClientView.AwarenessLevel.CLIENT_MOD} : new ClientView.AwarenessLevel[]{ClientView.AwarenessLevel.RESOURCE_PACK, ClientView.AwarenessLevel.CLIENT_MOD};
             try {
-                event.copyPluginResources(pluginSource, ClientView.AwarenessLevel.CLIENT_MOD, internalPath, "", pathInResourcePack -> !isLangFile(pathInResourcePack));
-            } catch (Exception e) {
+                event.copyPluginResource(providingPlugin.left(), awarenessLevels, (providingPlugin.right().isEmpty() ? "" : providingPlugin.right() + "/") + pathInResourcePack, pathInResourcePack);
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });

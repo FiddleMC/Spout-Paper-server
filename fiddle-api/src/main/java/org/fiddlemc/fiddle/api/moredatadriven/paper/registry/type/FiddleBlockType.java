@@ -9,6 +9,4 @@ public interface FiddleBlockType extends Keyed {
 
     Object getWrappedCodec();
 
-    Object getCodec();
-
 }

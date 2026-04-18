@@ -11,6 +11,7 @@ import org.bukkit.craftbukkit.util.CraftNamespacedKey;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
 import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackConstructEvent;
 import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackPath;
+import org.fiddlemc.fiddle.impl.util.io.JarFileUtil;
 import org.jspecify.annotations.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -19,15 +20,12 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.zip.CRC32;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
@@ -175,31 +173,23 @@ public final class FiddleResourcePackConstructEventImpl implements PaperLifecycl
 
     @Override
     public void copyPluginResources(Path pluginSource, Iterable<ClientView.AwarenessLevel> awarenessLevels, String pathInPluginResources, String pathInResourcePack, @Nullable Predicate<String> filter) throws IOException {
-        try (JarFile jar = new JarFile(pluginSource.toFile())) {
-            Enumeration<JarEntry> entries = jar.entries();
-            while (entries.hasMoreElements()) {
-                JarEntry entry = entries.nextElement();
-                String name = entry.getName();
-                if (name.startsWith(pathInPluginResources + "/") && !entry.isDirectory()) {
-                    String relativePath = name.substring(pathInPluginResources.length()); // Starts with forward slash
-                    if (filter == null || filter.test(relativePath.substring(1))) {
-                        byte[] bytes;
-                        try (InputStream inputStream = jar.getInputStream(entry)) {
-                            bytes = inputStream.readAllBytes();
-                        }
-                        boolean first = true;
-                        for (ClientView.AwarenessLevel awarenessLevel : awarenessLevels) {
-                            if (first) {
-                                first = false;
-                            } else {
-                                bytes = Arrays.copyOf(bytes, bytes.length);
-                            }
-                            path(awarenessLevel, pathInResourcePack + (pathInResourcePack.isEmpty() ? relativePath.substring(1) : relativePath)).asBytes().setMutable(bytes);
-                        }
+        JarFileUtil.forEachFileBelowDirectory(pluginSource.toFile(), pathInPluginResources + (pathInResourcePack.isEmpty() ? "" : "/" + pathInResourcePack), (entry, jar, relativePath) -> {
+            if (filter == null || filter.test(relativePath)) {
+                byte[] bytes;
+                try (InputStream inputStream = jar.getInputStream(entry)) {
+                    bytes = inputStream.readAllBytes();
+                }
+                boolean first = true;
+                for (ClientView.AwarenessLevel awarenessLevel : awarenessLevels) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        bytes = Arrays.copyOf(bytes, bytes.length);
                     }
+                    path(awarenessLevel, pathInResourcePack + relativePath).asBytes().setMutable(bytes);
                 }
             }
-        }
+        });
     }
 
     private static final Set<String> DONT_COMPRESS_FILE_EXTENSIONS = Set.of(

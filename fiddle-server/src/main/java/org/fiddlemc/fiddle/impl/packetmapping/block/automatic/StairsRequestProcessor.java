@@ -13,8 +13,8 @@ import org.jspecify.annotations.Nullable;
  */
 public class StairsRequestProcessor extends MatchingBlockStateClaimAttemptsRequestProcessor<UsedStates.Stairs, StairsRequestBuilderImpl> {
 
-    public StairsRequestProcessor(StairsRequestBuilderImpl request, BlockMappingsComposeEventImpl event, PluginBootstrap bootstrap) {
-        super(request, event, bootstrap);
+    public StairsRequestProcessor(StairsRequestBuilderImpl request, BlockMappingsComposeEventImpl event) {
+        super(request, event);
     }
 
     @Override

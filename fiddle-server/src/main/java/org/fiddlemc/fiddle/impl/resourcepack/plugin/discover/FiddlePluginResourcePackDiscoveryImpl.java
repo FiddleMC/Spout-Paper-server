@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * The implementation for {@link FiddlePluginResourcePackDiscovery}.
@@ -53,9 +55,15 @@ public final class FiddlePluginResourcePackDiscoveryImpl extends ComposableImpl<
      * the {@linkplain BootstrapContext#getPluginSource() plugin source}
      * and the path inside the JAR.
      */
-    Map<PluginBootstrap, Pair<Path, String>> resourcePackPaths = new LinkedHashMap<>();
+    Map<PluginBootstrap, Pair<Path, String>> resourcePackPathsByPlugin = new LinkedHashMap<>();
 
-    private final Map<Pair<PluginBootstrap, Identifier>, Blockstates> cachedBlockstates = new HashMap<>();
+    /**
+     * A map from each relative path (to the root of the resource pack) to a list of pairs of the
+     * {@link PluginBootstrap} that includes that file, and the path within the plugin JAR of its resource pack files.
+     */
+    Map<String, List<Pair<PluginBootstrap, String>>> providingPluginsByResourcePackFileRelativePath = new LinkedHashMap<>();
+
+    private final Map<Identifier, Blockstates> cachedBlockstates = new HashMap<>();
 
     private FiddlePluginResourcePackDiscoveryImpl() {
     }
@@ -66,46 +74,72 @@ public final class FiddlePluginResourcePackDiscoveryImpl extends ComposableImpl<
     }
 
     public @Nullable String getIncludedResourcePackPath(PluginBootstrap pluginBootstrap) {
-        return this.resourcePackPaths.get(pluginBootstrap).right();
+        return this.resourcePackPathsByPlugin.get(pluginBootstrap).right();
     }
 
-    public List<Pair<PluginBootstrap, Pair<Path, String>>> getIncludedResourcePackPaths() {
-        return this.resourcePackPaths.entrySet().stream().map(entry -> Pair.of(entry.getKey(), entry.getValue())).toList();
+    public List<Pair<PluginBootstrap, Pair<Path, String>>> getIncludedResourcePackPathsByPlugin() {
+        return this.resourcePackPathsByPlugin.entrySet().stream().map(entry -> Pair.of(entry.getKey(), entry.getValue())).toList();
     }
 
-    public Blockstates getResourcePackBlockstates(PluginBootstrap bootstrap, Identifier blockIdentifier) {
-        return this.cachedBlockstates.computeIfAbsent(Pair.of(bootstrap, blockIdentifier), $ -> {
-            String path = this.getIncludedResourcePackPath(bootstrap) + "/assets/" + blockIdentifier.getNamespace() + "/blockstates/" + blockIdentifier.getPath() + ".json";
+    public List<Pair<String, List<Pair<PluginBootstrap, String>>>> getProvidingPluginsByResourcePackFileRelativePath() {
+        return this.providingPluginsByResourcePackFileRelativePath.entrySet().stream().map(entry -> Pair.of(entry.getKey(), entry.getValue())).toList();
+    }
+
+    public Blockstates getResourcePackBlockstates(Identifier blockIdentifier) {
+        return this.cachedBlockstates.computeIfAbsent(blockIdentifier, identifier -> {
+            String relativePath = "assets/" + identifier.getNamespace() + "/blockstates/" + identifier.getPath() + ".json";
+            List<Pair<PluginBootstrap, String>> pluginBootstrapAndResourcePackPaths = this.providingPluginsByResourcePackFileRelativePath.get(relativePath);
+            if (pluginBootstrapAndResourcePackPaths == null || pluginBootstrapAndResourcePackPaths.isEmpty()) {
+                throw new IllegalStateException("Missing blockstates file from resource pack: " + relativePath);
+            }
+            Pair<PluginBootstrap, String> pluginBootstrapAndResourcePackPath = pluginBootstrapAndResourcePackPaths.getLast();
+            String path = pluginBootstrapAndResourcePackPath.right() + "/" + relativePath;
             try {
-                byte[] bytes = bootstrap.getClass().getClassLoader().getResourceAsStream(path).readAllBytes();
+                byte[] bytes = pluginBootstrapAndResourcePackPath.left().getClass().getClassLoader().getResourceAsStream(path).readAllBytes();
                 String string = new String(bytes, StandardCharsets.UTF_8);
                 JsonElement jsonElement = JsonParser.parseString(string);
                 return Blockstates.ofMutable(jsonElement.getAsJsonObject());
             } catch (Exception e) {
-                throw new RuntimeException("Missing or invalid blockstates file in plugin (" + bootstrap.getClass().getName() + ") resource pack: " + path, e);
+                throw new RuntimeException("Missing or invalid blockstates file in plugin (" + pluginBootstrapAndResourcePackPath.left().getClass().getName() + ") resource pack: " + path, e);
             }
         });
     }
 
     public List<Pair<PluginBootstrap, List<Pair<MinecraftLocaleUtil.KnownLocale, Lang>>>> getResourcePackLangs() {
-        return this.resourcePackPaths.entrySet().stream().map(entry -> {
-            PluginBootstrap bootstrap = entry.getKey();
-            String resourcePackPath = entry.getValue().right();
-            List<Pair<MinecraftLocaleUtil.KnownLocale, Lang>> langs = new ArrayList<>(1);
-            for (MinecraftLocaleUtil.KnownLocale locale : MinecraftLocaleUtil.getKnownLocales()) {
-                try {
-                    InputStream stream = bootstrap.getClass().getClassLoader().getResourceAsStream(resourcePackPath + "/assets/minecraft/lang/" + locale.lowerCaseLocale + ".json");
-                    if (stream != null) {
-                        Reader reader = new InputStreamReader(stream);
-                        JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
-                        Lang lang = Lang.wrap(json);
-                        langs.add(Pair.of(locale, lang));
-                    }
-                } catch (Exception ignored) {
-                }
+        Map<PluginBootstrap, List<Pair<MinecraftLocaleUtil.KnownLocale, Lang>>> langs = new LinkedHashMap<>();
+        this.providingPluginsByResourcePackFileRelativePath.forEach((pathInResourcePack, providingPlugins) -> {
+            if (providingPlugins.isEmpty()) return;
+            Matcher langMatcher = LANG_FILE_PATTERN.matcher(pathInResourcePack);
+            if (!langMatcher.find()) {
+                return;
             }
-            return Pair.of(bootstrap, langs);
-        }).filter(pair -> !pair.right().isEmpty()).toList();
+            try {
+                String locale = langMatcher.group(1);
+                MinecraftLocaleUtil.KnownLocale knownLocale = MinecraftLocaleUtil.getKnownLocale(locale);
+                if (knownLocale == null) {
+                    // Skip unknown locales
+                    return;
+                }
+                for (Pair<PluginBootstrap, String> providingPlugin : providingPlugins) {
+                    try {
+                        InputStream stream = providingPlugin.left().getClass().getClassLoader().getResourceAsStream((providingPlugin.right().isEmpty() ? "" : providingPlugin.right() + "/") + pathInResourcePack);
+                        if (stream != null) {
+                            Reader reader = new InputStreamReader(stream);
+                            JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
+                            Lang lang = Lang.wrap(json);
+                            langs.computeIfAbsent(providingPlugin.left(), $ -> new ArrayList<>(1)).add(Pair.of(knownLocale, lang));
+                        }
+                    } catch (Exception e) {
+                        throw new RuntimeException("Exception while including resource pack translations from plugin " + providingPlugin.left().getClass().getName() + " resource pack file " + pathInResourcePack, e);
+                    }
+                }
+            } catch (Exception ignored) {
+                // Something is weird, let's assume we shouldn't include it
+            }
+        });
+        return langs.entrySet().stream().map(entry -> Pair.of(entry.getKey(), entry.getValue())).toList();
     }
+
+    private static final Pattern LANG_FILE_PATTERN = Pattern.compile("assets/minecraft/lang/([^/]+)\\.json");
 
 }

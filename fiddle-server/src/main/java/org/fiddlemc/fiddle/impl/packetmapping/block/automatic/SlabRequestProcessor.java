@@ -13,8 +13,8 @@ import org.jspecify.annotations.Nullable;
  */
 public class SlabRequestProcessor extends MatchingBlockStateClaimAttemptsRequestProcessor<UsedStates.Slab, SlabRequestBuilderImpl> {
 
-    public SlabRequestProcessor(SlabRequestBuilderImpl request, BlockMappingsComposeEventImpl event, PluginBootstrap bootstrap) {
-        super(request, event, bootstrap);
+    public SlabRequestProcessor(SlabRequestBuilderImpl request, BlockMappingsComposeEventImpl event) {
+        super(request, event);
     }
 
     @Override

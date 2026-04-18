@@ -7,5 +7,11 @@
     "destroy_time": 2.0,
     "ignited_by_lava": true,
     "instrument": "minecraft:bass"
-  }
+  },
+  "mappings": [
+    {
+      "type": "full_block",
+      "fallback": "minecraft:warped_planks"
+    }
+  ]
 }

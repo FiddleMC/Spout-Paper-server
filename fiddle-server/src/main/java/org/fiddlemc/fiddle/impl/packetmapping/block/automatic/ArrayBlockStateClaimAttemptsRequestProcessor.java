@@ -15,8 +15,8 @@ public abstract class ArrayBlockStateClaimAttemptsRequestProcessor<US extends Us
     private BlockState @Nullable [][] statesToClaim;
     private int index;
 
-    protected ArrayBlockStateClaimAttemptsRequestProcessor(R request, BlockMappingsComposeEventImpl event, PluginBootstrap bootstrap) {
-        super(request, event, bootstrap);
+    protected ArrayBlockStateClaimAttemptsRequestProcessor(R request, BlockMappingsComposeEventImpl event) {
+        super(request, event);
     }
 
     protected abstract BlockState[][] createStatesToClaim();

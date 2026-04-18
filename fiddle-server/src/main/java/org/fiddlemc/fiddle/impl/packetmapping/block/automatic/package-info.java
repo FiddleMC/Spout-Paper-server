@@ -1,5 +1,5 @@
 /**
- * <h1>Block mapping - Proxies</h1>
+ * <h1>Block mapping - Automatic</h1>
  *
  * <p>
  * Adds functionality to map blocks in packets to proxies,

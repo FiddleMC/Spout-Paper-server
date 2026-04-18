@@ -6,5 +6,11 @@
     "destroy_time": 1.5,
     "requires_correct_tool_for_drops": true,
     "instrument": "minecraft:basedrum"
-  }
+  },
+  "mappings": [
+    {
+      "type": "slab",
+      "fallback": "minecraft:polished_diorite_slab"
+    }
+  ]
 }

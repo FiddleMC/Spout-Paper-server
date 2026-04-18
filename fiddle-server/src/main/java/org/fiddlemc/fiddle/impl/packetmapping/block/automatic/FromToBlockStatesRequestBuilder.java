@@ -16,9 +16,9 @@ public interface FromToBlockStatesRequestBuilder {
 
     BlockState[] fallbackStates();
 
-    default JsonObject getBlockstatesVariant(int fromStateI, PluginBootstrap bootstrap) {
+    default JsonObject getBlockstatesVariant(int fromStateI) {
         BlockState fromState = this.fromStates()[fromStateI];
-        Blockstates blockstates = FiddlePluginResourcePackDiscoveryImpl.get().getResourcePackBlockstates(bootstrap, fromState.getBlock().keyInBlockRegistry);
+        Blockstates blockstates = FiddlePluginResourcePackDiscoveryImpl.get().getResourcePackBlockstates(fromState.getBlock().keyInBlockRegistry);
         return blockstates.getVariant(fromState.createCraftBlockData());
     }
 

@@ -7,6 +7,7 @@ import org.fiddlemc.fiddle.api.clientview.ClientView;
 import org.fiddlemc.fiddle.api.packetmapping.block.BlockMappingFunctionContext;
 import org.fiddlemc.fiddle.api.packetmapping.block.BlockMappings;
 import org.fiddlemc.fiddle.api.packetmapping.block.BlockMappingsComposeEvent;
+import org.fiddlemc.fiddle.impl.moredatadriven.minecraft.BlockRegistry;
 import org.fiddlemc.fiddle.impl.moredatadriven.minecraft.BlockStateRegistry;
 import org.fiddlemc.fiddle.impl.packetmapping.block.claim.ResourcePackBlockStateClaimsImpl;
 import org.fiddlemc.fiddle.impl.util.composable.ComposableImpl;
@@ -138,12 +139,26 @@ public final class BlockMappingsImpl extends ComposableImpl<BlockMappingsCompose
 
     @Override
     protected BlockMappingsComposeEventImpl createComposeEvent() {
+
         // Create the event
         BlockMappingsComposeEventImpl event = new BlockMappingsComposeEventImpl();
+
+        // Register data-driven mappings
+        BlockRegistry.get().forEach(block -> {
+            if (block.unappliedDataPackMappings != null) {
+                // Apply the mappings
+                block.unappliedDataPackMappings.forEach(mapping -> mapping.apply(event, block));
+                // Dereference the mappings to reclaim memory
+                block.unappliedDataPackMappings = null;
+            }
+        });
+
         // Register the built-in mappings
         // TODO
+
         // Return the event
         return event;
+
     }
 
     @Override

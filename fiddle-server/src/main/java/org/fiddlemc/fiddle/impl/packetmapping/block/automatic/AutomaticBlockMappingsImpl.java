@@ -15,39 +15,37 @@ import java.util.function.Consumer;
 public final class AutomaticBlockMappingsImpl implements AutomaticBlockMappings {
 
     private final BlockMappingsComposeEventImpl event;
-    private final PluginBootstrap bootstrap;
 
-    public AutomaticBlockMappingsImpl(BlockMappingsComposeEventImpl event, PluginBootstrap bootstrap) {
+    public AutomaticBlockMappingsImpl(BlockMappingsComposeEventImpl event) {
         this.event = event;
-        this.bootstrap = bootstrap;
     }
 
     @Override
     public void fullBlock(Consumer<FullBlockRequestBuilder> builderConsumer) {
         FullBlockRequestBuilderImpl builder = new FullBlockRequestBuilderImpl();
         builderConsumer.accept(builder);
-        new FullBlockRequestProcessor(builder, this.event, this.bootstrap).process();
+        new FullBlockRequestProcessor(builder, this.event).process();
     }
 
     @Override
     public void slab(Consumer<SlabRequestBuilder> builderConsumer) {
         SlabRequestBuilderImpl builder = new SlabRequestBuilderImpl();
         builderConsumer.accept(builder);
-        new SlabRequestProcessor(builder, this.event, this.bootstrap).process();
+        new SlabRequestProcessor(builder, this.event).process();
     }
 
     @Override
     public void stairs(Consumer<StairsRequestBuilder> builderConsumer) {
         StairsRequestBuilderImpl builder = new StairsRequestBuilderImpl();
         builderConsumer.accept(builder);
-        new StairsRequestProcessor(builder, this.event, this.bootstrap).process();
+        new StairsRequestProcessor(builder, this.event).process();
     }
 
     @Override
     public void leaves(Consumer<LeavesRequestBuilder> builderConsumer) {
         LeavesRequestBuilderImpl builder = new LeavesRequestBuilderImpl();
         builderConsumer.accept(builder);
-        new LeavesRequestProcessor(builder, this.event, this.bootstrap).process();
+        new LeavesRequestProcessor(builder, this.event).process();
     }
 
 }

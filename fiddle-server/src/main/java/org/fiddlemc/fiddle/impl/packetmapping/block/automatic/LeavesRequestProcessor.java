@@ -20,8 +20,8 @@ import java.util.stream.StreamSupport;
  */
 public class LeavesRequestProcessor extends ArrayBlockStateClaimAttemptsRequestProcessor<UsedStates.Waterlogged, LeavesRequestBuilderImpl> {
 
-    public LeavesRequestProcessor(LeavesRequestBuilderImpl request, BlockMappingsComposeEventImpl event, PluginBootstrap bootstrap) {
-        super(request, event, bootstrap);
+    public LeavesRequestProcessor(LeavesRequestBuilderImpl request, BlockMappingsComposeEventImpl event) {
+        super(request, event);
     }
 
     @Override

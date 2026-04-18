@@ -12,9 +12,4 @@ public interface FiddleBlockTypeNMS<B extends Block> extends FiddleBlockType {
     @Override
     WrappedBlockCodec<B> getWrappedCodec();
 
-    @Override
-    default MapCodec<B> getCodec() {
-        return this.getWrappedCodec().getCodec();
-    }
-
 }

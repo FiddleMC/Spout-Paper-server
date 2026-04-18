@@ -10,4 +10,6 @@ public interface WrappedBlockCodec<B extends Block>{
 
     MapCodec<B> getCodec();
 
+    MapCodec<B> getExtendedCodec();
+
 }

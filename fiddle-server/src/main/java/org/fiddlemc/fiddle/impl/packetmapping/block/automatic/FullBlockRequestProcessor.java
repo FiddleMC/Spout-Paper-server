@@ -18,8 +18,8 @@ import java.util.List;
  */
 public class FullBlockRequestProcessor extends ArrayBlockStateClaimAttemptsRequestProcessor<UsedStates.Single, FullBlockRequestBuilderImpl> {
 
-    public FullBlockRequestProcessor(FullBlockRequestBuilderImpl request, BlockMappingsComposeEventImpl event, PluginBootstrap bootstrap) {
-        super(request, event, bootstrap);
+    public FullBlockRequestProcessor(FullBlockRequestBuilderImpl request, BlockMappingsComposeEventImpl event) {
+        super(request, event);
     }
 
     @Override
