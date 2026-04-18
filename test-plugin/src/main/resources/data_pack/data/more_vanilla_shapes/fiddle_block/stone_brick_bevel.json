@@ -6,5 +6,15 @@
     "destroy_time": 1.5,
     "requires_correct_tool_for_drops": true,
     "instrument": "minecraft:basedrum"
-  }
+  },
+  "mappings": [
+    {
+      "type": "manual",
+      "awareness_levels": [
+        "vanilla",
+        "resource_pack"
+      ],
+      "to": "minecraft:barrier"
+    }
+  ]
 }

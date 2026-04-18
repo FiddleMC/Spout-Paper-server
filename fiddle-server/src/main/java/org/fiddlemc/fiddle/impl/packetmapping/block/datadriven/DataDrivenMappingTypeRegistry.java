@@ -43,6 +43,9 @@ public final class DataDrivenMappingTypeRegistry {
     }
 
     static {
+        // Manual
+        register("manual", BuiltInDataDrivenMappingTypes.MANUAL);
+        // Automatic
         register("full_block", BuiltInDataDrivenMappingTypes.FULL_BLOCK);
         register("leaves", BuiltInDataDrivenMappingTypes.LEAVES);
         register("slab", BuiltInDataDrivenMappingTypes.SLAB);

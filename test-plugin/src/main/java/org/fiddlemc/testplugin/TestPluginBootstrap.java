@@ -3,12 +3,8 @@ package org.fiddlemc.testplugin;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import org.bukkit.block.BlockType;
 import org.bukkit.inventory.ItemType;
 import org.fiddlemc.fiddle.api.FiddleEvents;
-import org.fiddlemc.fiddle.api.clientview.ClientView;
-import org.fiddlemc.fiddle.api.packetmapping.block.automatic.AutomaticBlockMappings;
-import org.fiddlemc.testplugin.data.PluginBlockTypes;
 import org.fiddlemc.testplugin.data.PluginItemTypes;
 import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
@@ -22,7 +18,6 @@ public class TestPluginBootstrap implements PluginBootstrap {
     public void bootstrap(@NotNull BootstrapContext context) {
         loadIncludedDataPack(context);
         loadIncludedResourcePack(context);
-        setBlockMappings(context);
         setItemMappings(context);
     }
 
@@ -47,23 +42,6 @@ public class TestPluginBootstrap implements PluginBootstrap {
     private void loadIncludedResourcePack(@NotNull BootstrapContext context) {
         context.getLifecycleManager().registerEventHandler(FiddleEvents.PLUGIN_RESOURCE_PACK_DISCOVERY, event -> {
             event.register(this, context);
-        });
-    }
-
-    /**
-     * Configures the server-to-client mappings for blocks.
-     */
-    private void setBlockMappings(@NotNull BootstrapContext context) {
-        context.getLifecycleManager().registerEventHandler(FiddleEvents.BLOCK_MAPPING, event -> {
-            AutomaticBlockMappings automaticMappings = event.automaticMappings();
-
-            // Stone brick bevel
-            event.manualMappings().register(builder -> {
-                builder.awarenessLevel(ClientView.AwarenessLevel.getThatDoNotAlwaysUnderstandsAllServerSideBlocks());
-                builder.fromEveryStateOf(PluginBlockTypes.STONE_BRICK_BEVEL.get());
-                builder.toDefaultStateOf(BlockType.BARRIER);
-            });
-
         });
     }
 

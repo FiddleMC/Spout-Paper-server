@@ -32,16 +32,16 @@ public final class WrappedBlockCodecImpl<B extends Block> implements WrappedBloc
         this.extendedCodec = new MapCodec<B>() {
 
             @Override
-            public <T> RecordBuilder<T> encode(B b, DynamicOps<T> dynamicOps, RecordBuilder<T> recordBuilder) {
-                return codec.encode(b, dynamicOps, recordBuilder);
+            public <T> RecordBuilder<T> encode(B b, DynamicOps<T> ops, RecordBuilder<T> recordBuilder) {
+                return codec.encode(b, ops, recordBuilder);
             }
 
             @Override
-            public <T> DataResult<B> decode(DynamicOps<T> dynamicOps, MapLike<T> mapLike) {
-                return codec.decode(dynamicOps, mapLike).flatMap(block -> {
+            public <T> DataResult<B> decode(DynamicOps<T> ops, MapLike<T> mapLike) {
+                return codec.decode(ops, mapLike).flatMap(block -> {
                     T mappingsInput = mapLike.get("mappings");
                     if (mappingsInput != null) {
-                        DataResult<Pair<List<UnappliedDataDrivenMapping>, T>> mappings = UnappliedDataDrivenMapping.LIST_CODEC.decode(dynamicOps, mappingsInput);
+                        DataResult<Pair<List<UnappliedDataDrivenMapping>, T>> mappings = UnappliedDataDrivenMapping.LIST_CODEC.decode(ops, mappingsInput);
                         if (mappings.isError()) {
                             return mappings.map($ -> null);
                         }
@@ -52,8 +52,8 @@ public final class WrappedBlockCodecImpl<B extends Block> implements WrappedBloc
             }
 
             @Override
-            public <T> Stream<T> keys(DynamicOps<T> dynamicOps) {
-                return codec.keys(dynamicOps);
+            public <T> Stream<T> keys(DynamicOps<T> ops) {
+                return codec.keys(ops);
             }
 
         };

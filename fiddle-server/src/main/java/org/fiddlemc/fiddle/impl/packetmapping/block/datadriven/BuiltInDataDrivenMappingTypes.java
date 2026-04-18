@@ -4,14 +4,23 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.MapLike;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.Bukkit;
+import org.bukkit.block.BlockType;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.block.CraftBlockType;
+import org.bukkit.craftbukkit.block.data.CraftBlockData;
+import org.fiddlemc.fiddle.api.clientview.ClientView;
 import org.fiddlemc.fiddle.api.packetmapping.block.automatic.FromBlockStateRequestBuilder;
 import org.fiddlemc.fiddle.api.packetmapping.block.automatic.FromBlockTypeRequestBuilder;
 import org.fiddlemc.fiddle.api.packetmapping.block.automatic.ToBlockStateRequestBuilder;
 import org.fiddlemc.fiddle.api.packetmapping.block.automatic.ToBlockTypeRequestBuilder;
+import org.fiddlemc.fiddle.impl.clientview.ClientViewImpl;
 import org.fiddlemc.fiddle.impl.moredatadriven.minecraft.BlockRegistry;
 import org.fiddlemc.fiddle.impl.packetmapping.block.BlockMappingsComposeEventImpl;
+import org.jspecify.annotations.Nullable;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Some built-in {@link DataDrivenMappingType}s.
@@ -22,46 +31,141 @@ public final class BuiltInDataDrivenMappingTypes {
         throw new UnsupportedOperationException();
     }
 
-    public static <T> void parseFromBlockState(FromBlockStateRequestBuilder<?> builder, Block block, DynamicOps<T> dynamicOps, MapLike<T> mapLike) {
+    public static <T> Collection<? extends BlockData> parseFromBlockStates(@Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike) {
         T fromInput = mapLike.get("from");
         if (fromInput != null) {
-            builder.from(Bukkit.createBlockData(dynamicOps.getStringValue(fromInput).getOrThrow()));
+            return List.of(Bukkit.createBlockData(ops.getStringValue(fromInput).getOrThrow()));
+        } else if (block != null) {
+            return CraftBlockType.minecraftToBukkitNew(block).createBlockDataStates();
         } else {
-            builder.from(block.defaultBlockState().createCraftBlockData());
+            throw new IllegalArgumentException("Missing 'from' in included in data-driven block mapping");
         }
     }
 
-    public static <T> void parseToBlockState(ToBlockStateRequestBuilder<?> builder, Block block, DynamicOps<T> dynamicOps, MapLike<T> mapLike) {
-        T fallbackinput = mapLike.get("fallback");
-        if (fallbackinput != null) {
-            builder.fallback(Bukkit.createBlockData(dynamicOps.getStringValue(fallbackinput).getOrThrow()));
-        }
-    }
-
-    public static <T> void parseFromBlockType(FromBlockTypeRequestBuilder<?> builder, Block block, DynamicOps<T> dynamicOps, MapLike<T> mapLike) {
-        T fromInput = mapLike.get("from");
-        if (fromInput != null) {
-            builder.from(CraftBlockType.minecraftToBukkitNew(BlockRegistry.get().getValue(Identifier.CODEC.parse(dynamicOps, fromInput).getOrThrow())));
+    public static <T> @Nullable BlockData[] parseFromBlockState(FromBlockStateRequestBuilder<?> builder, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike, @Nullable BlockData @Nullable [] cached) {
+        @Nullable BlockData parsed;
+        if (cached != null) {
+            parsed = cached[0];
         } else {
-            builder.from(CraftBlockType.minecraftToBukkitNew(block));
+            T input = mapLike.get("from");
+            if (input != null) {
+                parsed = Bukkit.createBlockData(ops.getStringValue(input).getOrThrow());
+            } else if (block != null) {
+                parsed = block.defaultBlockState().createCraftBlockData();
+            } else {
+                parsed = null;
+            }
+            cached = new @Nullable BlockData[]{parsed};
         }
+        if (parsed != null) {
+            builder.from(parsed);
+        }
+        return cached;
     }
 
-    public static <T> void parseToBlockType(ToBlockTypeRequestBuilder<?> builder, Block block, DynamicOps<T> dynamicOps, MapLike<T> mapLike) {
-        T fallbackinput = mapLike.get("fallback");
-        if (fallbackinput != null) {
-            builder.fallback(CraftBlockType.minecraftToBukkitNew(BlockRegistry.get().getValue(Identifier.CODEC.parse(dynamicOps, fallbackinput).getOrThrow())));
+    public static <T> @Nullable BlockData[] parseToBlockState(ToBlockStateRequestBuilder<?> builder, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike, @Nullable BlockData @Nullable [] cached) {
+        @Nullable BlockData parsed;
+        if (cached != null) {
+            parsed = cached[0];
+        } else {
+            T input = mapLike.get("fallback");
+            if (input != null) {
+                parsed = Bukkit.createBlockData(ops.getStringValue(input).getOrThrow());
+            } else {
+                parsed = null;
+            }
+            cached = new @Nullable BlockData[]{parsed};
         }
+        if (parsed != null) {
+            builder.fallback(parsed);
+        }
+        return cached;
     }
+
+    public static <T> @Nullable BlockType[] parseFromBlockType(FromBlockTypeRequestBuilder<?> builder, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike, @Nullable BlockType @Nullable [] cached) {
+        @Nullable BlockType parsed;
+        if (cached != null) {
+            parsed = cached[0];
+        } else {
+            T input = mapLike.get("from");
+            if (input != null) {
+                parsed = CraftBlockType.minecraftToBukkitNew(BlockRegistry.get().getValue(Identifier.CODEC.parse(ops, input).getOrThrow()));
+            } else {
+                parsed = CraftBlockType.minecraftToBukkitNew(block);
+            }
+            cached = new @Nullable BlockType[]{parsed};
+        }
+        if (parsed != null) {
+            builder.from(parsed);
+        }
+        return cached;
+    }
+
+    public static <T> @Nullable BlockType[] parseToBlockType(ToBlockTypeRequestBuilder<?> builder, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike, @Nullable BlockType @Nullable [] cached) {
+        @Nullable BlockType parsed;
+        if (cached != null) {
+            parsed = cached[0];
+        } else {
+            T fallbackinput = mapLike.get("fallback");
+            if (fallbackinput != null) {
+                parsed = CraftBlockType.minecraftToBukkitNew(BlockRegistry.get().getValue(Identifier.CODEC.parse(ops, fallbackinput).getOrThrow()));
+            } else {
+                parsed = null;
+            }
+            cached = new @Nullable BlockType[]{parsed};
+        }
+        if (parsed != null) {
+            builder.fallback(parsed);
+        }
+        return cached;
+    }
+
+    public static final DataDrivenMappingType MANUAL = new DataDrivenMappingType() {
+
+        @Override
+        public <T> void apply(BlockMappingsComposeEventImpl event, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike) {
+            Collection<? extends BlockData> fromStates = parseFromBlockStates(block, ops, mapLike);
+            @Nullable List<ClientView.AwarenessLevel> awarenessLevels;
+            T awarenessLevelsInput = mapLike.get("awareness_levels");
+            if (awarenessLevelsInput != null) {
+                awarenessLevels = ClientViewImpl.AWARENESS_LEVEL_LIST_CODEC.decode(ops, awarenessLevelsInput).getOrThrow().getFirst();
+            } else {
+                awarenessLevels = null;
+            }
+            @Nullable BlockState to;
+            T toInput = mapLike.get("to");
+            if (toInput != null) {
+                to = ((CraftBlockData) Bukkit.createBlockData(ops.getStringValue(toInput).getOrThrow())).getState();
+            } else {
+                to = null;
+            }
+            for (BlockData fromState : fromStates) {
+                event.manualMappings().registerNMS(builder -> {
+                    if (awarenessLevels != null) {
+                        builder.awarenessLevel(awarenessLevels);
+                    }
+                    builder.from(((CraftBlockData) fromState).getState());
+                    if (to != null) {
+                        builder.to(to);
+                    }
+                });
+            }
+        }
+
+    };
 
     public static final DataDrivenMappingType FULL_BLOCK = new DataDrivenMappingType() {
 
         @Override
-        public <T> void apply(BlockMappingsComposeEventImpl event, Block block, DynamicOps<T> dynamicOps, MapLike<T> mapLike) {
-            event.automaticMappings().fullBlock(builder -> {
-                parseFromBlockState(builder, block, dynamicOps, mapLike);
-                parseToBlockState(builder, block, dynamicOps, mapLike);
-            });
+        public <T> void apply(BlockMappingsComposeEventImpl event, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike) {
+            Collection<? extends BlockData> fromStates = parseFromBlockStates(block, ops, mapLike);
+            @Nullable BlockData @Nullable [][] cachedTo = {null};
+            for (BlockData fromState : fromStates) {
+                event.automaticMappings().fullBlock(builder -> {
+                    builder.from(fromState);
+                    cachedTo[0] = parseToBlockState(builder, block, ops, mapLike, cachedTo[0]);
+                });
+            }
         }
 
     };
@@ -69,13 +173,13 @@ public final class BuiltInDataDrivenMappingTypes {
     public static final DataDrivenMappingType LEAVES = new DataDrivenMappingType() {
 
         @Override
-        public <T> void apply(BlockMappingsComposeEventImpl event, Block block, DynamicOps<T> dynamicOps, MapLike<T> mapLike) {
+        public <T> void apply(BlockMappingsComposeEventImpl event, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike) {
             event.automaticMappings().leaves(builder -> {
-                parseFromBlockType(builder, block, dynamicOps, mapLike);
-                parseToBlockType(builder, block, dynamicOps, mapLike);
+                parseFromBlockType(builder, block, ops, mapLike, null);
+                parseToBlockType(builder, block, ops, mapLike, null);
                 T tintedInput = mapLike.get("tinted");
                 if (tintedInput != null) {
-                    builder.tinted(dynamicOps.getBooleanValue(tintedInput).getOrThrow());
+                    builder.tinted(ops.getBooleanValue(tintedInput).getOrThrow());
                 }
             });
         }
@@ -85,13 +189,13 @@ public final class BuiltInDataDrivenMappingTypes {
     public static final DataDrivenMappingType SLAB = new DataDrivenMappingType() {
 
         @Override
-        public <T> void apply(BlockMappingsComposeEventImpl event, Block block, DynamicOps<T> dynamicOps, MapLike<T> mapLike) {
+        public <T> void apply(BlockMappingsComposeEventImpl event, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike) {
             event.automaticMappings().slab(builder -> {
-                parseFromBlockType(builder, block, dynamicOps, mapLike);
-                parseToBlockType(builder, block, dynamicOps, mapLike);
+                parseFromBlockType(builder, block, ops, mapLike, null);
+                parseToBlockType(builder, block, ops, mapLike, null);
                 T fullBlockFallbackinput = mapLike.get("full_block_fallback");
                 if (fullBlockFallbackinput != null) {
-                    builder.fullBlockFallback(Bukkit.createBlockData(dynamicOps.getStringValue(fullBlockFallbackinput).getOrThrow()));
+                    builder.fullBlockFallback(Bukkit.createBlockData(ops.getStringValue(fullBlockFallbackinput).getOrThrow()));
                 }
             });
         }
@@ -101,10 +205,10 @@ public final class BuiltInDataDrivenMappingTypes {
     public static final DataDrivenMappingType STAIRS = new DataDrivenMappingType() {
 
         @Override
-        public <T> void apply(BlockMappingsComposeEventImpl event, Block block, DynamicOps<T> dynamicOps, MapLike<T> mapLike) {
+        public <T> void apply(BlockMappingsComposeEventImpl event, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike) {
             event.automaticMappings().stairs(builder -> {
-                parseFromBlockType(builder, block, dynamicOps, mapLike);
-                parseToBlockType(builder, block, dynamicOps, mapLike);
+                parseFromBlockType(builder, block, ops, mapLike, null);
+                parseToBlockType(builder, block, ops, mapLike, null);
             });
         }
 

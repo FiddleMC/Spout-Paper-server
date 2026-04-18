@@ -4,12 +4,13 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.MapLike;
 import net.minecraft.world.level.block.Block;
 import org.fiddlemc.fiddle.impl.packetmapping.block.BlockMappingsComposeEventImpl;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A type of data-driven mapping.
  */
 public interface DataDrivenMappingType {
 
-    <T> void apply(BlockMappingsComposeEventImpl event, Block block, DynamicOps<T> dynamicOps, MapLike<T> mapLike);
+    <T> void apply(BlockMappingsComposeEventImpl event, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike);
 
 }
