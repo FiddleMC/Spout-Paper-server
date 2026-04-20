@@ -17,7 +17,7 @@ import org.fiddlemc.fiddle.api.packetmapping.block.automatic.FromBlockStateReque
 import org.fiddlemc.fiddle.api.packetmapping.block.automatic.FromBlockTypeRequestBuilder;
 import org.fiddlemc.fiddle.api.packetmapping.block.automatic.ToBlockStateRequestBuilder;
 import org.fiddlemc.fiddle.api.packetmapping.block.automatic.ToBlockTypeRequestBuilder;
-import org.fiddlemc.fiddle.impl.branding.FiddleNamespace;
+import spout.branding.SpoutNamespace;
 import org.fiddlemc.fiddle.impl.clientview.ClientViewImpl;
 import org.fiddlemc.fiddle.impl.moredatadriven.minecraft.BlockRegistry;
 import org.fiddlemc.fiddle.impl.packetmapping.block.BlockMappingsComposeEventImpl;
@@ -37,7 +37,7 @@ public final class BuiltInDataDrivenBlockMappingTypes {
     public static abstract class BuiltInDataDrivenBlockMappingType implements DataDrivenBlockMappingType {
 
         private BuiltInDataDrivenBlockMappingType(String key) {
-            DataDrivenBlockMappingTypeRegistry.register(Identifier.fromNamespaceAndPath(FiddleNamespace.FIDDLE, key), this);
+            DataDrivenBlockMappingTypeRegistry.register(Identifier.fromNamespaceAndPath(SpoutNamespace.SPOUT, key), this);
         }
 
     }

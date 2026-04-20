@@ -2,10 +2,10 @@
  * <h1>Branding</h1>
  *
  * <p>
- * Brands the server as Fiddle.
+ * Branding for Spout.
  * </p>
  */
 @NullMarked
-package org.fiddlemc.fiddle.impl.branding;
+package spout.branding;
 
 import org.jspecify.annotations.NullMarked;

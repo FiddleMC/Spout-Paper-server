@@ -8,7 +8,7 @@ import net.minecraft.network.protocol.login.ServerboundCustomQueryAnswerPacket;
 import net.minecraft.network.protocol.login.custom.CustomQueryPayload;
 import net.minecraft.resources.Identifier;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
-import org.fiddlemc.fiddle.impl.branding.FiddleNamespace;
+import spout.branding.SpoutNamespace;
 import org.fiddlemc.fiddle.impl.clientview.JavaVanillaClientViewImpl;
 import org.fiddlemc.fiddle.impl.clientview.JavaWithClientModClientViewImpl;
 import org.fiddlemc.fiddle.impl.clientview.JavaWithResourcePackClientViewImpl;
@@ -22,7 +22,7 @@ public final class ClientViewSetter {
 
     private static final int CLIENT_MOD_DETECTION_PACKET_TRANSACTION_ID = -721055663;
     private static final int CLIENT_MOD_DETECTION_PACKET_NONCE = 345890285;
-    private static final Identifier CLIENT_MOD_DETECTION_PACKET_ID = Identifier.fromNamespaceAndPath(FiddleNamespace.FIDDLE, "detect_client_mod");
+    private static final Identifier CLIENT_MOD_DETECTION_PACKET_ID = Identifier.fromNamespaceAndPath(SpoutNamespace.SPOUT, "detect_client_mod");
     private static final int MIN_CLIENT_MOD_PROTOCOL_VERSION = 1;
     private static final int MAX_CLIENT_MOD_PROTOCOL_VERSION = 1;
     private static final ClientboundCustomQueryPacket CLIENT_MOD_DETECTION_PACKET = new ClientboundCustomQueryPacket(CLIENT_MOD_DETECTION_PACKET_TRANSACTION_ID, new CustomQueryPayload() {

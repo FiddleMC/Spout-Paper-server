@@ -1,8 +1,8 @@
 <div align="center">
 
-  <img src="logo.png" alt="Spout logo" width="21%" align="right">
+  <!--<img src="logo.png" alt="Spout logo" width="21%" align="right">-->
   <h1>
-    Spout server extension<br>(Paper)
+    Spout<br>server (Bukkit/Paper)
   </h1>
   <h3>
     Lets you add new blocks and items
@@ -17,40 +17,58 @@
 <table>
   <tr>
     <td>
-      <img src="design/fire.png">
+      <a href="design/fire.png"><img src="design/fire_small.png"></a>
     </td>
     <td>
-      <img src="design/orange.png">
+      <a href="design/orange.png"><img src="design/orange_small.png"></a>
     </td>
     <td>
-      <img src="design/stone.png">
+      <a href="design/stone.png"><img src="design/stone_small.png"></a>
     </td>
   </tr>
   <tr>
     <td>
-      <img src="design/lantern.png">
+      <a href="design/lantern.png"><img src="design/lantern_small.png"></a>
     </td>
     <td>
-      <img src="design/bookshelves.png">
+      <a href="design/bookshelves.png"><img src="design/bookshelves_small.png"></a>
     </td>
     <td>
-      <img src="design/concrete.png">
+      <a href="design/concrete.png"><img src="design/concrete_small.png"></a>
     </td>
   </tr>
 </table>
 
 ## Introduction
 
-This is a Paper extension that lets [plugins](#Making-a-Spout-Paper-plugin-that-adds-new-blocksitems) add new blocks and items into Minecraft.
+Spout lets Spout plugins add new blocks and items server-side. When players join, the new blocks and items will be sent to their client and also added client-side.
 
-* The blocks and items are added server-side with plugins
-* Custom blocks and items are automatically sent to clients with the [Spout client mod](https://github.com/FiddleMC/Fiddle-mod) and installed when they join
-* Also works with vanilla clients: with an (optional!) resource pack
-* All Bukkit plugins are supported, even when interacting with custom blocks and items
+This is the Spout server extension of Paper.
+
+<ul style="list-style-type: '✓ ';">
+<li>Support for Bukkit / Spigot / Paper plugins</li>
+<li>Add Spout plugins just like Paper plugins</li>
+<li>Works with the <a href="https://github.com/FiddleMC/Fiddle-mod">Spout client mod</a> and vanilla clients</li>
+</ul>
 
 ## Installation
 
-Spout is a drop-in replacement for Paper.
+<div align="center">
+  <table>
+    <tr>
+      <td valign="center">
+        <h1>🔨</h1>
+      </td>
+      <td valign="center">
+        Spout is currently in beta testing.
+        <br>
+        It works and is running on some servers already,
+        <br>
+        but there may be some bugs still, so you should proceed with care.
+      </td>
+    </tr>
+  </table>
+</div>
 
 Download the latest JAR from [GitHub Actions](https://github.com/FiddleMC/Fiddle/actions), under **Artifacts**.
 
@@ -64,9 +82,9 @@ You can easily run a test server (which [includes some example blocks and items]
 You can download the latest stable JAR from [releases](https://github.com/FiddleMC/Fiddle/releases) and the latest development JAR from [actions](https://github.com/FiddleMC/Fiddle/actions).
 -->
 
-## Making a Spout Paper plugin that adds new blocks/items
+## Making a Spout plugin that adds new blocks/items
 
-See the [wiki](https://github.com/FiddleMC/Fiddle/wiki)!
+Read <a href="https://github.com/FiddleMC/Fiddle/wiki">here</a>.
 
 <!--
 New content to add to the game, like blocks and items, are loaded by Fiddle from packs, similar to resource and data packs.\
@@ -81,21 +99,19 @@ Bukkit plugins can also add custom blocks and items.
 ## Next
 
 The next goals of the project are:
-* Improve resource pack API
-* Unused block state claiming API
-* Provide more ways to serve the resource pack
+* More ways to serve the resource pack
+* More types of blocks and items
 
-Further goals of the project are:
-* Read server-side translations from resource pack
-* Support custom block entities and entities
-* Support using display entities to display custom blocks to vanilla clients
+Afterward, goals of the project are:
+* Custom block entities and entities
+* Using display entities to display custom blocks to vanilla clients
 
-Please feel free to join the project as a developer and contribute toward these goals!
+Don't hesitate to suggest ideas, send in PRs (we will take a serious look at every PR, even if it is only a draft), or ask to join the project as a developer.
 
-## Known issues
+## Current known issues
 
-* Block display entities and falling block entities are not mapped correctly
-* Stonecutter recipes do not display correctly in vanilla clients
+* Custom block display entities and falling custom block entities are not displayed correctly
+* Stonecutter recipes work, but do not display correctly
 
 <!--
 ## Acknowledgements

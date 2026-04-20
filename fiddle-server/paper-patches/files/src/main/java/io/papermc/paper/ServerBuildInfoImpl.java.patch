@@ -1,14 +1,23 @@
 --- a/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
 +++ b/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
+@@ -11,6 +_,8 @@
+ import net.minecraft.SharedConstants;
+ import org.bukkit.craftbukkit.CraftServer;
+ import org.bukkit.craftbukkit.Main;
++import spout.branding.SpoutBrandId;
++import spout.branding.SpoutBrandName;
+ import org.jetbrains.annotations.NotNull;
+ 
+ public record ServerBuildInfoImpl(
 @@ -42,15 +_,12 @@
          this(
              getManifestAttribute(manifest, ATTRIBUTE_BRAND_ID)
                  .map(Key::key)
 -                .orElse(BRAND_PAPER_ID),
-+                .orElse(org.fiddlemc.fiddle.impl.branding.FiddleBrandId.BRAND_FIDDLE_ID), // Fiddle - Branding - Rename server brand
++                .orElse(SpoutBrandId.BRAND_ID), // Fiddle - Branding - Rename server brand
              getManifestAttribute(manifest, ATTRIBUTE_BRAND_NAME)
 -                .orElse(BRAND_PAPER_NAME),
-+                .orElse(org.fiddlemc.fiddle.impl.branding.FiddleBrandName.BRAND_FIDDLE_NAME), // Fiddle - Branding - Rename server brand
++                .orElse(SpoutBrandName.BRAND), // Fiddle - Branding - Rename server brand
              SharedConstants.getCurrentVersion().id(),
              SharedConstants.getCurrentVersion().name(),
 -            getManifestAttribute(manifest, ATTRIBUTE_BUILD_NUMBER)

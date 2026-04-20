@@ -7,7 +7,7 @@ import com.mojang.serialization.MapLike;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
-import org.fiddlemc.fiddle.impl.branding.FiddleNamespace;
+import spout.branding.SpoutNamespace;
 import org.fiddlemc.fiddle.impl.clientview.ClientViewImpl;
 import org.fiddlemc.fiddle.impl.moredatadriven.minecraft.ItemRegistry;
 import org.fiddlemc.fiddle.impl.packetmapping.block.datadriven.DataDrivenBlockMappingType;
@@ -30,7 +30,7 @@ public final class BuiltInDataDrivenItemMappingTypes {
     public static abstract class BuiltInDataDrivenItemMappingType implements DataDrivenItemMappingType {
 
         private BuiltInDataDrivenItemMappingType(String key) {
-            DataDrivenItemMappingTypeRegistry.register(Identifier.fromNamespaceAndPath(FiddleNamespace.FIDDLE, key), this);
+            DataDrivenItemMappingTypeRegistry.register(Identifier.fromNamespaceAndPath(SpoutNamespace.SPOUT, key), this);
         }
 
     }

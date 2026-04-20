@@ -1,11 +1,11 @@
 package org.fiddlemc.fiddle.impl.packetmapping.block.breakspeed;
 
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import spout.branding.SpoutNamespace;
 import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 
@@ -22,7 +22,7 @@ public final class BlockBreakSpeedAttributeModification {
      * The {@link Identifier} for {@link AttributeModifier}s that serve to change the
      * {@link Attributes#BLOCK_BREAK_SPEED} to let the client calculate the same value as the server.
      */
-    public static final Identifier SERVER_TO_CLIENT_MODIFIER_IDENTIFIER = Identifier.fromNamespaceAndPath(org.fiddlemc.fiddle.impl.branding.FiddleNamespace.FIDDLE, "server_to_client");
+    public static final Identifier SERVER_TO_CLIENT_MODIFIER_IDENTIFIER = Identifier.fromNamespaceAndPath(SpoutNamespace.SPOUT, "server_to_client");
 
     public static Collection<AttributeModifier> withServerToClientModifierIfNecessary(AttributeInstance attributeInstance, Collection<AttributeModifier> modifiers, @Nullable ServerPlayer selfPlayer) {
         if (attributeInstance.getAttribute() == Attributes.BLOCK_BREAK_SPEED) {

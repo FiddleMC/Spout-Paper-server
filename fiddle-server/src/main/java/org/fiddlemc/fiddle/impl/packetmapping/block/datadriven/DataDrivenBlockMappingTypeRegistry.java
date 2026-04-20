@@ -1,7 +1,7 @@
 package org.fiddlemc.fiddle.impl.packetmapping.block.datadriven;
 
 import net.minecraft.resources.Identifier;
-import org.fiddlemc.fiddle.impl.branding.FiddleNamespace;
+import spout.branding.SpoutNamespace;
 import org.jspecify.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +27,7 @@ public final class DataDrivenBlockMappingTypeRegistry {
     public static @Nullable DataDrivenBlockMappingType get(String key) {
         BuiltInDataDrivenBlockMappingTypes.bootstrapIfNecessary();
         if (key.indexOf(Identifier.NAMESPACE_SEPARATOR) == -1) {
-            key = FiddleNamespace.FIDDLE + Identifier.NAMESPACE_SEPARATOR + key;
+            key = SpoutNamespace.SPOUT + Identifier.NAMESPACE_SEPARATOR + key;
         }
         return get(Identifier.parse(key));
     }

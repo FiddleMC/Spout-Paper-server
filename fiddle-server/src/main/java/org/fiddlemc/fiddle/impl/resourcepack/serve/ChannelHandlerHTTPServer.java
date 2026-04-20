@@ -7,7 +7,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.papermc.paper.network.ChannelInitializeListenerHolder;
 import net.kyori.adventure.key.Key;
-import org.fiddlemc.fiddle.impl.branding.FiddleNamespace;
+import spout.branding.SpoutNamespace;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -39,7 +39,7 @@ public final class ChannelHandlerHTTPServer {
     }
 
     public static void inject() {
-        ChannelInitializeListenerHolder.addListener(Key.key(FiddleNamespace.FIDDLE, "channel_handler_http_server_add_listener"), channel -> {
+        ChannelInitializeListenerHolder.addListener(Key.key(SpoutNamespace.SPOUT, "channel_handler_http_server_add_listener"), channel -> {
             channel.pipeline().addFirst("channel_handler_http_server", new ChannelInboundHandlerAdapter() {
 
                 @Override

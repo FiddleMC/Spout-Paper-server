@@ -11,7 +11,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemLore;
-import org.fiddlemc.fiddle.impl.branding.FiddleNamespace;
+import spout.branding.SpoutNamespace;
 import org.fiddlemc.fiddle.impl.configuration.FiddleGlobalConfiguration;
 import org.fiddlemc.fiddle.impl.moredatadriven.minecraft.ItemRegistry;
 import org.fiddlemc.fiddle.impl.packetmapping.item.ItemMappingsImpl;
@@ -50,7 +50,7 @@ public final class NamespaceTooltips {
                             return false;
                         }
                         String namespace = item.keyInItemRegistry.getNamespace();
-                        if (namespace.equals(Identifier.DEFAULT_NAMESPACE) || namespace.equals(FiddleNamespace.FIDDLE)) {
+                        if (namespace.equals(Identifier.DEFAULT_NAMESPACE) || namespace.equals(SpoutNamespace.SPOUT)) {
                             return false;
                         }
                         return true;
