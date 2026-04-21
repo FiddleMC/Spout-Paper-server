@@ -2,7 +2,7 @@
 
   <!--<img src="logo.png" alt="Spout logo" width="21%" align="right">-->
   <h1>
-    Spout<br>server (Bukkit/Paper)
+    Spout<br>server (Paper/Bukkit)
   </h1>
   <h3>
     Lets you add new blocks and items
