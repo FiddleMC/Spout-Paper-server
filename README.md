@@ -64,7 +64,7 @@ This is the Spout server extension of Paper.
         <br>
         It works and is running on some servers already,
         <br>
-        but there may be some bugs still, so you should proceed with care.
+        but there may be some bugs, so you should proceed with care.
       </td>
     </tr>
   </table>
