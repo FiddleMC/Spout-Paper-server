@@ -4,7 +4,7 @@
          this.paperConfigurations.initializeGlobalConfiguration(this.registryAccess());
          this.paperConfigurations.initializeWorldDefaultsConfiguration(this.registryAccess());
          // Paper end - initialize global and world-defaults configuration
-+        org.fiddlemc.fiddle.impl.configuration.FiddleConfigurations.get(this.options).initializeWorldDefaultsConfiguration(this.registryAccess()); // Fiddle - Configuration - Initialize world-defaults configuration
++        spout.server.paper.impl.configuration.SpoutConfigurations.get(this.options).initializeWorldDefaultsConfiguration(this.registryAccess()); // Fiddle - Configuration - Initialize world-defaults configuration
          this.server.spark.enableEarlyIfRequested(); // Paper - spark
          // Paper start - fix converting txt to json file; convert old users earlier after PlayerList creation but before file load/save
          if (this.convertOldUsers()) {

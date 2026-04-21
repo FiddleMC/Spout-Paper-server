@@ -7,7 +7,7 @@ import com.mojang.serialization.MapLike;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
-import spout.branding.SpoutNamespace;
+import spout.common.branding.SpoutNamespace;
 import org.fiddlemc.fiddle.impl.clientview.ClientViewImpl;
 import org.fiddlemc.fiddle.impl.moredatadriven.minecraft.ItemRegistry;
 import org.fiddlemc.fiddle.impl.packetmapping.block.datadriven.DataDrivenBlockMappingType;

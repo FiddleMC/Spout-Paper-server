@@ -11,8 +11,8 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemLore;
-import spout.branding.SpoutNamespace;
-import org.fiddlemc.fiddle.impl.configuration.FiddleGlobalConfiguration;
+import spout.server.paper.impl.configuration.SpoutGlobalConfiguration;
+import spout.common.branding.SpoutNamespace;
 import org.fiddlemc.fiddle.impl.moredatadriven.minecraft.ItemRegistry;
 import org.fiddlemc.fiddle.impl.packetmapping.item.ItemMappingsImpl;
 import org.jspecify.annotations.Nullable;
@@ -41,7 +41,7 @@ public final class NamespaceTooltips {
                 }
             }
         }
-        if (FiddleGlobalConfiguration.get().tooltips.items.namespace) {
+        if (SpoutGlobalConfiguration.get().tooltips.items.namespace) {
             ItemMappingsImpl.get().addEventInitializer(event -> {
                 event.registerNMS(builder -> {
                     builder.everyAwarenessLevel();
@@ -56,7 +56,7 @@ public final class NamespaceTooltips {
                         return true;
                     }).toList());
                     builder.to(handle -> {
-                        if (!FiddleGlobalConfiguration.get().tooltips.items.namespace) return;
+                        if (!SpoutGlobalConfiguration.get().tooltips.items.namespace) return;
                         String namespace = handle.getOriginal().getItem().keyInItemRegistry.getNamespace();
                         String name = getNamespaceNameOrNamespace(namespace);
                         Component nameComponent = Component.literal(name).withStyle(Style.EMPTY).withColor(NamedTextColor.BLUE.value());

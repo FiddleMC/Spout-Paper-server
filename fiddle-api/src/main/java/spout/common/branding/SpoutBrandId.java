@@ -1,4 +1,4 @@
-package spout.branding;
+package spout.common.branding;
 
 import net.kyori.adventure.key.Key;
 

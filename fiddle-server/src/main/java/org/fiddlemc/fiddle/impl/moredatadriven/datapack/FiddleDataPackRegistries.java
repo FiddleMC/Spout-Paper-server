@@ -6,7 +6,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import spout.branding.SpoutNamespace;
+import spout.common.branding.SpoutNamespace;
 
 /**
  * Analogous to {@link Registries}, but specifically for Fiddle registries populated from data packs.

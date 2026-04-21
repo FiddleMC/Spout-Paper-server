@@ -4,7 +4,7 @@
  
          org.spigotmc.SpigotConfig.init((File) this.console.options.valueOf("spigot-settings")); // Spigot
          this.console.paperConfigurations.reloadConfigs(this.console);
-+        org.fiddlemc.fiddle.impl.configuration.FiddleConfigurations.get(null).reloadConfigs(this.console); // Fiddle - Configuration - Reload on Bukkit reload
++        spout.server.paper.impl.configuration.SpoutConfigurations.get(null).reloadConfigs(this.console); // Fiddle - Configuration - Reload on Bukkit reload
          for (ServerLevel world : this.console.getAllLevels()) {
              // world.serverLevelData.setDifficulty(config.difficulty); // Paper - per level difficulty
              world.setSpawnSettings(world.isSpawningMonsters()); // Paper - per level difficulty (from MinecraftServer#setDifficulty(ServerLevel, Difficulty, boolean))
@@ -17,7 +17,7 @@
 +        @Override
 +        public YamlConfiguration getFiddleConfig()
 +        {
-+            return org.fiddlemc.fiddle.impl.configuration.FiddleConfigurations.get(null).createLegacyObject(CraftServer.this.console);
++            return spout.server.paper.impl.configuration.SpoutConfigurations.get(null).createLegacyObject(CraftServer.this.console);
 +        }
 +        // Fiddle end - Configuration - API - Implementation part
  

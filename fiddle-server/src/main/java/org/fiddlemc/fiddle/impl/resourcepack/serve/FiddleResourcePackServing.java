@@ -3,7 +3,7 @@ package org.fiddlemc.fiddle.impl.resourcepack.serve;
 import io.papermc.paper.configuration.type.number.IntOr;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
-import org.fiddlemc.fiddle.impl.configuration.FiddleGlobalConfiguration;
+import spout.server.paper.impl.configuration.SpoutGlobalConfiguration;
 import org.fiddlemc.fiddle.impl.resourcepack.construct.FiddleConstructedResourcePackImpl;
 import org.fiddlemc.fiddle.impl.resourcepack.construct.FiddleResourcePackConstructionImpl;
 import org.jspecify.annotations.Nullable;
@@ -24,7 +24,7 @@ public final class FiddleResourcePackServing {
     public static byte @Nullable [] clientModPackBytes;
 
     public static boolean isEnabled() {
-        return FiddleResourcePackConstructionImpl.get().isEnabled() && FiddleGlobalConfiguration.get().generatedResourcePack.output.serveOverHttp.enabled;
+        return FiddleResourcePackConstructionImpl.get().isEnabled() && SpoutGlobalConfiguration.get().generatedResourcePack.output.serveOverHttp.enabled;
     }
 
     private static int getServerPort() {
@@ -36,7 +36,7 @@ public final class FiddleResourcePackServing {
     }
 
     public static int getPort() {
-        IntOr.Default configuredPort = FiddleGlobalConfiguration.get().generatedResourcePack.output.serveOverHttp.port;
+        IntOr.Default configuredPort = SpoutGlobalConfiguration.get().generatedResourcePack.output.serveOverHttp.port;
         if (configuredPort.isDefined()) {
             return configuredPort.intValue();
         }

@@ -1,4 +1,4 @@
-package spout.branding;
+package spout.common.branding;
 
 import org.bukkit.NamespacedKey;
 

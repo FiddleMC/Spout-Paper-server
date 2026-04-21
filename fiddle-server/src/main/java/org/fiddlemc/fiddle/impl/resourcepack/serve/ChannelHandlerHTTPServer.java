@@ -7,7 +7,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.papermc.paper.network.ChannelInitializeListenerHolder;
 import net.kyori.adventure.key.Key;
-import spout.branding.SpoutNamespace;
+import spout.common.branding.SpoutNamespace;
 import java.nio.charset.StandardCharsets;
 
 /**

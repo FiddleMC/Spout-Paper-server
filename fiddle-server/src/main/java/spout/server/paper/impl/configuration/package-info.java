@@ -2,10 +2,10 @@
  * <h1>Configuration</h1>
  *
  * <p>
- * Defines the Fiddle configuration files.
+ * Defines the Spout configuration files.
  * </p>
  */
 @NullMarked
-package org.fiddlemc.fiddle.impl.configuration;
+package spout.server.paper.impl.configuration;
 
 import org.jspecify.annotations.NullMarked;

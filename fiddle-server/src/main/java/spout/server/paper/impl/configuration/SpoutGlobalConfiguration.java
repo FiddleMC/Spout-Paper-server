@@ -1,4 +1,4 @@
-package org.fiddlemc.fiddle.impl.configuration;
+package spout.server.paper.impl.configuration;
 
 import com.mojang.logging.LogUtils;
 import io.papermc.paper.configuration.Configuration;
@@ -10,24 +10,24 @@ import org.spongepowered.configurate.objectmapping.meta.Setting;
 import java.util.List;
 
 /**
- * The global configuration for Fiddle.
+ * The global configuration for Spout.
  *
  * <p>
  * Analogous to the Paper {@link GlobalConfiguration}.
  * </p>
  */
 @SuppressWarnings({"CanBeFinal", "FieldCanBeLocal", "FieldMayBeFinal", "NotNullFieldNotInitialized", "InnerClassMayBeStatic"})
-public class FiddleGlobalConfiguration extends ConfigurationPart {
+public class SpoutGlobalConfiguration extends ConfigurationPart {
     private static final Logger LOGGER = LogUtils.getClassLogger();
     static final int CURRENT_VERSION = 1; // (when you change the version, change the comment, so it conflicts on rebases): initial version
-    private static FiddleGlobalConfiguration instance;
+    private static SpoutGlobalConfiguration instance;
 
-    public static FiddleGlobalConfiguration get() {
+    public static SpoutGlobalConfiguration get() {
         return instance;
     }
 
-    static void set(final FiddleGlobalConfiguration instance) {
-        FiddleGlobalConfiguration.instance = instance;
+    static void set(final SpoutGlobalConfiguration instance) {
+        SpoutGlobalConfiguration.instance = instance;
     }
 
     @Setting(Configuration.VERSION_FIELD)

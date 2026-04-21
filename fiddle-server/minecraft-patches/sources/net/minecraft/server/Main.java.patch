@@ -10,12 +10,12 @@
 +            // Fiddle end - EULA before bootstrap - Add before bootstrap
 +
 +            // Fiddle start - Configuration - Load global configuration before bootstrap
-+            var fiddleConfigurations = org.fiddlemc.fiddle.impl.configuration.FiddleConfigurations.get(optionSet);
++            var fiddleConfigurations = spout.server.paper.impl.configuration.SpoutConfigurations.get(optionSet);
 +            fiddleConfigurations.initializeGlobalConfiguration(null);
 +            // Fiddle end - Configuration - Load global configuration before bootstrap
 +
 +            // Fiddle start - Confirm permanence - Check and exit if necessary
-+            if (!org.fiddlemc.fiddle.impl.configuration.FiddleGlobalConfiguration.get()._enabled) {
++            if (!spout.server.paper.impl.configuration.SpoutGlobalConfiguration.get()._enabled) {
 +                LOGGER.warn("");
 +                LOGGER.warn("********************************************************************************");
 +                LOGGER.warn("You must confirm that you wish to run Spout in this folder.");

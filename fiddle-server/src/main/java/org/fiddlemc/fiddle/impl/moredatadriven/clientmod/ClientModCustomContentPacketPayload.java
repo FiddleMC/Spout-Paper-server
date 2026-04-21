@@ -6,7 +6,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
-import spout.branding.SpoutNamespace;
+import spout.common.branding.SpoutNamespace;
 
 public final class ClientModCustomContentPacketPayload implements CustomPacketPayload {
 

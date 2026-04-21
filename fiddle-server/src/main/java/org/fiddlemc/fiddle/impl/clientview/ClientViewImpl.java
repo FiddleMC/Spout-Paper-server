@@ -3,7 +3,7 @@ package org.fiddlemc.fiddle.impl.clientview;
 import com.mojang.serialization.Codec;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
 import org.fiddlemc.fiddle.api.clientview.nms.NMSClientView;
-import spout.branding.SpoutNamespace;
+import spout.common.branding.SpoutNamespace;
 import org.fiddlemc.fiddle.impl.packetmapping.item.reverse.ItemMappingReverser;
 import org.fiddlemc.fiddle.impl.util.mojang.codec.EnumViaIdentifierCodec;
 import org.jspecify.annotations.Nullable;

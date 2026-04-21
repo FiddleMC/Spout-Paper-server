@@ -5,22 +5,49 @@
      }
      // Paper end - add paper world config
 +    // Fiddle start - Configuration - World configuration
-+    private final org.fiddlemc.fiddle.impl.configuration.FiddleWorldConfiguration fiddleConfig;
-+    public org.fiddlemc.fiddle.impl.configuration.FiddleWorldConfiguration fiddleConfig() {
++    private final spout.server.paper.impl.configuration.SpoutWorldConfiguration fiddleConfig;
++    public spout.server.paper.impl.configuration.SpoutWorldConfiguration spoutConfig() {
 +        return this.fiddleConfig;
 +    }
 +    // Fiddle end - Configuration - World configuration
  
      public static @Nullable BlockPos lastPhysicsProblem; // Spigot
      private int tileTickPosition;
-@@ -832,6 +_,7 @@
-         org.bukkit.World.Environment environment, // Paper
-         java.util.function.Function<org.spigotmc.SpigotWorldConfig, // Spigot - create per world config
+@@ -819,20 +_,21 @@
+     // Paper end - optimise random ticking
+ 
+     protected Level(
+-        WritableLevelData levelData,
+-        ResourceKey<Level> dimension,
+-        RegistryAccess registryAccess,
+-        Holder<DimensionType> dimensionTypeRegistration,
+-        boolean isClientSide,
+-        boolean isDebug,
+-        long biomeZoomSeed,
+-        int maxChainedNeighborUpdates,
+-        org.bukkit.generator.@Nullable ChunkGenerator generator, // Paper
+-        org.bukkit.generator.@Nullable BiomeProvider biomeProvider, // Paper
+-        org.bukkit.World.Environment environment, // Paper
+-        java.util.function.Function<org.spigotmc.SpigotWorldConfig, // Spigot - create per world config
++            WritableLevelData levelData,
++            ResourceKey<Level> dimension,
++            RegistryAccess registryAccess,
++            Holder<DimensionType> dimensionTypeRegistration,
++            boolean isClientSide,
++            boolean isDebug,
++            long biomeZoomSeed,
++            int maxChainedNeighborUpdates,
++            org.bukkit.generator.@Nullable ChunkGenerator generator, // Paper
++            org.bukkit.generator.@Nullable BiomeProvider biomeProvider, // Paper
++            org.bukkit.World.Environment environment, // Paper
++            java.util.function.Function<org.spigotmc.SpigotWorldConfig, // Spigot - create per world config
          io.papermc.paper.configuration.WorldConfiguration> paperWorldConfigCreator, // Paper - create paper world config
-+        java.util.function.Function<org.spigotmc.SpigotWorldConfig, org.fiddlemc.fiddle.impl.configuration.FiddleWorldConfiguration> fiddleWorldConfigCreator, // Fiddle - Configuration - Create world configuration
-         java.util.concurrent.Executor executor // Paper - Anti-Xray
+-        java.util.concurrent.Executor executor // Paper - Anti-Xray
++            java.util.function.Function<org.spigotmc.SpigotWorldConfig, spout.server.paper.impl.configuration.SpoutWorldConfiguration> fiddleWorldConfigCreator, // Fiddle - Configuration - Create world configuration
++            java.util.concurrent.Executor executor // Paper - Anti-Xray
      ) {
          // Paper start - getblock optimisations - cache world height/sections
+         final DimensionType dimType = dimensionTypeRegistration.value();
 @@ -845,6 +_,7 @@
          // Paper end - getblock optimisations - cache world height/sections
          this.spigotConfig = new org.spigotmc.SpigotWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) levelData).getLevelName()); // Spigot

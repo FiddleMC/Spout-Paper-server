@@ -1,4 +1,4 @@
-package org.fiddlemc.testplugin.data;
+package spout.server.paper.testplugin.data;
 
 import com.google.common.base.Suppliers;
 import net.kyori.adventure.key.Key;

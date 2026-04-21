@@ -1,4 +1,4 @@
-package org.fiddlemc.fiddle.impl.configuration;
+package spout.server.paper.impl.configuration;
 
 import com.mojang.logging.LogUtils;
 import io.leangen.geantyref.TypeToken;
@@ -25,7 +25,7 @@ import org.spongepowered.configurate.transformation.ConfigurationTransformation;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 /**
- * The configurations for Fiddle. The instance can be set up before bootstrap,
+ * The configurations for Spout. The instance can be set up before bootstrap,
  * so that the global configuration can be loaded before bootstrap.
  *
  * <p>
@@ -33,14 +33,14 @@ import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
  * </p>
  */
 @SuppressWarnings("Convert2Diamond")
-public final class FiddleConfigurations extends PaperConfigurations<FiddleGlobalConfiguration, FiddleWorldConfiguration> {
+public final class SpoutConfigurations extends PaperConfigurations<SpoutGlobalConfiguration, SpoutWorldConfiguration> {
 
-    private static FiddleConfigurations INSTANCE;
+    private static SpoutConfigurations INSTANCE;
 
     /**
      * @param optionSet The {@link OptionSet}, which must be non-null if the {@link #INSTANCE} needs to be created.
      */
-    public static FiddleConfigurations get(@Nullable OptionSet optionSet) {
+    public static SpoutConfigurations get(@Nullable OptionSet optionSet) {
         if (INSTANCE == null) {
             if (optionSet == null) {
                 throw new IllegalStateException();
@@ -57,39 +57,39 @@ public final class FiddleConfigurations extends PaperConfigurations<FiddleGlobal
 
     private static final Logger LOGGER = LogUtils.getClassLogger();
 
-    private static final String FIDDLE_WORLD_CONFIG_FILE_NAME = "fiddle-world.yml";
+    private static final String SPOUT_WORLD_CONFIG_FILE_NAME = "spout-world.yml";
 
-    private static final String FIDDLE_GLOBAL_HEADER = String.format("""
-        This is the global configuration file for Fiddle.
+    private static final String SPOUT_GLOBAL_HEADER = String.format("""
+        This is the global configuration file for Spout.
         
-        If you need help with the configuration or have any questions related to Fiddle,
+        If you need help with the configuration or have any questions related to Spout,
         join us in our Discord, or check the GitHub Wiki pages.
         
         The world configuration options are inside
         their respective world folder. The files are named %s
         
-        Wiki: https://github.com/FiddleMC/Fiddle/wiki
-        Discord: https://discord.gg/EduvcVmKS7""", FIDDLE_WORLD_CONFIG_FILE_NAME);
+        Wiki: https://github.com/FiddleMC/Spout-Paper-server/wiki
+        Discord: https://discord.gg/EduvcVmKS7""", SPOUT_WORLD_CONFIG_FILE_NAME);
 
     @Override
     protected String getWorldDefaultsHeader() {
         return """
-            This is the world defaults configuration file for Fiddle.
+            This is the world defaults configuration file for Spout.
             
-            If you need help with the configuration or have any questions related to Fiddle,
+            If you need help with the configuration or have any questions related to Spout,
             join us in our Discord, or check the GitHub Wiki pages.
             
             Configuration options here apply to all worlds, unless you specify overrides inside
             the world-specific config file inside each world folder.
             
-            Wiki: https://github.com/FiddleMC/Fiddle/wiki
+            Wiki: https://github.com/FiddleMC/Spout-Paper-server/wiki
             Discord: https://discord.gg/EduvcVmKS7""";
     }
 
     @Override
     protected String getWorldHeader(ContextMap map) {
         return String.format("""
-                This is a world configuration file for Fiddle.
+                This is a world configuration file for Spout.
                 This file may start empty but can be filled with settings to override ones in the %s/%s
                 
                 World: %s (%s)""",
@@ -101,27 +101,27 @@ public final class FiddleConfigurations extends PaperConfigurations<FiddleGlobal
     }
 
     @Override
-    protected FiddleGlobalConfiguration getGlobalConfiguration() {
-        return FiddleGlobalConfiguration.get();
+    protected SpoutGlobalConfiguration getGlobalConfiguration() {
+        return SpoutGlobalConfiguration.get();
     }
 
     @Override
-    protected FiddleWorldConfiguration getWorldConfiguration(ServerLevel level) {
-        return level.fiddleConfig();
+    protected SpoutWorldConfiguration getWorldConfiguration(ServerLevel level) {
+        return level.spoutConfig();
     }
 
-    private FiddleConfigurations(final Path globalFolder) {
-        super(globalFolder, FiddleGlobalConfiguration.class, FiddleWorldConfiguration.class, "fiddle");
+    private SpoutConfigurations(final Path globalFolder) {
+        super(globalFolder, SpoutGlobalConfiguration.class, SpoutWorldConfiguration.class, "spout");
     }
 
     @Override
     protected int globalConfigVersion() {
-        return FiddleGlobalConfiguration.CURRENT_VERSION;
+        return SpoutGlobalConfiguration.CURRENT_VERSION;
     }
 
     @Override
     protected int worldConfigVersion() {
-        return FiddleWorldConfiguration.CURRENT_VERSION;
+        return SpoutWorldConfiguration.CURRENT_VERSION;
     }
 
     @Override
@@ -132,7 +132,7 @@ public final class FiddleConfigurations extends PaperConfigurations<FiddleGlobal
 
     private static ConfigurationOptions defaultGlobalOptions(RegistryAccess registryAccess, ConfigurationOptions options) {
         return options
-            .header(FIDDLE_GLOBAL_HEADER)
+            .header(SPOUT_GLOBAL_HEADER)
             .serializers(builder -> builder
                 .register(new ServerboundPacketClassSerializer())
                 .register(new RegistryValueSerializer<>(new TypeToken<DataComponentType<?>>() {
@@ -141,10 +141,10 @@ public final class FiddleConfigurations extends PaperConfigurations<FiddleGlobal
     }
 
     @Override
-    public FiddleGlobalConfiguration initializeGlobalConfiguration(final @Nullable RegistryAccess registryAccess) throws ConfigurateException {
-        LOGGER.info("Initializing Fiddle global configuration...");
-        FiddleGlobalConfiguration configuration = super.initializeGlobalConfiguration(registryAccess);
-        FiddleGlobalConfiguration.set(configuration);
+    public SpoutGlobalConfiguration initializeGlobalConfiguration(final @Nullable RegistryAccess registryAccess) throws ConfigurateException {
+        LOGGER.info("Initializing Spout global configuration...");
+        SpoutGlobalConfiguration configuration = super.initializeGlobalConfiguration(registryAccess);
+        SpoutGlobalConfiguration.set(configuration);
         return configuration;
     }
 
@@ -155,8 +155,8 @@ public final class FiddleConfigurations extends PaperConfigurations<FiddleGlobal
     }
 
     @Override
-    protected FiddleWorldConfiguration createWorldConfigInstance(ContextMap contextMap) {
-        return new FiddleWorldConfiguration(
+    protected SpoutWorldConfiguration createWorldConfigInstance(ContextMap contextMap) {
+        return new SpoutWorldConfiguration(
             contextMap.require(PaperConfigurations.SPIGOT_WORLD_CONFIG_CONTEXT_KEY).get(),
             contextMap.require(Configurations.WORLD_KEY)
         );
@@ -187,12 +187,12 @@ public final class FiddleConfigurations extends PaperConfigurations<FiddleGlobal
         builder.build().apply(worldNode);
     }
 
-    public static FiddleConfigurations setup(final Path configDir) throws Exception {
+    public static SpoutConfigurations setup(final Path configDir) throws Exception {
         try {
             PaperConfigurations.createDirectoriesSymlinkAware(configDir);
-            return new FiddleConfigurations(configDir);
+            return new SpoutConfigurations(configDir);
         } catch (final IOException ex) {
-            throw new RuntimeException("Could not setup FiddleConfigurations", ex);
+            throw new RuntimeException("Could not setup " + SpoutConfigurations.class.getSimpleName(), ex);
         }
     }
 }

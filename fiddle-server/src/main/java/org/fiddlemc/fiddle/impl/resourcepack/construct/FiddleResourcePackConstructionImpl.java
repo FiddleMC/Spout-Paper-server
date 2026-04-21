@@ -13,7 +13,7 @@ import org.fiddlemc.fiddle.api.clientview.ClientView;
 import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackConstructEvent;
 import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackConstructFinishEvent;
 import org.fiddlemc.fiddle.api.resourcepack.construct.FiddleResourcePackConstruction;
-import org.fiddlemc.fiddle.impl.configuration.FiddleGlobalConfiguration;
+import spout.server.paper.impl.configuration.SpoutGlobalConfiguration;
 import org.fiddlemc.fiddle.impl.moredatadriven.minecraft.BlockRegistry;
 import org.fiddlemc.fiddle.impl.resourcepack.plugin.discover.FiddlePluginResourcePackDiscoveryImpl;
 import org.fiddlemc.fiddle.impl.resourcepack.send.FiddleResourcePackSending;
@@ -144,7 +144,7 @@ public final class FiddleResourcePackConstructionImpl extends ComposableImpl<Fid
      * Whether constructing the resource pack is enabled.
      */
     public boolean isEnabled() {
-        return FiddleGlobalConfiguration.get().generatedResourcePack.output.serveOverHttp.enabled;
+        return SpoutGlobalConfiguration.get().generatedResourcePack.output.serveOverHttp.enabled;
     }
 
     private static class FiddleResourcePackConstructFinishEventType extends PrioritizableLifecycleEventType.Simple<BootstrapContext, FiddleResourcePackConstructFinishEvent> {

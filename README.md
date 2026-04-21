@@ -49,7 +49,7 @@ This is the Spout server extension of Paper.
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;✓&nbsp;&nbsp;Add Spout plugins just like Paper plugins
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;✓&nbsp;&nbsp;Works with the <a href="https://github.com/FiddleMC/Fiddle-mod">Spout client mod</a> and vanilla clients
+&nbsp;&nbsp;&nbsp;&nbsp;✓&nbsp;&nbsp;Works with the <a href="https://github.com/FiddleMC/Spout-Fabric-client">Spout client mod</a> and vanilla clients
 
 ## Installation
 
@@ -70,31 +70,21 @@ This is the Spout server extension of Paper.
   </table>
 </div>
 
-Download the latest JAR from [GitHub Actions](https://github.com/FiddleMC/Fiddle/actions), under **Artifacts**.
+Download the latest JAR from [GitHub Actions](https://github.com/FiddleMC/Spout-Paper-server/actions), under **Artifacts**.
 
 ## Demo
 
-You can easily run a test server (which [includes some example blocks and items](https://github.com/FiddleMC/Fiddle/blob/master/test-plugin/src/main/java/org/fiddlemc/testplugin/TestPluginBootstrap.java)):
-* `git clone https://github.com/FiddleMC/Fiddle.git`
+You can easily run a test server (which [includes some example blocks and items](test-plugin/src/main/java/spout/server/paper/testplugin/data/PluginBlockTypes.java)):
+* `git clone https://github.com/FiddleMC/Spout-Paper-server.git`
 * `./gradlew applyAllPatches`
 * `./gradlew runDevServer`
 <!--
-You can download the latest stable JAR from [releases](https://github.com/FiddleMC/Fiddle/releases) and the latest development JAR from [actions](https://github.com/FiddleMC/Fiddle/actions).
+You can download the latest stable JAR from [releases](https://github.com/FiddleMC/Spout-Paper-server/releases) and the latest development JAR from [actions](https://github.com/FiddleMC/Spout-Paper-server/actions).
 -->
 
 ## Making a Spout plugin that adds new blocks/items
 
-Read <a href="https://github.com/FiddleMC/Fiddle/wiki">here</a>.
-
-<!--
-New content to add to the game, like blocks and items, are loaded by Fiddle from packs, similar to resource and data packs.\
-A pack is a `.zip` or `.rar` file. To install a pack, you can place it in the `fiddle_packs` folder in the server root.\
-*Example location:* `fiddle_packs/WillowTrees.zip`
-
-You can download packs made by others, or [create your own packs](https://github.com/FiddleMC/Fiddle/wiki/Making-packs) and share them.
-
-Bukkit plugins can also add custom blocks and items.
--->
+Read <a href="https://github.com/FiddleMC/Spout-Paper-server/wiki">here</a>.
 
 ## Next
 
@@ -117,7 +107,8 @@ Don't hesitate to suggest ideas, send in PRs (we will take a serious look at eve
 ## Acknowledgements
 
 This project has been made possible by:
+* the contributions of [Alvinn8](https://github.com/Alvinn8/) and [SoSeDiK](https://github.com/SoSeDiK)
 * the generous donation from <a href="https://github.com/pontaoski">Janet&nbsp;Blackquill</a>
 * the authors and maintainers of the Bukkit, [Spigot](https://www.spigotmc.org/) and [Paper](https://github.com/PaperMC/Paper) projects
-* everyone on GitHub and the [Discord](https://discord.gg/EduvcVmKS7) server who helps test Fiddle and provide feedback and suggestions
+* everyone on GitHub and the [Discord](https://discord.gg/EduvcVmKS7) server who helps test Spout and provide feedback and suggestions
 -->

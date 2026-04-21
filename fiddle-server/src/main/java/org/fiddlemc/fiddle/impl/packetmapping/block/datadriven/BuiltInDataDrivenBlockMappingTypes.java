@@ -17,7 +17,7 @@ import org.fiddlemc.fiddle.api.packetmapping.block.automatic.FromBlockStateReque
 import org.fiddlemc.fiddle.api.packetmapping.block.automatic.FromBlockTypeRequestBuilder;
 import org.fiddlemc.fiddle.api.packetmapping.block.automatic.ToBlockStateRequestBuilder;
 import org.fiddlemc.fiddle.api.packetmapping.block.automatic.ToBlockTypeRequestBuilder;
-import spout.branding.SpoutNamespace;
+import spout.common.branding.SpoutNamespace;
 import org.fiddlemc.fiddle.impl.clientview.ClientViewImpl;
 import org.fiddlemc.fiddle.impl.moredatadriven.minecraft.BlockRegistry;
 import org.fiddlemc.fiddle.impl.packetmapping.block.BlockMappingsComposeEventImpl;

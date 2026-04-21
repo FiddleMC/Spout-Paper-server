@@ -1,4 +1,4 @@
 @NullMarked
-package spout.branding;
+package spout.common.branding;
 
 import org.jspecify.annotations.NullMarked;

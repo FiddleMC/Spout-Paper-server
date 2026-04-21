@@ -9,7 +9,7 @@ import org.fiddlemc.fiddle.api.clientview.ClientView;
 import org.fiddlemc.fiddle.api.packetmapping.component.translatable.ServerSideTranslations;
 import org.fiddlemc.fiddle.api.packetmapping.component.translatable.ServerSideTranslationsComposeEvent;
 import org.fiddlemc.fiddle.api.resourcepack.content.Lang;
-import org.fiddlemc.fiddle.impl.configuration.FiddleGlobalConfiguration;
+import spout.server.paper.impl.configuration.SpoutGlobalConfiguration;
 import org.fiddlemc.fiddle.impl.resourcepack.construct.FiddleResourcePackConstructionImpl;
 import org.fiddlemc.fiddle.impl.resourcepack.plugin.discover.FiddlePluginResourcePackDiscoveryImpl;
 import org.fiddlemc.fiddle.impl.util.composable.ComposableImpl;
@@ -62,7 +62,7 @@ public final class ServerSideTranslationsImpl extends ComposableImpl<ServerSideT
         {
             // Create the complete list of locales in preferred order
             List<MinecraftLocaleUtil.KnownLocale> localesInOrder = new ArrayList<>(MinecraftLocaleUtil.getKnownLocales().length);
-            FiddleGlobalConfiguration.get().serverSideTranslations.preferredLocalesInOrder.stream().map(MinecraftLocaleUtil::getKnownLocale).filter(Objects::nonNull).forEach(localesInOrder::add);
+            SpoutGlobalConfiguration.get().serverSideTranslations.preferredLocalesInOrder.stream().map(MinecraftLocaleUtil::getKnownLocale).filter(Objects::nonNull).forEach(localesInOrder::add);
             Set<MinecraftLocaleUtil.KnownLocale> localesInOrderSet = new HashSet<>(localesInOrder);
             if (localesInOrderSet.add(MinecraftLocaleUtil.getDefault())) {
                 localesInOrder.add(MinecraftLocaleUtil.getDefault());

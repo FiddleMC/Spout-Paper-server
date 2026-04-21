@@ -5,7 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import spout.branding.SpoutNamespace;
+import spout.common.branding.SpoutNamespace;
 import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 

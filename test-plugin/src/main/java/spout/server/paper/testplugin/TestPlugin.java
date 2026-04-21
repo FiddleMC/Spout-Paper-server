@@ -1,4 +1,4 @@
-package org.fiddlemc.testplugin;
+package spout.server.paper.testplugin;
 
 import org.bukkit.Registry;
 import org.bukkit.entity.Player;

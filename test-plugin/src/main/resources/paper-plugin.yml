@@ -1,11 +1,11 @@
-name: Spout-Test-Plugin
+name: Spout-Paper-Test-Plugin
 version: ${version}
-main: org.fiddlemc.testplugin.TestPlugin
+main: spout.server.paper.testplugin.TestPlugin
 description: Spout test plugin
 author: Spout authors and contributors
 api-version: ${apiversion}
 load: STARTUP
-bootstrapper: org.fiddlemc.testplugin.TestPluginBootstrap
+bootstrapper: spout.server.paper.testplugin.TestPluginBootstrap
 defaultPerm: FALSE
 permissions:
 dependencies:

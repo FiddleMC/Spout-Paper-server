@@ -2,10 +2,10 @@
  * <h1>Configuration - API - Implementation part</h1>
  *
  * <p>
- * Implementation of {@link org.fiddlemc.fiddle.api.configuration.api}.
+ * Implementation of {@link spout.server.paper.api.configuration.api}.
  * </p>
  */
 @NullMarked
-package org.fiddlemc.fiddle.impl.configuration.api;
+package spout.server.paper.impl.configuration.api;
 
 import org.jspecify.annotations.NullMarked;

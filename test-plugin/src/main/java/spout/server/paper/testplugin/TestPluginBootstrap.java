@@ -1,4 +1,4 @@
-package org.fiddlemc.testplugin;
+package spout.server.paper.testplugin;
 
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;

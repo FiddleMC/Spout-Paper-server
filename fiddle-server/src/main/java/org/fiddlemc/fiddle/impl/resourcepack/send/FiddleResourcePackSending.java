@@ -4,7 +4,7 @@ import com.google.common.hash.Hashing;
 import com.google.common.io.ByteSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
-import org.fiddlemc.fiddle.impl.configuration.FiddleGlobalConfiguration;
+import spout.server.paper.impl.configuration.SpoutGlobalConfiguration;
 import org.fiddlemc.fiddle.impl.resourcepack.construct.FiddleConstructedResourcePackImpl;
 import org.fiddlemc.fiddle.impl.resourcepack.construct.FiddleResourcePackConstructionImpl;
 import org.fiddlemc.fiddle.impl.resourcepack.serve.FiddleResourcePackServing;
@@ -50,7 +50,7 @@ public final class FiddleResourcePackSending {
         String vanillaURL;
         String clientModURL;
         if (FiddleResourcePackServing.isEnabled()) {
-            String baseURL = "http://" + FiddleGlobalConfiguration.get().generatedResourcePack.output.serveOverHttp.ip + ":" + FiddleGlobalConfiguration.get().generatedResourcePack.output.serveOverHttp.externalPort.or(FiddleResourcePackServing.getPort()) + "/";
+            String baseURL = "http://" + SpoutGlobalConfiguration.get().generatedResourcePack.output.serveOverHttp.ip + ":" + SpoutGlobalConfiguration.get().generatedResourcePack.output.serveOverHttp.externalPort.or(FiddleResourcePackServing.getPort()) + "/";
             vanillaURL = baseURL + FiddleResourcePackServing.VANILLA_PACK_PATH;
             clientModURL = baseURL + FiddleResourcePackServing.CLIENT_MOD_PACK_PATH;
         } else {

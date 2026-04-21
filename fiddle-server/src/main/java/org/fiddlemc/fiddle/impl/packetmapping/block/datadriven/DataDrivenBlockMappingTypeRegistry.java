@@ -1,7 +1,7 @@
 package org.fiddlemc.fiddle.impl.packetmapping.block.datadriven;
 
 import net.minecraft.resources.Identifier;
-import spout.branding.SpoutNamespace;
+import spout.common.branding.SpoutNamespace;
 import org.jspecify.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;

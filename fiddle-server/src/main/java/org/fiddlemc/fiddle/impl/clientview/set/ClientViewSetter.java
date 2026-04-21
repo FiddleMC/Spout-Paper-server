@@ -8,7 +8,7 @@ import net.minecraft.network.protocol.login.ServerboundCustomQueryAnswerPacket;
 import net.minecraft.network.protocol.login.custom.CustomQueryPayload;
 import net.minecraft.resources.Identifier;
 import org.fiddlemc.fiddle.api.clientview.ClientView;
-import spout.branding.SpoutNamespace;
+import spout.common.branding.SpoutNamespace;
 import org.fiddlemc.fiddle.impl.clientview.JavaVanillaClientViewImpl;
 import org.fiddlemc.fiddle.impl.clientview.JavaWithClientModClientViewImpl;
 import org.fiddlemc.fiddle.impl.clientview.JavaWithResourcePackClientViewImpl;
