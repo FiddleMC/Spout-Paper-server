@@ -1,0 +1,11 @@
+--- a/net/minecraft/resources/RegistryDataLoader.java
++++ b/net/minecraft/resources/RegistryDataLoader.java
+@@ -308,7 +_,7 @@
+         Decoder<E> codec,
+         Map<ResourceKey<?>, Exception> loadingErrors
+     ) {
+-        FileToIdConverter fileToIdConverter = FileToIdConverter.registry(registry.key());
++        FileToIdConverter fileToIdConverter = spout.server.paper.impl.moredatadriven.datapack.DifferentDataPackRegistryDirectoryNames.getFileToIdConverter(registry); // Spout - More data-driven - Data pack - Allow directory name to be different than registry path
+         RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, registryInfoLookup);
+ 
+         final io.papermc.paper.registry.data.util.Conversions conversions = new io.papermc.paper.registry.data.util.Conversions(registryInfoLookup); // Paper - create conversions

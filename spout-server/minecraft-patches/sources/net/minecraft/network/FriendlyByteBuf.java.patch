@@ -5,19 +5,19 @@
  import org.jspecify.annotations.Nullable;
  
 -public class FriendlyByteBuf extends ByteBuf {
-+public class FriendlyByteBuf extends ByteBuf implements org.fiddlemc.fiddle.impl.clientview.lookup.ClientViewLookup { // Fiddle - Client view - Lookup - During packet handling - Store provider in FriendlyByteBuf - Easy access via ClientViewProvider interface
++public class FriendlyByteBuf extends ByteBuf implements spout.server.paper.impl.clientview.lookup.ClientViewLookup { // Spout - Client view - Lookup - During packet handling - Store provider in FriendlyByteBuf - Easy access via ClientViewProvider interface
      private final ByteBuf source;
      public final java.util.@Nullable Locale adventure$locale; // Paper - track player's locale for server-side translations
-+    public final java.lang.ref.@Nullable WeakReference<org.fiddlemc.fiddle.impl.clientview.lookup.ClientViewLookup> clientViewProvider; // Fiddle - Client view - Lookup - During packet handling - Store provider in FriendlyByteBuf
-+    // Fiddle start - Client view - Lookup - During packet handling - Store provider in FriendlyByteBuf - Easy access via ClientViewProvider interface
++    public final java.lang.ref.@Nullable WeakReference<spout.server.paper.impl.clientview.lookup.ClientViewLookup> clientViewProvider; // Spout - Client view - Lookup - During packet handling - Store provider in FriendlyByteBuf
++    // Spout start - Client view - Lookup - During packet handling - Store provider in FriendlyByteBuf - Easy access via ClientViewProvider interface
 +    @Override
-+    public org.fiddlemc.fiddle.api.clientview.@Nullable ClientView getClientView() {
-+        org.fiddlemc.fiddle.impl.clientview.lookup.@Nullable ClientViewLookup clientViewLookup = this.clientViewProvider == null ? null : this.clientViewProvider.get();
++    public spout.server.paper.api.clientview.@Nullable ClientView getClientView() {
++        spout.server.paper.impl.clientview.lookup.@Nullable ClientViewLookup clientViewLookup = this.clientViewProvider == null ? null : this.clientViewProvider.get();
 +        return clientViewLookup == null ? null : clientViewLookup.getClientView();
 +    }
-+    // Fiddle end - Client view - Lookup - During packet handling - Store provider in FriendlyByteBuf - Easy access via ClientViewProvider interface
-+    public boolean isEncodingStonecutterRecipeResult; // Fiddle - Item mapping - Detect stonecutter result - Store in FriendlyByteBuf
-+    public boolean isEncodingItemFrameItem; // Fiddle - Item mapping - Detect item frame - Store in FriendlyByteBuf
++    // Spout end - Client view - Lookup - During packet handling - Store provider in FriendlyByteBuf - Easy access via ClientViewProvider interface
++    public boolean isEncodingStonecutterRecipeResult; // Spout - Item mapping - Detect stonecutter result - Store in FriendlyByteBuf
++    public boolean isEncodingItemFrameItem; // Spout - Item mapping - Detect item frame - Store in FriendlyByteBuf
      public static final short MAX_STRING_LENGTH = 32767;
      public static final int MAX_COMPONENT_STRING_LENGTH = 262144;
      private static final int PUBLIC_KEY_SIZE = 256;
@@ -25,7 +25,7 @@
  
      public FriendlyByteBuf(ByteBuf source) {
          this.adventure$locale = PacketEncoder.ADVENTURE_LOCALE.get(); // Paper - track player's locale for server-side translations
-+        this.clientViewProvider = org.fiddlemc.fiddle.impl.clientview.lookup.packethandling.ClientViewLookupThreadLocal.THREAD_LOCAL.get();// Fiddle - Client view - Lookup - During packet handling - Copy lookup from the thread-local variable to the write buffer
++        this.clientViewProvider = spout.server.paper.impl.clientview.lookup.packethandling.ClientViewLookupThreadLocal.THREAD_LOCAL.get();// Spout - Client view - Lookup - During packet handling - Copy lookup from the thread-local variable to the write buffer
          this.source = source;
      }
  

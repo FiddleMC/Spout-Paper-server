@@ -4,7 +4,7 @@
              }
          };
          // Paper end - adventure; create separate codec for each locale
-+        codec1 = codec1.xmap(Function.identity(), component -> org.fiddlemc.fiddle.impl.packetmapping.component.ComponentMappingsImpl.get().applyGenerically(component)); // Fiddle - Component mapping - Implementation part - Apply at Component encoding
++        codec1 = codec1.xmap(Function.identity(), component -> spout.server.paper.impl.packetmapping.component.ComponentMappingsImpl.get().applyGenerically(component)); // Spout - Component mapping - Implementation part - Apply at Component encoding
          return Codec.either(Codec.either(Codec.STRING, ExtraCodecs.nonEmptyList(codec.listOf())), codec1)
              .xmap(
                  either -> either.map(either1 -> either1.map(Component::literal, ComponentSerialization::createFromList), component -> (Component)component),

@@ -4,13 +4,13 @@
              Pair<WorldDataConfiguration, CloseableResourceManager> pair = initConfig.packConfig.createResourceManager();
              CloseableResourceManager closeableResourceManager = pair.getSecond();
              LayeredRegistryAccess<RegistryLayer> layeredRegistryAccess = RegistryLayer.createRegistryAccess();
-+            // Fiddle start - More data-driven - Data pack - Delayed frozen registries - Load some registries before
-+            for (org.fiddlemc.fiddle.impl.moredatadriven.datapack.delayedfrozenregistries.DataPackRegistriesToLoadBeforeDelayedRegistryFreeze.Instance<?> instance : org.fiddlemc.fiddle.impl.moredatadriven.datapack.delayedfrozenregistries.DataPackRegistriesToLoadBeforeDelayedRegistryFreeze.REGISTRIES) {
++            // Spout start - More data-driven - Data pack - Delayed frozen registries - Load some registries before
++            for (spout.server.paper.impl.moredatadriven.datapack.delayedfrozenregistries.DataPackRegistriesToLoadBeforeDelayedRegistryFreeze.Instance<?> instance : spout.server.paper.impl.moredatadriven.datapack.delayedfrozenregistries.DataPackRegistriesToLoadBeforeDelayedRegistryFreeze.REGISTRIES) {
 +                RegistryAccess.Frozen registryAccess = RegistryDataLoader.load(closeableResourceManager, java.util.Collections.emptyList(), List.of(instance.registryData()));
 +                instance.postLoadAction().accept((Registry) registryAccess.lookupOrThrow(instance.registryData().key()));
 +            }
-+            // Fiddle end - More data-driven - Data pack - Delayed frozen registries - Load some registries before
-+            org.fiddlemc.fiddle.impl.moredatadriven.datapack.delayedfrozenregistries.DelayedRegistryFreezing.freezeDelayedRegistries(); // Fiddle - More data-driven - Data pack - Delayed frozen registries - Freeze delayed registries
++            // Spout end - More data-driven - Data pack - Delayed frozen registries - Load some registries before
++            spout.server.paper.impl.moredatadriven.datapack.delayedfrozenregistries.DelayedRegistryFreezing.freezeDelayedRegistries(); // Spout - More data-driven - Data pack - Delayed frozen registries - Freeze delayed registries
              List<Registry.PendingTags<?>> list = TagLoader.loadTagsForExistingRegistries(
                  closeableResourceManager, layeredRegistryAccess.getLayer(RegistryLayer.STATIC), io.papermc.paper.plugin.lifecycle.event.registrar.ReloadableRegistrarEvent.Cause.INITIAL // Paper - tag lifecycle - add cause
              );

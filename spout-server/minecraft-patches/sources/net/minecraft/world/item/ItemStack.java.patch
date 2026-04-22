@@ -4,12 +4,12 @@
          return new StreamCodec<RegistryFriendlyByteBuf, ItemStack>() {
              @Override
              public ItemStack decode(RegistryFriendlyByteBuf buffer) {
-+                // Fiddle start - Item mapping - Reverse - Apply at ItemStack decoding
++                // Spout start - Item mapping - Reverse - Apply at ItemStack decoding
 +                return this.decode(buffer, true);
 +            }
 +
 +            public ItemStack decode(RegistryFriendlyByteBuf buffer, boolean attemptReversing) {
-+                // Fiddle end - Item mapping - Reverse - Apply at ItemStack decoding
++                // Spout end - Item mapping - Reverse - Apply at ItemStack decoding
                  int varInt = buffer.readVarInt();
                  if (varInt <= 0) {
                      return ItemStack.EMPTY;
@@ -17,25 +17,25 @@
                      Holder<Item> holder = Item.STREAM_CODEC.decode(buffer);
                      DataComponentPatch dataComponentPatch = codec.decode(buffer);
 -                    return new ItemStack(holder, varInt, dataComponentPatch);
-+                    // Fiddle start - Item mapping - Reverse - Apply at ItemStack decoding
++                    // Spout start - Item mapping - Reverse - Apply at ItemStack decoding
 +                    ItemStack received = new ItemStack(holder, varInt, dataComponentPatch);
 +                    if (attemptReversing) {
-+                        org.fiddlemc.fiddle.impl.packetmapping.item.reverse.@Nullable ItemMappingReverser itemMappingReverser = ((org.fiddlemc.fiddle.impl.clientview.ClientViewImpl) buffer.getClientViewOrFallback()).getItemMappingReverser();
++                        spout.server.paper.impl.packetmapping.item.reverse.@Nullable ItemMappingReverser itemMappingReverser = ((spout.server.paper.impl.clientview.ClientViewImpl) buffer.getClientViewOrFallback()).getItemMappingReverser();
 +                        if (itemMappingReverser != null) {
 +                            received = itemMappingReverser.reverseMappingIfPossible(received);
 +                        }
 +                    }
 +                    return received;
-+                    // Fiddle end - Item mapping - Reverse - Apply at ItemStack decoding
++                    // Spout end - Item mapping - Reverse - Apply at ItemStack decoding
                  }
              }
  
              @Override
              public void encode(RegistryFriendlyByteBuf buffer, ItemStack value) {
-+                // Fiddle start - Item mapping - Implementation part - Apply at ItemStack encoding
-+                org.fiddlemc.fiddle.impl.packetmapping.item.ItemMappingFunctionContextImpl itemMappingContext = new org.fiddlemc.fiddle.impl.packetmapping.item.ItemMappingFunctionContextImpl(buffer.getClientViewOrFallback(), buffer.isEncodingItemFrameItem, buffer.isEncodingStonecutterRecipeResult);
-+                org.fiddlemc.fiddle.impl.packetmapping.item.reverse.@Nullable ItemMappingReverser itemMappingReverser = ((org.fiddlemc.fiddle.impl.clientview.ClientViewImpl) buffer.getClientViewOrFallback()).getItemMappingReverser();
-+                ItemStack mappedValue = org.fiddlemc.fiddle.impl.packetmapping.item.ItemMappingsImpl.get().apply(value, itemMappingContext);
++                // Spout start - Item mapping - Implementation part - Apply at ItemStack encoding
++                spout.server.paper.impl.packetmapping.item.ItemMappingFunctionContextImpl itemMappingContext = new spout.server.paper.impl.packetmapping.item.ItemMappingFunctionContextImpl(buffer.getClientViewOrFallback(), buffer.isEncodingItemFrameItem, buffer.isEncodingStonecutterRecipeResult);
++                spout.server.paper.impl.packetmapping.item.reverse.@Nullable ItemMappingReverser itemMappingReverser = ((spout.server.paper.impl.clientview.ClientViewImpl) buffer.getClientViewOrFallback()).getItemMappingReverser();
++                ItemStack mappedValue = spout.server.paper.impl.packetmapping.item.ItemMappingsImpl.get().apply(value, itemMappingContext);
 +                if (itemMappingReverser != null) {
 +                    long reservedId = -1;
 +                    if (mappedValue != value) {
@@ -65,13 +65,13 @@
 +            }
 +
 +            private void encodeUnmapped(RegistryFriendlyByteBuf buffer, ItemStack value) {
-+                // Fiddle end - Item mapping - Implementation part - Apply at ItemStack encoding
++                // Spout end - Item mapping - Implementation part - Apply at ItemStack encoding
                  if (value.isEmpty() || value.getItem() == null) { // CraftBukkit - NPE fix itemstack.getItem()
                      buffer.writeVarInt(0);
                  } else {
                      buffer.writeVarInt(io.papermc.paper.util.sanitizer.ItemComponentSanitizer.sanitizeCount(io.papermc.paper.util.sanitizer.ItemObfuscationSession.currentSession(), value, value.getCount())); // Paper - potentially sanitize count
 -                    Item.STREAM_CODEC.encode(buffer, value.getItemHolder());
-+                    Item.UNMAPPED_STREAM_CODEC.encode(buffer, value.getItemHolder()); // Fiddle - Item mapping - Wrap codec for items - Use original for unmapped item stacks
++                    Item.UNMAPPED_STREAM_CODEC.encode(buffer, value.getItemHolder()); // Spout - Item mapping - Wrap codec for items - Use original for unmapped item stacks
                      // Paper start - adventure; conditionally render translatable components
                      boolean prev = net.minecraft.network.chat.ComponentSerialization.DONT_RENDER_TRANSLATABLES.get();
                      try (final io.papermc.paper.util.SafeAutoClosable ignored = io.papermc.paper.util.sanitizer.ItemObfuscationSession.withContext(c -> c.itemStack(value))) { // pass the itemstack as context to the obfuscation session

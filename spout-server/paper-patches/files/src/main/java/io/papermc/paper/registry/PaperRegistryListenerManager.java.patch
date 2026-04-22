@@ -4,13 +4,13 @@
      }
  
      public <M, T extends Keyed, B extends PaperRegistryBuilder<M, T>> void runFreezeListeners(final ResourceKey<? extends Registry<M>> resourceKey, final Conversions conversions) {
-+        // Fiddle start - More data-driven - Data pack - Delayed frozen registries - Delay freezing registries
++        // Spout start - More data-driven - Data pack - Delayed frozen registries - Delay freezing registries
 +        Registry<?> registry = BuiltInRegistries.REGISTRY.getValue(resourceKey.identifier());
-+        if (registry != null && !org.fiddlemc.fiddle.impl.moredatadriven.datapack.delayedfrozenregistries.DelayedRegistryFreezing.isFreezingAllowed(registry)) {
-+            org.fiddlemc.fiddle.impl.moredatadriven.datapack.delayedfrozenregistries.DelayedRegistryFreezing.runFreezeListenersLater(resourceKey, conversions);
++        if (registry != null && !spout.server.paper.impl.moredatadriven.datapack.delayedfrozenregistries.DelayedRegistryFreezing.isFreezingAllowed(registry)) {
++            spout.server.paper.impl.moredatadriven.datapack.delayedfrozenregistries.DelayedRegistryFreezing.runFreezeListenersLater(resourceKey, conversions);
 +            return;
 +        }
-+        // Fiddle end - More data-driven - Data pack - Delayed frozen registries - Delay freezing registries
++        // Spout end - More data-driven - Data pack - Delayed frozen registries - Delay freezing registries
          final RegistryEntry<M, T> entry = PaperRegistries.getEntry(resourceKey);
          if (entry == null || !entry.meta().modificationApiSupport().canAdd() || !this.composeEventType.hasHandlers(entry.apiKey())) {
              return;

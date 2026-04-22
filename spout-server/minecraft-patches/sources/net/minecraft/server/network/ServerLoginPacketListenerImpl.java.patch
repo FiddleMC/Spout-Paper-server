@@ -4,7 +4,7 @@
  
      private void finishLoginAndWaitForClient(GameProfile profile) {
          this.state = ServerLoginPacketListenerImpl.State.PROTOCOL_SWITCHING;
-+        this.connection.clientViewSetter.sendClientModDetectionPacket(); // Fiddle - Client view - Set - Detect client mod
++        this.connection.clientViewSetter.sendClientModDetectionPacket(); // Spout - Client view - Set - Detect client mod
          this.connection.send(new ClientboundLoginFinishedPacket(profile));
          this.server.services().paper().filledProfileCache().add(profile); // Paper - update profile cache
      }
@@ -12,7 +12,7 @@
  
      @Override
      public void handleCustomQueryPacket(ServerboundCustomQueryAnswerPacket packet) {
-+        if (this.connection.clientViewSetter.handleClientModDetectionPacket(packet)) return; // Fiddle - Client view - Set - Handle potential client mod response
++        if (this.connection.clientViewSetter.handleClientModDetectionPacket(packet)) return; // Spout - Client view - Set - Handle potential client mod response
          // Paper start - Add Velocity IP Forwarding Support
          try {
              this.handleCustomQueryPacket0(packet);

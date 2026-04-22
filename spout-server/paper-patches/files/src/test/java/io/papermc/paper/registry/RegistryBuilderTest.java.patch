@@ -4,7 +4,7 @@
          return PaperRegistries.REGISTRY_ENTRIES.stream()
              .map(RegistryEntry::meta)
              .filter(RegistryEntryMeta.Buildable.class::isInstance)
-+            // Fiddle start - More data-driven - Paper registry API - Implementation part - Ignore modified registries in test
++            // Spout start - More data-driven - Paper registry API - Implementation part - Ignore modified registries in test
 +            .filter(entry -> {
 +                var identifier = entry.mcKey().identifier();
 +                if (identifier.equals(net.minecraft.core.registries.Registries.BLOCK.identifier())) {
@@ -15,7 +15,7 @@
 +                }
 +                return true;
 +            })
-+            // Fiddle end - More data-driven - Paper registry API - Implementation part - Ignore modified registries in test
++            // Spout end - More data-driven - Paper registry API - Implementation part - Ignore modified registries in test
              .map(Arguments::arguments);
      }
  

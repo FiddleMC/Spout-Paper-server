@@ -5,12 +5,12 @@
  
  public class Blocks {
 -    private static final BlockBehaviour.StatePredicate NOT_CLOSED_SHULKER = (state, level, pos) -> !(
-+    public static final BlockBehaviour.StatePredicate NOT_CLOSED_SHULKER = (state, level, pos) -> !( // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable - Make public
++    public static final BlockBehaviour.StatePredicate NOT_CLOSED_SHULKER = (state, level, pos) -> !( // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable - Make public
              level.getBlockEntity(pos) instanceof ShulkerBoxBlockEntity shulkerBoxBlockEntity
          )
          || shulkerBoxBlockEntity.isClosed();
 -    private static final BlockBehaviour.StatePredicate NOT_EXTENDED_PISTON = (state, level, pos) -> !state.getValue(PistonBaseBlock.EXTENDED);
-+    public static final BlockBehaviour.StatePredicate NOT_EXTENDED_PISTON = (state, level, pos) -> !state.getValue(PistonBaseBlock.EXTENDED); // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable - Make public
++    public static final BlockBehaviour.StatePredicate NOT_EXTENDED_PISTON = (state, level, pos) -> !state.getValue(PistonBaseBlock.EXTENDED); // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable - Make public
      public static final Block AIR = register("air", AirBlock::new, BlockBehaviour.Properties.of().replaceable().noCollision().noLootTable().air());
      public static final Block STONE = register(
          "stone",
@@ -19,7 +19,7 @@
          CropBlock::new,
          BlockBehaviour.Properties.of()
 -            .mapColor(blockState1 -> blockState1.getValue(CropBlock.AGE) >= 6 ? MapColor.COLOR_YELLOW : MapColor.PLANT)
-+            .mapColor(java.util.List.of(CropBlock.AGE), blockState1 -> blockState1.getValue(CropBlock.AGE) >= 6 ? MapColor.COLOR_YELLOW : MapColor.PLANT) // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
++            .mapColor(java.util.List.of(CropBlock.AGE), blockState1 -> blockState1.getValue(CropBlock.AGE) >= 6 ? MapColor.COLOR_YELLOW : MapColor.PLANT) // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
              .noCollision()
              .randomTicks()
              .instabreak()
@@ -28,7 +28,7 @@
              .requiresCorrectToolForDrops()
              .sound(SoundType.SNOW)
 -            .isViewBlocking((state, level, pos) -> state.getValue(SnowLayerBlock.LAYERS) >= 8)
-+            .isViewBlocking(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.MAX_SNOW_LAYERS) // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
++            .isViewBlocking(spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate.MAX_SNOW_LAYERS) // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
              .pushReaction(PushReaction.DESTROY)
      );
      public static final Block ICE = register(
@@ -37,7 +37,7 @@
          BlockBehaviour.Properties.of()
              .mapColor(MapColor.COLOR_GREEN)
 -            .lightLevel(blockState1 -> SeaPickleBlock.isDead(blockState1) ? 0 : 3 + 3 * blockState1.getValue(SeaPickleBlock.PICKLES))
-+            .lightLevel(new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(java.util.List.of(SeaPickleBlock.WATERLOGGED, SeaPickleBlock.PICKLES), blockState1 -> SeaPickleBlock.isDead(blockState1) ? 0 : 3 + 3 * blockState1.getValue(SeaPickleBlock.PICKLES))) // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
++            .lightLevel(new spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(java.util.List.of(SeaPickleBlock.WATERLOGGED, SeaPickleBlock.PICKLES), blockState1 -> SeaPickleBlock.isDead(blockState1) ? 0 : 3 + 3 * blockState1.getValue(SeaPickleBlock.PICKLES))) // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
              .sound(SoundType.SLIME_BLOCK)
              .noOcclusion()
              .pushReaction(PushReaction.DESTROY)
@@ -46,7 +46,7 @@
              .requiresCorrectToolForDrops()
              .strength(50.0F, 1200.0F)
 -            .lightLevel(blockState1 -> RespawnAnchorBlock.getScaledChargeLevel(blockState1, 15))
-+            .lightLevel(new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(java.util.List.of(RespawnAnchorBlock.CHARGE), blockState1 -> RespawnAnchorBlock.getScaledChargeLevel(blockState1, 15))) // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
++            .lightLevel(new spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(java.util.List.of(RespawnAnchorBlock.CHARGE), blockState1 -> RespawnAnchorBlock.getScaledChargeLevel(blockState1, 15))) // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
      );
      public static final Block POTTED_CRIMSON_FUNGUS = register(
          "potted_crimson_fungus", properties -> new FlowerPotBlock(CRIMSON_FUNGUS, properties), flowerPotProperties()
@@ -55,7 +55,7 @@
              .sound(SoundType.SCULK_SENSOR)
              .lightLevel(blockState1 -> 1)
 -            .emissiveRendering((state, level, pos) -> SculkSensorBlock.getPhase(state) == SculkSensorPhase.ACTIVE)
-+            .emissiveRendering(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.SCULK_PHASE_ACTIVE)
++            .emissiveRendering(spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate.SCULK_PHASE_ACTIVE)
      );
      public static final Block CALIBRATED_SCULK_SENSOR = register(
          "calibrated_sculk_sensor", CalibratedSculkSensorBlock::new, BlockBehaviour.Properties.ofLegacyCopy(SCULK_SENSOR)
@@ -64,7 +64,7 @@
              .mapColor(MapColor.STONE)
              .instrument(NoteBlockInstrument.BASEDRUM)
 -            .lightLevel(blockState1 -> blockState1.getValue(TrialSpawnerBlock.STATE).lightLevel())
-+            .lightLevel(new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(java.util.List.of(TrialSpawnerBlock.STATE), blockState1 -> blockState1.getValue(TrialSpawnerBlock.STATE).lightLevel())) // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
++            .lightLevel(new spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(java.util.List.of(TrialSpawnerBlock.STATE), blockState1 -> blockState1.getValue(TrialSpawnerBlock.STATE).lightLevel())) // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
              .strength(50.0F)
              .sound(SoundType.TRIAL_SPAWNER)
              .isViewBlocking(Blocks::never)
@@ -73,7 +73,7 @@
              .noOcclusion()
              .sound(SoundType.VAULT)
 -            .lightLevel(blockState1 -> blockState1.getValue(VaultBlock.STATE).lightLevel())
-+            .lightLevel(new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(java.util.List.of(VaultBlock.STATE), blockState1 -> blockState1.getValue(VaultBlock.STATE).lightLevel())) // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
++            .lightLevel(new spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(java.util.List.of(VaultBlock.STATE), blockState1 -> blockState1.getValue(VaultBlock.STATE).lightLevel())) // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
              .strength(50.0F)
              .isViewBlocking(Blocks::never)
      );
@@ -83,18 +83,18 @@
  
 -    private static ToIntFunction<BlockState> litBlockEmission(int lightValue) {
 -        return state -> state.getValue(BlockStateProperties.LIT) ? lightValue : 0;
-+    // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
-+    private static org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction<Integer> litBlockEmission(int lightValue) {
-+        return new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(java.util.List.of(BlockStateProperties.LIT), state -> state.getValue(BlockStateProperties.LIT) ? lightValue : 0);
-+        // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
++    // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
++    private static spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction<Integer> litBlockEmission(int lightValue) {
++        return new spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(java.util.List.of(BlockStateProperties.LIT), state -> state.getValue(BlockStateProperties.LIT) ? lightValue : 0);
++        // Spout end - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
      }
  
 -    private static Function<BlockState, MapColor> waterloggedMapColor(MapColor unwaterloggedMapColor) {
 -        return state -> state.getValue(BlockStateProperties.WATERLOGGED) ? MapColor.WATER : unwaterloggedMapColor;
-+    // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
-+    private static org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction<net.minecraft.world.level.material.MapColor> waterloggedMapColor(MapColor unwaterloggedMapColor) {
-+        return new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(java.util.List.of(BlockStateProperties.WATERLOGGED), state -> state.getValue(BlockStateProperties.WATERLOGGED) ? MapColor.WATER : unwaterloggedMapColor);
-+        // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
++    // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
++    private static spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction<net.minecraft.world.level.material.MapColor> waterloggedMapColor(MapColor unwaterloggedMapColor) {
++        return new spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(java.util.List.of(BlockStateProperties.WATERLOGGED), state -> state.getValue(BlockStateProperties.WATERLOGGED) ? MapColor.WATER : unwaterloggedMapColor);
++        // Spout end - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
      }
  
      private static Boolean never(BlockState state, BlockGetter level, BlockPos pos, EntityType<?> entity) {
@@ -103,7 +103,7 @@
              properties -> new BedBlock(color, properties),
              BlockBehaviour.Properties.of()
 -                .mapColor(blockState -> blockState.getValue(BedBlock.PART) == BedPart.FOOT ? color.getMapColor() : MapColor.WOOL)
-+                .mapColor(java.util.List.of(BedBlock.PART), blockState -> blockState.getValue(BedBlock.PART) == BedPart.FOOT ? color.getMapColor() : MapColor.WOOL) // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
++                .mapColor(java.util.List.of(BedBlock.PART), blockState -> blockState.getValue(BedBlock.PART) == BedPart.FOOT ? color.getMapColor() : MapColor.WOOL) // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
                  .sound(SoundType.WOOD)
                  .strength(0.2F)
                  .noOcclusion()
@@ -112,7 +112,7 @@
      private static BlockBehaviour.Properties logProperties(MapColor sideColor, MapColor topColor, SoundType sound) {
          return BlockBehaviour.Properties.of()
 -            .mapColor(state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? sideColor : topColor)
-+            .mapColor(java.util.List.of(RotatedPillarBlock.AXIS), state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? sideColor : topColor) // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
++            .mapColor(java.util.List.of(RotatedPillarBlock.AXIS), state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? sideColor : topColor) // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
              .instrument(NoteBlockInstrument.BASS)
              .strength(2.0F)
              .sound(sound)
@@ -121,16 +121,16 @@
  
      private static BlockBehaviour.Properties netherStemProperties(MapColor color) {
 -        return BlockBehaviour.Properties.of().mapColor(blockState -> color).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.STEM);
-+        return BlockBehaviour.Properties.of().mapColor(color).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.STEM); // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
++        return BlockBehaviour.Properties.of().mapColor(color).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.STEM); // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
      }
  
 -    private static boolean always(BlockState state, BlockGetter level, BlockPos pos) {
-+    public static boolean always(BlockState state, BlockGetter level, BlockPos pos) { // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable - Make public
++    public static boolean always(BlockState state, BlockGetter level, BlockPos pos) { // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable - Make public
          return true;
      }
  
 -    private static boolean never(BlockState state, BlockGetter level, BlockPos pos) {
-+    public static boolean never(BlockState state, BlockGetter level, BlockPos pos) { // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable - Make public
++    public static boolean never(BlockState state, BlockGetter level, BlockPos pos) { // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable - Make public
          return false;
      }
  
@@ -138,13 +138,13 @@
  
      private static Block register(ResourceKey<Block> resourceKey, Function<BlockBehaviour.Properties, Block> factory, BlockBehaviour.Properties properties) {
          Block block = factory.apply(properties.setId(resourceKey));
-+        // Fiddle start - More data-driven - Vanilla flag - Implementation part
++        // Spout start - More data-driven - Vanilla flag - Implementation part
 +        block.markAsVanilla();
 +        // Currently, there is no way to modify block states of vanilla blocks, so we assume all block states of vanilla blocks are vanilla too
 +        for (BlockState blockState : block.getStateDefinition().getPossibleStates()) {
 +            blockState.markAsVanilla();
 +        }
-+        // Fiddle end - More data-driven - Vanilla flag - Implementation part
++        // Spout end - More data-driven - Vanilla flag - Implementation part
          return Registry.register(BuiltInRegistries.BLOCK, resourceKey, block);
      }
  
@@ -153,10 +153,10 @@
          for (Block block : BuiltInRegistries.BLOCK) {
              for (BlockState blockState : block.getStateDefinition().getPossibleStates()) {
 -                Block.BLOCK_STATE_REGISTRY.add(blockState);
-+                // Block.BLOCK_STATE_REGISTRY.add(blockState); // Fiddle - More data-driven - Minecraft registries - Register block states in BlockRegistry#register
++                // Block.BLOCK_STATE_REGISTRY.add(blockState); // Spout - More data-driven - Minecraft registries - Register block states in BlockRegistry#register
                  blockState.initCache();
              }
          }
-+        org.fiddlemc.fiddle.impl.moredatadriven.minecraft.BlockRegistry.get().canInitializeBlockStateCaches = true; // Fiddle - More data-driven - Minecraft registries - Initialize block state caches for non-vanilla blocks in BlockRegistry#register
++        spout.server.paper.impl.moredatadriven.minecraft.BlockRegistry.get().canInitializeBlockStateCaches = true; // Spout - More data-driven - Minecraft registries - Initialize block state caches for non-vanilla blocks in BlockRegistry#register
      }
  }

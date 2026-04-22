@@ -5,8 +5,8 @@
      private static final int TWO_MEGABYTES = 2097152;
      private final Map<Heightmap.Types, long[]> heightmaps;
 -    private final byte[] buffer;
-+    public byte[] buffer; // Fiddle - Block mapping - Chunk packets - Expose buffer
-+    public int bufferLength; // Fiddle - Block mapping - Chunk packets - Make buffer length explicit
++    public byte[] buffer; // Spout - Block mapping - Chunk packets - Expose buffer
++    public int bufferLength; // Spout - Block mapping - Chunk packets - Make buffer length explicit
      private final List<ClientboundLevelChunkPacketData.BlockEntityInfo> blockEntitiesData;
      // Paper start - Handle oversized block entities in chunks
      private final java.util.List<net.minecraft.network.protocol.Packet<?>> extraPackets = new java.util.ArrayList<>();
@@ -14,7 +14,7 @@
              .filter(entry1 -> entry1.getKey().sendToClient())
              .collect(Collectors.toMap(Entry::getKey, entry1 -> (long[])entry1.getValue().getRawData().clone()));
          this.buffer = new byte[calculateChunkSize(levelChunk)];
-+        this.bufferLength = this.buffer.length; // Fiddle - Block mapping - Chunk packets - Make buffer length explicit
++        this.bufferLength = this.buffer.length; // Spout - Block mapping - Chunk packets - Make buffer length explicit
          // Paper start - Anti-Xray - Add chunk packet info
          if (chunkPacketInfo != null) {
              chunkPacketInfo.setBuffer(this.buffer);
@@ -22,7 +22,7 @@
              throw new RuntimeException("Chunk Packet trying to allocate too much memory on read.");
          } else {
              this.buffer = new byte[varInt];
-+            this.bufferLength = this.buffer.length; // Fiddle - Block mapping - Chunk packets - Make buffer length explicit
++            this.bufferLength = this.buffer.length; // Spout - Block mapping - Chunk packets - Make buffer length explicit
              buffer.readBytes(this.buffer);
              this.blockEntitiesData = ClientboundLevelChunkPacketData.BlockEntityInfo.LIST_STREAM_CODEC.decode(buffer);
          }
@@ -32,10 +32,10 @@
          HEIGHTMAPS_STREAM_CODEC.encode(buffer, this.heightmaps);
 -        buffer.writeVarInt(this.buffer.length);
 -        buffer.writeBytes(this.buffer);
-+        // Fiddle start - Block mapping - Chunk packets - Make buffer length explicit
++        // Spout start - Block mapping - Chunk packets - Make buffer length explicit
 +        buffer.writeVarInt(this.bufferLength);
 +        buffer.writeBytes(this.buffer, 0, this.bufferLength);
-+        // Fiddle end - Block mapping - Chunk packets - Make buffer length explicit
++        // Spout end - Block mapping - Chunk packets - Make buffer length explicit
          ClientboundLevelChunkPacketData.BlockEntityInfo.LIST_STREAM_CODEC.encode(buffer, this.blockEntitiesData);
      }
  

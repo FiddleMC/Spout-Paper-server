@@ -3,7 +3,7 @@ package spout.server.paper.testplugin;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import org.fiddlemc.fiddle.api.FiddleEvents;
+import spout.server.paper.api.SpoutEvents;
 import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -41,7 +41,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
      */
     private void loadIncludedResourcePack(@NotNull BootstrapContext context) {
         context.getLifecycleManager().registerEventHandler(
-            FiddleEvents.PLUGIN_RESOURCE_PACK_DISCOVERY,
+            SpoutEvents.PLUGIN_RESOURCE_PACK_DISCOVERY,
             event -> event.register(this, context)
         );
     }

@@ -4,13 +4,13 @@
      static {
          //<editor-fold desc="CraftBlockData Registration" defaultstate="collapsed">
          // Start generate - CraftBlockData#MAP
-+        // Fiddle start - Built-in content - Blocks - API - Implementation part - Register BlockData translations
-+        register(org.fiddlemc.fiddle.impl.content.block.BevelBlock.class, org.fiddlemc.fiddle.impl.content.block.api.CraftBevel::new);
-+        register(org.fiddlemc.fiddle.impl.content.block.HalfTransparentSlabBlock.class, org.bukkit.craftbukkit.block.impl.CraftSlab::new);
-+        register(org.fiddlemc.fiddle.impl.content.block.HalfTransparentStairBlock.class, org.bukkit.craftbukkit.block.impl.CraftStair::new);
-+        register(org.fiddlemc.fiddle.impl.content.block.TransparentSlabBlock.class, org.bukkit.craftbukkit.block.impl.CraftSlab::new);
-+        register(org.fiddlemc.fiddle.impl.content.block.TransparentStairBlock.class, org.bukkit.craftbukkit.block.impl.CraftStair::new);
-+        // Fiddle end - Built-in content - Blocks - API - Implementation part - Register BlockData translations
++        // Spout start - Built-in content - Blocks - API - Implementation part - Register BlockData translations
++        register(spout.server.paper.impl.content.block.BevelBlock.class, spout.server.paper.impl.content.block.api.CraftBevel::new);
++        register(spout.server.paper.impl.content.block.HalfTransparentSlabBlock.class, org.bukkit.craftbukkit.block.impl.CraftSlab::new);
++        register(spout.server.paper.impl.content.block.HalfTransparentStairBlock.class, org.bukkit.craftbukkit.block.impl.CraftStair::new);
++        register(spout.server.paper.impl.content.block.TransparentSlabBlock.class, org.bukkit.craftbukkit.block.impl.CraftSlab::new);
++        register(spout.server.paper.impl.content.block.TransparentStairBlock.class, org.bukkit.craftbukkit.block.impl.CraftStair::new);
++        // Spout end - Built-in content - Blocks - API - Implementation part - Register BlockData translations
          register(net.minecraft.world.level.block.AmethystClusterBlock.class, org.bukkit.craftbukkit.block.impl.CraftAmethystCluster::new);
          register(net.minecraft.world.level.block.AnvilBlock.class, org.bukkit.craftbukkit.block.impl.CraftAnvil::new);
          register(net.minecraft.world.level.block.AttachedStemBlock.class, org.bukkit.craftbukkit.block.impl.CraftAttachedStem::new);
@@ -19,7 +19,7 @@
  
                  StringReader reader = new StringReader(data);
 -                BlockStateParser.BlockResult arg = BlockStateParser.parseForBlock(CraftRegistry.getMinecraftRegistry(Registries.BLOCK), reader, false);
-+                BlockStateParser.BlockResult arg = BlockStateParser.parseForBlock(BuiltInRegistries.BLOCK/*CraftRegistry.getMinecraftRegistry(Registries.BLOCK)*/, reader, false); // Fiddle - More data-driven - Minecraft registries - Use registry directly instead of looking it up by key, to allow translating Bukkit to Minecraft block state classes before the block registry is registered with the registry of registries
++                BlockStateParser.BlockResult arg = BlockStateParser.parseForBlock(BuiltInRegistries.BLOCK/*CraftRegistry.getMinecraftRegistry(Registries.BLOCK)*/, reader, false); // Spout - More data-driven - Minecraft registries - Use registry directly instead of looking it up by key, to allow translating Bukkit to Minecraft block state classes before the block registry is registered with the registry of registries
                  Preconditions.checkArgument(!reader.canRead(), "Spurious trailing data: " + data);
  
                  blockData = arg.blockState();
@@ -28,10 +28,10 @@
          return this.state.canBeReplaced();
      }
 +
-+    // Fiddle start - More data-driven - Vanilla flag - Implementation part
++    // Spout start - More data-driven - Vanilla flag - Implementation part
 +    @Override
 +    public boolean isVanilla() {
 +        return this.state.isVanilla();
 +    }
-+    // Fiddle end - More data-driven - Vanilla flag - Implementation part
++    // Spout end - More data-driven - Vanilla flag - Implementation part
  }

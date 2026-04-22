@@ -5,7 +5,7 @@
  
  public class ClientboundBlockUpdatePacket implements Packet<ClientGamePacketListener> {
 -    public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundBlockUpdatePacket> STREAM_CODEC = StreamCodec.composite(
-+    // Fiddle start - Block mapping - Implementation part - Apply to single block update
++    // Spout start - Block mapping - Implementation part - Apply to single block update
 +    public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundBlockUpdatePacket> STREAM_CODEC = new StreamCodec<>() {
 +
 +        private static final StreamCodec<io.netty.buffer.ByteBuf, BlockState> BLOCK_STATE_CODEC = ByteBufCodecs.idMapper(Block.BLOCK_STATE_REGISTRY);
@@ -14,8 +14,8 @@
 +        public void encode(RegistryFriendlyByteBuf buffer, ClientboundBlockUpdatePacket value) {
 +            BlockPos pos = value.getPos();
 +            BlockPos.STREAM_CODEC.encode(buffer, pos);
-+            org.fiddlemc.fiddle.api.packetmapping.block.BlockMappingFunctionContext context = new org.fiddlemc.fiddle.impl.packetmapping.block.BlockMappingFunctionContextImpl(buffer.getClientViewOrFallback(), true, pos.getX(), pos.getY(), pos.getZ());
-+            BLOCK_STATE_CODEC.encode(buffer, org.fiddlemc.fiddle.impl.packetmapping.block.BlockMappingsImpl.get().apply(value.getBlockState(), context));
++            spout.server.paper.api.packetmapping.block.BlockMappingFunctionContext context = new spout.server.paper.impl.packetmapping.block.BlockMappingFunctionContextImpl(buffer.getClientViewOrFallback(), true, pos.getX(), pos.getY(), pos.getZ());
++            BLOCK_STATE_CODEC.encode(buffer, spout.server.paper.impl.packetmapping.block.BlockMappingsImpl.get().apply(value.getBlockState(), context));
 +        }
 +
 +        @Override
@@ -25,7 +25,7 @@
 +
 +    };
 +    public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundBlockUpdatePacket> UNMAPPED_STREAM_CODEC = StreamCodec.composite(
-+        // Fiddle end - Block mapping - Implementation part - Apply to single block update
++        // Spout end - Block mapping - Implementation part - Apply to single block update
          BlockPos.STREAM_CODEC,
          ClientboundBlockUpdatePacket::getPos,
          ByteBufCodecs.idMapper(Block.BLOCK_STATE_REGISTRY),

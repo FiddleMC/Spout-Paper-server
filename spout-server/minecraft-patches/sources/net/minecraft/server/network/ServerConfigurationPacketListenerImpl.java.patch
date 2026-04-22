@@ -4,23 +4,23 @@
      public void startConfiguration() {
          new io.papermc.paper.event.connection.configuration.PlayerConnectionInitialConfigureEvent(this.paperConnection).callEvent(); // Paper
          this.send(new ClientboundCustomPayloadPacket(new BrandPayload(this.server.getServerModName())));
-+        // Fiddle start - Client view - Set - Send custom content - Send packet
++        // Spout start - Client view - Set - Send custom content - Send packet
 +        if (this.connection.clientViewSetter.hasClientMod()) {
-+            org.fiddlemc.fiddle.impl.moredatadriven.clientmod.ClientModCustomContentPacketPayload.send(this.connection);
++            spout.server.paper.impl.moredatadriven.clientmod.ClientModCustomContentPacketPayload.send(this.connection);
 +        }
-+        // Fiddle end - Client view - Set - Send custom content - Send packet
-+        // Fiddle start - Client view - Set - Offer resource pack
-+        net.minecraft.network.protocol.common.@Nullable ClientboundResourcePackPushPacket fiddleResourcePackPacket = this.connection.clientViewSetter.getResourcePackPacket();
-+        if (fiddleResourcePackPacket != null) {
++        // Spout end - Client view - Set - Send custom content - Send packet
++        // Spout start - Client view - Set - Offer resource pack
++        net.minecraft.network.protocol.common.@Nullable ClientboundResourcePackPushPacket spoutResourcePackPacket = this.connection.clientViewSetter.getResourcePackPacket();
++        if (spoutResourcePackPacket != null) {
 +            this.connection.clientViewSetter.isWaitingForResourcePackPacketResponse = true;
-+            this.send(fiddleResourcePackPacket);
++            this.send(spoutResourcePackPacket);
 +        } else {
-+            this.continueConfigurationAfterOfferingFiddlerResourcePack();
++            this.continueConfigurationAfterOfferingSpoutResourcePack();
 +        }
 +    }
 +
-+    public void continueConfigurationAfterOfferingFiddlerResourcePack() {
-+        // Fiddle end - Client view - Set - Offer resource pack
++    public void continueConfigurationAfterOfferingSpoutResourcePack() {
++        // Spout end - Client view - Set - Offer resource pack
          ServerLinks serverLinks = this.server.serverLinks();
          if (!serverLinks.isEmpty()) {
              // Paper start
@@ -28,7 +28,7 @@
          if (packet.action().isTerminal() && packet.id().equals(this.server.getServerResourcePack().map(MinecraftServer.ServerResourcePackInfo::id).orElse(null))) { // Paper - Ignore resource pack requests that are not vanilla
              this.finishCurrentTask(ServerResourcePackConfigurationTask.TYPE);
          }
-+        // Fiddle start - Client view - Set - Offer resource pack
++        // Spout start - Client view - Set - Offer resource pack
 +        if (this.connection.clientViewSetter.isWaitingForResourcePackPacketResponse) {
 +            if (packet.action() != net.minecraft.network.protocol.common.ServerboundResourcePackPacket.Action.ACCEPTED && packet.action() != net.minecraft.network.protocol.common.ServerboundResourcePackPacket.Action.DOWNLOADED) {
 +                this.connection.clientViewSetter.isWaitingForResourcePackPacketResponse = false;
@@ -37,10 +37,10 @@
 +                } else {
 +                    this.connection.clientViewSetter.markDeniedResourcePack();
 +                }
-+                this.continueConfigurationAfterOfferingFiddlerResourcePack();
++                this.continueConfigurationAfterOfferingSpoutResourcePack();
 +            }
 +        }
-+        // Fiddle end - Client view - Set - Offer resource pack
++        // Spout end - Client view - Set - Offer resource pack
      }
  
      @Override

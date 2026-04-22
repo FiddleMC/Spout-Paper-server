@@ -5,12 +5,12 @@
  public final class Ingredient implements StackedContents.IngredientInfo<io.papermc.paper.inventory.recipe.ItemOrExact>, Predicate<ItemStack> { // Paper - Improve exact choice recipe ingredients
      public static final StreamCodec<RegistryFriendlyByteBuf, Ingredient> CONTENTS_STREAM_CODEC = ByteBufCodecs.holderSet(Registries.ITEM)
 -        .map(Ingredient::new, ingredient -> ingredient.values);
-+        .map(Ingredient::new, ingredient -> org.fiddlemc.fiddle.impl.packetmapping.item.ItemMappingsImpl.get().applyGenerically(ingredient.values)); // Fiddle - Item mapping - Implementation part - Map ingredients - Apply in codec
++        .map(Ingredient::new, ingredient -> spout.server.paper.impl.packetmapping.item.ItemMappingsImpl.get().applyGenerically(ingredient.values)); // Spout - Item mapping - Implementation part - Map ingredients - Apply in codec
      public static final StreamCodec<RegistryFriendlyByteBuf, Optional<Ingredient>> OPTIONAL_CONTENTS_STREAM_CODEC = ByteBufCodecs.holderSet(Registries.ITEM)
          .map(
              items -> items.size() == 0 ? Optional.empty() : Optional.of(new Ingredient((HolderSet<Item>)items)),
 -            optional -> optional.map(ingredient -> ingredient.values).orElse(HolderSet.direct())
-+            optional -> optional.map(ingredient -> org.fiddlemc.fiddle.impl.packetmapping.item.ItemMappingsImpl.get().applyGenerically(ingredient.values)).orElse(HolderSet.direct()) // Fiddle - Item mapping - Implementation part - Map ingredients - Apply in codec
++            optional -> optional.map(ingredient -> spout.server.paper.impl.packetmapping.item.ItemMappingsImpl.get().applyGenerically(ingredient.values)).orElse(HolderSet.direct()) // Spout - Item mapping - Implementation part - Map ingredients - Apply in codec
          );
      public static final Codec<HolderSet<Item>> NON_AIR_HOLDER_SET_CODEC = HolderSetCodec.create(Registries.ITEM, Item.CODEC, false);
      public static final Codec<Ingredient> CODEC = ExtraCodecs.nonEmptyHolderSet(NON_AIR_HOLDER_SET_CODEC)

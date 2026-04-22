@@ -14,7 +14,7 @@
 -
 -        filtered = filtered.replaceAll("\\s+", "_").replaceAll("\\W", "");
 -        return getMaterial(filtered, legacyName);
-+        return org.fiddlemc.fiddle.impl.bukkit.enuminjection.material.match.MaterialByKeyLookup.get().lookup(name, legacyName); // Fiddle - Material injection - Flexible matchMaterial
++        return spout.server.paper.impl.bukkit.enuminjection.material.match.MaterialByKeyLookup.get().lookup(name, legacyName); // Spout - Material injection - Flexible matchMaterial
      }
  
      static {

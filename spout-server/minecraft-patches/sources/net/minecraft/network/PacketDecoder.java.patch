@@ -4,7 +4,7 @@
  
          Packet<? super T> packet;
          try {
-+            org.fiddlemc.fiddle.impl.clientview.lookup.packethandling.ClientViewLookupThreadLocal.THREAD_LOCAL.set(ctx.channel().attr(org.fiddlemc.fiddle.impl.clientview.lookup.packethandling.NettyClientViewLookupAttribute.ATTRIBUTE_KEY).get()); // Fiddle - Client view - Lookup - During packet handling - Copy lookup from the channel to the thread-local variable
++            spout.server.paper.impl.clientview.lookup.packethandling.ClientViewLookupThreadLocal.THREAD_LOCAL.set(ctx.channel().attr(spout.server.paper.impl.clientview.lookup.packethandling.NettyClientViewLookupAttribute.ATTRIBUTE_KEY).get()); // Spout - Client view - Lookup - During packet handling - Copy lookup from the channel to the thread-local variable
              packet = this.protocolInfo.codec().decode(in);
          } catch (Exception var7) {
              if (var7 instanceof SkipPacketException) {

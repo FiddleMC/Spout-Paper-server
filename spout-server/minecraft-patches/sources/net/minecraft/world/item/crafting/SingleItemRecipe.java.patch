@@ -4,12 +4,12 @@
          private final StreamCodec<RegistryFriendlyByteBuf, T> streamCodec;
  
          protected Serializer(SingleItemRecipe.Factory<T> factory) {
-+            // Fiddle start - Item mapping - Detect stonecutter result - Apply codec
++            // Spout start - Item mapping - Detect stonecutter result - Apply codec
 +            this(factory, false);
 +        }
 +
 +        protected Serializer(SingleItemRecipe.Factory<T> factory, boolean isStonecutter) {
-+            // Fiddle end - Item mapping - Detect stonecutter result - Apply codec
++            // Spout end - Item mapping - Detect stonecutter result - Apply codec
              this.codec = RecordCodecBuilder.mapCodec(
                  instance -> instance.group(
                          Codec.STRING.optionalFieldOf("group", "").forGetter(SingleItemRecipe::group),
@@ -18,7 +18,7 @@
                  Ingredient.CONTENTS_STREAM_CODEC,
                  SingleItemRecipe::input,
 -                ItemStack.STREAM_CODEC,
-+                isStonecutter ? org.fiddlemc.fiddle.impl.packetmapping.item.detectstonecutterresult.StonecutterRecipeResultStreamCodec.STREAM_CODEC : ItemStack.STREAM_CODEC, // Fiddle - Item mapping - Detect stonecutter result - Apply codec
++                isStonecutter ? spout.server.paper.impl.packetmapping.item.detectstonecutterresult.StonecutterRecipeResultStreamCodec.STREAM_CODEC : ItemStack.STREAM_CODEC, // Spout - Item mapping - Detect stonecutter result - Apply codec
                  SingleItemRecipe::result,
                  factory::create
              );

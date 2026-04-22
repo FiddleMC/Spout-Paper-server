@@ -5,17 +5,17 @@
              getManifestAttribute(manifest, ATTRIBUTE_BRAND_ID)
                  .map(Key::key)
 -                .orElse(BRAND_PAPER_ID),
-+                .orElse(spout.common.branding.SpoutBrandId.BRAND_ID), // Fiddle - Branding - Rename server brand
++                .orElse(spout.common.branding.SpoutBrandId.BRAND_ID), // Spout - Branding - Rename server brand
              getManifestAttribute(manifest, ATTRIBUTE_BRAND_NAME)
 -                .orElse(BRAND_PAPER_NAME),
-+                .orElse(spout.common.branding.SpoutBrandName.BRAND), // Fiddle - Branding - Rename server brand
++                .orElse(spout.common.branding.SpoutBrandName.BRAND), // Spout - Branding - Rename server brand
              SharedConstants.getCurrentVersion().id(),
              SharedConstants.getCurrentVersion().name(),
 -            getManifestAttribute(manifest, ATTRIBUTE_BUILD_NUMBER)
 -                .map(Integer::parseInt)
 -                .map(OptionalInt::of)
 -                .orElse(OptionalInt.empty()),
-+            OptionalInt.empty(), // Fiddle - Branding - Version fetcher - Do not attempt to get build number
++            OptionalInt.empty(), // Spout - Branding - Version fetcher - Do not attempt to get build number
              getManifestAttribute(manifest, ATTRIBUTE_BUILD_TIME)
                  .map(Instant::parse)
                  .orElse(Main.BOOT_TIME),
@@ -24,7 +24,7 @@
      @Override
      public boolean isBrandCompatible(final @NotNull Key brandId) {
 -        return brandId.equals(this.brandId);
-+        return brandId.equals(this.brandId) || brandId.equals(BRAND_PAPER_ID); // Fiddle - Branding - Rename server brand - Spout does not break public Paper APIs
++        return brandId.equals(this.brandId) || brandId.equals(BRAND_PAPER_ID); // Spout - Branding - Rename server brand - Spout does not break public Paper APIs
      }
  
      @Override

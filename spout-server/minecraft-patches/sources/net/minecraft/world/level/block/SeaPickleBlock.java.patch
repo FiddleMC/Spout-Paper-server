@@ -5,7 +5,7 @@
      }
  
 -    public static boolean isDead(BlockState state) {
-+    public static boolean isDead(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap state) { // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
++    public static boolean isDead(spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap state) { // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
          return !state.getValue(WATERLOGGED);
      }
  

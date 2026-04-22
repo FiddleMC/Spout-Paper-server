@@ -5,7 +5,7 @@
  import net.minecraft.world.level.block.state.properties.Property;
  
 -public class BlockState extends BlockBehaviour.BlockStateBase {
-+public class BlockState extends BlockBehaviour.BlockStateBase implements org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap { // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make block state function properties serializable
++public class BlockState extends BlockBehaviour.BlockStateBase implements spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap { // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make block state function properties serializable
      public static final Codec<BlockState> CODEC = codec(BuiltInRegistries.BLOCK.byNameCodec(), Block::defaultBlockState).stable();
  
      // Paper start - optimise getType calls
@@ -14,31 +14,31 @@
          super(owner, values, propertiesCodec);
      }
 +
-+    // Fiddle start - More data-driven - Minecraft registries - Cache block and item values
++    // Spout start - More data-driven - Minecraft registries - Cache block and item values
 +    /**
 +     * The {@linkplain net.minecraft.core.Registry#getId index} at which this block state is registered in
 +     * {@link Block#BLOCK_STATE_REGISTRY}.
 +     *
 +     * <p>
 +     * This will be -1 until initialized in
-+     * {@link org.fiddlemc.fiddle.impl.moredatadriven.minecraft.BlockStateRegistry#add}.
++     * {@link BlockStateRegistry#add}.
 +     * </p>
 +     */
 +    public int indexInBlockStateRegistry = -1;
 +
 +    /**
 +     * The {@linkplain net.minecraft.core.Registry#getId index} at which this block state is registered in
-+     * {@link org.fiddlemc.fiddle.impl.moredatadriven.minecraft.VanillaOnlyBlockStateRegistry}.
++     * {@link VanillaOnlyBlockStateRegistry}.
 +     *
 +     * <p>
 +     * This will be -1 until initialized in
-+     * {@link org.fiddlemc.fiddle.impl.moredatadriven.minecraft.VanillaOnlyBlockStateRegistry#add}.
++     * {@link VanillaOnlyBlockStateRegistry#add}.
 +     * </p>
 +     */
 +    public int indexInVanillaOnlyBlockStateRegistry = -1;
-+    // Fiddle end - More data-driven - Minecraft registries - Cache block and item values
++    // Spout end - More data-driven - Minecraft registries - Cache block and item values
 +
-+    // Fiddle start - More data-driven - Vanilla flag - Implementation part
++    // Spout start - More data-driven - Vanilla flag - Implementation part
 +    private boolean isVanilla;
 +
 +    /**
@@ -66,7 +66,7 @@
 +    public void markAsVanilla() {
 +        this.isVanilla = true;
 +    }
-+    // Fiddle end - More data-driven - Vanilla flag - Implementation part
++    // Spout end - More data-driven - Vanilla flag - Implementation part
  
      @Override
      protected BlockState asState() {

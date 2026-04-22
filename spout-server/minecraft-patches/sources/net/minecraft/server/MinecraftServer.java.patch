@@ -5,7 +5,7 @@
      public volatile boolean abnormalExit; // Paper - Improved watchdog support
      public volatile Thread shutdownThread; // Paper - Improved watchdog support
 -    public final io.papermc.paper.configuration.PaperConfigurations paperConfigurations; // Paper - add paper configuration files
-+    public final io.papermc.paper.configuration.PaperConfigurations.OriginalPaperConfigurations paperConfigurations; // Paper - add paper configuration files // Fiddle - Configuration - Use PaperConfigurations as basis - Re-add original concrete class
++    public final io.papermc.paper.configuration.PaperConfigurations.OriginalPaperConfigurations paperConfigurations; // Paper - add paper configuration files // Spout - Configuration - Use PaperConfigurations as basis - Re-add original concrete class
      public boolean isIteratingOverLevels = false; // Paper - Throw exception on world create while being ticked
      private final Set<String> pluginsBlockingSleep = new java.util.HashSet<>(); // Paper - API to allow/disallow tick sleeping
      public static final long SERVER_INIT = System.nanoTime(); // Paper - Lag compensation
@@ -20,7 +20,7 @@
 -                LOGGER.info("View this and more helpful information here: https://docs.papermc.io/paper/next-steps");
 -                LOGGER.info("*************************************************************************************");
 -            }
-+            // Fiddle start - Branding - Disable onboarding message (server owners who download Fiddle are expected to be more advanced users anyway)
++            // Spout start - Branding - Disable onboarding message (server owners who download Spout are expected to be more advanced users anyway)
 +            // if (io.papermc.paper.configuration.GlobalConfiguration.isFirstStart) {
 +            //     LOGGER.info("*************************************************************************************");
 +            //     LOGGER.info("This is the first time you're starting this server.");
@@ -28,7 +28,7 @@
 +            //     LOGGER.info("View this and more helpful information here: https://docs.papermc.io/paper/next-steps");
 +            //     LOGGER.info("*************************************************************************************");
 +            // }
-+            // Fiddle end - Branding - Disable onboarding message (server owners who download Fiddle are expected to be more advanced users anyway)
++            // Spout end - Branding - Disable onboarding message (server owners who download Spout are expected to be more advanced users anyway)
              // Paper end - Add onboarding message for initial server start
              // Paper start - Improve outdated version checking
              if (System.getProperty("paper.disableStartupVersionCheck") == null && io.papermc.paper.configuration.GlobalConfiguration.get().updateChecker.enabled) {

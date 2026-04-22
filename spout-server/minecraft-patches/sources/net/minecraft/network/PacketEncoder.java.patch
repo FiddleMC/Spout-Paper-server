@@ -4,7 +4,7 @@
  
          try {
              ADVENTURE_LOCALE.set(channelHandlerContext.channel().attr(io.papermc.paper.adventure.PaperAdventure.LOCALE_ATTRIBUTE).get()); // Paper - adventure; set player's locale
-+            org.fiddlemc.fiddle.impl.clientview.lookup.packethandling.ClientViewLookupThreadLocal.THREAD_LOCAL.set(channelHandlerContext.channel().attr(org.fiddlemc.fiddle.impl.clientview.lookup.packethandling.NettyClientViewLookupAttribute.ATTRIBUTE_KEY).get()); // Fiddle - Client view - Lookup - During packet handling - Copy lookup from the channel to the thread-local variable
++            spout.server.paper.impl.clientview.lookup.packethandling.ClientViewLookupThreadLocal.THREAD_LOCAL.set(channelHandlerContext.channel().attr(spout.server.paper.impl.clientview.lookup.packethandling.NettyClientViewLookupAttribute.ATTRIBUTE_KEY).get()); // Spout - Client view - Lookup - During packet handling - Copy lookup from the channel to the thread-local variable
              this.protocolInfo.codec().encode(byteBuf, packet);
              int i = byteBuf.readableBytes();
              if (LOGGER.isDebugEnabled()) {

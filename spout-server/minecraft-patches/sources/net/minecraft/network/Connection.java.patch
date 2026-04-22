@@ -5,16 +5,16 @@
  import org.slf4j.MarkerFactory;
  
 -public class Connection extends SimpleChannelInboundHandler<Packet<?>> {
-+public class Connection extends SimpleChannelInboundHandler<Packet<?>> implements org.fiddlemc.fiddle.impl.clientview.lookup.ClientViewLookup { // Fiddle - Client view - Lookup - Implement for Connection
-+    public org.fiddlemc.fiddle.api.clientview.@Nullable ClientView clientView; // Fiddle - Client view - Set - Field
-+    // Fiddle start - Client view - Lookup - Implement for Connection - Getter
++public class Connection extends SimpleChannelInboundHandler<Packet<?>> implements spout.server.paper.impl.clientview.lookup.ClientViewLookup { // Spout - Client view - Lookup - Implement for Connection
++    public spout.server.paper.api.clientview.@Nullable ClientView clientView; // Spout - Client view - Set - Field
++    // Spout start - Client view - Lookup - Implement for Connection - Getter
 +    @Override
-+    public org.fiddlemc.fiddle.api.clientview.@Nullable ClientView getClientView() {
++    public spout.server.paper.api.clientview.@Nullable ClientView getClientView() {
 +        return this.clientView;
 +    }
-+    // Fiddle end - Client view - Lookup - Implement for Connection - Getter
-+    public final org.fiddlemc.fiddle.impl.clientview.set.ClientViewSetter clientViewSetter; // Fiddle - Client view - Set - Setter
-+    public final org.fiddlemc.fiddle.impl.packetmapping.item.reverse.ItemMappingReverser itemMappingReverser; // Fiddle - Item mapping - Reverse - Store reverser in Connection
++    // Spout end - Client view - Lookup - Implement for Connection - Getter
++    public final spout.server.paper.impl.clientview.set.ClientViewSetter clientViewSetter; // Spout - Client view - Set - Setter
++    public final spout.server.paper.impl.packetmapping.item.reverse.ItemMappingReverser itemMappingReverser; // Spout - Item mapping - Reverse - Store reverser in Connection
      private static final float AVERAGE_PACKETS_SMOOTHING = 0.75F;
      private static final Logger LOGGER = LogUtils.getLogger();
      public static final Marker ROOT_MARKER = MarkerFactory.getMarker("NETWORK");
@@ -22,15 +22,15 @@
  
      public Connection(PacketFlow receiving) {
          this.receiving = receiving;
-+        this.clientViewSetter = new org.fiddlemc.fiddle.impl.clientview.set.ClientViewSetter(this); // Fiddle - Client view - Set - Setter
-+        this.itemMappingReverser = new org.fiddlemc.fiddle.impl.packetmapping.item.reverse.ItemMappingReverser(); // Fiddle - Item mapping - Reverse - Store reverser in Connection
++        this.clientViewSetter = new spout.server.paper.impl.clientview.set.ClientViewSetter(this); // Spout - Client view - Set - Setter
++        this.itemMappingReverser = new spout.server.paper.impl.packetmapping.item.reverse.ItemMappingReverser(); // Spout - Item mapping - Reverse - Store reverser in Connection
      }
  
      @Override
      public void channelActive(ChannelHandlerContext ctx) throws Exception {
          super.channelActive(ctx);
          this.channel = ctx.channel();
-+        this.channel.attr(org.fiddlemc.fiddle.impl.clientview.lookup.packethandling.NettyClientViewLookupAttribute.ATTRIBUTE_KEY).set(new java.lang.ref.WeakReference<>(this)); // Fiddle - Client view - Lookup - During packet handling - Copy the connection (acting as the lookup) to the channel
++        this.channel.attr(spout.server.paper.impl.clientview.lookup.packethandling.NettyClientViewLookupAttribute.ATTRIBUTE_KEY).set(new java.lang.ref.WeakReference<>(this)); // Spout - Client view - Lookup - During packet handling - Copy the connection (acting as the lookup) to the channel
          this.address = this.channel.remoteAddress();
          this.preparing = false; // Spigot
          if (this.delayedDisconnect != null) {

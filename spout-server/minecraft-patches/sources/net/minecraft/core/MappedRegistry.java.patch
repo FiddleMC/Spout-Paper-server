@@ -13,12 +13,12 @@
  
      @Override
      public Registry<T> freeze() {
-+        // Fiddle start - More data-driven - Data pack - Delayed frozen registries - Delay freezing registries
-+        if (!org.fiddlemc.fiddle.impl.moredatadriven.datapack.delayedfrozenregistries.DelayedRegistryFreezing.isFreezingAllowed(this)) {
-+            org.fiddlemc.fiddle.impl.moredatadriven.datapack.delayedfrozenregistries.DelayedRegistryFreezing.freezeLater(this);
++        // Spout start - More data-driven - Data pack - Delayed frozen registries - Delay freezing registries
++        if (!spout.server.paper.impl.moredatadriven.datapack.delayedfrozenregistries.DelayedRegistryFreezing.isFreezingAllowed(this)) {
++            spout.server.paper.impl.moredatadriven.datapack.delayedfrozenregistries.DelayedRegistryFreezing.freezeLater(this);
 +            return this;
 +        }
-+        // Fiddle end - More data-driven - Data pack - Delayed frozen registries - Delay freezing registries
++        // Spout end - More data-driven - Data pack - Delayed frozen registries - Delay freezing registries
          if (this.frozen) {
              return this;
          } else {

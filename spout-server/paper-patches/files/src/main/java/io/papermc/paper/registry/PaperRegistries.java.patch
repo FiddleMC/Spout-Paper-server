@@ -6,14 +6,14 @@
              start(Registries.MOB_EFFECT, RegistryKey.MOB_EFFECT).craft(PotionEffectType.class, CraftPotionEffectType::new).build(),
 -            start(Registries.BLOCK, RegistryKey.BLOCK).craft(BlockType.class, CraftBlockType::new).build(),
 -            start(Registries.ITEM, RegistryKey.ITEM).craft(ItemType.class, CraftItemType::new).build(),
-+            // Fiddle start - More data-driven - Paper registry API - Types - Implementation part - Create Paper registries
-+            start(Registries.FIDDLE_BLOCK_TYPE, RegistryKey.FIDDLE_BLOCK_TYPE).craft(org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec.class, org.fiddlemc.fiddle.impl.moredatadriven.paper.registry.type.FiddleBlockTypeImpl::of).writable(org.fiddlemc.fiddle.impl.moredatadriven.paper.registry.type.FiddleBlockTypeRegistryEntryImpl.BuilderImpl::new).delayed(),
-+            start(Registries.FIDDLE_ITEM_TYPE, RegistryKey.FIDDLE_ITEM_TYPE).craft(org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedItemCodec.class, org.fiddlemc.fiddle.impl.moredatadriven.paper.registry.type.FiddleItemTypeImpl::of).writable(org.fiddlemc.fiddle.impl.moredatadriven.paper.registry.type.FiddleItemTypeRegistryEntryImpl.BuilderImpl::new).delayed(),
-+            // Fiddle end - More data-driven - Paper registry API - Types - Implementation part - Create Paper registries
-+            // Fiddle start - More data-driven - Paper registry API - Implementation part - Make writable and delayed
-+            start(Registries.BLOCK, RegistryKey.BLOCK).craft(BlockType.class, CraftBlockType::new).writable(org.fiddlemc.fiddle.impl.moredatadriven.paper.registry.BlockRegistryEntryImpl.BuilderImpl::new).delayed(),
-+            start(Registries.ITEM, RegistryKey.ITEM).craft(ItemType.class, CraftItemType::new).writable(org.fiddlemc.fiddle.impl.moredatadriven.paper.registry.ItemRegistryEntryImpl.BuilderImpl::new).delayed(),
-+            // Fiddle end - More data-driven - Paper registry API - Implementation part - Make writable and delayed
++            // Spout start - More data-driven - Paper registry API - Types - Implementation part - Create Paper registries
++            start(Registries.BLOCK_TYPE, RegistryKey.BLOCK_TYPE_TYPE).craft(spout.server.paper.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec.class, spout.server.paper.impl.moredatadriven.paper.registry.type.BlockTypeTypeImpl::of).writable(spout.server.paper.impl.moredatadriven.paper.registry.type.BlockTypeTypeRegistryEntryImpl.BuilderImpl::new).delayed(),
++            start(Registries.ITEM_TYPE, RegistryKey.ITEM_TYPE_TYPE).craft(spout.server.paper.api.moredatadriven.paper.registry.type.nms.WrappedItemCodec.class, spout.server.paper.impl.moredatadriven.paper.registry.type.ItemTypeTypeImpl::of).writable(spout.server.paper.impl.moredatadriven.paper.registry.type.ItemTypeTypeRegistryEntryImpl.BuilderImpl::new).delayed(),
++            // Spout end - More data-driven - Paper registry API - Types - Implementation part - Create Paper registries
++            // Spout start - More data-driven - Paper registry API - Implementation part - Make writable and delayed
++            start(Registries.BLOCK, RegistryKey.BLOCK).craft(BlockType.class, CraftBlockType::new).writable(spout.server.paper.impl.moredatadriven.paper.registry.BlockTypeRegistryEntryImpl.BuilderImpl::new).delayed(),
++            start(Registries.ITEM, RegistryKey.ITEM).craft(ItemType.class, CraftItemType::new).writable(spout.server.paper.impl.moredatadriven.paper.registry.ItemTypeRegistryEntryImpl.BuilderImpl::new).delayed(),
++            // Spout end - More data-driven - Paper registry API - Implementation part - Make writable and delayed
              start(Registries.VILLAGER_PROFESSION, RegistryKey.VILLAGER_PROFESSION).craft(Villager.Profession.class, CraftVillager.CraftProfession::new).build(),
              start(Registries.VILLAGER_TYPE, RegistryKey.VILLAGER_TYPE).craft(Villager.Type.class, CraftVillager.CraftType::new).build(),
              start(Registries.MAP_DECORATION_TYPE, RegistryKey.MAP_DECORATION_TYPE).craft(MapCursor.Type.class, CraftMapCursor.CraftType::new).build(),

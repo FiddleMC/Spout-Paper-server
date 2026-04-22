@@ -4,7 +4,7 @@
      // Utility
      public static void enterBootstrappers() {
          LaunchEntryPointHandler.INSTANCE.enter(Entrypoint.BOOTSTRAPPER);
-+        org.fiddlemc.fiddle.impl.resourcepack.plugin.discover.FiddlePluginResourcePackDiscoveryImpl.get().fireComposeEvent(); // Fiddle - Resource pack - Plugin resource pack discovery - Implementation part - Fire event
++        spout.server.paper.impl.resourcepack.plugin.discover.PluginResourcePackDiscoveryImpl.get().fireComposeEvent(); // Spout - Resource pack - Plugin resource pack discovery - Implementation part - Fire event
      }
  
      @Override
@@ -12,7 +12,7 @@
          }
  
          storage.enter();
-+        org.fiddlemc.fiddle.impl.packetmapping.item.namespacetooltip.NamespaceTooltips.registerNamespaceNames(storage); // Fiddle - Item mapping - Namespace tooltips - Register namespace
++        spout.server.paper.impl.packetmapping.item.namespacetooltip.NamespaceTooltips.registerNamespaceNames(storage); // Spout - Item mapping - Namespace tooltips - Register namespace
          this.enteredMap.put(entrypoint, true);
      }
  

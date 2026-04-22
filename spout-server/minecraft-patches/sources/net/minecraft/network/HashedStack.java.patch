@@ -5,13 +5,13 @@
          }
      };
 -    StreamCodec<RegistryFriendlyByteBuf, HashedStack> STREAM_CODEC = ByteBufCodecs.optional(HashedStack.ActualItem.STREAM_CODEC)
-+    // Fiddle start - Item mapping - Reverse - Reverse-map hashed item stacks - Wrap codec
++    // Spout start - Item mapping - Reverse - Reverse-map hashed item stacks - Wrap codec
 +    StreamCodec<RegistryFriendlyByteBuf, HashedStack> STREAM_CODEC = new net.minecraft.network.codec.StreamCodec<RegistryFriendlyByteBuf, HashedStack>() {
 +
 +        @Override
 +        public HashedStack decode(final RegistryFriendlyByteBuf buffer) {
 +            HashedStack decoded = UNMAPPED_STREAM_CODEC.decode(buffer);
-+            org.fiddlemc.fiddle.impl.packetmapping.item.reverse.@org.jspecify.annotations.Nullable ItemMappingReverser itemMappingReverser = ((org.fiddlemc.fiddle.impl.clientview.ClientViewImpl) buffer.getClientViewOrFallback()).getItemMappingReverser();
++            spout.server.paper.impl.packetmapping.item.reverse.@org.jspecify.annotations.Nullable ItemMappingReverser itemMappingReverser = ((spout.server.paper.impl.clientview.ClientViewImpl) buffer.getClientViewOrFallback()).getItemMappingReverser();
 +            return itemMappingReverser != null ? itemMappingReverser.reverseMappingIfPossible(decoded) : decoded;
 +        }
 +
@@ -22,7 +22,7 @@
 +
 +    };
 +    StreamCodec<RegistryFriendlyByteBuf, HashedStack> UNMAPPED_STREAM_CODEC = ByteBufCodecs.optional(HashedStack.ActualItem.STREAM_CODEC)
-+        // Fiddle end - Item mapping - Reverse - Reverse-map hashed item stacks - Wrap codec
++        // Spout end - Item mapping - Reverse - Reverse-map hashed item stacks - Wrap codec
          .map(
              optional -> DataFixUtils.orElse((Optional<? extends HashedStack>)optional, EMPTY),
              hashedStack -> hashedStack instanceof HashedStack.ActualItem actualItem ? Optional.of(actualItem) : Optional.empty()

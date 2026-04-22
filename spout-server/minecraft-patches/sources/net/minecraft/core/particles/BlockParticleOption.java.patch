@@ -5,7 +5,7 @@
  
      public static StreamCodec<? super RegistryFriendlyByteBuf, BlockParticleOption> streamCodec(ParticleType<BlockParticleOption> particleType) {
 -        return ByteBufCodecs.idMapper(Block.BLOCK_STATE_REGISTRY)
-+        return org.fiddlemc.fiddle.impl.packetmapping.block.NonPhysicalBlockStateCodec.STREAM_CODEC // Fiddle - Block mapping - Implementation part - Apply to block particles
++        return spout.server.paper.impl.packetmapping.block.NonPhysicalBlockStateCodec.STREAM_CODEC // Spout - Block mapping - Implementation part - Apply to block particles
              .map(blockState -> new BlockParticleOption(particleType, blockState), blockParticleOption -> blockParticleOption.state);
      }
  

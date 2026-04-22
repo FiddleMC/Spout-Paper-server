@@ -5,8 +5,8 @@
  import org.slf4j.Logger;
  
 -public class Item implements FeatureElement, ItemLike {
-+// Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key
-+public class Item implements FeatureElement, ItemLike, org.fiddlemc.fiddle.impl.moredatadriven.datapack.CopyResourcesFromDataPackRegistryToInternalRegistry.DelayedResourceKeyAttachable<Item> {
++// Spout start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key
++public class Item implements FeatureElement, ItemLike, spout.server.paper.impl.moredatadriven.datapack.CopyResourcesFromDataPackRegistryToInternalRegistry.DelayedResourceKeyAttachable<Item> {
 +    private Item.@Nullable Properties originalProperties;
 +    @Override
 +    public void attachResourceKey(ResourceKey<Item> resourceKey) {
@@ -16,14 +16,14 @@
 +        this.descriptionId = properties.effectiveDescriptionId();
 +        this.components = properties.buildAndValidateComponents(Component.translatable(this.descriptionId), properties.effectiveModel());
 +    }
-+    // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key
++    // Spout end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key
      public static final Codec<Holder<Item>> CODEC = BuiltInRegistries.ITEM
          .holderByNameCodec()
          .validate(
              holder -> holder.is(Items.AIR.builtInRegistryHolder()) ? DataResult.error(() -> "Item must not be minecraft:air") : DataResult.success(holder)
          );
 -    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Item>> STREAM_CODEC = ByteBufCodecs.holderRegistry(Registries.ITEM);
-+    // Fiddle start - Item mapping - Wrap codec for items
++    // Spout start - Item mapping - Wrap codec for items
 +    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Item>> STREAM_CODEC = new net.minecraft.network.codec.StreamCodec<>() {
 +
 +        @Override
@@ -34,13 +34,13 @@
 +        @Override
 +        public void encode(final RegistryFriendlyByteBuf buffer, final Holder<Item> value) {
 +            Item item = value.value();
-+            Item mappedItem = org.fiddlemc.fiddle.impl.packetmapping.item.ItemMappingsImpl.get().applyGenerically(item);
++            Item mappedItem = spout.server.paper.impl.packetmapping.item.ItemMappingsImpl.get().applyGenerically(item);
 +            UNMAPPED_STREAM_CODEC.encode(buffer, mappedItem == item ? value : Holder.direct(mappedItem));
 +        }
 +
 +    };
 +    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Item>> UNMAPPED_STREAM_CODEC = ByteBufCodecs.holderRegistry(Registries.ITEM);
-+    // Fiddle end - Item mapping - Wrap codec for items
++    // Spout end - Item mapping - Wrap codec for items
      private static final Logger LOGGER = LogUtils.getLogger();
      public static final Map<Block, Item> BY_BLOCK = Maps.newHashMap();
      public static final Identifier BASE_ATTACK_DAMAGE_ID = Identifier.withDefaultNamespace("base_attack_damage");
@@ -49,32 +49,32 @@
      protected static final int APPROXIMATELY_INFINITE_USE_DURATION = 72000;
      private final Holder.Reference<Item> builtInRegistryHolder = BuiltInRegistries.ITEM.createIntrusiveHolder(this);
 -    private final DataComponentMap components;
-+    private DataComponentMap components; // Fiddle - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Make dependent fields non-final
++    private DataComponentMap components; // Spout - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Make dependent fields non-final
      private final @Nullable Item craftingRemainingItem;
 -    protected final String descriptionId;
-+    protected String descriptionId; // Fiddle - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Make dependent fields non-final
++    protected String descriptionId; // Spout - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Make dependent fields non-final
      private final FeatureFlagSet requiredFeatures;
  
-+    // Fiddle start - More data-driven - Minecraft registries - Types - Add codec for items
++    // Spout start - More data-driven - Minecraft registries - Types - Add codec for items
 +    public com.mojang.serialization.MapCodec<? extends net.minecraft.world.item.Item> codec() {
-+        return org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.ItemCodecs.ITEM_CODEC;
++        return spout.server.paper.impl.moredatadriven.minecraft.type.ItemCodecs.ITEM_CODEC;
 +    }
-+    // Fiddle end - More data-driven - Minecraft registries - Types - Add codec for items
++    // Spout end - More data-driven - Minecraft registries - Types - Add codec for items
 +
      public static int getId(Item item) {
          return item == null ? 0 : BuiltInRegistries.ITEM.getId(item);
      }
  
-+    public java.util.@Nullable List<org.fiddlemc.fiddle.impl.packetmapping.item.datadriven.UnappliedDataDrivenItemMapping> unappliedDataPackMappings = null; // Fiddle - Item mapping - Data-driven - Load mappings from data pack
++    public java.util.@Nullable List<spout.server.paper.impl.packetmapping.item.datadriven.UnappliedDataDrivenItemMapping> unappliedDataPackMappings = null; // Spout - Item mapping - Data-driven - Load mappings from data pack
 +
-+    // Fiddle start - More data-driven - Minecraft registries - Cache block and item values
++    // Spout start - More data-driven - Minecraft registries - Cache block and item values
 +    /**
 +     * The {@link net.minecraft.resources.Identifier} with which this item is registered in
 +     * {@link BuiltInRegistries#ITEM}.
 +     *
 +     * <p>
 +     * This will be null until initialized in
-+     * {@link org.fiddlemc.fiddle.impl.moredatadriven.minecraft.ItemRegistry#register}.
++     * {@link spout.server.paper.impl.moredatadriven.minecraft.ItemRegistry#register}.
 +     * </p>
 +     */
 +    public net.minecraft.resources.Identifier keyInItemRegistry = null;
@@ -85,24 +85,24 @@
 +     *
 +     * <p>
 +     * This will be -1 until initialized in
-+     * {@link org.fiddlemc.fiddle.impl.moredatadriven.minecraft.ItemRegistry#register}.
++     * {@link spout.server.paper.impl.moredatadriven.minecraft.ItemRegistry#register}.
 +     * </p>
 +     */
 +    public int indexInItemRegistry = -1;
 +
 +    /**
 +     * The {@linkplain net.minecraft.core.Registry#getId index} at which this item is registered in
-+     * {@link org.fiddlemc.fiddle.impl.moredatadriven.minecraft.VanillaOnlyItemRegistry}.
++     * {@link spout.server.paper.impl.moredatadriven.minecraft.VanillaOnlyItemRegistry}.
 +     *
 +     * <p>
 +     * This will be -1 until initialized in
-+     * {@link org.fiddlemc.fiddle.impl.moredatadriven.minecraft.VanillaOnlyItemRegistry#add}.
++     * {@link spout.server.paper.impl.moredatadriven.minecraft.VanillaOnlyItemRegistry#add}.
 +     * </p>
 +     */
 +    public int indexInVanillaOnlyItemRegistry = -1;
-+    // Fiddle end - More data-driven - Minecraft registries - Cache block and item values
++    // Spout end - More data-driven - Minecraft registries - Cache block and item values
 +
-+    // Fiddle start - More data-driven - Vanilla flag - Implementation part
++    // Spout start - More data-driven - Vanilla flag - Implementation part
 +    private boolean isVanilla;
 +
 +    /**
@@ -130,7 +130,7 @@
 +    public void markAsVanilla() {
 +        this.isVanilla = true;
 +    }
-+    // Fiddle end - More data-driven - Vanilla flag - Implementation part
++    // Spout end - More data-driven - Vanilla flag - Implementation part
 +
      public static Item byId(int id) {
          return BuiltInRegistries.ITEM.byId(id);
@@ -139,14 +139,14 @@
      }
  
      public Item(Item.Properties properties) {
-+        // Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Don't set dependent fields without a key
++        // Spout start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Don't set dependent fields without a key
 +        if (properties.id != null) {
          this.descriptionId = properties.effectiveDescriptionId();
          this.components = properties.buildAndValidateComponents(Component.translatable(this.descriptionId), properties.effectiveModel());
 +        } else {
 +            this.originalProperties = properties;
 +        }
-+        // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Don't set dependent fields without a key
++        // Spout end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Don't set dependent fields without a key
          this.craftingRemainingItem = properties.craftingRemainingItem;
          this.requiredFeatures = properties.requiredFeatures;
          if (SharedConstants.IS_RUNNING_IN_IDE) {
@@ -155,7 +155,7 @@
          private static final DependantName<Item, String> BLOCK_DESCRIPTION_ID = key -> Util.makeDescriptionId("block", key.identifier());
          private static final DependantName<Item, String> ITEM_DESCRIPTION_ID = key -> Util.makeDescriptionId("item", key.identifier());
 -        private final DataComponentMap.Builder components = DataComponentMap.builder().addAll(DataComponents.COMMON_ITEM_COMPONENTS);
-+        // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make properties fields public
++        // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make properties fields public
 +        public final DataComponentMap.Builder components = DataComponentMap.builder().addAll(DataComponents.COMMON_ITEM_COMPONENTS);
          @Nullable Item craftingRemainingItem;
 -        FeatureFlagSet requiredFeatures = FeatureFlags.VANILLA_SET;
@@ -163,7 +163,7 @@
 +        public FeatureFlagSet requiredFeatures = FeatureFlags.VANILLA_SET;
 +        public @Nullable ResourceKey<Item> id;
          private DependantName<Item, String> descriptionId = ITEM_DESCRIPTION_ID;
-+        // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make properties fields public
++        // Spout end - More data-driven - Minecraft registries - Types - Properties serialization - Make properties fields public
          private final DependantName<Item, Identifier> model = ResourceKey::identifier;
  
          public Item.Properties food(FoodProperties food) {

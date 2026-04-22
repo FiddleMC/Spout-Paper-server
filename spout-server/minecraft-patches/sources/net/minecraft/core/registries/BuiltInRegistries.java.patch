@@ -5,13 +5,13 @@
      public static final DefaultedRegistry<Fluid> FLUID = registerDefaultedWithIntrusiveHolders(Registries.FLUID, "empty", registry -> Fluids.EMPTY);
      public static final Registry<MobEffect> MOB_EFFECT = registerSimple(Registries.MOB_EFFECT, MobEffects::bootstrap);
 -    public static final DefaultedRegistry<Block> BLOCK = registerDefaultedWithIntrusiveHolders(Registries.BLOCK, "air", registry -> Blocks.AIR);
-+    public static final org.fiddlemc.fiddle.impl.moredatadriven.minecraft.BlockRegistry BLOCK = internalRegister(Registries.BLOCK, org.fiddlemc.fiddle.impl.moredatadriven.minecraft.BlockRegistry.get(), registry -> Blocks.AIR); // Fiddle - More data-driven - Minecraft registries - Use custom class
++    public static final spout.server.paper.impl.moredatadriven.minecraft.BlockRegistry BLOCK = internalRegister(Registries.BLOCK, spout.server.paper.impl.moredatadriven.minecraft.BlockRegistry.get(), registry -> Blocks.AIR); // Spout - More data-driven - Minecraft registries - Use custom class
      public static final Registry<DebugSubscription<?>> DEBUG_SUBSCRIPTION = registerSimple(Registries.DEBUG_SUBSCRIPTION, DebugSubscriptions::bootstrap);
      public static final DefaultedRegistry<EntityType<?>> ENTITY_TYPE = registerDefaultedWithIntrusiveHolders(
          Registries.ENTITY_TYPE, "pig", registry -> EntityType.PIG
      );
 -    public static final DefaultedRegistry<Item> ITEM = registerDefaultedWithIntrusiveHolders(Registries.ITEM, "air", registry -> Items.AIR);
-+    public static final org.fiddlemc.fiddle.impl.moredatadriven.minecraft.ItemRegistry ITEM = internalRegister(Registries.ITEM, org.fiddlemc.fiddle.impl.moredatadriven.minecraft.ItemRegistry.get(), registry -> Items.AIR); // Fiddle - More data-driven - Minecraft registries - Use custom class
++    public static final spout.server.paper.impl.moredatadriven.minecraft.ItemRegistry ITEM = internalRegister(Registries.ITEM, spout.server.paper.impl.moredatadriven.minecraft.ItemRegistry.get(), registry -> Items.AIR); // Spout - More data-driven - Minecraft registries - Use custom class
      public static final Registry<Potion> POTION = registerSimple(Registries.POTION, Potions::bootstrap);
      public static final Registry<ParticleType<?>> PARTICLE_TYPE = registerSimple(Registries.PARTICLE_TYPE, registry -> ParticleTypes.BLOCK);
      public static final Registry<BlockEntityType<?>> BLOCK_ENTITY_TYPE = registerSimpleWithIntrusiveHolders(
@@ -20,8 +20,8 @@
          Registries.DENSITY_FUNCTION_TYPE, DensityFunctions::bootstrap
      );
 -    public static final Registry<MapCodec<? extends Block>> BLOCK_TYPE = registerSimple(Registries.BLOCK_TYPE, BlockTypes::bootstrap);
-+    public static final Registry<org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<?>> FIDDLE_BLOCK_TYPE = registerSimple(Registries.FIDDLE_BLOCK_TYPE, BlockTypes::bootstrap); // Fiddle - More data-driven - Minecraft registries - Types - Adapt existing block type registry
-+    public static final Registry<org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedItemCodec<?>> FIDDLE_ITEM_TYPE = registerSimple(Registries.FIDDLE_ITEM_TYPE, org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.ItemTypes::bootstrap); // Fiddle - More data-driven - Minecraft registries - Types - Add item type registry
++    public static final Registry<spout.server.paper.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<?>> BLOCK_TYPE = registerSimple(Registries.BLOCK_TYPE, BlockTypes::bootstrap); // Spout - More data-driven - Minecraft registries - Types - Adapt existing block type registry
++    public static final Registry<spout.server.paper.api.moredatadriven.paper.registry.type.nms.WrappedItemCodec<?>> ITEM_TYPE = registerSimple(Registries.ITEM_TYPE, spout.server.paper.impl.moredatadriven.minecraft.type.ItemTypes::bootstrap); // Spout - More data-driven - Minecraft registries - Types - Add item type registry
      public static final Registry<StructureProcessorType<?>> STRUCTURE_PROCESSOR = registerSimple(
          Registries.STRUCTURE_PROCESSOR, registry -> StructureProcessorType.BLOCK_IGNORE
      );

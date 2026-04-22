@@ -5,10 +5,10 @@
  
  @ApiStatus.Internal
 -record RegistryEventProviderImpl<T, B extends RegistryBuilder<T>>(RegistryKey<T> registryKey) implements RegistryEventProvider<T, B> {
-+public record RegistryEventProviderImpl<T, B extends RegistryBuilder<T>>(RegistryKey<T> registryKey) implements RegistryEventProvider<T, B> { // Fiddle - More data-driven - Paper registry API - Implementation part - Make public
++public record RegistryEventProviderImpl<T, B extends RegistryBuilder<T>>(RegistryKey<T> registryKey) implements RegistryEventProvider<T, B> { // Spout - More data-driven - Paper registry API - Implementation part - Make public
  
 -    static <T, B extends RegistryBuilder<T>> RegistryEventProvider<T, B> create(final RegistryKey<T> registryKey) {
-+    public static <T, B extends RegistryBuilder<T>> RegistryEventProvider<T, B> create(final RegistryKey<T> registryKey) { // Fiddle - More data-driven - Paper registry API - Implementation part - Make public
++    public static <T, B extends RegistryBuilder<T>> RegistryEventProvider<T, B> create(final RegistryKey<T> registryKey) { // Spout - More data-driven - Paper registry API - Implementation part - Make public
          return new RegistryEventProviderImpl<>(registryKey);
      }
  

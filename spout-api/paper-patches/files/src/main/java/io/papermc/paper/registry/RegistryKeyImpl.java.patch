@@ -5,7 +5,7 @@
      // creates the key without adding to the internal set of keys
      static <T> RegistryKey<T> createInternal(@Subst("some_key") final String key) {
 -        return new RegistryKeyImpl<>(Key.key(Key.MINECRAFT_NAMESPACE, key));
-+        return new RegistryKeyImpl<>(Key.key(key)); // Fiddle - More data-driven - Paper registry API - API part - Allow other namespaces
++        return new RegistryKeyImpl<>(Key.key(key)); // Spout - More data-driven - Paper registry API - API part - Allow other namespaces
      }
  
  }

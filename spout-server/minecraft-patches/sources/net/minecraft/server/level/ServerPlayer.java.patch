@@ -1,21 +1,13 @@
 --- a/net/minecraft/server/level/ServerPlayer.java
 +++ b/net/minecraft/server/level/ServerPlayer.java
-@@ -64,7 +_,6 @@
- import net.minecraft.network.protocol.game.ClientboundMerchantOffersPacket;
- import net.minecraft.network.protocol.game.ClientboundMountScreenOpenPacket;
- import net.minecraft.network.protocol.game.ClientboundOpenBookPacket;
--import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
- import net.minecraft.network.protocol.game.ClientboundOpenSignEditorPacket;
- import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
- import net.minecraft.network.protocol.game.ClientboundPlayerCombatEndPacket;
 @@ -226,6 +_,10 @@
      private static final boolean DEFAULT_SEEN_CREDITS = false;
      private static final boolean DEFAULT_SPAWN_EXTRA_PARTICLES_ON_FALL = false;
      public ServerGamePacketListenerImpl connection;
-+    // Fiddle start - Block mapping - Breaking speed - Store factor in player
++    // Spout start - Block mapping - Breaking speed - Store factor in player
 +    public float serverToClientSideBlockBreakSpeedFactor = 1;
-+    public org.fiddlemc.fiddle.impl.packetmapping.block.breakspeed.BlockBreakSpeedFactorHistory serverToClientSideBlockBreakSpeedFactorHistory = new org.fiddlemc.fiddle.impl.packetmapping.block.breakspeed.BlockBreakSpeedFactorHistory();
-+    // Fiddle end - Block mapping - Breaking speed - Store factor in player
++    public spout.server.paper.impl.packetmapping.block.breakspeed.BlockBreakSpeedFactorHistory serverToClientSideBlockBreakSpeedFactorHistory = new spout.server.paper.impl.packetmapping.block.breakspeed.BlockBreakSpeedFactorHistory();
++    // Spout end - Block mapping - Breaking speed - Store factor in player
      private final MinecraftServer server;
      public final ServerPlayerGameMode gameMode;
      private final PlayerAdvancements advancements;
@@ -26,15 +18,15 @@
 -    public final ContainerSynchronizer containerSynchronizer = new ContainerSynchronizer() {
 -        private final LoadingCache<TypedDataComponent<?>, Integer> cache = CacheBuilder.newBuilder()
 -            .maximumSize(256L)
-+    // Fiddle start - Item mapping - Reverse - Reverse-map hashed item stacks - Expose hashing mechanism
++    // Spout start - Item mapping - Reverse - Reverse-map hashed item stacks - Expose hashing mechanism
 +    public static LoadingCache<TypedDataComponent<?>, Integer> createHashingCache(net.minecraft.core.RegistryAccess registryAccess, long maximumSize) {
 +        return CacheBuilder.newBuilder()
 +            .maximumSize(maximumSize)
-+            // Fiddle end - Item mapping - Reverse - Reverse-map hashed item stacks - Expose hashing mechanism
++            // Spout end - Item mapping - Reverse - Reverse-map hashed item stacks - Expose hashing mechanism
              .build(
                  new CacheLoader<TypedDataComponent<?>, Integer>() {
 -                    private final DynamicOps<HashCode> registryHashOps = ServerPlayer.this.registryAccess().createSerializationContext(HashOps.CRC32C_INSTANCE);
-+                    private final DynamicOps<HashCode> registryHashOps = registryAccess.createSerializationContext(HashOps.CRC32C_INSTANCE); // Fiddle - Item mapping - Reverse - Reverse-map hashed item stacks - Expose hashing mechanism
++                    private final DynamicOps<HashCode> registryHashOps = registryAccess.createSerializationContext(HashOps.CRC32C_INSTANCE); // Spout - Item mapping - Reverse - Reverse-map hashed item stacks - Expose hashing mechanism
  
                      @Override
                      public Integer load(TypedDataComponent<?> component) {
@@ -42,11 +34,11 @@
                      }
                  }
              );
-+        // Fiddle start - Item mapping - Reverse - Reverse-map hashed item stacks - Expose hashing mechanism
++        // Spout start - Item mapping - Reverse - Reverse-map hashed item stacks - Expose hashing mechanism
 +    }
 +    public final ContainerSynchronizer containerSynchronizer = new ContainerSynchronizer() {
 +        private final LoadingCache<TypedDataComponent<?>, Integer> cache = createHashingCache(ServerPlayer.this.registryAccess(), 256L);
-+        // Fiddle end - Item mapping - Reverse - Reverse-map hashed item stacks - Expose hashing mechanism
++        // Spout end - Item mapping - Reverse - Reverse-map hashed item stacks - Expose hashing mechanism
  
          @Override
          public void sendInitialData(AbstractContainerMenu container, List<ItemStack> items, ItemStack carried, int[] remoteDataSlots) {

@@ -5,8 +5,8 @@
      private final LevelChunk chunk;
      private final int[] bits;
 -    private final Object[] palettes;
-+    public final Object[] palettes; // Fiddle - Block mapping - Chunk packets - Expose palettes
-+    public final int[] sectionEndIndexes; // Fiddle - Block mapping - Chunk packets - Track section end indexes
++    public final Object[] palettes; // Spout - Block mapping - Chunk packets - Expose palettes
++    public final int[] sectionEndIndexes; // Spout - Block mapping - Chunk packets - Track section end indexes
      private final int[] indexes;
      private final Object[][] presetValues;
      private byte[] buffer;
@@ -14,7 +14,7 @@
          int sections = chunk.getSectionsCount();
          bits = new int[sections];
          palettes = new Object[sections];
-+        sectionEndIndexes = new int[sections]; // Fiddle - Block mapping - Chunk packets - Track section end indexes
++        sectionEndIndexes = new int[sections]; // Spout - Block mapping - Chunk packets - Track section end indexes
          indexes = new int[sections];
          presetValues = new Object[sections][];
      }

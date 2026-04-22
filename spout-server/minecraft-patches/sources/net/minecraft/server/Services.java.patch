@@ -5,7 +5,7 @@
      // Paper start - add paper configuration files
      public record PaperServices(
 -        io.papermc.paper.configuration.PaperConfigurations configurations,
-+        io.papermc.paper.configuration.PaperConfigurations.OriginalPaperConfigurations configurations, // Fiddle - Configuration - Use PaperConfigurations as basis - Re-add original concrete class
++        io.papermc.paper.configuration.PaperConfigurations.OriginalPaperConfigurations configurations, // Spout - Configuration - Use PaperConfigurations as basis - Re-add original concrete class
          io.papermc.paper.profile.PaperFilledProfileCache filledProfileCache
      ) {}
  
@@ -15,8 +15,8 @@
          final java.nio.file.Path legacyConfigPath = ((File) optionSet.valueOf("paper-settings")).toPath();
 -        final java.nio.file.Path configDirPath = ((File) optionSet.valueOf("paper-settings-directory")).toPath();
 -        io.papermc.paper.configuration.PaperConfigurations paperConfigurations = io.papermc.paper.configuration.PaperConfigurations.setup(legacyConfigPath, configDirPath, profileRepository.toPath(), (File) optionSet.valueOf("spigot-settings"));
-+        final java.nio.file.Path configDirPath = getConfigDirPath(optionSet); // Fiddle - Configuration - Load global configuration before bootstrap - Extract config dir path getter to method
-+        io.papermc.paper.configuration.PaperConfigurations.OriginalPaperConfigurations paperConfigurations = io.papermc.paper.configuration.PaperConfigurations.setup(legacyConfigPath, configDirPath, profileRepository.toPath(), (File) optionSet.valueOf("spigot-settings")); // Fiddle - Configuration - Use PaperConfigurations as basis - Re-add original concrete class
++        final java.nio.file.Path configDirPath = getConfigDirPath(optionSet); // Spout - Configuration - Load global configuration before bootstrap - Extract config dir path getter to method
++        io.papermc.paper.configuration.PaperConfigurations.OriginalPaperConfigurations paperConfigurations = io.papermc.paper.configuration.PaperConfigurations.setup(legacyConfigPath, configDirPath, profileRepository.toPath(), (File) optionSet.valueOf("spigot-settings")); // Spout - Configuration - Use PaperConfigurations as basis - Re-add original concrete class
          PaperServices paperServices = new PaperServices(
              paperConfigurations,
              new io.papermc.paper.profile.PaperFilledProfileCache()
@@ -25,9 +25,9 @@
          return !this.servicesKeySet.keys(ServicesKeyType.PROFILE_KEY).isEmpty();
      }
 +
-+    // Fiddle start - Configuration - Load global configuration before bootstrap - Extract config dir path getter to method
++    // Spout start - Configuration - Load global configuration before bootstrap - Extract config dir path getter to method
 +    public static java.nio.file.Path getConfigDirPath(joptsimple.OptionSet optionSet) {
 +        return ((File) optionSet.valueOf("paper-settings-directory")).toPath();
 +    }
-+    // Fiddle end - Configuration - Load global configuration before bootstrap - Extract config dir path getter to method
++    // Spout end - Configuration - Load global configuration before bootstrap - Extract config dir path getter to method
  }

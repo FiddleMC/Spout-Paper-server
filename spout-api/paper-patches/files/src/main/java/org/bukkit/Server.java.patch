@@ -4,21 +4,21 @@
          }
          // Paper end
  
-+        // Fiddle start - Configuration - API - API part
++        // Spout start - Configuration - API - API part
 +        /**
 +         * @deprecated Server config options may be renamed or removed without notice. Prefer using existing API
 +         *  wherever possible, rather than directly reading from a server config.
 +         *
 +         * @see #getServerConfig()
-+         * @return The server's Fiddle config.
++         * @return The server's Spout config.
 +         */
 +        @Deprecated(since = "1.21.4", forRemoval = true)
 +        @NotNull
-+        public org.bukkit.configuration.file.YamlConfiguration getFiddleConfig()
++        public org.bukkit.configuration.file.YamlConfiguration getSpoutConfig()
 +        {
 +            throw new UnsupportedOperationException("Not supported yet.");
 +        }
-+        // Fiddle end - Configuration - API - API part
++        // Spout end - Configuration - API - API part
 +
          /**
           * Sends the component to the player

@@ -5,16 +5,16 @@
      }
  
 -    public record DataValue<T>(int id, EntityDataSerializer<T> serializer, T value) {
-+    // Fiddle start - Item mapping - Detect item frame - Store accessor in DataValue
++    // Spout start - Item mapping - Detect item frame - Store accessor in DataValue
 +    public record DataValue<T>(@Nullable EntityDataAccessor<T> dataAccessor, int id, EntityDataSerializer<T> serializer, T value) {
 +        DataValue(int id, EntityDataSerializer<T> serializer, T value) {
 +            this(null, id, serializer, value);
 +        }
-+        // Fiddle end - Item mapping - Detect item frame - Store accessor in DataValue
++        // Spout end - Item mapping - Detect item frame - Store accessor in DataValue
          public static <T> SynchedEntityData.DataValue<T> create(EntityDataAccessor<T> dataAccessor, T value) {
              EntityDataSerializer<T> entityDataSerializer = dataAccessor.serializer();
 -            return new SynchedEntityData.DataValue<>(dataAccessor.id(), entityDataSerializer, entityDataSerializer.copy(value));
-+            return new SynchedEntityData.DataValue<>(dataAccessor, dataAccessor.id(), entityDataSerializer, entityDataSerializer.copy(value)); // Fiddle - Item mapping - Detect item frame - Store accessor in DataValue
++            return new SynchedEntityData.DataValue<>(dataAccessor, dataAccessor.id(), entityDataSerializer, entityDataSerializer.copy(value)); // Spout - Item mapping - Detect item frame - Store accessor in DataValue
          }
  
          public void write(RegistryFriendlyByteBuf buffer) {
@@ -22,12 +22,12 @@
              } else {
                  buffer.writeByte(this.id);
                  buffer.writeVarInt(serializedId);
-+                // Fiddle start - Item mapping - Detect item frame - Set flag if item frame
++                // Spout start - Item mapping - Detect item frame - Set flag if item frame
 +                boolean isItemFrame = this.dataAccessor == net.minecraft.world.entity.decoration.ItemFrame.DATA_ITEM;
 +                if (isItemFrame) buffer.isEncodingItemFrameItem = true;
-+                // Fiddle end - Item mapping - Detect item frame - Set flag if item frame
++                // Spout end - Item mapping - Detect item frame - Set flag if item frame
                  this.serializer.codec().encode(buffer, this.value);
-+                if (isItemFrame) buffer.isEncodingItemFrameItem = false; // Fiddle - Item mapping - Detect item frame - Set flag if item frame
++                if (isItemFrame) buffer.isEncodingItemFrameItem = false; // Spout - Item mapping - Detect item frame - Set flag if item frame
              }
          }
  

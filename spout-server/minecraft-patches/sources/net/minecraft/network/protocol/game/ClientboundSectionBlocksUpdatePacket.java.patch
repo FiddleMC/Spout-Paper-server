@@ -5,13 +5,13 @@
  
          for (int i = 0; i < this.positions.length; i++) {
 -            buffer.writeVarLong((long)Block.getId(this.states[i]) << 12 | this.positions[i]);
-+            // Fiddle start - Block mapping - Implementation part - Apply during section blocks update write
++            // Spout start - Block mapping - Implementation part - Apply during section blocks update write
 +            int x = this.sectionPos.relativeToBlockX(this.positions[i]);
 +            int y = this.sectionPos.relativeToBlockY(this.positions[i]);
 +            int z = this.sectionPos.relativeToBlockZ(this.positions[i]);
-+            org.fiddlemc.fiddle.api.packetmapping.block.BlockMappingFunctionContext context = new org.fiddlemc.fiddle.impl.packetmapping.block.BlockMappingFunctionContextImpl(buffer.getClientViewOrFallback(), true, x, y, z);
-+            buffer.writeVarLong((long)Block.getId(org.fiddlemc.fiddle.impl.packetmapping.block.BlockMappingsImpl.get().apply(this.states[i], context)) << 12 | this.positions[i]);
-+            // Fiddle end - Block mapping - Implementation part - Apply during section blocks update write
++            spout.server.paper.api.packetmapping.block.BlockMappingFunctionContext context = new spout.server.paper.impl.packetmapping.block.BlockMappingFunctionContextImpl(buffer.getClientViewOrFallback(), true, x, y, z);
++            buffer.writeVarLong((long)Block.getId(spout.server.paper.impl.packetmapping.block.BlockMappingsImpl.get().apply(this.states[i], context)) << 12 | this.positions[i]);
++            // Spout end - Block mapping - Implementation part - Apply during section blocks update write
          }
      }
  

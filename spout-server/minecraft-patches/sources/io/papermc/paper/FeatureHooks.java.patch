@@ -7,11 +7,11 @@
 -            player.connection.send(refreshPackets.computeIfAbsent(shouldModify, s -> { // Use connection to prevent creating firing event
 -                return new ClientboundLevelChunkWithLightPacket(chunk, chunk.level.getLightEngine(), null, null, (Boolean) s);
 -            }));
-+            // Fiddle start - Block mapping - Chunk packets - Pass the player
++            // Spout start - Block mapping - Chunk packets - Pass the player
 +            player.connection.send( // Use connection to prevent creating firing event
 +                new ClientboundLevelChunkWithLightPacket(chunk, chunk.level.getLightEngine(), null, null, (Boolean) shouldModify, player)
 +            );
-+            // Fiddle end - Block mapping - Chunk packets - Pass the player
++            // Spout end - Block mapping - Chunk packets - Pass the player
              // Paper end - Anti-Xray
          }
      }

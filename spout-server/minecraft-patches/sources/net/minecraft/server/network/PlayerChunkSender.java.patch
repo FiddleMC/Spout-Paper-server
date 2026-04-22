@@ -5,7 +5,7 @@
          // Paper start - Anti-Xray
          final boolean shouldModify = level.chunkPacketBlockController.shouldModify(packetListener.player, chunk);
 -        packetListener.send(new ClientboundLevelChunkWithLightPacket(chunk, level.getLightEngine(), null, null, shouldModify));
-+        packetListener.send(new ClientboundLevelChunkWithLightPacket(chunk, level.getLightEngine(), null, null, shouldModify, packetListener.getPlayer())); // Fiddle - Block mapping - Chunk packets - Pass the player
++        packetListener.send(new ClientboundLevelChunkWithLightPacket(chunk, level.getLightEngine(), null, null, shouldModify, packetListener.getPlayer())); // Spout - Block mapping - Chunk packets - Pass the player
          // Paper end - Anti-Xray
          // Paper start - PlayerChunkLoadEvent
          if (io.papermc.paper.event.packet.PlayerChunkLoadEvent.getHandlerList().getRegisteredListeners().length > 0) {

@@ -4,15 +4,15 @@
          if (this.entity instanceof LivingEntity livingEntity) {
              Collection<AttributeInstance> syncableAttributes = livingEntity.getAttributes().getSyncableAttributes();
              // CraftBukkit start - If sending own attributes send scaled health instead of current maximum health
-+            @Nullable ServerPlayer selfPlayer = null; // Fiddle - Block mapping - Breaking speed - Pass self player to attributes packet
++            @Nullable ServerPlayer selfPlayer = null; // Spout - Block mapping - Breaking speed - Pass self player to attributes packet
              if (this.entity.getId() == player.getId()) {
-+                selfPlayer = player; // Fiddle - Block mapping - Breaking speed - Pass self player to attributes packet
++                selfPlayer = player; // Spout - Block mapping - Breaking speed - Pass self player to attributes packet
                  ((ServerPlayer) this.entity).getBukkitEntity().injectScaledMaxHealth(syncableAttributes, false);
              }
              // CraftBukkit end
              if (!syncableAttributes.isEmpty()) {
 -                consumer.accept(new ClientboundUpdateAttributesPacket(this.entity.getId(), syncableAttributes));
-+                consumer.accept(new ClientboundUpdateAttributesPacket(this.entity.getId(), syncableAttributes, selfPlayer)); // Fiddle - Block mapping - Breaking speed - Pass self player to attributes packet
++                consumer.accept(new ClientboundUpdateAttributesPacket(this.entity.getId(), syncableAttributes, selfPlayer)); // Spout - Block mapping - Breaking speed - Pass self player to attributes packet
              }
          }
  
@@ -21,12 +21,12 @@
                  }
                  // CraftBukkit end
 -                this.synchronizer.sendToTrackingPlayersAndSelf(new ClientboundUpdateAttributesPacket(this.entity.getId(), attributesToSync));
-+                // Fiddle start - Block mapping - Breaking speed - Pass self player to attributes packet
++                // Spout start - Block mapping - Breaking speed - Pass self player to attributes packet
 +                this.synchronizer.sendToTrackingPlayers(new ClientboundUpdateAttributesPacket(this.entity.getId(), attributesToSync, null));
 +                if (this.entity instanceof ServerPlayer serverPlayer) {
 +                    serverPlayer.connection.send(new net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket(this.entity.getId(), attributesToSync, serverPlayer));
 +                }
-+                // Fiddle ebd - Block mapping - Breaking speed - Pass self player to attributes packet
++                // Spout ebd - Block mapping - Breaking speed - Pass self player to attributes packet
              }
  
              attributesToSync.clear();

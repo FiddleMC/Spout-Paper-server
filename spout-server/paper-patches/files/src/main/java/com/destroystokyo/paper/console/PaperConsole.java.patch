@@ -5,7 +5,7 @@
      protected LineReader buildReader(LineReaderBuilder builder) {
          builder
 -                .appName("Paper")
-+                .appName("Fiddle") // Fiddle - Branding - Rename server brand
++                .appName("Spout") // Spout - Branding - Rename server brand
                  .variable(LineReader.HISTORY_FILE, java.nio.file.Paths.get(".console_history"))
                  .completer(new ConsoleCommandCompleter(this.server))
                  .option(LineReader.Option.COMPLETE_IN_WORD, true);

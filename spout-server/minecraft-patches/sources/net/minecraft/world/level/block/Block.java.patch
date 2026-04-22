@@ -1,19 +1,11 @@
 --- a/net/minecraft/world/level/block/Block.java
 +++ b/net/minecraft/world/level/block/Block.java
-@@ -25,7 +_,6 @@
- import net.minecraft.core.BlockPos;
- import net.minecraft.core.Direction;
- import net.minecraft.core.Holder;
--import net.minecraft.core.IdMapper;
- import net.minecraft.core.registries.BuiltInRegistries;
- import net.minecraft.network.chat.Component;
- import net.minecraft.network.chat.MutableComponent;
 @@ -78,7 +_,7 @@
      public static final MapCodec<Block> CODEC = simpleCodec(Block::new);
      private static final Logger LOGGER = LogUtils.getLogger();
      private final Holder.Reference<Block> builtInRegistryHolder = BuiltInRegistries.BLOCK.createIntrusiveHolder(this);
 -    public static final IdMapper<BlockState> BLOCK_STATE_REGISTRY = new IdMapper<>();
-+    public static final org.fiddlemc.fiddle.impl.moredatadriven.minecraft.BlockStateRegistry BLOCK_STATE_REGISTRY = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.BlockStateRegistry.get(); // Fiddle - More data-driven - Minecraft registries - Custom registries for blocks and items
++    public static final spout.server.paper.impl.moredatadriven.minecraft.BlockStateRegistry BLOCK_STATE_REGISTRY = spout.server.paper.impl.moredatadriven.minecraft.BlockStateRegistry.get(); // Spout - More data-driven - Minecraft registries - Custom registries for blocks and items
      private static final LoadingCache<VoxelShape, Boolean> SHAPE_FULL_BLOCK_CACHE = CacheBuilder.newBuilder()
          .maximumSize(512L)
          .weakKeys()
@@ -22,16 +14,16 @@
          return CODEC;
      }
 +
-+    public @Nullable List<org.fiddlemc.fiddle.impl.packetmapping.block.datadriven.UnappliedDataDrivenBlockMapping> unappliedDataPackMappings = null; // Fiddle - Block mapping - Data-driven - Load mappings from data pack
++    public @Nullable List<spout.server.paper.impl.packetmapping.block.datadriven.UnappliedDataDrivenBlockMapping> unappliedDataPackMappings = null; // Spout - Block mapping - Data-driven - Load mappings from data pack
 +
-+    // Fiddle start - More data-driven - Minecraft registries - Cache block and item values
++    // Spout start - More data-driven - Minecraft registries - Cache block and item values
 +    /**
 +     * The {@link net.minecraft.resources.Identifier} with which this block is registered in the
 +     * {@link BuiltInRegistries#BLOCK}.
 +     *
 +     * <p>
 +     * This will be null until initialized in
-+     * {@link org.fiddlemc.fiddle.impl.moredatadriven.minecraft.BlockRegistry#register}.
++     * {@link BlockRegistry#register}.
 +     * </p>
 +     */
 +    public net.minecraft.resources.Identifier keyInBlockRegistry = null;
@@ -42,24 +34,24 @@
 +     *
 +     * <p>
 +     * This will be -1 until initialized in
-+     * {@link org.fiddlemc.fiddle.impl.moredatadriven.minecraft.BlockRegistry#register}.
++     * {@link BlockRegistry#register}.
 +     * </p>
 +     */
 +    public int indexInBlockRegistry = -1;
 +
 +    /**
 +     * The {@linkplain net.minecraft.core.Registry#getId index} at which this block is registered in
-+     * {@link org.fiddlemc.fiddle.impl.moredatadriven.minecraft.VanillaOnlyBlockRegistry}.
++     * {@link VanillaOnlyBlockRegistry}.
 +     *
 +     * <p>
 +     * This will be -1 until initialized in
-+     * {@link org.fiddlemc.fiddle.impl.moredatadriven.minecraft.VanillaOnlyBlockRegistry#add}.
++     * {@link VanillaOnlyBlockRegistry#add}.
 +     * </p>
 +     */
 +    public int indexInVanillaOnlyBlockRegistry = -1;
-+    // Fiddle end - More data-driven - Minecraft registries - Cache block and item values
++    // Spout end - More data-driven - Minecraft registries - Cache block and item values
 +
-+    // Fiddle start - More data-driven - Vanilla flag - Implementation part
++    // Spout start - More data-driven - Vanilla flag - Implementation part
 +    private boolean isVanilla;
 +
 +    /**
@@ -87,7 +79,7 @@
 +    public void markAsVanilla() {
 +        this.isVanilla = true;
 +    }
-+    // Fiddle end - More data-driven - Vanilla flag - Implementation part
++    // Spout end - More data-driven - Vanilla flag - Implementation part
  
      public static int getId(@Nullable BlockState state) {
          if (state == null) {

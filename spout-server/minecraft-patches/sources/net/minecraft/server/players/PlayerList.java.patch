@@ -5,7 +5,7 @@
              player.connection.send(new net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket(
                  new net.minecraft.world.level.chunk.EmptyLevelChunk(serverLevel, player.chunkPosition(), plains),
 -                serverLevel.getLightEngine(), (java.util.BitSet)null, (java.util.BitSet) null, true) // Paper - Anti-Xray
-+                serverLevel.getLightEngine(), (java.util.BitSet)null, (java.util.BitSet) null, true, player) // Paper - Anti-Xray // Fiddle - Block mapping - Chunk packets - Pass the player
++                serverLevel.getLightEngine(), (java.util.BitSet)null, (java.util.BitSet) null, true, player) // Paper - Anti-Xray // Spout - Block mapping - Chunk packets - Pass the player
              );
          }
          // Paper end - Send empty chunk
@@ -13,7 +13,7 @@
              // CraftBukkit end
              this.sendAllPlayerInfoIn = 0;
          }
-+        org.fiddlemc.fiddle.impl.packetmapping.block.breakspeed.BlockBreakSpeedFactorUpdater.updateFactor(this.players); // Fiddle - Block mapping - Breaking speed - Update factor
++        spout.server.paper.impl.packetmapping.block.breakspeed.BlockBreakSpeedFactorUpdater.updateFactor(this.players); // Spout - Block mapping - Breaking speed - Update factor
      }
  
      // CraftBukkit start - add a world/entity limited version
@@ -22,7 +22,7 @@
          java.util.Collection<net.minecraft.world.entity.ai.attributes.AttributeInstance> syncableAttributes = player.getAttributes().getSyncableAttributes();
          player.getBukkitEntity().injectScaledMaxHealth(syncableAttributes, true);
 -        player.connection.send(new net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket(player.getId(), syncableAttributes));
-+        player.connection.send(new net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket(player.getId(), syncableAttributes, player)); // Fiddle - Block mapping - Breaking speed - Pass self player to attributes packet
++        player.connection.send(new net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket(player.getId(), syncableAttributes, player)); // Spout - Block mapping - Breaking speed - Pass self player to attributes packet
          // Paper end - send all attributes
          player.refreshEntityData(player); // CraftBukkit - SPIGOT-7218: sync metadata
          player.connection.send(new ClientboundSetHeldSlotPacket(player.getInventory().getSelectedSlot()));

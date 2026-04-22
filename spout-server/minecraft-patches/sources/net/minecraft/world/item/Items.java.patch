@@ -7,13 +7,13 @@
 -        if (item instanceof BlockItem blockItem) {
 -            blockItem.registerBlocks(Item.BY_BLOCK, item);
 -        }
-+        // Fiddle start - More data-driven - Minecraft registries - Register block items in ItemRegistry#register
++        // Spout start - More data-driven - Minecraft registries - Register block items in ItemRegistry#register
 +        // if (item instanceof BlockItem blockItem) {
 +        //     blockItem.registerBlocks(Item.BY_BLOCK, item);
 +        // }
-+        // Fiddle end - More data-driven - Minecraft registries - Register block items in ItemRegistry#register
++        // Spout end - More data-driven - Minecraft registries - Register block items in ItemRegistry#register
  
-+        item.markAsVanilla(); // Fiddle - More data-driven - Vanilla flag - Implementation part
++        item.markAsVanilla(); // Spout - More data-driven - Vanilla flag - Implementation part
          return Registry.register(BuiltInRegistries.ITEM, key, item);
      }
  }

@@ -4,40 +4,24 @@
          this.paperConfigurations.initializeGlobalConfiguration(this.registryAccess());
          this.paperConfigurations.initializeWorldDefaultsConfiguration(this.registryAccess());
          // Paper end - initialize global and world-defaults configuration
-+        spout.server.paper.impl.configuration.SpoutConfigurations.get(this.options).initializeWorldDefaultsConfiguration(this.registryAccess()); // Fiddle - Configuration - Initialize world-defaults configuration
++        spout.server.paper.impl.configuration.SpoutConfigurations.get(this.options).initializeWorldDefaultsConfiguration(this.registryAccess()); // Spout - Configuration - Initialize world-defaults configuration
          this.server.spark.enableEarlyIfRequested(); // Paper - spark
          // Paper start - fix converting txt to json file; convert old users earlier after PlayerList creation but before file load/save
          if (this.convertOldUsers()) {
-@@ -275,6 +_,33 @@
+@@ -275,6 +_,17 @@
          com.destroystokyo.paper.Metrics.PaperMetrics.startMetrics(); // Paper - start metrics
          com.destroystokyo.paper.VersionHistoryManager.INSTANCE.getClass(); // Paper - load version history now
  
-+        org.fiddlemc.fiddle.impl.packetmapping.component.translatable.ServerSideTranslationsImpl.get().fireComposeEvent(); // Fiddle - Server-side translations - Implementation part - Fire compose event to register translations
-+        org.fiddlemc.fiddle.impl.packetmapping.component.ComponentMappingsImpl.get().fireComposeEvent(); // Fiddle - Component mapping - Implementation part - Fire compose event to register mappings
-+        org.fiddlemc.fiddle.impl.packetmapping.block.BlockMappingsImpl.get().fireComposeEvent(); // Fiddle - Block mapping - Implementation part - Fire compose event to register mappings
-+        org.fiddlemc.fiddle.impl.packetmapping.item.ItemMappingsImpl.get().fireComposeEvent(); // Fiddle - Item mapping - Implementation part - Fire compose event to register mappings
-+        // Fiddle start - Resource pack - Construction - Fire compose event
-+        org.fiddlemc.fiddle.impl.resourcepack.construct.FiddleResourcePackConstructionImpl resourcePackConstruction = org.fiddlemc.fiddle.impl.resourcepack.construct.FiddleResourcePackConstructionImpl.get();
++        spout.server.paper.impl.packetmapping.component.translatable.ServerSideTranslationsImpl.get().fireComposeEvent(); // Spout - Server-side translations - Implementation part - Fire compose event to register translations
++        spout.server.paper.impl.packetmapping.component.ComponentMappingsImpl.get().fireComposeEvent(); // Spout - Component mapping - Implementation part - Fire compose event to register mappings
++        spout.server.paper.impl.packetmapping.block.BlockMappingsImpl.get().fireComposeEvent(); // Spout - Block mapping - Implementation part - Fire compose event to register mappings
++        spout.server.paper.impl.packetmapping.item.ItemMappingsImpl.get().fireComposeEvent(); // Spout - Item mapping - Implementation part - Fire compose event to register mappings
++        // Spout start - Resource pack - Construction - Fire compose event
++        spout.server.paper.impl.resourcepack.construct.ResourcePackConstructionImpl resourcePackConstruction = spout.server.paper.impl.resourcepack.construct.ResourcePackConstructionImpl.get();
 +        if (resourcePackConstruction.isEnabled()) {
 +            resourcePackConstruction.fireComposeEvent();
 +        }
-+        // Fiddle end - Resource pack - Construction - Fire compose event
-+        // TODO Fiddle remove temp debug below
-+        // org.fiddlemc.fiddle.impl.clientview.lookup.packethandling.ClientViewLookupThreadLocal.THREAD_LOCAL.set(new java.lang.ref.WeakReference<>(new org.fiddlemc.fiddle.impl.clientview.lookup.ClientViewLookup() {
-+        //     @Override
-+        //     public org.fiddlemc.fiddle.api.clientview.ClientView getClientView() {
-+        //         return new org.fiddlemc.fiddle.impl.clientview.JavaWithClientModClientViewImpl(null);
-+        //     }
-+        // }));
-+        // org.fiddlemc.fiddle.impl.moredatadriven.minecraft.BlockRegistry.get().stream().forEach(block -> {
-+        //     if (block.isVanilla() && block != net.minecraft.world.level.block.Blocks.BARRIER && block != net.minecraft.world.level.block.Blocks.WHEAT && block != net.minecraft.world.level.block.Blocks.SHORT_GRASS) return;
-+        //     System.out.println("Custom block: " + net.minecraft.world.level.block.BlockTypes.CODEC.codec().encodeStart(com.mojang.serialization.JsonOps.INSTANCE, block).getOrThrow().toString());
-+        // });
-+        // org.fiddlemc.fiddle.impl.moredatadriven.minecraft.ItemRegistry.get().stream().forEach(item -> {
-+        //     if (item.isVanilla()) return;
-+        //     System.out.println("Custom item: " + org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.ItemTypes.CODEC.codec().encodeStart(com.mojang.serialization.JsonOps.INSTANCE, item).getOrThrow().toString());
-+        // });
-+        // org.fiddlemc.fiddle.impl.clientview.lookup.packethandling.ClientViewLookupThreadLocal.THREAD_LOCAL.remove();
++        // Spout end - Resource pack - Construction - Fire compose event
 +
          // this.worldData.setGameType(properties.gameMode.get()); // CraftBukkit - moved to world loading
          LOGGER.info("Default game type: {}", properties.gameMode.get());
@@ -47,10 +31,10 @@
              return false;
          }
 +
-+        // Fiddle start - Material injection - Implementation part - Run on server start, before Bukkit plugins are loaded
-+        org.fiddlemc.fiddle.impl.bukkit.enuminjection.material.MaterialEnumNameMappingPipelineImpl.get().fireComposeEvent();
-+        org.fiddlemc.fiddle.impl.bukkit.enuminjection.material.MaterialEnumSynchronizer.get().runFromDedicatedServerInit();
-+        // Fiddle end - Material injection - Implementation part - Run on server start, before Bukkit plugins are loaded
++        // Spout start - Material injection - Implementation part - Run on server start, before Bukkit plugins are loaded
++        spout.server.paper.impl.bukkit.enuminjection.material.MaterialEnumNameMappingPipelineImpl.get().fireComposeEvent();
++        spout.server.paper.impl.bukkit.enuminjection.material.MaterialEnumSynchronizer.get().runFromDedicatedServerInit();
++        // Spout end - Material injection - Implementation part - Run on server start, before Bukkit plugins are loaded
  
          // CraftBukkit start
          this.server.loadPlugins();

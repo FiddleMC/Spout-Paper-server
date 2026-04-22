@@ -5,7 +5,7 @@
       */
      boolean hasCollision();
 +
-+    // Fiddle start - More data-driven - Vanilla flag - API part
++    // Spout start - More data-driven - Vanilla flag - API part
 +    /**
 +     * Returns whether this block type is present in vanilla.
 +     * <p>
@@ -16,5 +16,5 @@
 +     * @return Whether this block type is present in vanilla.
 +     */
 +    boolean isVanilla();
-+    // Fiddle end - More data-driven - Vanilla flag - API part
++    // Spout end - More data-driven - Vanilla flag - API part
  }

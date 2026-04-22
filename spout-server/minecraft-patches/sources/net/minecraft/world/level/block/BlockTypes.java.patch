@@ -5,24 +5,24 @@
  
  public class BlockTypes {
 -    public static final MapCodec<Block> CODEC = BuiltInRegistries.BLOCK_TYPE.byNameCodec().dispatchMap(Block::codec, Function.identity());
-+    // Fiddle start - More data-driven - Minecraft registries - Types - Adapt existing block type registry
-+    public static final MapCodec<Block> CODEC = BuiltInRegistries.FIDDLE_BLOCK_TYPE.byNameCodec().dispatchMap(block -> org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.WrappedBlockCodecImpl.wrap(block.codec()), org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec::getExtendedCodec);
++    // Spout start - More data-driven - Minecraft registries - Types - Adapt existing block type registry
++    public static final MapCodec<Block> CODEC = BuiltInRegistries.BLOCK_TYPE.byNameCodec().dispatchMap(block -> spout.server.paper.impl.moredatadriven.minecraft.type.WrappedBlockCodecImpl.wrap(block.codec()), spout.server.paper.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec::getExtendedCodec);
  
 -    public static MapCodec<? extends Block> bootstrap(Registry<MapCodec<? extends Block>> registry) {
-+    public static org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<?> bootstrap(Registry<org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<? extends net.minecraft.world.level.block.Block>> registry) {
++    public static spout.server.paper.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<?> bootstrap(Registry<spout.server.paper.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<? extends Block>> registry) {
 +        class Registry {
-+            static org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<?> register(net.minecraft.core.Registry<org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<? extends net.minecraft.world.level.block.Block>> registry, String name, MapCodec<? extends Block> value) {
-+                return net.minecraft.core.Registry.register(registry, name, org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.WrappedBlockCodecImpl.wrap(value));
++            static spout.server.paper.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<?> register(net.minecraft.core.Registry<spout.server.paper.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<? extends Block>> registry, String name, MapCodec<? extends Block> value) {
++                return net.minecraft.core.Registry.register(registry, name, spout.server.paper.impl.moredatadriven.minecraft.type.WrappedBlockCodecImpl.wrap(value));
 +            }
 +        }
-+        // Fiddle end - More data-driven - Minecraft registries - Types - Adapt existing block type registry
-+        // Fiddle start - Built-in content - Blocks - Register block types
-+        Registry.register(registry, "fiddle:bevel", org.fiddlemc.fiddle.impl.content.block.BevelBlock.CODEC);
-+        Registry.register(registry, "fiddle:half_transparent_slab", org.fiddlemc.fiddle.impl.content.block.HalfTransparentSlabBlock.CODEC);
-+        Registry.register(registry, "fiddle:half_transparent_stair", org.fiddlemc.fiddle.impl.content.block.HalfTransparentStairBlock.CODEC);
-+        Registry.register(registry, "fiddle:transparent_slab", org.fiddlemc.fiddle.impl.content.block.TransparentSlabBlock.CODEC);
-+        Registry.register(registry, "fiddle:transparent_stair", org.fiddlemc.fiddle.impl.content.block.TransparentStairBlock.CODEC);
-+        // Fiddle end - Built-in content - Blocks - Register block types
++        // Spout end - More data-driven - Minecraft registries - Types - Adapt existing block type registry
++        // Spout start - Built-in content - Blocks - Register block types
++        Registry.register(registry, net.minecraft.resources.Identifier.fromNamespaceAndPath(spout.common.branding.SpoutNamespace.SPOUT, "bevel").toString(), spout.server.paper.impl.content.block.BevelBlock.CODEC);
++        Registry.register(registry, net.minecraft.resources.Identifier.fromNamespaceAndPath(spout.common.branding.SpoutNamespace.SPOUT, "half_transparent_slab").toString(), spout.server.paper.impl.content.block.HalfTransparentSlabBlock.CODEC);
++        Registry.register(registry, net.minecraft.resources.Identifier.fromNamespaceAndPath(spout.common.branding.SpoutNamespace.SPOUT, "half_transparent_stair").toString(), spout.server.paper.impl.content.block.HalfTransparentStairBlock.CODEC);
++        Registry.register(registry, net.minecraft.resources.Identifier.fromNamespaceAndPath(spout.common.branding.SpoutNamespace.SPOUT, "transparent_slab").toString(), spout.server.paper.impl.content.block.TransparentSlabBlock.CODEC);
++        Registry.register(registry, net.minecraft.resources.Identifier.fromNamespaceAndPath(spout.common.branding.SpoutNamespace.SPOUT, "transparent_stair").toString(), spout.server.paper.impl.content.block.TransparentStairBlock.CODEC);
++        // Spout end - Built-in content - Blocks - Register block types
          Registry.register(registry, "block", Block.CODEC);
          Registry.register(registry, "air", AirBlock.CODEC);
          Registry.register(registry, "amethyst", AmethystBlock.CODEC);

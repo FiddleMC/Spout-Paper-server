@@ -4,7 +4,7 @@
          buffer.writeShort(this.nonEmptyBlockCount);
          this.states.write(buffer, chunkPacketInfo, chunkSectionIndex);
          this.biomes.write(buffer, null, chunkSectionIndex);
-+        chunkPacketInfo.sectionEndIndexes[chunkSectionIndex] = buffer.writerIndex(); // Fiddle - Block mapping - Chunk packets - Track section end indexes
++        chunkPacketInfo.sectionEndIndexes[chunkSectionIndex] = buffer.writerIndex(); // Spout - Block mapping - Chunk packets - Track section end indexes
      // Paper end - Anti-Xray - Add chunk packet info
      }
  

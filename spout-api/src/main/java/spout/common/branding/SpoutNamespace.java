@@ -19,6 +19,6 @@ public final class SpoutNamespace {
       * not those of content added by Spout plugins (those plugins should use their own namespaces).
      * </p>
       */
-    public static final String SPOUT = "fiddle";
+    public static final String SPOUT = "spout";
 
 }

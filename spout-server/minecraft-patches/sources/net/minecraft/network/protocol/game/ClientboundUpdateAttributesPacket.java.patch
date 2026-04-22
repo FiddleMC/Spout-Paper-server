@@ -5,7 +5,7 @@
      private final List<ClientboundUpdateAttributesPacket.AttributeSnapshot> attributes;
  
 -    public ClientboundUpdateAttributesPacket(int entityId, Collection<AttributeInstance> attributes) {
-+    public ClientboundUpdateAttributesPacket(int entityId, Collection<AttributeInstance> attributes, net.minecraft.server.level.@org.jspecify.annotations.Nullable ServerPlayer selfPlayer) { // Fiddle - Block mapping - Breaking speed - Pass self player to attributes packet
++    public ClientboundUpdateAttributesPacket(int entityId, Collection<AttributeInstance> attributes, net.minecraft.server.level.@org.jspecify.annotations.Nullable ServerPlayer selfPlayer) { // Spout - Block mapping - Breaking speed - Pass self player to attributes packet
          this.entityId = entityId;
          this.attributes = Lists.newArrayList();
  
@@ -14,7 +14,7 @@
                  .add(
                      new ClientboundUpdateAttributesPacket.AttributeSnapshot(
 -                        attributeInstance.getAttribute(), attributeInstance.getBaseValue(), attributeInstance.getModifiers()
-+                        attributeInstance.getAttribute(), attributeInstance.getBaseValue(), org.fiddlemc.fiddle.impl.packetmapping.block.breakspeed.BlockBreakSpeedAttributeModification.withServerToClientModifierIfNecessary(attributeInstance, attributeInstance.getModifiers(), selfPlayer) // Fiddle - Block mapping - Breaking speed - Add attribute modifier in packets to self
++                        attributeInstance.getAttribute(), attributeInstance.getBaseValue(), spout.server.paper.impl.packetmapping.block.breakspeed.BlockBreakSpeedAttributeModification.withServerToClientModifierIfNecessary(attributeInstance, attributeInstance.getModifiers(), selfPlayer) // Spout - Block mapping - Breaking speed - Add attribute modifier in packets to self
                      )
                  );
          }

@@ -5,7 +5,7 @@
  
      public record ShowItem(ItemStack item) implements HoverEvent {
 -        public static final MapCodec<HoverEvent.ShowItem> CODEC = ItemStack.MAP_CODEC.xmap(HoverEvent.ShowItem::new, HoverEvent.ShowItem::item);
-+        public static final MapCodec<HoverEvent.ShowItem> CODEC = org.fiddlemc.fiddle.impl.packetmapping.item.applytohoverevent.ClientViewMappedItemStackMapCodec.CLIENT_VIEW_MAPPED_CODEC.xmap(HoverEvent.ShowItem::new, HoverEvent.ShowItem::item); // Fiddle - Item mapping - Apply to hover events - Use codec that applies mappings
++        public static final MapCodec<HoverEvent.ShowItem> CODEC = spout.server.paper.impl.packetmapping.item.applytohoverevent.ClientViewMappedItemStackMapCodec.CLIENT_VIEW_MAPPED_CODEC.xmap(HoverEvent.ShowItem::new, HoverEvent.ShowItem::item); // Spout - Item mapping - Apply to hover events - Use codec that applies mappings
  
          public ShowItem(ItemStack item) {
              item = item.copy();

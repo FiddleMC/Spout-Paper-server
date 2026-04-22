@@ -5,15 +5,15 @@
  import org.jspecify.annotations.Nullable;
  
 -public abstract class BlockBehaviour implements FeatureElement {
-+// Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key
-+public abstract class BlockBehaviour implements FeatureElement, org.fiddlemc.fiddle.impl.moredatadriven.datapack.CopyResourcesFromDataPackRegistryToInternalRegistry.DelayedResourceKeyAttachable<Block> {
++// Spout start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key
++public abstract class BlockBehaviour implements FeatureElement, spout.server.paper.impl.moredatadriven.datapack.CopyResourcesFromDataPackRegistryToInternalRegistry.DelayedResourceKeyAttachable<Block> {
 +    @Override
 +    public void attachResourceKey(ResourceKey<Block> resourceKey) {
 +        this.properties.setId(resourceKey);
 +        this.drops = properties.effectiveDrops();
 +        this.descriptionId = properties.effectiveDescriptionId();
 +    }
-+    // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key
++    // Spout end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key
      protected static final Direction[] UPDATE_SHAPE_ORDER = new Direction[]{
          Direction.WEST, Direction.EAST, Direction.NORTH, Direction.SOUTH, Direction.DOWN, Direction.UP
      };
@@ -23,19 +23,19 @@
      protected final BlockBehaviour.Properties properties;
 -    protected final Optional<ResourceKey<LootTable>> drops;
 -    protected final String descriptionId;
-+    // Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Make dependent fields non-final
++    // Spout start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Make dependent fields non-final
 +    protected Optional<ResourceKey<LootTable>> drops;
 +    protected String descriptionId;
-+    // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Make dependent fields non-final
++    // Spout end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Make dependent fields non-final
  
      public BlockBehaviour(BlockBehaviour.Properties properties) {
          this.hasCollision = properties.hasCollision;
-+        // Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Don't set dependent fields without a key
++        // Spout start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Don't set dependent fields without a key
 +        if (properties.id != null) {
          this.drops = properties.effectiveDrops();
          this.descriptionId = properties.effectiveDescriptionId();
 +        }
-+        // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Don't set dependent fields without a key
++        // Spout end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Allow delayed setting of key - Don't set dependent fields without a key
          this.explosionResistance = properties.explosionResistance;
          this.isRandomlyTicking = properties.isRandomlyTicking;
          this.soundType = properties.soundType;
@@ -44,7 +44,7 @@
  
      protected static <B extends Block> RecordCodecBuilder<B, BlockBehaviour.Properties> propertiesCodec() {
 -        return BlockBehaviour.Properties.CODEC.fieldOf("properties").forGetter(BlockBehaviour::properties);
-+        return org.fiddlemc.fiddle.impl.util.mojang.codec.CodecUtil.optionalFieldOf(BlockBehaviour.Properties.CODEC,"properties", BlockBehaviour.Properties::new).forGetter(BlockBehaviour::properties); // Fiddle - More data-driven - Minecraft registries - Types - Adapt existing block type registry - Make properties optional in block codec
++        return spout.server.paper.impl.util.mojang.codec.CodecUtil.optionalFieldOf(BlockBehaviour.Properties.CODEC,"properties", BlockBehaviour.Properties::new).forGetter(BlockBehaviour::properties); // Spout - More data-driven - Minecraft registries - Types - Adapt existing block type registry - Make properties optional in block codec
      }
  
      public static <B extends Block> MapCodec<B> simpleCodec(Function<BlockBehaviour.Properties, B> factory) {
@@ -52,22 +52,22 @@
      }
  
      protected float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
-+        // Fiddle start - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
++        // Spout start - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
 +        return this.getDestroyProgress(state, player, level, pos, null);
 +    }
 +
 +    protected float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos, @Nullable ItemStack heldItemStack) {
-+        // Fiddle end - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
++        // Spout end - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
          float destroySpeed = state.getDestroySpeed(level, pos);
          if (destroySpeed == -1.0F) {
              return 0.0F;
          } else {
 -            int i = player.hasCorrectToolForDrops(state) ? 30 : 100;
 -            return player.getDestroySpeed(state) / destroySpeed / i;
-+            // Fiddle start - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
++            // Spout start - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
 +            int i = player.hasCorrectToolForDrops(state, heldItemStack) ? 30 : 100;
 +            return player.getDestroySpeed(state, heldItemStack) / destroySpeed / i;
-+            // Fiddle end - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
++            // Spout end - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
          }
      }
  
@@ -81,14 +81,14 @@
 -        private final BlockBehaviour.StatePredicate hasPostProcess;
 -        private final BlockBehaviour.StatePredicate emissiveRendering;
 -        private final BlockBehaviour.@Nullable OffsetFunction offsetFunction;
-+        // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
-+        private final org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isRedstoneConductor;
-+        private final org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isSuffocating;
-+        private final org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isViewBlocking;
-+        private final org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate hasPostProcess;
-+        private final org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate emissiveRendering;
-+        // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
-+        private final BlockBehaviour.@Nullable OffsetType offsetFunction; // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
++        // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
++        private final spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate isRedstoneConductor;
++        private final spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate isSuffocating;
++        private final spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate isViewBlocking;
++        private final spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate hasPostProcess;
++        private final spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate emissiveRendering;
++        // Spout end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
++        private final BlockBehaviour.@Nullable OffsetType offsetFunction; // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
          private final boolean spawnTerrainParticles;
          private final NoteBlockInstrument instrument;
          private final boolean replaceable;
@@ -97,7 +97,7 @@
              super(owner, values, propertiesCodec);
              BlockBehaviour.Properties properties = owner.properties;
 -            this.lightEmission = properties.lightEmission.applyAsInt(this.asState());
-+            this.lightEmission = properties.lightEmission.apply(this.asState()); // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
++            this.lightEmission = properties.lightEmission.apply(this.asState()); // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
              this.useShapeForLightOcclusion = owner.useShapeForLightOcclusion(this.asState());
              this.isAir = properties.isAir;
              this.ignitedByLava = properties.ignitedByLava;
@@ -106,13 +106,13 @@
  
          public float getDestroyProgress(Player player, BlockGetter level, BlockPos pos) {
 -            return this.getBlock().getDestroyProgress(this.asState(), player, level, pos);
-+            // Fiddle start - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
++            // Spout start - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
 +            return this.getDestroyProgress(player, level, pos, null);
 +        }
 +
 +        public float getDestroyProgress(Player player, BlockGetter level, BlockPos pos, @Nullable ItemStack heldItemStack) {
 +            return this.getBlock().getDestroyProgress(this.asState(), player, level, pos, heldItemStack);
-+            // Fiddle end - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
++            // Spout end - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
          }
  
          public int getDirectSignal(BlockGetter level, BlockPos pos, Direction direction) {
@@ -121,7 +121,7 @@
  
          public Vec3 getOffset(BlockPos pos) {
 -            BlockBehaviour.OffsetFunction offsetFunction = this.offsetFunction;
-+            BlockBehaviour.OffsetType offsetFunction = this.offsetFunction; // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
++            BlockBehaviour.OffsetType offsetFunction = this.offsetFunction; // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
              return offsetFunction != null ? offsetFunction.evaluate(this.asState(), pos) : Vec3.ZERO;
          }
  
@@ -133,19 +133,19 @@
 -    public interface OffsetFunction {
 -        Vec3 evaluate(BlockState state, BlockPos pos);
 -    }
-+    // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
++    // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
 +    // @FunctionalInterface
 +    // public interface OffsetFunction {
 +    //     Vec3 evaluate(BlockState state, BlockPos pos);
 +    // }
-+    // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
++    // Spout end - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
  
      public static enum OffsetType {
          NONE,
          XZ,
          XYZ;
 +
-+        // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
++        // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
 +        private final java.util.function.BiFunction<BlockState, BlockPos, Vec3> evaluate;
 +
 +        OffsetType() {
@@ -157,7 +157,7 @@
 +        }
 +
      }
-+    // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
++    // Spout end - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
  
      public static class Properties {
 -        public static final Codec<BlockBehaviour.Properties> CODEC = MapCodec.unitCodec(() -> of());
@@ -173,14 +173,14 @@
 -        float speedFactor = 1.0F;
 -        float jumpFactor = 1.0F;
 -        private @Nullable ResourceKey<Block> id;
-+        public static final Codec<BlockBehaviour.Properties> CODEC = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockCodecs.PROPERTIES_CODEC; // Fiddle - More data-driven - Minecraft registries - Types - Adapt existing block type registry - Add missing properties codec implementation
-+        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.@Nullable ChunkSectionLayer chunkSectionLayer; // Fiddle - More data-driven - Minecraft registries - Types - Add chunk section layer
-+        // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make properties fields public
-+        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction<MapColor> mapColor = new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.Single<>(MapColor.NONE);
++        public static final Codec<BlockBehaviour.Properties> CODEC = spout.server.paper.impl.moredatadriven.minecraft.type.BlockCodecs.PROPERTIES_CODEC; // Spout - More data-driven - Minecraft registries - Types - Adapt existing block type registry - Add missing properties codec implementation
++        public spout.server.paper.impl.moredatadriven.minecraft.type.@Nullable ChunkSectionLayer chunkSectionLayer; // Spout - More data-driven - Minecraft registries - Types - Add chunk section layer
++        // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make properties fields public
++        public spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction<MapColor> mapColor = new spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.Single<>(MapColor.NONE);
 +        public boolean hasCollision = true;
 +        public SoundType soundType = SoundType.STONE;
-+        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction<Integer> lightEmission = new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.Single<>(0);
-+        public boolean wasExplosionResistanceSet = false; // Fiddle - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references - Replace stairs explosion resistance implementation
++        public spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction<Integer> lightEmission = new spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.Single<>(0);
++        public boolean wasExplosionResistanceSet = false; // Spout - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references - Replace stairs explosion resistance implementation
 +        public float explosionResistance;
 +        public float destroyTime;
 +        public boolean requiresCorrectToolForDrops;
@@ -227,15 +227,15 @@
 -        boolean dynamicShape;
 -        FeatureFlagSet requiredFeatures = FeatureFlags.VANILLA_SET;
 -        BlockBehaviour.@Nullable OffsetFunction offsetFunction;
-+        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isRedstoneConductor = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.IS_COLLISION_SHAPE_FULL_BLOCK;
-+        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isSuffocating = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.BLOCKS_MOTION_AND_IS_COLLISION_SHAPE_FULL_BLOCK;
-+        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isViewBlocking = this.isSuffocating;
-+        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate hasPostProcess = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.NEVER;
-+        public org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate emissiveRendering = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.NEVER;
++        public spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate isRedstoneConductor = spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate.IS_COLLISION_SHAPE_FULL_BLOCK;
++        public spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate isSuffocating = spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate.BLOCKS_MOTION_AND_IS_COLLISION_SHAPE_FULL_BLOCK;
++        public spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate isViewBlocking = this.isSuffocating;
++        public spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate hasPostProcess = spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate.NEVER;
++        public spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate emissiveRendering = spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate.NEVER;
 +        public boolean dynamicShape;
 +        public FeatureFlagSet requiredFeatures = FeatureFlags.VANILLA_SET;
 +        public BlockBehaviour.@Nullable OffsetType offsetFunction;
-+        // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make properties fields public
++        // Spout end - More data-driven - Minecraft registries - Types - Properties serialization - Make properties fields public
  
          private Properties() {
          }
@@ -243,12 +243,12 @@
              BlockBehaviour.Properties properties = new BlockBehaviour.Properties();
              BlockBehaviour.Properties properties1 = blockBehaviour.properties;
              properties.destroyTime = properties1.destroyTime;
-+            // Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references - Replace stairs explosion resistance implementation
++            // Spout start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references - Replace stairs explosion resistance implementation
 +            if (properties1.wasExplosionResistanceSet) {
              properties.explosionResistance = properties1.explosionResistance;
 +            properties.wasExplosionResistanceSet = true;
 +            }
-+            // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references - Replace stairs explosion resistance implementation
++            // Spout end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references - Replace stairs explosion resistance implementation
              properties.hasCollision = properties1.hasCollision;
              properties.isRandomlyTicking = properties1.isRandomlyTicking;
              properties.lightEmission = properties1.lightEmission;
@@ -256,32 +256,32 @@
              return properties;
          }
  
-+        // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
-+        public BlockBehaviour.Properties mapColor(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction<MapColor> mapColor) {
++        // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
++        public BlockBehaviour.Properties mapColor(spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction<MapColor> mapColor) {
 +            this.mapColor = mapColor;
 +            return this;
 +        }
-+        // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
++        // Spout end - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
 +
          public BlockBehaviour.Properties mapColor(DyeColor mapColor) {
 -            this.mapColor = state -> mapColor.getMapColor();
 -            return this;
-+            return this.mapColor(mapColor.getMapColor()); // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
++            return this.mapColor(mapColor.getMapColor()); // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
          }
  
          public BlockBehaviour.Properties mapColor(MapColor mapColor) {
 -            this.mapColor = state -> mapColor;
 -            return this;
-+            return this.mapColor(new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.Single<>(mapColor)); // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
++            return this.mapColor(new spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.Single<>(mapColor)); // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
          }
  
 -        public BlockBehaviour.Properties mapColor(Function<BlockState, MapColor> mapColor) {
 -            this.mapColor = mapColor;
 -            return this;
-+        // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
-+        public BlockBehaviour.Properties mapColor(List<Property<?>> properties, Function<org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap, MapColor> byPropertyValues) {
-+            return this.mapColor(new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(properties, byPropertyValues));
-+            // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
++        // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
++        public BlockBehaviour.Properties mapColor(List<Property<?>> properties, Function<spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap, MapColor> byPropertyValues) {
++            return this.mapColor(new spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(properties, byPropertyValues));
++            // Spout end - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
          }
  
          public BlockBehaviour.Properties noCollision() {
@@ -293,20 +293,20 @@
 -            this.lightEmission = lightEmission;
 -            return this;
 -        }
-+        // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
++        // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
 +        public BlockBehaviour.Properties lightLevel(int lightEmission) {
-+            return this.lightLevel(new org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction.Single<>(lightEmission));
++            return this.lightLevel(new spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.Single<>(lightEmission));
 +        }
 +
 +        public BlockBehaviour.Properties lightLevel(Function<BlockState, Integer> lightEmission) {
-+            if (lightEmission instanceof org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateFunction<Integer> blockStateFunction) {
++            if (lightEmission instanceof spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction<Integer> blockStateFunction) {
 +                this.lightEmission = blockStateFunction;
 +                return this;
 +            }
 +            // Assume that every piece of code that calls this method with an argument that is not a BlockStateFunction is calling it with a single value; for every other place we call the method with a BlockStateFunction instead
 +            return this.lightLevel(lightEmission.apply(null));
 +        }
-+        // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
++        // Spout end - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
  
          public BlockBehaviour.Properties strength(float destroyTime, float explosionResistance) {
              return this.destroyTime(destroyTime).explosionResistance(explosionResistance);
@@ -314,56 +314,56 @@
          }
  
          public BlockBehaviour.Properties isRedstoneConductor(BlockBehaviour.StatePredicate isRedstoneConductor) {
-+            // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
-+            return this.isRedstoneConductor(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.wrap(isRedstoneConductor));
++            // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
++            return this.isRedstoneConductor(spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate.wrap(isRedstoneConductor));
 +        }
 +
-+        public BlockBehaviour.Properties isRedstoneConductor(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isRedstoneConductor) {
-+            // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
++        public BlockBehaviour.Properties isRedstoneConductor(spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate isRedstoneConductor) {
++            // Spout end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
              this.isRedstoneConductor = isRedstoneConductor;
              return this;
          }
  
          public BlockBehaviour.Properties isSuffocating(BlockBehaviour.StatePredicate isSuffocating) {
-+            // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
-+            return this.isSuffocating(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.wrap(isSuffocating));
++            // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
++            return this.isSuffocating(spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate.wrap(isSuffocating));
 +        }
 +
-+        public BlockBehaviour.Properties isSuffocating(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isSuffocating) {
-+            // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
++        public BlockBehaviour.Properties isSuffocating(spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate isSuffocating) {
++            // Spout end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
              this.isSuffocating = isSuffocating;
              return this;
          }
  
          public BlockBehaviour.Properties isViewBlocking(BlockBehaviour.StatePredicate isViewBlocking) {
-+            // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
-+            return this.isViewBlocking(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.wrap(isViewBlocking));
++            // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
++            return this.isViewBlocking(spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate.wrap(isViewBlocking));
 +        }
 +
-+        public BlockBehaviour.Properties isViewBlocking(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate isViewBlocking) {
-+            // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
++        public BlockBehaviour.Properties isViewBlocking(spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate isViewBlocking) {
++            // Spout end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
              this.isViewBlocking = isViewBlocking;
              return this;
          }
  
          public BlockBehaviour.Properties hasPostProcess(BlockBehaviour.StatePredicate hasPostProcess) {
-+            // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
-+            return this.hasPostProcess(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.wrap(hasPostProcess));
++            // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
++            return this.hasPostProcess(spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate.wrap(hasPostProcess));
 +        }
 +
-+        public BlockBehaviour.Properties hasPostProcess(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate hasPostProcess) {
-+            // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
++        public BlockBehaviour.Properties hasPostProcess(spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate hasPostProcess) {
++            // Spout end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
              this.hasPostProcess = hasPostProcess;
              return this;
          }
  
          public BlockBehaviour.Properties emissiveRendering(BlockBehaviour.StatePredicate emissiveRendering) {
-+            // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
-+            return this.emissiveRendering(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate.wrap(emissiveRendering));
++            // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
++            return this.emissiveRendering(spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate.wrap(emissiveRendering));
 +        }
 +
-+        public BlockBehaviour.Properties emissiveRendering(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.KnownStatePredicate emissiveRendering) {
-+            // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
++        public BlockBehaviour.Properties emissiveRendering(spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate emissiveRendering) {
++            // Spout end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
              this.emissiveRendering = emissiveRendering;
              return this;
          }
@@ -371,20 +371,20 @@
  
          public BlockBehaviour.Properties explosionResistance(float explosionResistance) {
              this.explosionResistance = Math.max(0.0F, explosionResistance);
-+            this.wasExplosionResistanceSet = true; // Fiddle - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references - Replace stairs explosion resistance implementation
++            this.wasExplosionResistanceSet = true; // Spout - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references - Replace stairs explosion resistance implementation
              return this;
          }
  
          public BlockBehaviour.Properties offsetType(BlockBehaviour.OffsetType offsetType) {
 -            this.offsetFunction = switch (offsetType) {
-+            // Fiddle start - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
++            // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
 +            this.offsetFunction = offsetType;
 +            return this;
 +        }
 +
 +        public static java.util.function.BiFunction<BlockState, BlockPos, Vec3> offsetFunction(BlockBehaviour.OffsetType offsetType) {
 +            return switch (offsetType) {
-+                // Fiddle end - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
++                // Spout end - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
                  case NONE -> null;
                  case XZ -> (state, pos) -> {
                      Block block = state.getBlock();
@@ -401,7 +401,7 @@
  
      @FunctionalInterface
 -    public interface StatePredicate {
-+    public interface StatePredicate extends java.io.Serializable { // Fiddle - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable - Make predicate extend serializable so that we can inspect it in KnownStatePrediate#wrap
++    public interface StatePredicate extends java.io.Serializable { // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable - Make predicate extend serializable so that we can inspect it in KnownStatePrediate#wrap
          boolean test(BlockState state, BlockGetter level, BlockPos pos);
      }
  }

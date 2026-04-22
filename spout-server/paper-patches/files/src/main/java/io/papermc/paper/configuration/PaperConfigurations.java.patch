@@ -5,9 +5,9 @@
  
  @SuppressWarnings("Convert2Diamond")
 -public class PaperConfigurations extends Configurations<GlobalConfiguration, WorldConfiguration> {
-+public abstract class PaperConfigurations<G, W> extends Configurations<G, W> { // Fiddle - Configuration - Use PaperConfigurations as basis - Make PaperConfigurations abstract
++public abstract class PaperConfigurations<G, W> extends Configurations<G, W> { // Spout - Configuration - Use PaperConfigurations as basis - Make PaperConfigurations abstract
 +
-+    // Fiddle start - Configuration - Use PaperConfigurations as basis - Re-add original concrete class
++    // Spout start - Configuration - Use PaperConfigurations as basis - Re-add original concrete class
 +    public static class OriginalPaperConfigurations extends PaperConfigurations<GlobalConfiguration, WorldConfiguration> {
 +        public OriginalPaperConfigurations(final Path globalFolder) {
 +            super(globalFolder, GlobalConfiguration.class, WorldConfiguration.class, "paper");
@@ -38,22 +38,22 @@
 +            );
 +        }
 +    }
-+    // Fiddle end - Configuration - Use PaperConfigurations as basis - Re-add original concrete class
++    // Spout end - Configuration - Use PaperConfigurations as basis - Re-add original concrete class
  
      private static final Logger LOGGER = LogUtils.getClassLogger();
 -    static final String GLOBAL_CONFIG_FILE_NAME = "paper-global.yml";
 -    static final String WORLD_DEFAULTS_CONFIG_FILE_NAME = "paper-world-defaults.yml";
 -    static final String WORLD_CONFIG_FILE_NAME = "paper-world.yml";
-+    // Fiddle start - Configuration - Use PaperConfigurations as basis - Make sure original values are not used in unexpected places
++    // Spout start - Configuration - Use PaperConfigurations as basis - Make sure original values are not used in unexpected places
 +    static final String PAPER_GLOBAL_CONFIG_FILE_NAME = "paper-global.yml";
 +    static final String PAPER_WORLD_DEFAULTS_CONFIG_FILE_NAME = "paper-world-defaults.yml";
 +    static final String PAPER_WORLD_CONFIG_FILE_NAME = "paper-world.yml";
-+    // Fiddle end - Configuration - Use PaperConfigurations as basis - Make sure original values are not used in unexpected places
++    // Spout end - Configuration - Use PaperConfigurations as basis - Make sure original values are not used in unexpected places
      public static final String CONFIG_DIR = "config";
      private static final String BACKUP_DIR ="legacy-backup";
  
 -    private static final String GLOBAL_HEADER = String.format("""
-+    // Fiddle start - Configuration - Use PaperConfigurations as basis - Make headers overridable
++    // Spout start - Configuration - Use PaperConfigurations as basis - Make headers overridable
 +    private static final String PAPER_GLOBAL_HEADER = String.format("""
              This is the global configuration file for Paper.
              As you can see, there's a lot to configure. Some options may impact gameplay, so use
@@ -88,18 +88,18 @@
          World: %s (%s)""",
          PaperConfigurations.CONFIG_DIR,
 -        PaperConfigurations.WORLD_DEFAULTS_CONFIG_FILE_NAME,
-+        this.defaultWorldConfigFileName, // Fiddle - Configuration - Use filename fields
++        this.defaultWorldConfigFileName, // Spout - Configuration - Use filename fields
          map.require(WORLD_NAME),
          map.require(WORLD_KEY)
      );
 +    }
-+    // Fiddle end - Configuration - Use PaperConfigurations as basis - Make headers overridable
++    // Spout end - Configuration - Use PaperConfigurations as basis - Make headers overridable
 +
-+    // Fiddle start - Configuration - Use PaperConfigurations as basis - Make PaperConfigurations abstract
++    // Spout start - Configuration - Use PaperConfigurations as basis - Make PaperConfigurations abstract
 +    protected abstract G getGlobalConfiguration();
 +
 +    protected abstract W getWorldConfiguration(ServerLevel level);
-+    // Fiddle end - Configuration - Use PaperConfigurations as basis - Make PaperConfigurations abstract
++    // Spout end - Configuration - Use PaperConfigurations as basis - Make PaperConfigurations abstract
  
      private static final String MOVED_NOTICE = """
          The global and world default configuration files have moved to %s
@@ -111,9 +111,9 @@
 -    public PaperConfigurations(final Path globalFolder) {
 -        super(globalFolder, GlobalConfiguration.class, WorldConfiguration.class, GLOBAL_CONFIG_FILE_NAME, WORLD_DEFAULTS_CONFIG_FILE_NAME, WORLD_CONFIG_FILE_NAME);
 -    }
-+    private final String softwareName; // Fiddle - Configuration - Use PaperConfigurations as basis - Store software name in field
++    private final String softwareName; // Spout - Configuration - Use PaperConfigurations as basis - Store software name in field
 +
-+    // Fiddle start - Configuration - Use PaperConfigurations as basis - Compute file names for instance
++    // Spout start - Configuration - Use PaperConfigurations as basis - Compute file names for instance
 +    public PaperConfigurations(
 +        final Path globalFolder,
 +        final Class<G> globalConfigType,
@@ -150,7 +150,7 @@
 +        );
 +        this.softwareName = softwareName;
 +    }
-+    // Fiddle end - Configuration - Use PaperConfigurations as basis - Compute file names for instance
++    // Spout end - Configuration - Use PaperConfigurations as basis - Compute file names for instance
  
      @Override
      protected int globalConfigVersion() {
@@ -159,7 +159,7 @@
      private static ConfigurationOptions defaultGlobalOptions(RegistryAccess registryAccess, ConfigurationOptions options) {
          return options
 -            .header(GLOBAL_HEADER)
-+            .header(PAPER_GLOBAL_HEADER) // Fiddle - Configuration - Use PaperConfigurations as basis - Make headers overridable
++            .header(PAPER_GLOBAL_HEADER) // Spout - Configuration - Use PaperConfigurations as basis - Make headers overridable
              .serializers(builder -> builder
                  .register(new ServerboundPacketClassSerializer())
                  .register(new RegistryValueSerializer<>(new TypeToken<DataComponentType<?>>() {}, registryAccess, Registries.DATA_COMPONENT_TYPE, false))
@@ -170,13 +170,13 @@
 -    public GlobalConfiguration initializeGlobalConfiguration(final RegistryAccess registryAccess) throws ConfigurateException {
 -        GlobalConfiguration configuration = super.initializeGlobalConfiguration(registryAccess);
 -        GlobalConfiguration.set(configuration);
-+    // Fiddle start - Configuration - Use PaperConfigurations as basis - Make PaperConfigurations abstract
++    // Spout start - Configuration - Use PaperConfigurations as basis - Make PaperConfigurations abstract
 +    public G initializeGlobalConfiguration(final @Nullable RegistryAccess registryAccess) throws ConfigurateException {
 +        G configuration = super.initializeGlobalConfiguration(registryAccess);
 +        // GlobalConfiguration.set(configuration);
          return configuration;
      }
-+    // Fiddle end - Configuration - Use PaperConfigurations as basis - Make PaperConfigurations abstract
++    // Spout end - Configuration - Use PaperConfigurations as basis - Make PaperConfigurations abstract
  
      @Override
      protected ContextMap.Builder createDefaultContextMap(final RegistryAccess registryAccess) {
@@ -185,7 +185,7 @@
              .addNodeResolver(new RequiresSpigotInitialization.Factory(contextMap.require(SPIGOT_WORLD_CONFIG_CONTEXT_KEY).get()))
              .addNodeResolver(new NestedSetting.Factory())
 -            .addDiscoverer(InnerClassFieldDiscoverer.worldConfig(createWorldConfigInstance(contextMap), defaultFieldProcessors()));
-+            .addDiscoverer(InnerClassFieldDiscoverer.worldConfig(this.worldConfigClass, createWorldConfigInstance(contextMap), defaultFieldProcessors())); // Fiddle - Configuration - Use PaperConfigurations as basis - Make PaperConfigurations abstract
++            .addDiscoverer(InnerClassFieldDiscoverer.worldConfig(this.worldConfigClass, createWorldConfigInstance(contextMap), defaultFieldProcessors())); // Spout - Configuration - Use PaperConfigurations as basis - Make PaperConfigurations abstract
      }
  
 -    private static WorldConfiguration createWorldConfigInstance(ContextMap contextMap) {
@@ -194,7 +194,7 @@
 -            contextMap.require(Configurations.WORLD_KEY)
 -        );
 -    }
-+    protected abstract W createWorldConfigInstance(ContextMap contextMap); // Fiddle - Configuration - Use PaperConfigurations as basis - Make PaperConfigurations abstract
++    protected abstract W createWorldConfigInstance(ContextMap contextMap); // Spout - Configuration - Use PaperConfigurations as basis - Make PaperConfigurations abstract
  
      @Override
      protected YamlConfigurationLoader.Builder createWorldConfigLoaderBuilder(final ContextMap contextMap) {
@@ -202,7 +202,7 @@
          return super.createWorldConfigLoaderBuilder(contextMap)
              .defaultOptions(options -> options
 -                .header(contextMap.require(WORLD_NAME).equals(WORLD_DEFAULTS) ? WORLD_DEFAULTS_HEADER : WORLD_HEADER.apply(contextMap))
-+                .header(contextMap.require(WORLD_NAME).equals(WORLD_DEFAULTS) ? this.getWorldDefaultsHeader() : this.getWorldHeader(contextMap)) // Fiddle - Configuration - Use PaperConfigurations as basis - Make headers overridable
++                .header(contextMap.require(WORLD_NAME).equals(WORLD_DEFAULTS) ? this.getWorldDefaultsHeader() : this.getWorldHeader(contextMap)) // Spout - Configuration - Use PaperConfigurations as basis - Make headers overridable
                  .serializers(serializers -> serializers
                      .register(new TypeToken<Reference2IntMap<?>>() {}, new FastutilMapSerializer.SomethingToPrimitive<Reference2IntMap<?>>(Reference2IntOpenHashMap::new, Integer.TYPE))
                      .register(new TypeToken<Reference2LongMap<?>>() {}, new FastutilMapSerializer.SomethingToPrimitive<Reference2LongMap<?>>(Reference2LongOpenHashMap::new, Long.TYPE))
@@ -211,13 +211,13 @@
  
      @Override
 -    public WorldConfiguration createWorldConfig(final ContextMap contextMap) {
-+    public W createWorldConfig(final ContextMap contextMap) { // Fiddle - Configuration - Use PaperConfigurations as basis - Make PaperConfigurations abstract
++    public W createWorldConfig(final ContextMap contextMap) { // Spout - Configuration - Use PaperConfigurations as basis - Make PaperConfigurations abstract
          final String levelName = contextMap.require(WORLD_NAME);
          try {
              return super.createWorldConfig(contextMap);
          } catch (IOException exception) {
 -            throw new RuntimeException("Could not create world config for " + levelName, exception);
-+            throw new RuntimeException("Could not create " + this.softwareName + " world config for " + levelName, exception);  // Fiddle - Configuration - Use PaperConfigurations as basis - Store software name in field
++            throw new RuntimeException("Could not create " + this.softwareName + " world config for " + levelName, exception);  // Spout - Configuration - Use PaperConfigurations as basis - Store software name in field
          }
      }
  
@@ -226,27 +226,27 @@
      public void reloadConfigs(MinecraftServer server) {
          try {
 -            this.initializeGlobalConfiguration(server.registryAccess(), reloader(this.globalConfigClass, GlobalConfiguration.get()));
-+            this.initializeGlobalConfiguration(server.registryAccess(), reloader(this.globalConfigClass, this.getGlobalConfiguration())); // Fiddle - Configuration - Use PaperConfigurations as basis - Make headers overridable
++            this.initializeGlobalConfiguration(server.registryAccess(), reloader(this.globalConfigClass, this.getGlobalConfiguration())); // Spout - Configuration - Use PaperConfigurations as basis - Make headers overridable
              this.initializeWorldDefaultsConfiguration(server.registryAccess());
              for (ServerLevel level : server.getAllLevels()) {
 -                this.createWorldConfig(createWorldContextMap(level), reloader(this.worldConfigClass, level.paperConfig()));
-+                this.createWorldConfig(createWorldContextMap(level), reloader(this.worldConfigClass, this.getWorldConfiguration(level))); // Fiddle - Configuration - Use PaperConfigurations as basis - Make headers overridable
++                this.createWorldConfig(createWorldContextMap(level), reloader(this.worldConfigClass, this.getWorldConfiguration(level))); // Spout - Configuration - Use PaperConfigurations as basis - Make headers overridable
              }
          } catch (Exception ex) {
 -            throw new RuntimeException("Could not reload paper configuration files", ex);
-+            throw new RuntimeException("Could not reload " + this.softwareName + " configuration files", ex);  // Fiddle - Configuration - Use PaperConfigurations as basis - Store software name in field
++            throw new RuntimeException("Could not reload " + this.softwareName + " configuration files", ex);  // Spout - Configuration - Use PaperConfigurations as basis - Store software name in field
          }
      }
  
 -    private static List<Definition<? extends Annotation, ?, ? extends FieldProcessor.Factory<?, ?>>> defaultFieldProcessors() {
-+    public static List<Definition<?, ?, ? extends FieldProcessor.Factory<?, ?>>> defaultFieldProcessors() { // Fiddle - Configuration - Use PaperConfigurations as basis - Make public and more generic
++    public static List<Definition<?, ?, ? extends FieldProcessor.Factory<?, ?>>> defaultFieldProcessors() { // Spout - Configuration - Use PaperConfigurations as basis - Make public and more generic
          return List.of(
              MergeMap.DEFINITION
          );
      }
  
 -    private static ContextMap createWorldContextMap(ServerLevel level) {
-+    public static ContextMap createWorldContextMap(ServerLevel level) { // Fiddle - Configuration - Use PaperConfigurations as basis - Make public
++    public static ContextMap createWorldContextMap(ServerLevel level) { // Spout - Configuration - Use PaperConfigurations as basis - Make public
          return createWorldContextMap(level.levelStorageAccess.levelDirectory.path(), level.serverLevelData.getLevelName(), level.dimension().identifier(), level.spigotConfig, level.registryAccess(), level.getGameRules());
      }
  
@@ -255,7 +255,7 @@
      }
  
 -    public static PaperConfigurations setup(final Path legacyConfig, final Path configDir, final Path worldFolder, final File spigotConfig) throws Exception {
-+    public static OriginalPaperConfigurations setup(final Path legacyConfig, final Path configDir, final Path worldFolder, final File spigotConfig) throws Exception { // Fiddle - Configuration - Use PaperConfigurations as basis - Re-add original concrete class
++    public static OriginalPaperConfigurations setup(final Path legacyConfig, final Path configDir, final Path worldFolder, final File spigotConfig) throws Exception { // Spout - Configuration - Use PaperConfigurations as basis - Re-add original concrete class
          final Path legacy = Files.isSymbolicLink(legacyConfig) ? Files.readSymbolicLink(legacyConfig) : legacyConfig;
          if (needsConverting(legacyConfig)) {
              final String legacyFileName = legacyConfig.getFileName().toString();
@@ -264,7 +264,7 @@
          try {
              createDirectoriesSymlinkAware(configDir);
 -            return new PaperConfigurations(configDir);
-+            return new OriginalPaperConfigurations(configDir); // Fiddle - Configuration - Use PaperConfigurations as basis - Re-add original concrete class
++            return new OriginalPaperConfigurations(configDir); // Spout - Configuration - Use PaperConfigurations as basis - Re-add original concrete class
          } catch (final IOException ex) {
              throw new RuntimeException("Could not setup PaperConfigurations", ex);
          }
@@ -274,8 +274,8 @@
          final YamlConfigurationLoader legacyLoader = ConfigurationLoaders.naturallySortedWithoutHeader(legacyConfig);
 -        final YamlConfigurationLoader globalLoader = ConfigurationLoaders.naturallySortedWithoutHeader(configDir.resolve(GLOBAL_CONFIG_FILE_NAME));
 -        final YamlConfigurationLoader worldDefaultsLoader = ConfigurationLoaders.naturallySortedWithoutHeader(configDir.resolve(WORLD_DEFAULTS_CONFIG_FILE_NAME));
-+        final YamlConfigurationLoader globalLoader = ConfigurationLoaders.naturallySortedWithoutHeader(configDir.resolve(PAPER_GLOBAL_CONFIG_FILE_NAME)); // Fiddle - Configuration - Use PaperConfigurations as basis - Make sure original values are not used in unexpected places
-+        final YamlConfigurationLoader worldDefaultsLoader = ConfigurationLoaders.naturallySortedWithoutHeader(configDir.resolve(PAPER_WORLD_DEFAULTS_CONFIG_FILE_NAME)); // Fiddle - Configuration - Use PaperConfigurations as basis - Make sure original values are not used in unexpected places
++        final YamlConfigurationLoader globalLoader = ConfigurationLoaders.naturallySortedWithoutHeader(configDir.resolve(PAPER_GLOBAL_CONFIG_FILE_NAME)); // Spout - Configuration - Use PaperConfigurations as basis - Make sure original values are not used in unexpected places
++        final YamlConfigurationLoader worldDefaultsLoader = ConfigurationLoaders.naturallySortedWithoutHeader(configDir.resolve(PAPER_WORLD_DEFAULTS_CONFIG_FILE_NAME)); // Spout - Configuration - Use PaperConfigurations as basis - Make sure original values are not used in unexpected places
  
          final ConfigurationNode legacy = legacyLoader.load();
          checkState(!legacy.virtual(), "can't be virtual");
@@ -284,7 +284,7 @@
                  LegacyPaperWorldConfig.transformation().apply(legacyWorldNode);
                  LegacyPaperWorldConfig.toNewFormat().apply(legacyWorldNode);
 -                ConfigurationLoaders.naturallySortedWithoutHeader(worldFolder.resolve(world.toString()).resolve(WORLD_CONFIG_FILE_NAME)).save(legacyWorldNode); // save converted node to new location
-+                ConfigurationLoaders.naturallySortedWithoutHeader(worldFolder.resolve(world.toString()).resolve(PAPER_WORLD_CONFIG_FILE_NAME)).save(legacyWorldNode); // save converted node to new location // Fiddle - Configuration - Use PaperConfigurations as basis - Make sure original values are not used in unexpected places
++                ConfigurationLoaders.naturallySortedWithoutHeader(worldFolder.resolve(world.toString()).resolve(PAPER_WORLD_CONFIG_FILE_NAME)).save(legacyWorldNode); // save converted node to new location // Spout - Configuration - Use PaperConfigurations as basis - Make sure original values are not used in unexpected places
              } catch (final ConfigurateException ex) {
                  ex.printStackTrace();
              }
@@ -293,7 +293,7 @@
  
      // Symlinks are not correctly checked in createDirectories
 -    static void createDirectoriesSymlinkAware(Path path) throws IOException {
-+    public static void createDirectoriesSymlinkAware(Path path) throws IOException { // Fiddle - Configuration - Use PaperConfigurations as basis - Make public
++    public static void createDirectoriesSymlinkAware(Path path) throws IOException { // Spout - Configuration - Use PaperConfigurations as basis - Make public
          if (!Files.isDirectory(path)) {
              Files.createDirectories(path);
          }

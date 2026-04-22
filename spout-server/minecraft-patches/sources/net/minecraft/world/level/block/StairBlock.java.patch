@@ -5,7 +5,7 @@
  public class StairBlock extends Block implements SimpleWaterloggedBlock {
      public static final MapCodec<StairBlock> CODEC = RecordCodecBuilder.mapCodec(
 -        instance -> instance.group(BlockState.CODEC.fieldOf("base_state").forGetter(stairBlock -> stairBlock.baseState), propertiesCodec())
-+        instance -> instance.group(com.mojang.serialization.Codec.STRING.fieldOf("base_state").forGetter(stairBlock -> stairBlock.baseStateString), propertiesCodec()) // Fiddle - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
++        instance -> instance.group(com.mojang.serialization.Codec.STRING.fieldOf("base_state").forGetter(stairBlock -> stairBlock.baseStateString), propertiesCodec()) // Spout - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
              .apply(instance, StairBlock::new)
      );
      public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
@@ -15,7 +15,7 @@
      private static final Map<Direction, VoxelShape> SHAPE_TOP_INNER = Shapes.rotateHorizontal(SHAPE_INNER, OctahedralGroup.INVERT_Y);
 -    private final Block base;
 -    protected final BlockState baseState;
-+    // Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
++    // Spout start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
 +    protected final String baseStateString;
 +    private @org.jspecify.annotations.Nullable Block baseCached;
 +    private Block base() {
@@ -27,11 +27,11 @@
 +    private @org.jspecify.annotations.Nullable BlockState baseStateCached;
 +    protected final BlockState baseState() {
 +        if (this.baseStateCached == null) {
-+            this.baseStateCached = org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateStringConversion.blockStateFromString(this.baseStateString);
++            this.baseStateCached = spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateStringConversion.blockStateFromString(this.baseStateString);
 +        }
 +        return this.baseStateCached;
 +    };
-+    // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
++    // Spout end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
  
      @Override
      public MapCodec<? extends StairBlock> codec() {
@@ -39,12 +39,12 @@
      }
  
      protected StairBlock(BlockState baseState, BlockBehaviour.Properties properties) {
-+        // Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
-+        this(org.fiddlemc.fiddle.impl.moredatadriven.minecraft.type.BlockStateStringConversion.blockStateToString(baseState), properties);
++        // Spout start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
++        this(spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateStringConversion.blockStateToString(baseState), properties);
 +    }
 +
 +    protected StairBlock(String baseStateString, BlockBehaviour.Properties properties) {
-+        // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
++        // Spout end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
          super(properties);
          this.registerDefaultState(
              this.stateDefinition
@@ -54,9 +54,9 @@
          );
 -        this.base = baseState.getBlock();
 -        this.baseState = baseState;
-+        // Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
++        // Spout start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
 +        this.baseStateString = baseStateString;
-+        // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
++        // Spout end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
      }
  
      @Override
@@ -65,12 +65,12 @@
      @Override
      public float getExplosionResistance() {
 -        return this.base.getExplosionResistance();
-+        // Fiddle start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references - Replace stairs explosion resistance implementation
++        // Spout start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references - Replace stairs explosion resistance implementation
 +        if (this.properties.wasExplosionResistanceSet) {
 +            return this.properties.explosionResistance;
 +        }
 +        return this.base().getExplosionResistance();
-+        // Fiddle end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references - Replace stairs explosion resistance implementation
++        // Spout end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references - Replace stairs explosion resistance implementation
      }
  
      @Override

@@ -5,7 +5,7 @@
          "campfire_cooking", new AbstractCookingRecipe.Serializer<>(CampfireCookingRecipe::new, 100)
      );
 -    RecipeSerializer<StonecutterRecipe> STONECUTTER = register("stonecutting", new SingleItemRecipe.Serializer<>(StonecutterRecipe::new));
-+    RecipeSerializer<StonecutterRecipe> STONECUTTER = register("stonecutting", new SingleItemRecipe.Serializer<>(StonecutterRecipe::new, true)); // Fiddle - Item mapping - Detect stonecutter result - Apply codec
++    RecipeSerializer<StonecutterRecipe> STONECUTTER = register("stonecutting", new SingleItemRecipe.Serializer<>(StonecutterRecipe::new, true)); // Spout - Item mapping - Detect stonecutter result - Apply codec
      RecipeSerializer<SmithingTransformRecipe> SMITHING_TRANSFORM = register("smithing_transform", new SmithingTransformRecipe.Serializer());
      RecipeSerializer<SmithingTrimRecipe> SMITHING_TRIM = register("smithing_trim", new SmithingTrimRecipe.Serializer());
      RecipeSerializer<DecoratedPotRecipe> DECORATED_POT_RECIPE = register("crafting_decorated_pot", new CustomRecipe.Serializer<>(DecoratedPotRecipe::new));

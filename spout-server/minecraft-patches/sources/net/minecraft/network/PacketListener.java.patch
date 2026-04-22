@@ -5,7 +5,7 @@
  import net.minecraft.network.protocol.PacketUtils;
  
 -public interface PacketListener {
-+public interface PacketListener extends org.fiddlemc.fiddle.impl.clientview.lookup.ClientViewLookup { // Fiddle - Client view - Lookup - Implement for PacketListener (actually only implemented for ServerLoginPacketListenerImpl and ServerCommonPacketListenerImpl, but having the method available is convenient)
++public interface PacketListener extends spout.server.paper.impl.clientview.lookup.ClientViewLookup { // Spout - Client view - Lookup - Implement for PacketListener (actually only implemented for ServerLoginPacketListenerImpl and ServerCommonPacketListenerImpl, but having the method available is convenient)
      PacketFlow flow();
  
      ConnectionProtocol protocol();

@@ -1,28 +1,19 @@
 --- a/src/main/java/io/papermc/paper/registry/RegistryKey.java
 +++ b/src/main/java/io/papermc/paper/registry/RegistryKey.java
-@@ -39,6 +_,8 @@
- import org.bukkit.map.MapCursor;
- import org.bukkit.potion.PotionEffectType;
- import org.bukkit.potion.PotionType;
-+import org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.FiddleBlockType;
-+import org.fiddlemc.fiddle.api.moredatadriven.paper.registry.type.FiddleItemType;
- import org.jspecify.annotations.NullMarked;
- 
- import static io.papermc.paper.registry.RegistryKeyImpl.create;
 @@ -77,6 +_,16 @@
       * @see io.papermc.paper.registry.keys.MobEffectKeys
       */
      RegistryKey<PotionEffectType> MOB_EFFECT = create("mob_effect");
-+    // Fiddle start - More data-driven - Paper registry API - Types - API part - Define registry keys
++    // Spout start - More data-driven - Paper registry API - Types - API part - Define registry keys
 +    /**
-+     * Built-in registry for Fiddle block types.
++     * Built-in registry for Spout block type types.
 +     */
-+    RegistryKey<FiddleBlockType> FIDDLE_BLOCK_TYPE = create("fiddle:block_type");
++    RegistryKey<spout.server.paper.api.moredatadriven.paper.registry.type.BlockTypeType> BLOCK_TYPE_TYPE = create(spout.common.branding.SpoutNamespace.SPOUT + ":block_type"); // Has to match the corresponding entry in net.minecraft.core.registries.Registries
 +    /**
-+     * Built-in registry for Fiddle item types.
++     * Built-in registry for Spout item type types.
 +     */
-+    RegistryKey<FiddleItemType> FIDDLE_ITEM_TYPE = create("fiddle:item_type");
-+    // Fiddle end - More data-driven - Paper registry API - Types - API part - Define registry keys
++    RegistryKey<spout.server.paper.api.moredatadriven.paper.registry.type.ItemTypeType> ITEM_TYPE_TYPE = create(spout.common.branding.SpoutNamespace.SPOUT + ":item_type"); // Has to match the corresponding entry in net.minecraft.core.registries.Registries
++    // Spout end - More data-driven - Paper registry API - Types - API part - Define registry keys
      /**
       * Built-in registry for block types.
       * @see io.papermc.paper.registry.keys.BlockTypeKeys

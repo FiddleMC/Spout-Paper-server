@@ -37,7 +37,7 @@ ij_java_class_names_in_javadoc = 1
 [spout-server/src/minecraft/java/**/*.java]
 ij_java_use_fq_class_names = true
 
-[paper-server/src/*/java/**/*.java]
+[paper-*/src/*/java/**/*.java]
 ij_java_use_fq_class_names = true
 
 [spout-server/src/*/resources/data/**/*.json]

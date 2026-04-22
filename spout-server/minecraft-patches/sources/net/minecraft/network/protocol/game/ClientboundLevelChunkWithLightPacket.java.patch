@@ -4,18 +4,18 @@
      private final int z;
      private final ClientboundLevelChunkPacketData chunkData;
      private final ClientboundLightUpdatePacketData lightData;
-+    // Fiddle start - Block mapping - Chunk packets - Call
-+    public org.fiddlemc.fiddle.impl.packetmapping.block.chunk.@Nullable ChunkPacketBlockMapper fiddleChunkPacketBlockMapper;
++    // Spout start - Block mapping - Chunk packets - Call
++    public spout.server.paper.impl.packetmapping.block.chunk.@Nullable ChunkPacketBlockMapper spoutChunkPacketBlockMapper;
 +    private final java.util.concurrent.atomic.AtomicBoolean startedMappingBlocks = new java.util.concurrent.atomic.AtomicBoolean();
 +    public volatile boolean readyMappingBlocks;
-+    // Fiddle end - Block mapping - Chunk packets - Call
++    // Spout end - Block mapping - Chunk packets - Call
      // Paper start - Async-Anti-Xray - Ready flag for the connection, add chunk packet info
      private volatile boolean ready;
  
      @Override
      public boolean isReady() {
 -        return this.ready;
-+        // Fiddle start - Block mapping - Chunk packets - Call after x-ray
++        // Spout start - Block mapping - Chunk packets - Call after x-ray
 +        if (!this.ready) {
 +            return false;
 +        }
@@ -27,7 +27,7 @@
 +
 +    private void startMappingBlocksIfNecessary() {
 +        if (this.startedMappingBlocks.compareAndExchange(false, true)) {
-+            this.fiddleChunkPacketBlockMapper.applyMappings();
++            this.spoutChunkPacketBlockMapper.applyMappings();
 +        }
      }
  
@@ -39,29 +39,29 @@
 +                this.startMappingBlocksIfNecessary();
 +            }
 +        }
-+        // Fiddle end - Block mapping - Chunk packets - Call after x-ray
++        // Spout end - Block mapping - Chunk packets - Call after x-ray
      }
  
      @Deprecated @io.papermc.paper.annotation.DoNotUse
 -    public ClientboundLevelChunkWithLightPacket(LevelChunk chunk, LevelLightEngine lightEngine, @Nullable BitSet skyLight, @Nullable BitSet blockLight) {
 -        this(chunk, lightEngine, skyLight, blockLight, true);
-+    // Fiddle start - Block mapping - Chunk packets - Pass the player
++    // Spout start - Block mapping - Chunk packets - Pass the player
 +    public ClientboundLevelChunkWithLightPacket(LevelChunk chunk, LevelLightEngine lightEngine, @Nullable BitSet skyLight, @Nullable BitSet blockLight, net.minecraft.server.level.ServerPlayer player) {
 +        this(chunk, lightEngine, skyLight, blockLight, true, player);
-+        // Fiddle end - Block mapping - Chunk packets - Pass the player
++        // Spout end - Block mapping - Chunk packets - Pass the player
      }
 -    public ClientboundLevelChunkWithLightPacket(LevelChunk chunk, LevelLightEngine lightEngine, @Nullable BitSet skyLight, @Nullable BitSet blockLight, boolean modifyBlocks) {
-+    public ClientboundLevelChunkWithLightPacket(LevelChunk chunk, LevelLightEngine lightEngine, @Nullable BitSet skyLight, @Nullable BitSet blockLight, boolean modifyBlocks, net.minecraft.server.level.ServerPlayer player) { // Fiddle - Block mapping - Chunk packets - Pass the player
++    public ClientboundLevelChunkWithLightPacket(LevelChunk chunk, LevelLightEngine lightEngine, @Nullable BitSet skyLight, @Nullable BitSet blockLight, boolean modifyBlocks, net.minecraft.server.level.ServerPlayer player) { // Spout - Block mapping - Chunk packets - Pass the player
          // Paper end - Anti-Xray
          ChunkPos pos = chunk.getPos();
          this.x = pos.x;
          this.z = pos.z;
 -        io.papermc.paper.antixray.ChunkPacketInfo<net.minecraft.world.level.block.state.BlockState> chunkPacketInfo = modifyBlocks ? chunk.getLevel().chunkPacketBlockController.getChunkPacketInfo(this, chunk) : null; // Paper - Ant-Xray
-+        io.papermc.paper.antixray.ChunkPacketInfo<net.minecraft.world.level.block.state.BlockState> chunkPacketInfo = modifyBlocks ? chunk.getLevel().chunkPacketBlockController.getChunkPacketInfo(this, chunk) : new io.papermc.paper.antixray.ChunkPacketInfo<>(this, chunk); // Paper - Ant-Xray // Fiddle - Block mapping - Chunk packets - Always create ChunkPacketInfo
++        io.papermc.paper.antixray.ChunkPacketInfo<net.minecraft.world.level.block.state.BlockState> chunkPacketInfo = modifyBlocks ? chunk.getLevel().chunkPacketBlockController.getChunkPacketInfo(this, chunk) : new io.papermc.paper.antixray.ChunkPacketInfo<>(this, chunk); // Paper - Ant-Xray // Spout - Block mapping - Chunk packets - Always create ChunkPacketInfo
          this.chunkData = new ClientboundLevelChunkPacketData(chunk, chunkPacketInfo); // Paper - Anti-Xray
          this.lightData = new ClientboundLightUpdatePacketData(pos, lightEngine, skyLight, blockLight);
          chunk.getLevel().chunkPacketBlockController.modifyBlocks(this, chunkPacketInfo); // Paper - Anti-Xray - Modify blocks
-+        this.fiddleChunkPacketBlockMapper = new org.fiddlemc.fiddle.impl.packetmapping.block.chunk.ChunkPacketBlockMapper(this, chunk, player, chunkPacketInfo);
++        this.spoutChunkPacketBlockMapper = new spout.server.paper.impl.packetmapping.block.chunk.ChunkPacketBlockMapper(this, chunk, player, chunkPacketInfo);
      }
  
      private ClientboundLevelChunkWithLightPacket(RegistryFriendlyByteBuf buffer) {
