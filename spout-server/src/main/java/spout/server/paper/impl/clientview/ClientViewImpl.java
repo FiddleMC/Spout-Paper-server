@@ -5,7 +5,7 @@ import spout.server.paper.api.clientview.ClientView;
 import spout.server.paper.api.clientview.nms.NMSClientView;
 import spout.common.branding.SpoutNamespace;
 import spout.server.paper.impl.packetmapping.item.reverse.ItemMappingReverser;
-import spout.server.paper.impl.util.mojang.codec.EnumViaIdentifierCodec;
+import spout.common.util.mojang.codec.EnumViaIdentifierCodec;
 import org.jspecify.annotations.Nullable;
 import java.util.List;
 

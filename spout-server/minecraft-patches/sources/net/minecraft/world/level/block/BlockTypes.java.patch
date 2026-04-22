@@ -17,11 +17,11 @@
 +        }
 +        // Spout end - More data-driven - Minecraft registries - Types - Adapt existing block type registry
 +        // Spout start - Built-in content - Blocks - Register block types
-+        Registry.register(registry, net.minecraft.resources.Identifier.fromNamespaceAndPath(spout.common.branding.SpoutNamespace.SPOUT, "bevel").toString(), spout.server.paper.impl.content.block.BevelBlock.CODEC);
-+        Registry.register(registry, net.minecraft.resources.Identifier.fromNamespaceAndPath(spout.common.branding.SpoutNamespace.SPOUT, "half_transparent_slab").toString(), spout.server.paper.impl.content.block.HalfTransparentSlabBlock.CODEC);
-+        Registry.register(registry, net.minecraft.resources.Identifier.fromNamespaceAndPath(spout.common.branding.SpoutNamespace.SPOUT, "half_transparent_stair").toString(), spout.server.paper.impl.content.block.HalfTransparentStairBlock.CODEC);
-+        Registry.register(registry, net.minecraft.resources.Identifier.fromNamespaceAndPath(spout.common.branding.SpoutNamespace.SPOUT, "transparent_slab").toString(), spout.server.paper.impl.content.block.TransparentSlabBlock.CODEC);
-+        Registry.register(registry, net.minecraft.resources.Identifier.fromNamespaceAndPath(spout.common.branding.SpoutNamespace.SPOUT, "transparent_stair").toString(), spout.server.paper.impl.content.block.TransparentStairBlock.CODEC);
++        Registry.register(registry, net.minecraft.resources.Identifier.fromNamespaceAndPath(spout.common.branding.SpoutNamespace.SPOUT, "bevel").toString(), spout.common.builtincontent.block.BevelBlock.CODEC);
++        Registry.register(registry, net.minecraft.resources.Identifier.fromNamespaceAndPath(spout.common.branding.SpoutNamespace.SPOUT, "half_transparent_slab").toString(), spout.common.builtincontent.block.HalfTransparentSlabBlock.CODEC);
++        Registry.register(registry, net.minecraft.resources.Identifier.fromNamespaceAndPath(spout.common.branding.SpoutNamespace.SPOUT, "half_transparent_stair").toString(), spout.common.builtincontent.block.HalfTransparentStairBlock.CODEC);
++        Registry.register(registry, net.minecraft.resources.Identifier.fromNamespaceAndPath(spout.common.branding.SpoutNamespace.SPOUT, "transparent_slab").toString(), spout.common.builtincontent.block.TransparentSlabBlock.CODEC);
++        Registry.register(registry, net.minecraft.resources.Identifier.fromNamespaceAndPath(spout.common.branding.SpoutNamespace.SPOUT, "transparent_stair").toString(), spout.common.builtincontent.block.TransparentStairBlock.CODEC);
 +        // Spout end - Built-in content - Blocks - Register block types
          Registry.register(registry, "block", Block.CODEC);
          Registry.register(registry, "air", AirBlock.CODEC);

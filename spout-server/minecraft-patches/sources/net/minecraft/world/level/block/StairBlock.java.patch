@@ -27,7 +27,7 @@
 +    private @org.jspecify.annotations.Nullable BlockState baseStateCached;
 +    protected final BlockState baseState() {
 +        if (this.baseStateCached == null) {
-+            this.baseStateCached = spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateStringConversion.blockStateFromString(this.baseStateString);
++            this.baseStateCached = spout.common.moredatadriven.minecraft.type.BlockStateStringConversion.blockStateFromString(this.baseStateString);
 +        }
 +        return this.baseStateCached;
 +    };
@@ -40,7 +40,7 @@
  
      protected StairBlock(BlockState baseState, BlockBehaviour.Properties properties) {
 +        // Spout start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references
-+        this(spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateStringConversion.blockStateToString(baseState), properties);
++        this(spout.common.moredatadriven.minecraft.type.BlockStateStringConversion.blockStateToString(baseState), properties);
 +    }
 +
 +    protected StairBlock(String baseStateString, BlockBehaviour.Properties properties) {

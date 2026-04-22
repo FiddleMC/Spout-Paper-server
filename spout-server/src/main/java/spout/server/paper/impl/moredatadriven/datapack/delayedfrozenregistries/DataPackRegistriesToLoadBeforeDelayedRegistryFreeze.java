@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.BlockTypes;
 import spout.server.paper.impl.moredatadriven.datapack.CopyResourcesFromDataPackRegistryToInternalRegistry;
 import spout.server.paper.impl.moredatadriven.datapack.SpoutDataPackRegistries;
-import spout.server.paper.impl.moredatadriven.minecraft.type.ItemTypes;
+import spout.common.moredatadriven.minecraft.type.ItemTypes;
 import java.util.List;
 import java.util.function.Consumer;
 

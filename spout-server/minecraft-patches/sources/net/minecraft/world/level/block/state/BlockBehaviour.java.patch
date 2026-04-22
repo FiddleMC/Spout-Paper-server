@@ -44,7 +44,7 @@
  
      protected static <B extends Block> RecordCodecBuilder<B, BlockBehaviour.Properties> propertiesCodec() {
 -        return BlockBehaviour.Properties.CODEC.fieldOf("properties").forGetter(BlockBehaviour::properties);
-+        return spout.server.paper.impl.util.mojang.codec.CodecUtil.optionalFieldOf(BlockBehaviour.Properties.CODEC,"properties", BlockBehaviour.Properties::new).forGetter(BlockBehaviour::properties); // Spout - More data-driven - Minecraft registries - Types - Adapt existing block type registry - Make properties optional in block codec
++        return spout.common.util.mojang.codec.CodecUtil.optionalFieldOf(BlockBehaviour.Properties.CODEC,"properties", BlockBehaviour.Properties::new).forGetter(BlockBehaviour::properties); // Spout - More data-driven - Minecraft registries - Types - Adapt existing block type registry - Make properties optional in block codec
      }
  
      public static <B extends Block> MapCodec<B> simpleCodec(Function<BlockBehaviour.Properties, B> factory) {
@@ -82,11 +82,11 @@
 -        private final BlockBehaviour.StatePredicate emissiveRendering;
 -        private final BlockBehaviour.@Nullable OffsetFunction offsetFunction;
 +        // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
-+        private final spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate isRedstoneConductor;
-+        private final spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate isSuffocating;
-+        private final spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate isViewBlocking;
-+        private final spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate hasPostProcess;
-+        private final spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate emissiveRendering;
++        private final spout.common.moredatadriven.minecraft.type.KnownStatePredicate isRedstoneConductor;
++        private final spout.common.moredatadriven.minecraft.type.KnownStatePredicate isSuffocating;
++        private final spout.common.moredatadriven.minecraft.type.KnownStatePredicate isViewBlocking;
++        private final spout.common.moredatadriven.minecraft.type.KnownStatePredicate hasPostProcess;
++        private final spout.common.moredatadriven.minecraft.type.KnownStatePredicate emissiveRendering;
 +        // Spout end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
 +        private final BlockBehaviour.@Nullable OffsetType offsetFunction; // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make offset function property serializable
          private final boolean spawnTerrainParticles;
@@ -173,13 +173,13 @@
 -        float speedFactor = 1.0F;
 -        float jumpFactor = 1.0F;
 -        private @Nullable ResourceKey<Block> id;
-+        public static final Codec<BlockBehaviour.Properties> CODEC = spout.server.paper.impl.moredatadriven.minecraft.type.BlockCodecs.PROPERTIES_CODEC; // Spout - More data-driven - Minecraft registries - Types - Adapt existing block type registry - Add missing properties codec implementation
++        public static final Codec<BlockBehaviour.Properties> CODEC = spout.common.moredatadriven.minecraft.type.BlockCodecs.PROPERTIES_CODEC; // Spout - More data-driven - Minecraft registries - Types - Adapt existing block type registry - Add missing properties codec implementation
 +        public spout.server.paper.impl.moredatadriven.minecraft.type.@Nullable ChunkSectionLayer chunkSectionLayer; // Spout - More data-driven - Minecraft registries - Types - Add chunk section layer
 +        // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make properties fields public
-+        public spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction<MapColor> mapColor = new spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.Single<>(MapColor.NONE);
++        public spout.common.moredatadriven.minecraft.type.BlockStateFunction<MapColor> mapColor = new spout.common.moredatadriven.minecraft.type.BlockStateFunction.Single<>(MapColor.NONE);
 +        public boolean hasCollision = true;
 +        public SoundType soundType = SoundType.STONE;
-+        public spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction<Integer> lightEmission = new spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.Single<>(0);
++        public spout.common.moredatadriven.minecraft.type.BlockStateFunction<Integer> lightEmission = new spout.common.moredatadriven.minecraft.type.BlockStateFunction.Single<>(0);
 +        public boolean wasExplosionResistanceSet = false; // Spout - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Replace block arguments by references - Replace stairs explosion resistance implementation
 +        public float explosionResistance;
 +        public float destroyTime;
@@ -227,11 +227,11 @@
 -        boolean dynamicShape;
 -        FeatureFlagSet requiredFeatures = FeatureFlags.VANILLA_SET;
 -        BlockBehaviour.@Nullable OffsetFunction offsetFunction;
-+        public spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate isRedstoneConductor = spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate.IS_COLLISION_SHAPE_FULL_BLOCK;
-+        public spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate isSuffocating = spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate.BLOCKS_MOTION_AND_IS_COLLISION_SHAPE_FULL_BLOCK;
-+        public spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate isViewBlocking = this.isSuffocating;
-+        public spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate hasPostProcess = spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate.NEVER;
-+        public spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate emissiveRendering = spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate.NEVER;
++        public spout.common.moredatadriven.minecraft.type.KnownStatePredicate isRedstoneConductor = spout.common.moredatadriven.minecraft.type.KnownStatePredicate.IS_COLLISION_SHAPE_FULL_BLOCK;
++        public spout.common.moredatadriven.minecraft.type.KnownStatePredicate isSuffocating = spout.common.moredatadriven.minecraft.type.KnownStatePredicate.BLOCKS_MOTION_AND_IS_COLLISION_SHAPE_FULL_BLOCK;
++        public spout.common.moredatadriven.minecraft.type.KnownStatePredicate isViewBlocking = this.isSuffocating;
++        public spout.common.moredatadriven.minecraft.type.KnownStatePredicate hasPostProcess = spout.common.moredatadriven.minecraft.type.KnownStatePredicate.NEVER;
++        public spout.common.moredatadriven.minecraft.type.KnownStatePredicate emissiveRendering = spout.common.moredatadriven.minecraft.type.KnownStatePredicate.NEVER;
 +        public boolean dynamicShape;
 +        public FeatureFlagSet requiredFeatures = FeatureFlags.VANILLA_SET;
 +        public BlockBehaviour.@Nullable OffsetType offsetFunction;
@@ -257,7 +257,7 @@
          }
  
 +        // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
-+        public BlockBehaviour.Properties mapColor(spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction<MapColor> mapColor) {
++        public BlockBehaviour.Properties mapColor(spout.common.moredatadriven.minecraft.type.BlockStateFunction<MapColor> mapColor) {
 +            this.mapColor = mapColor;
 +            return this;
 +        }
@@ -272,15 +272,15 @@
          public BlockBehaviour.Properties mapColor(MapColor mapColor) {
 -            this.mapColor = state -> mapColor;
 -            return this;
-+            return this.mapColor(new spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.Single<>(mapColor)); // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
++            return this.mapColor(new spout.common.moredatadriven.minecraft.type.BlockStateFunction.Single<>(mapColor)); // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
          }
  
 -        public BlockBehaviour.Properties mapColor(Function<BlockState, MapColor> mapColor) {
 -            this.mapColor = mapColor;
 -            return this;
 +        // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
-+        public BlockBehaviour.Properties mapColor(List<Property<?>> properties, Function<spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap, MapColor> byPropertyValues) {
-+            return this.mapColor(new spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(properties, byPropertyValues));
++        public BlockBehaviour.Properties mapColor(List<Property<?>> properties, Function<spout.common.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap, MapColor> byPropertyValues) {
++            return this.mapColor(new spout.common.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(properties, byPropertyValues));
 +            // Spout end - More data-driven - Minecraft registries - Types - Properties serialization - Make map color property serializable
          }
  
@@ -295,11 +295,11 @@
 -        }
 +        // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
 +        public BlockBehaviour.Properties lightLevel(int lightEmission) {
-+            return this.lightLevel(new spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.Single<>(lightEmission));
++            return this.lightLevel(new spout.common.moredatadriven.minecraft.type.BlockStateFunction.Single<>(lightEmission));
 +        }
 +
 +        public BlockBehaviour.Properties lightLevel(Function<BlockState, Integer> lightEmission) {
-+            if (lightEmission instanceof spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction<Integer> blockStateFunction) {
++            if (lightEmission instanceof spout.common.moredatadriven.minecraft.type.BlockStateFunction<Integer> blockStateFunction) {
 +                this.lightEmission = blockStateFunction;
 +                return this;
 +            }
@@ -315,10 +315,10 @@
  
          public BlockBehaviour.Properties isRedstoneConductor(BlockBehaviour.StatePredicate isRedstoneConductor) {
 +            // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
-+            return this.isRedstoneConductor(spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate.wrap(isRedstoneConductor));
++            return this.isRedstoneConductor(spout.common.moredatadriven.minecraft.type.KnownStatePredicate.wrap(isRedstoneConductor));
 +        }
 +
-+        public BlockBehaviour.Properties isRedstoneConductor(spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate isRedstoneConductor) {
++        public BlockBehaviour.Properties isRedstoneConductor(spout.common.moredatadriven.minecraft.type.KnownStatePredicate isRedstoneConductor) {
 +            // Spout end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
              this.isRedstoneConductor = isRedstoneConductor;
              return this;
@@ -326,10 +326,10 @@
  
          public BlockBehaviour.Properties isSuffocating(BlockBehaviour.StatePredicate isSuffocating) {
 +            // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
-+            return this.isSuffocating(spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate.wrap(isSuffocating));
++            return this.isSuffocating(spout.common.moredatadriven.minecraft.type.KnownStatePredicate.wrap(isSuffocating));
 +        }
 +
-+        public BlockBehaviour.Properties isSuffocating(spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate isSuffocating) {
++        public BlockBehaviour.Properties isSuffocating(spout.common.moredatadriven.minecraft.type.KnownStatePredicate isSuffocating) {
 +            // Spout end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
              this.isSuffocating = isSuffocating;
              return this;
@@ -337,10 +337,10 @@
  
          public BlockBehaviour.Properties isViewBlocking(BlockBehaviour.StatePredicate isViewBlocking) {
 +            // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
-+            return this.isViewBlocking(spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate.wrap(isViewBlocking));
++            return this.isViewBlocking(spout.common.moredatadriven.minecraft.type.KnownStatePredicate.wrap(isViewBlocking));
 +        }
 +
-+        public BlockBehaviour.Properties isViewBlocking(spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate isViewBlocking) {
++        public BlockBehaviour.Properties isViewBlocking(spout.common.moredatadriven.minecraft.type.KnownStatePredicate isViewBlocking) {
 +            // Spout end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
              this.isViewBlocking = isViewBlocking;
              return this;
@@ -348,10 +348,10 @@
  
          public BlockBehaviour.Properties hasPostProcess(BlockBehaviour.StatePredicate hasPostProcess) {
 +            // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
-+            return this.hasPostProcess(spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate.wrap(hasPostProcess));
++            return this.hasPostProcess(spout.common.moredatadriven.minecraft.type.KnownStatePredicate.wrap(hasPostProcess));
 +        }
 +
-+        public BlockBehaviour.Properties hasPostProcess(spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate hasPostProcess) {
++        public BlockBehaviour.Properties hasPostProcess(spout.common.moredatadriven.minecraft.type.KnownStatePredicate hasPostProcess) {
 +            // Spout end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
              this.hasPostProcess = hasPostProcess;
              return this;
@@ -359,10 +359,10 @@
  
          public BlockBehaviour.Properties emissiveRendering(BlockBehaviour.StatePredicate emissiveRendering) {
 +            // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
-+            return this.emissiveRendering(spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate.wrap(emissiveRendering));
++            return this.emissiveRendering(spout.common.moredatadriven.minecraft.type.KnownStatePredicate.wrap(emissiveRendering));
 +        }
 +
-+        public BlockBehaviour.Properties emissiveRendering(spout.server.paper.impl.moredatadriven.minecraft.type.KnownStatePredicate emissiveRendering) {
++        public BlockBehaviour.Properties emissiveRendering(spout.common.moredatadriven.minecraft.type.KnownStatePredicate emissiveRendering) {
 +            // Spout end - More data-driven - Minecraft registries - Types - Properties serialization - Make block state predicate properties serializable
              this.emissiveRendering = emissiveRendering;
              return this;

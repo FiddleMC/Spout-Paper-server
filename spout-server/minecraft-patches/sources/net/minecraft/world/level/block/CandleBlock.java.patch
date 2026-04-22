@@ -5,7 +5,7 @@
      public static final BooleanProperty LIT = AbstractCandleBlock.LIT;
      public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 -    public static final ToIntFunction<BlockState> LIGHT_EMISSION = state -> state.getValue(LIT) ? 3 * state.getValue(CANDLES) : 0;
-+    public static final spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction<Integer> LIGHT_EMISSION = new spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(List.of(LIT, CANDLES), state -> state.getValue(LIT) ? 3 * state.getValue(CANDLES) : 0); // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
++    public static final spout.common.moredatadriven.minecraft.type.BlockStateFunction<Integer> LIGHT_EMISSION = new spout.common.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(List.of(LIT, CANDLES), state -> state.getValue(LIT) ? 3 * state.getValue(CANDLES) : 0); // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
      private static final Int2ObjectMap<List<Vec3>> PARTICLE_OFFSETS = Util.make(
          new Int2ObjectOpenHashMap<>(4),
          map -> {

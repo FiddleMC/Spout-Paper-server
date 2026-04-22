@@ -5,7 +5,7 @@
  import net.minecraft.world.level.block.state.properties.Property;
  
 -public class BlockState extends BlockBehaviour.BlockStateBase {
-+public class BlockState extends BlockBehaviour.BlockStateBase implements spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap { // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make block state function properties serializable
++public class BlockState extends BlockBehaviour.BlockStateBase implements spout.common.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap { // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make block state function properties serializable
      public static final Codec<BlockState> CODEC = codec(BuiltInRegistries.BLOCK.byNameCodec(), Block::defaultBlockState).stable();
  
      // Paper start - optimise getType calls

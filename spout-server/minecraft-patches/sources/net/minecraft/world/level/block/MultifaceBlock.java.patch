@@ -5,7 +5,7 @@
      }
  
 -    public static boolean hasFace(BlockState state, Direction direction) {
-+    public static boolean hasFace(spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap state, Direction direction) { // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make block state function properties serializable
++    public static boolean hasFace(spout.common.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap state, Direction direction) { // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make block state function properties serializable
          BooleanProperty faceProperty = getFaceProperty(direction);
          return state.getValueOrElse(faceProperty, false);
      }
@@ -14,7 +14,7 @@
      }
  
 -    protected static boolean hasAnyFace(BlockState state) {
-+    protected static boolean hasAnyFace(spout.server.paper.impl.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap state) { // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make block state function properties serializable
++    protected static boolean hasAnyFace(spout.common.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap state) { // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make block state function properties serializable
          for (Direction direction : DIRECTIONS) {
              if (hasFace(state, direction)) {
                  return true;

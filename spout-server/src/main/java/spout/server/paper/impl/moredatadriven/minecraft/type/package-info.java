@@ -2,7 +2,7 @@
  * <h1>More data-driven - Minecraft registries - Types</h1>
  *
  * <p>
- * Allows the vanilla block and item types to be extended.
+ * Paper server specific implementations for {@link spout.common.moredatadriven.minecraft.type}.
  * </p>
  */
 @NullMarked

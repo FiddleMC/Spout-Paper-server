@@ -21,7 +21,7 @@
      );
 -    public static final Registry<MapCodec<? extends Block>> BLOCK_TYPE = registerSimple(Registries.BLOCK_TYPE, BlockTypes::bootstrap);
 +    public static final Registry<spout.server.paper.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<?>> BLOCK_TYPE = registerSimple(Registries.BLOCK_TYPE, BlockTypes::bootstrap); // Spout - More data-driven - Minecraft registries - Types - Adapt existing block type registry
-+    public static final Registry<spout.server.paper.api.moredatadriven.paper.registry.type.nms.WrappedItemCodec<?>> ITEM_TYPE = registerSimple(Registries.ITEM_TYPE, spout.server.paper.impl.moredatadriven.minecraft.type.ItemTypes::bootstrap); // Spout - More data-driven - Minecraft registries - Types - Add item type registry
++    public static final Registry<spout.server.paper.api.moredatadriven.paper.registry.type.nms.WrappedItemCodec<?>> ITEM_TYPE = registerSimple(Registries.ITEM_TYPE, spout.common.moredatadriven.minecraft.type.ItemTypes::bootstrap); // Spout - More data-driven - Minecraft registries - Types - Add item type registry
      public static final Registry<StructureProcessorType<?>> STRUCTURE_PROCESSOR = registerSimple(
          Registries.STRUCTURE_PROCESSOR, registry -> StructureProcessorType.BLOCK_IGNORE
      );

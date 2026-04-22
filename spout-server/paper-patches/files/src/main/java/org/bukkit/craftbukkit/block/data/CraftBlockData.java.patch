@@ -5,11 +5,11 @@
          //<editor-fold desc="CraftBlockData Registration" defaultstate="collapsed">
          // Start generate - CraftBlockData#MAP
 +        // Spout start - Built-in content - Blocks - API - Implementation part - Register BlockData translations
-+        register(spout.server.paper.impl.content.block.BevelBlock.class, spout.server.paper.impl.content.block.api.CraftBevel::new);
-+        register(spout.server.paper.impl.content.block.HalfTransparentSlabBlock.class, org.bukkit.craftbukkit.block.impl.CraftSlab::new);
-+        register(spout.server.paper.impl.content.block.HalfTransparentStairBlock.class, org.bukkit.craftbukkit.block.impl.CraftStair::new);
-+        register(spout.server.paper.impl.content.block.TransparentSlabBlock.class, org.bukkit.craftbukkit.block.impl.CraftSlab::new);
-+        register(spout.server.paper.impl.content.block.TransparentStairBlock.class, org.bukkit.craftbukkit.block.impl.CraftStair::new);
++        register(spout.common.builtincontent.block.BevelBlock.class, spout.server.paper.impl.builtincontent.block.api.CraftBevel::new);
++        register(spout.common.builtincontent.block.HalfTransparentSlabBlock.class, org.bukkit.craftbukkit.block.impl.CraftSlab::new);
++        register(spout.common.builtincontent.block.HalfTransparentStairBlock.class, org.bukkit.craftbukkit.block.impl.CraftStair::new);
++        register(spout.common.builtincontent.block.TransparentSlabBlock.class, org.bukkit.craftbukkit.block.impl.CraftSlab::new);
++        register(spout.common.builtincontent.block.TransparentStairBlock.class, org.bukkit.craftbukkit.block.impl.CraftStair::new);
 +        // Spout end - Built-in content - Blocks - API - Implementation part - Register BlockData translations
          register(net.minecraft.world.level.block.AmethystClusterBlock.class, org.bukkit.craftbukkit.block.impl.CraftAmethystCluster::new);
          register(net.minecraft.world.level.block.AnvilBlock.class, org.bukkit.craftbukkit.block.impl.CraftAnvil::new);
