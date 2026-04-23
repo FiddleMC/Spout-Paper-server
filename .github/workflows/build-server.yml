@@ -1,10 +1,12 @@
 # Builds the server JAR
 name: build-server
+permissions:
+  packages: write
 on:
   push:
     branches: [ "master" ]
 jobs:
-  build:
+  build-server:
     # Only runs on master, and if the last commit does not start with [ci-skip]
     if: ${{ !contains(github.event.commits[0].message, '[ci-skip]') }}
     runs-on: ubuntu-latest

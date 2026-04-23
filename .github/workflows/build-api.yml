@@ -1,12 +1,12 @@
-# Builds and publishes the API JAR
-name: build-publish-api
+# Builds the API JAR
+name: build-api
 on:
   push:
     branches: [ "master" ]
   release:
     types: [created]
 jobs:
-  build:
+  build-publish-api:
     # Only runs if the last commit does not start with [ci-skip]
     if: ${{ !contains(github.event.commits[0].message, '[ci-skip]') }}
     runs-on: ubuntu-latest
@@ -29,16 +29,14 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+      - name: Set up Git
+        run: |
+          git config --global user.email "no-reply@github.com"
+          git config --global user.name "Github Actions"
       - name: Apply single file patches
-        run: |
-          git config --global user.email "no-reply@github.com"
-          git config --global user.name "Github Actions"
-          ./gradlew applyPaperSingleFilePatches --stacktrace
+        run: ./gradlew applyPaperSingleFilePatches --stacktrace
       - name: Apply API patches
-        run: |
-          git config --global user.email "no-reply@github.com"
-          git config --global user.name "Github Actions"
-          ./gradlew applyPaperApiPatches --stacktrace
+        run: ./gradlew applyPaperApiPatches --stacktrace
       - name: Build JAR
         run: ./gradlew :spout-api:jar --stacktrace
       - name: Upload JAR
@@ -47,7 +45,3 @@ jobs:
           name: Spout API JAR
           path: spout-api/build/libs/spout-api-*.jar
           archive: false
-      - name: Publish JAR
-        run: ./gradlew :spout-api:publishAllPublicationsToGitHubPackagesRepository --stacktrace
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

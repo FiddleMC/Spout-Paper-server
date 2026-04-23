@@ -1,0 +1,8 @@
+jdk:
+  - openjdk21
+install:
+  - git config --global user.email "no-reply@github.com"
+  - git config --global user.name "Github Actions"
+  - ./gradlew applyPaperSingleFilePatches
+  - ./gradlew applyPaperApiPatches
+  - ./gradlew :spout-api:publishToMavenLocal
