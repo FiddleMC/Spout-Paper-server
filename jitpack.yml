@@ -1,32 +1,24 @@
 jdk:
   - openjdk21
-before_install:
-  - echo "Creating safer git wrapper..."
-  - mkdir -p $HOME/bin
-  - |
-    cat > $HOME/bin/git << 'EOF'
-    #!/bin/sh
-    set -- "$@"
-    filtered=""
-    for a in "$@"; do
-      case "$a" in
-        --prune-tags) continue ;;
-        *) filtered="$filtered \"$a\"" ;;
-      esac
-    done
-    /usr/bin/git $@
-    EOF
-  - chmod +x $HOME/bin/git
-  - export PATH=$HOME/bin:$PATH
-  - git --version
 install:
   - echo "Configuring Git"
   - git --version
   - git config --global user.email "no-reply@jitpack.io"
   - git config --global user.name "Jitpack build"
+  - echo "Creating safer git wrapper..."
+  - mkdir -p $HOME/bin
+  - |
+    cat > $HOME/bin/git << 'EOF'
+    #!/bin/sh
+    exec /usr/bin/git "$@"
+    EOF
+  - chmod +x $HOME/bin/git
+  - export PATH=$HOME/bin:$PATH
+  - which git
+  - git --version
   - echo "Applying single file patches"
-  - ./gradlew applyPaperSingleFilePatches --stacktrace
+  - ./gradlew applyPaperSingleFilePatches --stacktrace --no-daemon
   - echo "Applying paper API patches"
-  - ./gradlew applyPaperApiPatches --stacktrace
+  - ./gradlew applyPaperApiPatches --stacktrace --no-daemon
   - echo "Publishing to Maven local"
-  - ./gradlew :spout-api:publishToMavenLocal --stacktrace
+  - ./gradlew :spout-api:publishToMavenLocal --stacktrace --no-daemon
