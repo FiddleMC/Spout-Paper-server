@@ -6,21 +6,19 @@ install:
   - which git
   - git config --global user.email "no-reply@jitpack.io"
   - git config --global user.name "Jitpack build"
-  - echo "Installing git wrapper (safe, no eval)"
+  - echo "Installing git wrapper safely (no heredoc)"
   - mkdir -p $HOME/bin
-  - |
-    cat > $HOME/bin/git << 'EOF'
-    #!/bin/sh
-    set -- "$@"
-    filtered=""
-    for a in "$@"; do
-      case "$a" in
-        --prune-tags) continue ;;
-        *) filtered="$filtered \"$a\"" ;;
-      esac
-    done
-    /usr/bin/git "$@"
-    EOF
+  - printf '%s\n' \
+    '#!/bin/sh' \
+    'set -- "$@"' \
+    'for a in "$@"; do' \
+    '  case "$a" in' \
+    '    --prune-tags) continue ;;' \
+    '    *) ;;' \
+    '  esac' \
+    'done' \
+    'exec /usr/bin/git "$@"' \
+    > $HOME/bin/git
   - chmod +x $HOME/bin/git
   - export PATH=$HOME/bin:$PATH
   - hash -r
