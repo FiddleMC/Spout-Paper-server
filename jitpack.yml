@@ -1,24 +1,41 @@
 jdk:
   - openjdk21
 install:
+  - git config --global fetch.prune false
+  - git config --global remote.upstream.fetch "+refs/heads/*:refs/remotes/upstream/*"
+  - git fetch --unshallow || true
+  - git fetch --all --tags
   - echo "Configuring Git"
   - git --version
   - which git
   - git config --global user.email "no-reply@jitpack.io"
   - git config --global user.name "Jitpack build"
-  - echo "Installing git wrapper safely (no heredoc)"
+  - echo "Installing git emulation wrapper"
   - mkdir -p $HOME/bin
-  - printf '%s\n' \
-    '#!/bin/sh' \
-    'args=""' \
-    'for a in "$@"; do' \
-    '  case "$a" in' \
-    '    --prune-tags) continue ;;' \
-    '    *) args="$args \"$a\"";;' \
-    '  esac' \
-    'done' \
-    'eval /usr/bin/git $args' \
-    > $HOME/bin/git
+  - |
+    cat > $HOME/bin/git << 'EOF'
+    #!/bin/sh
+    if [ "$1" = "fetch" ]; then
+      shift
+      PRUNE=0
+      FORCE=0
+      ARGS=""
+      for a in "$@"; do
+        case "$a" in
+          --prune) PRUNE=1 ;;
+          --force) FORCE=1 ;;
+          --prune-tags) ;; # ignore
+          *) ARGS="$ARGS $a" ;;
+        esac
+      done
+      # run base fetch
+      /usr/bin/git fetch "$ARGS"
+      # emulate prune-tags
+      /usr/bin/git fetch upstream +refs/tags/*:refs/tags/*
+      exit $?
+    fi
+    exec /usr/bin/git "$@"
+    EOF
   - chmod +x $HOME/bin/git
   - export PATH=$HOME/bin:$PATH
   - hash -r
