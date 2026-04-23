@@ -2,8 +2,8 @@ jdk:
   - openjdk21
 before_install:
   - echo "Installing newer Git..."
-  - wget https://github.com/sgerrand/alpine-pkg-glibc/releases/latest
-  - tar -xf git.tar.gz
+  - wget https://example.com/git-static-linux-amd64.tar.gz
+  - tar -xzf git-static-linux-amd64.tar.gz
   - export PATH=$PWD/git/bin:$PATH
   - git --version
 install:
