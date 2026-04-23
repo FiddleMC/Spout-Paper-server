@@ -10,7 +10,7 @@
     that are automatically sent to connecting players
   </h3>
 
-  [![Discord](https://img.shields.io/discord/1091830813240348732?color=5865F2&label=discord&style=for-the-badge)](https://discord.gg/EduvcVmKS7)
+[![Discord](https://img.shields.io/discord/1091830813240348732?color=5865F2&label=discord&style=for-the-badge)](https://discord.gg/EduvcVmKS7) [![1.21.11](https://img.shields.io/badge/Latest_version-1.21.11-4fa31a?style=for-the-badge)](https://github.com/FiddleMC/Spout-Paper-server/actions)
 
 </div>
 
@@ -41,7 +41,8 @@
 
 ## Introduction
 
-Spout lets Spout plugins add new blocks and items server-side. When players join, the new blocks and items will be sent to their client and also added client-side.
+Spout lets Spout plugins add new blocks and items server-side.
+When players join, the new blocks and items will be sent to their client and also added client-side.
 
 This is the Spout server extension of Paper.
 
@@ -49,9 +50,25 @@ This is the Spout server extension of Paper.
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;✓&nbsp;&nbsp;Add Spout plugins just like Paper plugins
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;✓&nbsp;&nbsp;Works with the <a href="https://github.com/FiddleMC/Spout-Fabric-client">Spout client mod</a> and vanilla clients
+&nbsp;&nbsp;&nbsp;&nbsp;✓&nbsp;&nbsp;Works with the
+<a href="https://github.com/FiddleMC/Spout-Fabric-client">Spout client mod</a> and vanilla clients
 
 ## Installation
+
+Download the latest JAR from [GitHub Actions](https://github.com/FiddleMC/Spout-Paper-server/actions),
+under **Artifacts**.
+<!--
+You can download the latest stable JAR from [releases](https://github.com/FiddleMC/Spout-Paper-server/releases)
+and the latest development JAR from [actions](https://github.com/FiddleMC/Spout-Paper-server/actions).
+-->
+
+It is a drop-in replacement for the Paper JAR file, so you can run it the same:
+
+```sh
+java -jar spout-paperclip-1.21.11-R0.1-SNAPSHOT-mojmap.jar
+```
+
+You can place Spout/Paper/Bukkit plugins in the `plugins` folder.
 
 <div align="center">
   <table>
@@ -60,27 +77,24 @@ This is the Spout server extension of Paper.
         <h1>🔨</h1>
       </td>
       <td valign="center">
-        Spout is currently in beta testing.
+        Spout provides some non-trivial features.
         <br>
-        It works and is running on some servers already,
+        It has been tested, but please report any issues you encounter.
         <br>
-        but there may be some bugs, so you should proceed with care.
+        Keep backups, and always proceed with care.
       </td>
     </tr>
   </table>
 </div>
 
-Download the latest JAR from [GitHub Actions](https://github.com/FiddleMC/Spout-Paper-server/actions), under **Artifacts**.
-
 ## Demo
 
-You can easily run a test server (which [includes some example blocks and items](test-plugin/src/main/java/spout/server/paper/testplugin/data/PluginBlockTypes.java)):
+You can easily run a test server (
+which [includes some example blocks and items](test-plugin/src/main/java/spout/server/paper/testplugin/data/PluginBlockTypes.java)):
+
 * `git clone https://github.com/FiddleMC/Spout-Paper-server.git`
 * `./gradlew applyAllPatches`
 * `./gradlew runDevServer`
-<!--
-You can download the latest stable JAR from [releases](https://github.com/FiddleMC/Spout-Paper-server/releases) and the latest development JAR from [actions](https://github.com/FiddleMC/Spout-Paper-server/actions).
--->
 
 ## Making a Spout plugin that adds new blocks/items
 
@@ -89,14 +103,17 @@ Read <a href="https://github.com/FiddleMC/Spout-Paper-server/wiki">here</a>.
 ## Next
 
 The next goals of the project are:
+
 * More ways to serve the resource pack
 * More types of blocks and items
 
 Afterward, goals of the project are:
+
 * Custom block entities and entities
 * Using display entities to display custom blocks to vanilla clients
 
-Don't hesitate to suggest ideas, send in PRs (we will take a serious look at every PR, even if it is only a draft), or ask to join the project as a developer.
+Don't hesitate to suggest ideas, send in PRs (we will take a serious look at every PR, even if it is only a draft),
+or ask to join the project as a developer.
 
 ## Current known issues
 

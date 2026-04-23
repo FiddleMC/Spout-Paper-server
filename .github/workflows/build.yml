@@ -1,4 +1,4 @@
-name: Build Spout
+name: build
 on: [ push ]
 jobs:
   build:
@@ -18,7 +18,7 @@ jobs:
           java-version: ${{ matrix.java }}
           distribution: 'temurin'
       - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@v3
+        uses: gradle/actions/wrapper-validation@v4
         continue-on-error: true
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v3
