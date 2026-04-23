@@ -1,10 +1,23 @@
 jdk:
   - openjdk21
 before_install:
-  - echo "Installing newer Git..."
-  - wget https://example.com/git-static-linux-amd64.tar.gz
-  - tar -xzf git-static-linux-amd64.tar.gz
-  - export PATH=$PWD/git/bin:$PATH
+  - echo "Creating safer git wrapper..."
+  - mkdir -p $HOME/bin
+  - |
+    cat > $HOME/bin/git << 'EOF'
+    #!/bin/sh
+    set -- "$@"
+    filtered=""
+    for a in "$@"; do
+      case "$a" in
+        --prune-tags) continue ;;
+        *) filtered="$filtered \"$a\"" ;;
+      esac
+    done
+    /usr/bin/git $@
+    EOF
+  - chmod +x $HOME/bin/git
+  - export PATH=$HOME/bin:$PATH
   - git --version
 install:
   - echo "Configuring Git"
