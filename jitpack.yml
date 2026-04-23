@@ -5,25 +5,23 @@ install:
   - git --version
   - git config --global user.email "no-reply@jitpack.io"
   - git config --global user.name "Jitpack build"
-  - echo "Overriding git with wrapper via symlink + argument filter"
-  - mkdir -p $HOME/git-bin
+  - echo "Installing git wrapper (safe, no eval)"
+  - mkdir -p $HOME/bin
   - |
-    cat > $HOME/git-bin/git << 'EOF'
+    cat > $HOME/bin/git << 'EOF'
     #!/bin/sh
-    args=""
+    set -- "$@"
+    filtered=""
     for a in "$@"; do
       case "$a" in
-        --prune-tags)
-          ;;
-        *)
-          args="$args \"$a\""
-          ;;
+        --prune-tags) continue ;;
+        *) filtered="$filtered \"$a\"" ;;
       esac
     done
-    eval /usr/bin/git $args
+    /usr/bin/git "$@"
     EOF
-  - chmod +x $HOME/git-bin/git
-  - export PATH=$HOME/git-bin:$PATH
+  - chmod +x $HOME/bin/git
+  - export PATH=$HOME/bin:$PATH
   - hash -r
   - which git
   - git --version
