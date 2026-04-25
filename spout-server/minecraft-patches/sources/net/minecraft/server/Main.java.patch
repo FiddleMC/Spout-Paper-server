@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/Main.java
 +++ b/net/minecraft/server/Main.java
-@@ -105,6 +_,40 @@
+@@ -105,6 +_,18 @@
                  JvmProfiler.INSTANCE.start(Environment.SERVER);
              }
  
@@ -14,29 +14,7 @@
 +            spoutConfigurations.initializeGlobalConfiguration(null);
 +            // Spout end - Configuration - Load global configuration before bootstrap
 +
-+            // Spout start - Confirm permanence - Check and exit if necessary
-+            if (!spout.server.paper.impl.configuration.SpoutGlobalConfiguration.get()._enabled) {
-+                LOGGER.warn("");
-+                LOGGER.warn("********************************************************************************");
-+                LOGGER.warn("You must confirm that you wish to run Spout in this folder.");
-+                LOGGER.warn("");
-+                LOGGER.warn("Spout allows you to add new blocks and items. These are saved into your world");
-+                LOGGER.warn("and plugin data, meaning the world and plugin data is affected in the same way");
-+                LOGGER.warn("as on a modded server. Loading a world in Spout is therefore PERMANENT.");
-+                LOGGER.warn("");
-+                LOGGER.warn("DO NOT RUN SPOUT ON A SERVER IF YOU DO NOT WANT THE WORLD AND PLUGIN DATA TO BE");
-+                LOGGER.warn("PERMANENTLY AFFECTED.");
-+                LOGGER.warn("");
-+                LOGGER.warn("Make sure to back up any world and plugin data before enabling Spout.");
-+                LOGGER.warn("");
-+                LOGGER.warn("To confirm, open config/spout-global.yml and change '_enabled' to true.");
-+                LOGGER.warn("By changing '_enabled' to true, you are indicating that you understand that");
-+                LOGGER.warn("the server world and plugin data will become modded PERMANENTLY.");
-+                LOGGER.warn("********************************************************************************");
-+                LOGGER.warn("");
-+                return;
-+            }
-+            // Spout end - Confirm permanence - Check and exit if necessary
++            if (!spout.server.paper.impl.confirmpermanence.ConfirmPermanence.check(LOGGER)) return; // Spout - Confirm permanence - Check and exit if necessary
 +
              io.papermc.paper.plugin.PluginInitializerManager.load(optionSet); // Paper
              Bootstrap.bootStrap();

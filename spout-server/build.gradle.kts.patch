@@ -113,12 +113,13 @@
  idea {
      module {
          generatedSourceDirs.add(generatedDir.toFile())
-@@ -293,6 +_,8 @@
+@@ -293,6 +_,9 @@
          vendor.set(JvmVendorSpec.JETBRAINS)
      })
      jvmArgs("-XX:+AllowEnhancedClassRedefinition")
 +    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED") // Spout - Synchronize Bukkit enums - Add module opens to dev server runs
 +    // jvmArgs("--enable-final-field-mutation", "ALL-UNNAMED") // Spout - Synchronize Bukkit enums - Add enable final field mutation to dev server runs
++    jvmArgs("-Dspout.server.paper.enabled=true") // Spout - Confirm permanence - Ignore for dev server runs
  
      if (rootProject.childProjects["test-plugin"] != null) {
          val testPluginJar = rootProject.project(":test-plugin").tasks.jar.flatMap { it.archiveFile }

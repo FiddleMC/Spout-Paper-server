@@ -36,9 +36,11 @@ jobs:
           ./gradlew applyAllPatches --stacktrace
       - name: Build JAR
         run: ./gradlew createMojmapPaperclipJar --stacktrace
+      - name: Rename and move JAR
+        run: mv spout-server/build/libs/spout-paperclip-*-mojmap.jar spout-$(basename spout-server/build/libs/spout-paperclip-*-mojmap.jar | sed -E 's/^spout-paperclip-(.*)-mojmap\.jar$/\1/').jar
       - name: Upload JAR
         uses: actions/upload-artifact@v7
         with:
           name: Spout server JAR
-          path: spout-server/build/libs/spout-paperclip-*-mojmap.jar
+          path: spout-*.jar
           archive: false
