@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.component.Bees;
 import org.bukkit.craftbukkit.inventory.CraftItemType;
 import org.bukkit.inventory.ItemType;
 import spout.server.paper.api.packetmapping.item.ItemMappingHandle;
@@ -108,6 +109,13 @@ public final class ItemMappingUtilitiesImpl implements ItemMappingUtilitiesNMS {
         int newDamage = mutable.getDamageValue();
         if (newDamage != originalDamage) {
             mutable.set(DataComponents.DAMAGE, originalDamage);
+        }
+
+        // Restore the bees
+        @Nullable Bees originalBees = immutable.get(DataComponents.BEES);
+        @Nullable Bees newBees = immutable.get(DataComponents.BEES);
+        if (Objects.equals(originalBees, newBees)) {
+            mutable.set(DataComponents.BEES, originalBees);
         }
 
         // We made changes

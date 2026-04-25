@@ -25,7 +25,7 @@
  idea {
      module {
          generatedSourceDirs.add(generatedDir.toFile())
-@@ -101,9 +_,26 @@
+@@ -101,6 +_,18 @@
      main {
          java {
              srcDir(generatedDir)
@@ -44,27 +44,22 @@
          }
      }
  }
-+
-+fun getGitHashProvider(length: Int?) = providers.exec {
-+    workingDir = rootProject.projectDir
-+    commandLine(*(listOfNotNull("git", "rev-parse", length?.let { "--short=$it" }, "HEAD").toTypedArray()))
-+}.standardOutput.asText.map { it.trim() }
- 
- val outgoingVariants = arrayOf("runtimeElements", "apiElements", "sourcesElements", "javadocElements")
- val mainCapability = "${project.group}:${project.name}:${project.version}"
-@@ -116,10 +_,24 @@
+@@ -116,10 +_,27 @@
              }
              outgoing {
                  capability(mainCapability)
 +                // Spout start - Project setup - Extend module capabilities
 +                // Conflict with jitpack.io artifact requirements
++                fun getGitHashProvider(length: Int?) = providers.exec {
++                    workingDir = rootProject.projectDir
++                    commandLine(*(listOfNotNull("git", "rev-parse", length?.let { "--short=$it" }, "HEAD").toTypedArray()))
++                }.standardOutput.asText.map { it.trim() }
 +                for (coordinates in arrayOf(
 +                    "com.github.modernspout:spout-api",
 +                    "com.github.ModernSpout:Spout-Paper-server"
 +                )) {
 +                    for (version in arrayOf(project.version, getGitHashProvider(null).get(), getGitHashProvider(7).get(), getGitHashProvider(8).get(), getGitHashProvider(10).get())) {
 +                        val alternativeCapability = "$coordinates:$version"
-+                        println("Alternative capability: $alternativeCapability")
 +                        if (alternativeCapability != mainCapability) capability(alternativeCapability)
 +                    }
 +                }

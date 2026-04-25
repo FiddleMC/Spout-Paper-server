@@ -14,16 +14,16 @@ public class TestPluginBootstrap implements PluginBootstrap {
 
     @Override
     public void bootstrap(@NotNull BootstrapContext context) {
-        if (!CheckSpout.checkSpout()) return; // Cancel if the server doesn't support Spout
-        loadIncludedDataPack(context);
-        loadIncludedResourcePack(context);
+        if (!CheckSpout.checkSpout()) return; // Don't do anything else if the server doesn't support Spout
+        registerIncludedDataPack(context);
+        registerIncludedResourcePack(context);
     }
 
     /**
      * Makes sure the included data pack is loaded.
      * It contains drop tables, crafting recipes and more for the custom blocks and items we add.
      */
-    private void loadIncludedDataPack(@NotNull BootstrapContext context) {
+    private void registerIncludedDataPack(@NotNull BootstrapContext context) {
         context.getLifecycleManager().registerEventHandler(
             LifecycleEvents.DATAPACK_DISCOVERY,
             event -> {
@@ -40,7 +40,7 @@ public class TestPluginBootstrap implements PluginBootstrap {
      * Makes sure the included resource pack is loaded.
      * It contains textures, models and more for the custom blocks and items we add.
      */
-    private void loadIncludedResourcePack(@NotNull BootstrapContext context) {
+    private void registerIncludedResourcePack(@NotNull BootstrapContext context) {
         context.getLifecycleManager().registerEventHandler(
             SpoutEvents.PLUGIN_RESOURCE_PACK_DISCOVERY,
             event -> event.register(this, context)

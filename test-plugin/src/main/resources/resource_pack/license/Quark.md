@@ -6,7 +6,7 @@ The following files (referenced relative to the parent folder of the folder this
 
 These files are provided under an `Attribution-NonCommercial-ShareAlike 3.0 Unported` license, which is included below.
 
-Fiddle's authors are very grateful to Quark's authors for their amazing creations, and the creativity they have inspired in others.
+Spout's authors are very grateful to Quark's authors for their amazing creations, and the creativity they have inspired in others.
 Quark is really fun, you should check it out!
 
 # Attribution-NonCommercial-ShareAlike 3.0 Unported

@@ -5,9 +5,11 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.BlockItemStateProperties;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.bukkit.block.data.BlockData;
 import spout.server.paper.api.clientview.ClientView;
 import spout.server.paper.api.packetmapping.block.automatic.UsedStates;
@@ -22,6 +24,7 @@ import spout.server.paper.impl.packetmapping.item.ItemMappingsImpl;
 import spout.server.paper.impl.resourcepack.construct.ResourcePackConstructionImpl;
 import org.jspecify.annotations.Nullable;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * A {@link MultipleAttemptsRequestProcessor} where each attempt means claiming some {@link BlockState}s.
@@ -60,34 +63,46 @@ public abstract class BlockStateClaimAttemptsRequestProcessor<US extends UsedSta
                 }
             },
             this.request.createProxyToVisualDuplicateMapping ? visualDuplicates -> {
+                // For resource pack clients, map the proxy to the visual duplicate
                 for (int i = 0; i < visualDuplicates.length; i++) {
                     BlockState visualDuplicate = VanillaOnlyBlockStateRegistry.get().byId(visualDuplicates[i]);
+                    BlockState candidate = candidates[i];
+                    // Block
                     this.event.registerNMS(
                         ClientView.AwarenessLevel.RESOURCE_PACK,
-                        candidates[i],
+                        candidate,
                         visualDuplicate
                     );
-                    if (this.request.createItemMappings && this.request instanceof FromToItemRequestBuilderImpl<?> && candidates[i] == candidates[i].getBlock().defaultBlockState()) {
-                        @Nullable Item candidateItem = FromToItemRequestBuilderImpl.inferItem(candidates[i].getBlock());
+                    // Item
+                    if (this.request.createItemMappings && this.request instanceof FromToItemRequestBuilderImpl<?> && candidate == candidate.getBlock().defaultBlockState()) {
+                        @Nullable Item candidateItem = FromToItemRequestBuilderImpl.inferItem(candidate.getBlock());
                         @Nullable Item visualDuplicateItem = FromToItemRequestBuilderImpl.inferItem(visualDuplicate.getBlock());
                         if (candidateItem != null && visualDuplicateItem != null) {
                             ItemMappingsImpl.get().addEventInitializer(event -> {
-                                @Nullable BlockItemStateProperties blockItemStateProperties = visualDuplicate == visualDuplicate.getBlock().defaultBlockState() ? null : new BlockItemStateProperties(visualDuplicate.createCraftBlockData().toStates(false));
-                                @Nullable Identifier itemModel = candidateItem == visualDuplicateItem ? null : visualDuplicateItem.getDefaultInstance().getOrDefault(DataComponents.ITEM_MODEL, visualDuplicateItem.keyInItemRegistry);
-                                if (candidateItem != visualDuplicateItem || itemModel != null || blockItemStateProperties != null) {
+                                @Nullable BlockItemStateProperties toBlockItemStateProperties = (!this.overridesStateBasedOnPlacementOfVisualDuplicateItem() && visualDuplicate == visualDuplicate.getBlock().defaultBlockState()) ? null : new BlockItemStateProperties(visualDuplicate.createCraftBlockData().toStates(true));
+                               Item toItem;
+                                if (toBlockItemStateProperties != null && !haveSameHoneyLevel(candidate, visualDuplicate)) {
+                                    toBlockItemStateProperties = null;
+                                    toItem = Items.BARRIER;
+                                } else {
+                                    toItem = visualDuplicateItem;
+                                }
+                                @Nullable BlockItemStateProperties finalToBlockItemStateProperties = toBlockItemStateProperties;
+                                @Nullable Identifier toItemModel = candidateItem == toItem ? null : visualDuplicateItem.getDefaultInstance().getOrDefault(DataComponents.ITEM_MODEL, visualDuplicateItem.keyInItemRegistry);
+                                if (candidateItem != visualDuplicateItem || toItemModel != null || toBlockItemStateProperties != null) {
                                     event.registerNMS(builder -> {
                                         builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
                                         builder.from(candidateItem);
                                         builder.to(handle -> {
-                                            if (candidateItem != visualDuplicateItem) {
-                                                ItemMappingUtilitiesNMS.get().setItemWhilePreservingRest(handle, visualDuplicateItem);
+                                            if (candidateItem != toItem) {
+                                                ItemMappingUtilitiesNMS.get().setItemWhilePreservingRest(handle, toItem);
                                             }
                                             ItemStack itemStack = handle.getMutable();
-                                            if (itemModel != null) {
-                                                itemStack.set(DataComponents.ITEM_MODEL, itemModel);
+                                            if (toItemModel != null) {
+                                                itemStack.set(DataComponents.ITEM_MODEL, toItemModel);
                                             }
-                                            if (blockItemStateProperties != null) {
-                                                itemStack.set(DataComponents.BLOCK_STATE, blockItemStateProperties);
+                                            if (finalToBlockItemStateProperties != null) {
+                                                itemStack.set(DataComponents.BLOCK_STATE, finalToBlockItemStateProperties);
                                             }
                                         });
                                     });
@@ -125,6 +140,18 @@ public abstract class BlockStateClaimAttemptsRequestProcessor<US extends UsedSta
 
     protected int mapFromStatesIndexToFallbackStatesIndex(int fromStatesIndex) {
         return fromStatesIndex;
+    }
+
+    protected boolean overridesStateBasedOnPlacementOfVisualDuplicateItem() {
+        return false;
+    }
+
+    protected boolean overridesStateBasedOnPlacementOfProxyItem() {
+        return false;
+    }
+
+    protected boolean overridesStateBasedOnPlacementOfFallbackItem() {
+        return false;
     }
 
     protected void processResult(BlockState @Nullable [] proxyStates) {
@@ -181,34 +208,50 @@ public abstract class BlockStateClaimAttemptsRequestProcessor<US extends UsedSta
                 if (proxyItem != null || fallbackItem != null) {
                     ItemMappingsImpl.get().addEventInitializer(event -> {
                         if (proxyItem != null) {
-                            BlockState itemBlockState = proxyItemIsFallback ? this.request.fallbackStates()[this.mapFromStatesIndexToFallbackStatesIndex(finalFromItemBlockStateIndex)] : proxyStates[this.mapFromStatesIndexToProxyStatesIndex(finalFromItemBlockStateIndex, proxyStates)];
-                            @Nullable BlockItemStateProperties blockItemStateProperties = itemBlockState == itemBlockState.getBlock().defaultBlockState() ? null : new BlockItemStateProperties(itemBlockState.createCraftBlockData().toStates(false));
-                            @Nullable Identifier itemModel = fromToItemRequest.getFromItemModel();
+                            BlockState toItemBlockState = proxyItemIsFallback ? this.request.fallbackStates()[this.mapFromStatesIndexToFallbackStatesIndex(finalFromItemBlockStateIndex)] : proxyStates[this.mapFromStatesIndexToProxyStatesIndex(finalFromItemBlockStateIndex, proxyStates)];
+                            @Nullable BlockItemStateProperties toBlockItemStateProperties = (!this.overridesStateBasedOnPlacementOfProxyItem() && toItemBlockState == toItemBlockState.getBlock().defaultBlockState()) ? null : new BlockItemStateProperties(toItemBlockState.createCraftBlockData().toStates(true));
+                            Item toItem;
+                            if (toBlockItemStateProperties != null && !haveSameHoneyLevel(null, toItemBlockState)) {
+                                toBlockItemStateProperties = null;
+                                toItem = Items.BARRIER;
+                            } else {
+                                toItem = proxyItem;
+                            }
+                            @Nullable BlockItemStateProperties finalToBlockItemStateProperties = toBlockItemStateProperties;
+                            @Nullable Identifier toItemModel = fromToItemRequest.getFromItemModel();
                             event.registerNMS(builder -> {
                                 builder.awarenessLevel(ClientView.AwarenessLevel.RESOURCE_PACK);
                                 builder.from(fromItem);
                                 builder.to(handle -> {
-                                    ItemMappingUtilitiesNMS.get().setItemWhilePreservingRest(handle, proxyItem);
+                                    ItemMappingUtilitiesNMS.get().setItemWhilePreservingRest(handle, toItem);
                                     ItemStack itemStack = handle.getMutable();
-                                    if (itemModel != null) {
-                                        itemStack.set(DataComponents.ITEM_MODEL, itemModel);
+                                    if (toItemModel != null) {
+                                        itemStack.set(DataComponents.ITEM_MODEL, toItemModel);
                                     }
-                                    if (blockItemStateProperties != null) {
-                                        itemStack.set(DataComponents.BLOCK_STATE, blockItemStateProperties);
+                                    if (finalToBlockItemStateProperties != null) {
+                                        itemStack.set(DataComponents.BLOCK_STATE, finalToBlockItemStateProperties);
                                     }
                                 });
                             });
                         }
                         if (fallbackItem != null) {
                             BlockState itemBlockState = this.request.fallbackStates()[this.mapFromStatesIndexToFallbackStatesIndex(finalFromItemBlockStateIndex)];
-                            @Nullable BlockItemStateProperties blockItemStateProperties = itemBlockState == itemBlockState.getBlock().defaultBlockState() ? null : new BlockItemStateProperties(this.request.fallbackStates()[0].createCraftBlockData().toStates(false));
+                            @Nullable BlockItemStateProperties toBlockItemStateProperties = (!this.overridesStateBasedOnPlacementOfFallbackItem() && itemBlockState == itemBlockState.getBlock().defaultBlockState()) ? null : new BlockItemStateProperties(this.request.fallbackStates()[0].createCraftBlockData().toStates(true));
+                            Item toItem;
+                            if (toBlockItemStateProperties != null && !haveSameHoneyLevel(null, this.request.fallbackStates()[0])) {
+                                toBlockItemStateProperties = null;
+                                toItem = Items.BARRIER;
+                            } else {
+                                toItem = fallbackItem;
+                            }
+                            @Nullable BlockItemStateProperties finalToBlockItemStateProperties = toBlockItemStateProperties;
                             event.registerNMS(builder -> {
                                 builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
                                 builder.from(fromItem);
                                 builder.to(handle -> {
-                                    ItemMappingUtilitiesNMS.get().setItemWhilePreservingRest(handle, fallbackItem);
-                                    if (blockItemStateProperties != null) {
-                                        handle.getMutable().set(DataComponents.BLOCK_STATE, blockItemStateProperties);
+                                    ItemMappingUtilitiesNMS.get().setItemWhilePreservingRest(handle, toItem);
+                                    if (finalToBlockItemStateProperties != null) {
+                                        handle.getMutable().set(DataComponents.BLOCK_STATE, finalToBlockItemStateProperties);
                                     }
                                 });
                             });
@@ -221,6 +264,12 @@ public abstract class BlockStateClaimAttemptsRequestProcessor<US extends UsedSta
             US usedStates = this.createUsedStates(proxyStates);
             this.request.resultConsumers.forEach(consumer -> consumer.accept(usedStates));
         }
+    }
+
+    private static boolean haveSameHoneyLevel(@Nullable BlockState state1, @Nullable BlockState state2) {
+        @Nullable Integer level1 = (state1 != null && state1.hasProperty(BlockStateProperties.LEVEL_HONEY)) ? state1.getValue(BlockStateProperties.LEVEL_HONEY) : null;
+        @Nullable Integer level2 = (state2 != null && state2.hasProperty(BlockStateProperties.LEVEL_HONEY)) ? state2.getValue(BlockStateProperties.LEVEL_HONEY) : null;
+        return Objects.equals(level1, level2);
     }
 
 }

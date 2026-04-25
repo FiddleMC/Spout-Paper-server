@@ -1,6 +1,6 @@
 {
   "pack": {
-    "description": "A data pack for the Fiddle test plugin",
+    "description": "A data pack for the Spout test plugin",
     "min_format": [94, 1],
     "max_format": [94, 1]
   }

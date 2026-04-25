@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/WorldLoader.java
 +++ b/net/minecraft/server/WorldLoader.java
-@@ -37,6 +_,13 @@
+@@ -37,6 +_,14 @@
              Pair<WorldDataConfiguration, CloseableResourceManager> pair = initConfig.packConfig.createResourceManager();
              CloseableResourceManager closeableResourceManager = pair.getSecond();
              LayeredRegistryAccess<RegistryLayer> layeredRegistryAccess = RegistryLayer.createRegistryAccess();
@@ -11,6 +11,7 @@
 +            }
 +            // Spout end - More data-driven - Data pack - Delayed frozen registries - Load some registries before
 +            spout.server.paper.impl.moredatadriven.datapack.delayedfrozenregistries.DelayedRegistryFreezing.freezeDelayedRegistries(); // Spout - More data-driven - Data pack - Delayed frozen registries - Freeze delayed registries
++            spout.server.paper.impl.logging.CustomContentLogging.logCustomContent(LOGGER); // Spout - Logging - Log custom content
              List<Registry.PendingTags<?>> list = TagLoader.loadTagsForExistingRegistries(
                  closeableResourceManager, layeredRegistryAccess.getLayer(RegistryLayer.STATIC), io.papermc.paper.plugin.lifecycle.event.registrar.ReloadableRegistrarEvent.Cause.INITIAL // Paper - tag lifecycle - add cause
              );

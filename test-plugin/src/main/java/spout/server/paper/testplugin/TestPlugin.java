@@ -14,14 +14,9 @@ import java.util.logging.Logger;
 @SuppressWarnings("unused")
 public final class TestPlugin extends JavaPlugin implements Listener {
 
-    private Logger logger;
-
     @Override
     public void onEnable() {
-        // Get the logger
-        this.logger = this.getLogger();
-        // Cancel if the server doesn't support Spout
-        if (!CheckSpout.checkSpout()) return;
+        if (!CheckSpout.checkSpout()) return; // Don't do anything else if the server doesn't support Spout
         // Register as a listener
         this.getServer().getPluginManager().registerEvents(this, this);
     }

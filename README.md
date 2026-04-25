@@ -10,7 +10,8 @@
     that are automatically sent to connecting players
   </h3>
 
-[![Discord](https://img.shields.io/discord/1091830813240348732?color=5865F2&label=discord&style=for-the-badge)](https://discord.gg/EduvcVmKS7) [![1.21.11](https://img.shields.io/badge/Latest_version-1.21.11-4fa31a?style=for-the-badge)](https://github.com/ModernSpout/Spout-Paper-server/actions/workflows/build-server.yml)
+[![Discord](https://img.shields.io/discord/1091830813240348732?color=5865F2&label=discord&style=for-the-badge)](https://discord.gg/EduvcVmKS7)
+[![1.21.11](https://img.shields.io/badge/Latest_version-1.21.11-4fa31a?style=for-the-badge)](https://github.com/ModernSpout/Spout-Paper-server/releases/download/1.21.11-R0.1/spout-paperclip-1.21.11-R0.1.jar)
 
 </div>
 
@@ -53,19 +54,20 @@ This is the Spout server extension of Paper.
 &nbsp;&nbsp;&nbsp;&nbsp;✓&nbsp;&nbsp;Works with the
 <a href="https://github.com/ModernSpout/Spout-Fabric-client">Spout client mod</a> and vanilla clients
 
+## Download
+
+* [Latest version: 1.21.11-R0.1](https://github.com/ModernSpout/Spout-Paper-server/releases/download/1.21.11-R0.1/spout-paperclip-1.21.11-R0.1.jar)
+* Development versions: download from
+  [Actions](https://github.com/ModernSpout/Spout-Paper-server/actions/workflows/build-server.yml),
+  under **Artifacts**
+* [Older releases](https://github.com/ModernSpout/Spout-Paper-server/releases)
+
 ## Installation
 
-Download the latest JAR from [GitHub Actions](https://github.com/ModernSpout/Spout-Paper-server/actions/workflows/build-server.yml),
-under **Artifacts**.
-<!--
-You can download the latest stable JAR from [releases](https://github.com/ModernSpout/Spout-Paper-server/releases)
-and the latest development JAR from [actions](https://github.com/ModernSpout/Spout-Paper-server/actions/workflows/build-server.yml).
--->
-
-It is a drop-in replacement for the Paper JAR file, so you can run it the same:
+The `.jar` file is a drop-in replacement for the Paper server JAR, you can run it the same:
 
 ```sh
-java -jar spout-paperclip-1.21.11-R0.1-SNAPSHOT-mojmap.jar
+java -jar spout-paperclip-1.21.11-R0.1.jar
 ```
 
 You can place Spout/Paper/Bukkit plugins in the `plugins` folder.
@@ -87,18 +89,16 @@ You can place Spout/Paper/Bukkit plugins in the `plugins` folder.
   </table>
 </div>
 
-## Demo
+## Plugin showcase
 
-You can easily run a test server (
-which [includes some example blocks and items](test-plugin/src/main/java/spout/server/paper/testplugin/data/PluginBlockTypes.java)):
+* [Chinese paper lamps](https://github.com/ModernSpout/ChinesePaperLamps-plugin)
+* [Snowy stone bricks](https://github.com/ModernSpout/SnowyStoneBricks-plugin)
+* [Quark (port)](https://github.com/ModernSpout/Quark-plugin)
 
-* `git clone https://github.com/ModernSpout/Spout-Paper-server.git`
-* `./gradlew applyAllPatches`
-* `./gradlew runDevServer`
+## Creating a plugin
 
-## Making a Spout plugin that adds new blocks/items
-
-Read <a href="https://github.com/ModernSpout/Spout-Paper-server/wiki">here</a>.
+It's surprisingly easy! See the step-by-step guides on the
+<a href="https://github.com/ModernSpout/Spout-Paper-server/wiki">wiki</a>.
 
 ## Next
 
@@ -126,6 +126,8 @@ or ask to join the project as a developer.
 This project has been made possible by:
 * the contributions of [Alvinn8](https://github.com/Alvinn8/) and [SoSeDiK](https://github.com/SoSeDiK)
 * the generous donation from <a href="https://github.com/pontaoski">Janet&nbsp;Blackquill</a>
-* the authors and maintainers of the Bukkit, [Spigot](https://www.spigotmc.org/) and [Paper](https://github.com/PaperMC/Paper) projects
-* everyone on GitHub and the [Discord](https://discord.gg/EduvcVmKS7) server who helps test Spout and provide feedback and suggestions
+* the authors and maintainers of the Bukkit,
+  [Spigot](https://www.spigotmc.org/) and [Paper](https://github.com/PaperMC/Paper) projects
+* everyone on GitHub and the [Discord](https://discord.gg/EduvcVmKS7)
+  server who helps test Spout and provide feedback and suggestions
 -->

@@ -88,6 +88,33 @@ public class SpoutGlobalConfiguration extends ConfigurationPart {
 
     }
 
+    public Logging logging;
+
+    public class Logging extends ConfigurationPart {
+
+        public OnStartup onStartup;
+
+        public class OnStartup extends ConfigurationPart {
+
+            public boolean blocks = false;
+            public boolean blockCount = true;
+            public boolean blockStates = false;
+            public boolean blockStateCount = false;
+            public boolean items = false;
+            public boolean itemCount = true;
+
+        }
+
+    }
+
+    public ServerSideTranslations serverSideTranslations;
+
+    public class ServerSideTranslations extends ConfigurationPart {
+
+        public List<String> preferredLocalesInOrder = List.of("en_us");
+
+    }
+
     public Tooltips tooltips;
 
     public class Tooltips extends ConfigurationPart {
@@ -99,14 +126,6 @@ public class SpoutGlobalConfiguration extends ConfigurationPart {
             public boolean namespace = false;
 
         }
-
-    }
-
-    public ServerSideTranslations serverSideTranslations;
-
-    public class ServerSideTranslations extends ConfigurationPart {
-
-        public List<String> preferredLocalesInOrder = List.of("en_us");
 
     }
 

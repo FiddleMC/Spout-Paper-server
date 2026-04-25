@@ -1,0 +1,9 @@
+--- a/data/minecraft/tags/block/enchantment_power_provider.json
++++ b/data/minecraft/tags/block/enchantment_power_provider.json
+@@ -1,5 +_,5 @@
+ {
+   "values": [
+-    "minecraft:bookshelf"
++    "#c:bookshelves"
+   ]
+ }

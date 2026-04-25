@@ -44,6 +44,21 @@ public class FullBlockRequestProcessor extends ArrayBlockStateClaimAttemptsReque
         return result != null ? new UsedStatesImpl.SingleImpl(result[0], false) : new UsedStatesImpl.SingleImpl(this.request.fallback, true);
     }
 
+    @Override
+    protected boolean overridesStateBasedOnPlacementOfVisualDuplicateItem() {
+        return true;
+    }
+
+    @Override
+    protected boolean overridesStateBasedOnPlacementOfProxyItem() {
+        return true;
+    }
+
+    @Override
+    protected boolean overridesStateBasedOnPlacementOfFallbackItem() {
+        return true;
+    }
+
     /**
      * The return value of {@link #claimableStates()},
      * or null if not initialized yet.
