@@ -2,9 +2,8 @@
   "type": "minecraft:untinted_particle_leaves",
   "leaf_particle_chance": 0.05,
   "leaf_particle": {
-    "type": "dust",
-    "color": 16109122,
-    "scale": 1
+    "type": "minecraft:tinted_leaves",
+    "color": 4294492531
   },
   "properties": {
     "map_color": "minecraft:plant",
