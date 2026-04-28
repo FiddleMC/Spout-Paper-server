@@ -1,5 +1,6 @@
 package spout.server.paper.impl.packetmapping.block.automatic;
 
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
@@ -13,6 +14,11 @@ import org.jspecify.annotations.Nullable;
 public class SlabRequestBuilderImpl extends FromToBlockTypeRequestBuilderImpl<UsedStates.Slab> implements SlabRequestBuilder {
 
     public @Nullable BlockState fullBlockFallback; // TODO use
+
+    public SlabRequestBuilderImpl() {
+        super();
+        this.fallback = Blocks.STONE_SLAB;
+    }
 
     @Override
     public void fullBlockFallback(@Nullable BlockData fullBlockFallback) {

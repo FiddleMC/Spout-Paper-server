@@ -6,6 +6,12 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * A {@link ProxyStatesRequestBuilder} for {@link AutomaticBlockMappings#slab}.
+ *
+ * <p>
+ * By default:
+ * <ul>
+ *     <li>{@link #fallback()} is {@link BlockType#STONE_SLAB}.</li>
+ * </ul>
  */
 public interface SlabRequestBuilder extends FromBlockTypeRequestBuilder<UsedStates.Slab>, ToBlockTypeRequestBuilder<UsedStates.Slab> {
 
