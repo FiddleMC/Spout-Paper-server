@@ -3,6 +3,7 @@ package spout.server.paper.impl.packetmapping.block.automatic;
 import spout.server.paper.api.packetmapping.block.automatic.FullBlockRequestBuilder;
 import spout.server.paper.api.packetmapping.block.automatic.LeavesRequestBuilder;
 import spout.server.paper.api.packetmapping.block.automatic.AutomaticBlockMappings;
+import spout.server.paper.api.packetmapping.block.automatic.PressurePlateRequestBuilder;
 import spout.server.paper.api.packetmapping.block.automatic.SlabRequestBuilder;
 import spout.server.paper.api.packetmapping.block.automatic.StairsRequestBuilder;
 import spout.server.paper.impl.packetmapping.block.BlockMappingsComposeEventImpl;
@@ -27,6 +28,20 @@ public final class AutomaticBlockMappingsImpl implements AutomaticBlockMappings 
     }
 
     @Override
+    public void leaves(Consumer<LeavesRequestBuilder> builderConsumer) {
+        LeavesRequestBuilderImpl builder = new LeavesRequestBuilderImpl();
+        builderConsumer.accept(builder);
+        new LeavesRequestProcessor(builder, this.event).process();
+    }
+
+    @Override
+    public void pressurePlate(Consumer<PressurePlateRequestBuilder> builderConsumer) {
+        PressurePlateRequestBuilderImpl builder = new PressurePlateRequestBuilderImpl();
+        builderConsumer.accept(builder);
+        new PressurePlateRequestProcessor(builder, this.event).process();
+    }
+
+    @Override
     public void slab(Consumer<SlabRequestBuilder> builderConsumer) {
         SlabRequestBuilderImpl builder = new SlabRequestBuilderImpl();
         builderConsumer.accept(builder);
@@ -38,13 +53,6 @@ public final class AutomaticBlockMappingsImpl implements AutomaticBlockMappings 
         StairsRequestBuilderImpl builder = new StairsRequestBuilderImpl();
         builderConsumer.accept(builder);
         new StairsRequestProcessor(builder, this.event).process();
-    }
-
-    @Override
-    public void leaves(Consumer<LeavesRequestBuilder> builderConsumer) {
-        LeavesRequestBuilderImpl builder = new LeavesRequestBuilderImpl();
-        builderConsumer.accept(builder);
-        new LeavesRequestProcessor(builder, this.event).process();
     }
 
 }

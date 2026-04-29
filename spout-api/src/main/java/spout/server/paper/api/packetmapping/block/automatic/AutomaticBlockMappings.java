@@ -47,16 +47,6 @@ public interface AutomaticBlockMappings {
     void fullBlock(Consumer<FullBlockRequestBuilder> builderConsumer);
 
     /**
-     * Attempts to find a proxy state for every possible state of a slab.
-     */
-    void slab(Consumer<SlabRequestBuilder> builderConsumer);
-
-    /**
-     * Attempts to find a proxy state for every possible state of stairs.
-     */
-    void stairs(Consumer<StairsRequestBuilder> builderConsumer);
-
-    /**
      * Attempts to find proxy states for 2 leaves block states:
      * 1 non-waterlogged and 1 waterlogged.
      *
@@ -67,5 +57,20 @@ public interface AutomaticBlockMappings {
      * </p>
      */
     void leaves(Consumer<LeavesRequestBuilder> builderConsumer);
+
+    /**
+     * Attempts to find a proxy state for every possible state of a pressure plate.
+     */
+    void pressurePlate(Consumer<PressurePlateRequestBuilder> builderConsumer);
+
+    /**
+     * Attempts to find a proxy state for every possible state of a slab.
+     */
+    void slab(Consumer<SlabRequestBuilder> builderConsumer);
+
+    /**
+     * Attempts to find a proxy state for every possible state of stairs.
+     */
+    void stairs(Consumer<StairsRequestBuilder> builderConsumer);
 
 }

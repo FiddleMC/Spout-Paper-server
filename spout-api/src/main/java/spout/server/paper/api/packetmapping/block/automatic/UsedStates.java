@@ -15,19 +15,19 @@ import org.bukkit.block.data.BlockData;
  */
 public interface UsedStates {
 
+    interface PressurePlate extends UsedStates {
+
+        BlockData get(boolean powered);
+
+        boolean isFallback(boolean powered);
+
+    }
+
     interface Single extends UsedStates {
 
         BlockData get();
 
         boolean isFallback();
-
-    }
-
-    interface Waterlogged extends UsedStates {
-
-        BlockData get(boolean waterlogged);
-
-        boolean isFallback(boolean waterlogged);
 
     }
 
@@ -44,6 +44,14 @@ public interface UsedStates {
         BlockData get(org.bukkit.block.data.type.Stairs.Shape shape, Bisected.Half half, BlockFace facing, boolean waterlogged);
 
         boolean isFallback(org.bukkit.block.data.type.Stairs.Shape shape, Bisected.Half half, BlockFace facing, boolean waterlogged);
+
+    }
+
+    interface Waterlogged extends UsedStates {
+
+        BlockData get(boolean waterlogged);
+
+        boolean isFallback(boolean waterlogged);
 
     }
 

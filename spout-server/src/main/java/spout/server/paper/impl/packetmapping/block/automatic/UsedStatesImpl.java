@@ -1,5 +1,7 @@
 package spout.server.paper.impl.packetmapping.block.automatic;
 
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -10,14 +12,116 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
+import org.jspecify.annotations.Nullable;
 import spout.server.paper.api.packetmapping.block.automatic.UsedStates;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
  * The implementation of {@link UsedStates}.
  */
 public final class UsedStatesImpl {
+
+    public static abstract class MultiStateImpl {
+
+        /**
+         * The used block states, in the order of the {@link StateDefinition} of
+         * {@link #getReference()}.
+         */
+        private final BlockState[] data;
+
+        /**
+         * Whether each state is a fallback, in the order of the {@link StateDefinition} of
+         * {@link Blocks#STONE_STAIRS}.
+         */
+        private final boolean[] isFallback;
+
+        /**
+         * A map of the {@link Property} values to the index in {@link #data} or {@link #isFallback},
+         * or null if not initialized yet.
+         */
+        private @Nullable Object2IntMap<List<Comparable<?>>> indexByPropertyValues = null;
+
+        public MultiStateImpl(BlockState[] data, boolean[] isFallback) {
+            this.data = data;
+            this.isFallback = isFallback;
+        }
+
+        public MultiStateImpl(Block block, boolean isFallback) {
+            List<BlockState> possibleStates = this.getReference().getStateDefinition().getPossibleStates();
+            Collection<Property<?>> properties = this.getReference().getStateDefinition().getProperties();
+            this.data = new BlockState[possibleStates.size()];
+            for (int i = 0; i < possibleStates.size(); i++) {
+                BlockState state = possibleStates.get(i);
+                BlockState stateForBlock = block.defaultBlockState();
+                for (Property<?> property : properties) {
+                    stateForBlock = stateForBlock.setValue((Property) property, state.getValue(property));
+                }
+                this.data[i] = stateForBlock;
+            }
+            this.isFallback = new boolean[this.data.length];
+            Arrays.fill(this.isFallback, isFallback);
+        }
+
+        protected abstract Block getReference();
+
+        private Object2IntMap<List<Comparable<?>>> getIndexByPropertyValues() {
+            if (this.indexByPropertyValues == null) {
+                this.indexByPropertyValues = new Object2IntOpenHashMap<>(this.data.length);
+                Collection<Property<?>> properties = this.getReference().getStateDefinition().getProperties();
+                for (int i = 0; i < this.data.length; i++) {
+                    List<Comparable<?>> propertyValues = new ArrayList<>(properties.size());
+                    for (Property<?> property : properties) {
+                        propertyValues.add(this.data[i].getValue(property));
+                    }
+                    this.indexByPropertyValues.put(propertyValues, i);
+                }
+            }
+            return this.indexByPropertyValues;
+        }
+
+        protected int getIndex(List<Comparable<?>> propertyValues) {
+            return this.getIndexByPropertyValues().getInt(propertyValues);
+        }
+
+        protected BlockData get(List<Comparable<?>> propertyValues) {
+            return this.data[this.getIndex(propertyValues)].createCraftBlockData();
+        }
+
+        protected boolean isFallback(List<Comparable<?>> propertyValues) {
+            return this.isFallback[this.getIndex(propertyValues)];
+        }
+
+    }
+
+    public static final class PressurePlateImpl extends MultiStateImpl implements UsedStates.PressurePlate {
+
+        public PressurePlateImpl(BlockState[] data, boolean[] isFallback) {
+            super(data, isFallback);
+        }
+
+        public PressurePlateImpl(Block block, boolean isFallback) {
+            super(block, isFallback);
+        }
+
+        @Override
+        protected Block getReference() {
+            return Blocks.STONE_PRESSURE_PLATE;
+        }
+
+        @Override
+        public BlockData get(boolean powered) {
+            return this.get(List.of(powered));
+        }
+
+        @Override
+        public boolean isFallback(boolean powered) {
+            return this.isFallback(List.of(powered));
+        }
+
+    }
 
     public static final class SingleImpl implements UsedStates.Single {
 
@@ -37,36 +141,6 @@ public final class UsedStatesImpl {
         @Override
         public boolean isFallback() {
             return this.isFallback;
-        }
-    }
-
-    public static final class WaterloggedImpl implements UsedStates.Waterlogged {
-
-        private final BlockState nonWaterlogged;
-        private final BlockState waterlogged;
-        private final boolean nonWaterloggedIsFallback;
-        private final boolean waterloggedIsFallback;
-
-        public WaterloggedImpl(
-            BlockState nonWaterlogged,
-            BlockState waterlogged,
-            boolean nonWaterloggedIsFallback,
-            boolean waterloggedIsFallback
-        ) {
-            this.nonWaterlogged = nonWaterlogged;
-            this.waterlogged = waterlogged;
-            this.nonWaterloggedIsFallback = nonWaterloggedIsFallback;
-            this.waterloggedIsFallback = waterloggedIsFallback;
-        }
-
-        @Override
-        public BlockData get(boolean waterlogged) {
-            return (waterlogged ? this.waterlogged : this.nonWaterlogged).createCraftBlockData();
-        }
-
-        @Override
-        public boolean isFallback(final boolean waterlogged) {
-            return waterlogged ?  this.waterloggedIsFallback : this.nonWaterloggedIsFallback;
         }
     }
 
@@ -111,65 +185,61 @@ public final class UsedStatesImpl {
         }
     }
 
-    public static final class StairsImpl implements UsedStates.Stairs {
-
-        /**
-         * The used block states, in the order of the {@link StateDefinition} of
-         * {@link Blocks#STONE_STAIRS}.
-         */
-        private final BlockState[] data;
-
-        /**
-         * Whether each state is a fallback, in the order of the {@link StateDefinition} of
-         * {@link Blocks#STONE_STAIRS}.
-         */
-        private final boolean[] isFallback;
+    public static final class StairsImpl extends MultiStateImpl implements UsedStates.Stairs {
 
         public StairsImpl(BlockState[] data, boolean[] isFallback) {
-            this.data = data;
-            this.isFallback = isFallback;
+            super(data, isFallback);
         }
 
         public StairsImpl(Block block, boolean isFallback) {
-            List<BlockState> possibleStates = Blocks.STONE_STAIRS.getStateDefinition().getPossibleStates();
-            this.data = new BlockState[possibleStates.size()];
-            for (int i = 0; i < possibleStates.size(); i++) {
-                BlockState state = possibleStates.get(i);
-                BlockState stateForBlock = block.defaultBlockState();
-                for (Property<?> property : state.getProperties()) {
-                    stateForBlock = stateForBlock.setValue((Property) property, state.getValue(property));
-                }
-                this.data[i] = stateForBlock;
-            }
-            this.isFallback = new boolean[this.data.length];
-            Arrays.fill(this.isFallback, isFallback);
+            super(block, isFallback);
         }
 
-        private int getIndex(org.bukkit.block.data.type.Stairs.Shape shape, Bisected.Half half, BlockFace facing, boolean waterlogged) {
-            List<BlockState> possibleStates = Blocks.STONE_STAIRS.getStateDefinition().getPossibleStates();
-            for (int i = 0; i < this.data.length; i++) {
-                BlockState state = possibleStates.get(i);
-                if (CraftBlockData.toBukkit(state.getValue(BlockStateProperties.STAIRS_SHAPE), org.bukkit.block.data.type.Stairs.Shape.class) == shape) {
-                    if (CraftBlockData.toBukkit(state.getValue(BlockStateProperties.HALF), Bisected.Half.class) == half) {
-                        if (state.getValue(BlockStateProperties.WATERLOGGED) == waterlogged) {
-                            return i;
-                        }
-                    }
-                }
-            }
-            throw new IllegalStateException();
+        @Override
+        protected Block getReference() {
+            return Blocks.STONE_STAIRS;
         }
 
         @Override
         public BlockData get(org.bukkit.block.data.type.Stairs.Shape shape, Bisected.Half half, BlockFace facing, boolean waterlogged) {
-            return this.data[this.getIndex(shape, half, facing, waterlogged)].createCraftBlockData();
+            return this.get(List.of(shape, half, facing, waterlogged));
         }
 
         @Override
         public boolean isFallback(org.bukkit.block.data.type.Stairs.Shape shape, Bisected.Half half, BlockFace facing, boolean waterlogged) {
-            return this.isFallback[this.getIndex(shape, half, facing, waterlogged)];
+            return this.isFallback(List.of(shape, half, facing, waterlogged));
         }
 
+    }
+
+    public static final class WaterloggedImpl implements UsedStates.Waterlogged {
+
+        private final BlockState nonWaterlogged;
+        private final BlockState waterlogged;
+        private final boolean nonWaterloggedIsFallback;
+        private final boolean waterloggedIsFallback;
+
+        public WaterloggedImpl(
+            BlockState nonWaterlogged,
+            BlockState waterlogged,
+            boolean nonWaterloggedIsFallback,
+            boolean waterloggedIsFallback
+        ) {
+            this.nonWaterlogged = nonWaterlogged;
+            this.waterlogged = waterlogged;
+            this.nonWaterloggedIsFallback = nonWaterloggedIsFallback;
+            this.waterloggedIsFallback = waterloggedIsFallback;
+        }
+
+        @Override
+        public BlockData get(boolean waterlogged) {
+            return (waterlogged ? this.waterlogged : this.nonWaterlogged).createCraftBlockData();
+        }
+
+        @Override
+        public boolean isFallback(final boolean waterlogged) {
+            return waterlogged ?  this.waterloggedIsFallback : this.nonWaterloggedIsFallback;
+        }
     }
 
 }

@@ -18,12 +18,16 @@ import spout.server.paper.api.packetmapping.block.automatic.FromBlockTypeRequest
 import spout.server.paper.api.packetmapping.block.automatic.ToBlockStateRequestBuilder;
 import spout.server.paper.api.packetmapping.block.automatic.ToBlockTypeRequestBuilder;
 import spout.common.branding.SpoutNamespace;
+import spout.server.paper.api.packetmapping.block.automatic.UsedStates;
 import spout.server.paper.impl.clientview.ClientViewImpl;
 import spout.server.paper.impl.moredatadriven.minecraft.BlockRegistry;
 import spout.server.paper.impl.packetmapping.block.BlockMappingsComposeEventImpl;
 import org.jspecify.annotations.Nullable;
+import spout.server.paper.impl.packetmapping.block.automatic.AutomaticBlockMappingsImpl;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * Some built-in {@link DataDrivenBlockMappingType}s.
@@ -38,6 +42,25 @@ public final class BuiltInDataDrivenBlockMappingTypes {
 
         private BuiltInDataDrivenBlockMappingType(String key) {
             DataDrivenBlockMappingTypeRegistry.register(Identifier.fromNamespaceAndPath(SpoutNamespace.SPOUT, key), this);
+        }
+
+    }
+
+    public static class MultiStateBuiltInDataDrivenBlockMappingType<US extends UsedStates, B extends FromBlockTypeRequestBuilder<US> & ToBlockTypeRequestBuilder<US>> extends BuiltInDataDrivenBlockMappingType {
+
+        private final BiConsumer<AutomaticBlockMappingsImpl, Consumer<B>> mappingFunction;
+
+        private MultiStateBuiltInDataDrivenBlockMappingType(String key, BiConsumer<AutomaticBlockMappingsImpl, Consumer<B>> mappingFunction) {
+            super(key);
+            this.mappingFunction = mappingFunction;
+        }
+
+        @Override
+        public <T> void apply(BlockMappingsComposeEventImpl event, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike) {
+            this.mappingFunction.accept(event.automaticMappings(), builder -> {
+                parseFromBlockType(builder, block, ops, mapLike, null);
+                parseToBlockType(builder, block, ops, mapLike, null);
+            });
         }
 
     }
@@ -204,6 +227,8 @@ public final class BuiltInDataDrivenBlockMappingTypes {
 
     };
 
+    public static final DataDrivenBlockMappingType PRESSURE_PLATE = new MultiStateBuiltInDataDrivenBlockMappingType<>("pressure_plate", AutomaticBlockMappingsImpl::pressurePlate);
+
     public static final DataDrivenBlockMappingType SLAB = new BuiltInDataDrivenBlockMappingType("slab") {
 
         @Override
@@ -220,17 +245,7 @@ public final class BuiltInDataDrivenBlockMappingTypes {
 
     };
 
-    public static final DataDrivenBlockMappingType STAIRS = new BuiltInDataDrivenBlockMappingType("stairs") {
-
-        @Override
-        public <T> void apply(BlockMappingsComposeEventImpl event, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike) {
-            event.automaticMappings().stairs(builder -> {
-                parseFromBlockType(builder, block, ops, mapLike, null);
-                parseToBlockType(builder, block, ops, mapLike, null);
-            });
-        }
-
-    };
+    public static final DataDrivenBlockMappingType STAIRS = new MultiStateBuiltInDataDrivenBlockMappingType<>("stairs", AutomaticBlockMappingsImpl::stairs);
 
     private static boolean bootstrapped = false;
 
