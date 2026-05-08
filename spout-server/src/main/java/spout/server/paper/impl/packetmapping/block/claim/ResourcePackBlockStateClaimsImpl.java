@@ -18,6 +18,7 @@ import spout.server.paper.api.packetmapping.block.claim.ResourcePackBlockStateCl
 import spout.server.paper.impl.moredatadriven.minecraft.VanillaOnlyBlockStateRegistry;
 import spout.server.paper.impl.util.java.serviceloader.NoArgsConstructorServiceProviderImpl;
 import org.jspecify.annotations.Nullable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -71,14 +72,29 @@ public final class ResourcePackBlockStateClaimsImpl implements ResourcePackBlock
 
     private int nextClaimId;
     private final TreeSet<ClaimRequest> requests;
+    private @Nullable AllRequestsProcessingState processingState;
+    private List<IntConsumer> claimListeners = new ArrayList<>();
 
     public ResourcePackBlockStateClaimsImpl() {
         Comparator<ClaimRequestPriority> requestPriorityComparator = new ClaimRequestPriorityComparator(Object2DoubleMaps.emptyMap()); /* TODO fill with useful values based on how often block states occur */
         this.requests = new TreeSet<>(Comparator.comparing(ClaimRequest::priority, requestPriorityComparator).thenComparingInt(request -> -request.id));
     }
 
+    public void registerClaimListener(IntConsumer consumer) {
+        this.claimListeners.add(consumer);
+    }
+
+    public boolean isClaimed(BlockState state) {
+        return this.processingState != null && this.processingState.isClaimed(state.indexInVanillaOnlyBlockStateRegistry);
+    }
+
+    public boolean isClaimed(int state) {
+        return this.processingState != null && this.processingState.isClaimed(state);
+    }
+
     public void processRequests() {
-        new AllRequestsProcessingState().process();
+        this.processingState = new AllRequestsProcessingState();
+        this.processingState.process();
     }
 
     public void claim(int[] states, ClaimRequestPriority priority, @Nullable Consumer<int @Nullable []> resultConsumer, @Nullable Consumer<int[]> visualDuplicatesConsumer, boolean orSimilar, boolean usingVanillaLook) {
@@ -571,6 +587,9 @@ public final class ResourcePackBlockStateClaimsImpl implements ResourcePackBlock
                     AllRequestsProcessingState.this.claimed[stateToClaim] = true;
                     if (!this.request.usingVanillaLook) {
                         AllRequestsProcessingState.this.claimedNonVanilla[stateToClaim] = true;
+                    }
+                    for (IntConsumer claimListener : ResourcePackBlockStateClaimsImpl.this.claimListeners) {
+                        claimListener.accept(stateToClaim);
                     }
 
                     // Mark if we need a mapping to a visual duplicate

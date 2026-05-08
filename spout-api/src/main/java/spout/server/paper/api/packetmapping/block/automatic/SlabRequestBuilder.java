@@ -7,7 +7,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * A {@link ProxyStatesRequestBuilder} for {@link AutomaticBlockMappings#slab}.
  */
-public interface SlabRequestBuilder extends FromBlockTypeRequestBuilder<UsedStates.Slab>, ToBlockTypeRequestBuilder<UsedStates.Slab> {
+public interface SlabRequestBuilder extends FromBlockTypeRequestBuilder, ToBlockTypeRequestBuilder {
 
     /**
      * @param fullBlockFallback A block state that is the best fallback

@@ -10,8 +10,8 @@ import java.util.function.Consumer;
  * <p>
  * By default:
  * <ul>
- *     <li>{@link #createFromToProxyMapping()} is true.</li>
- *     <li>{@link #createProxyToVisualDuplicateMapping()} is true.</li>
+ *     <li>{@link #createFromToUsedStatesMappings()} is true.</li>
+ *     <li>{@link #createProxyToVisualDuplicateMappings()} is true.</li>
  *     <li>{@link #createItemMappings()} is true.</li>
  *     <li>{@link #createVanillaMappings()} is true.</li>
  *     <li>{@link #createResourcePackBlockstatesEntries()} is true.</li>
@@ -19,31 +19,31 @@ import java.util.function.Consumer;
  * </ul>
  * </p>
  */
-public interface ProxyStatesRequestBuilder<US extends UsedStates> {
+public interface ProxyStatesRequestBuilder {
 
     /**
      * @param createFromToProxyMapping Whether to create a block mapping from the server-side block states
      *                                 that this mapping targets, to the corresponding used proxy states,
      *                                 for {@link ClientView.AwarenessLevel#RESOURCE_PACK} clients.
      */
-    void createFromToProxyMapping(boolean createFromToProxyMapping);
+    void createFromToUsedStatesMappings(boolean createFromToProxyMapping);
 
     /**
-     * @return The current setting of {@link #createFromToProxyMapping}.
+     * @return The current setting of {@link #createFromToUsedStatesMappings}.
      */
-    boolean createFromToProxyMapping();
+    boolean createFromToUsedStatesMappings();
 
     /**
      * @param createProxyToVisualDuplicateMapping Whether to create a block mapping from used proxy states
      *                                            to corresponding visual duplicates,
      *                                            for {@link ClientView.AwarenessLevel#RESOURCE_PACK} clients.
      */
-    void createProxyToVisualDuplicateMapping(boolean createProxyToVisualDuplicateMapping);
+    void createProxyToVisualDuplicateMappings(boolean createProxyToVisualDuplicateMapping);
 
     /**
-     * @return The current setting of {@link #createProxyToVisualDuplicateMapping}.
+     * @return The current setting of {@link #createProxyToVisualDuplicateMappings}.
      */
-    boolean createProxyToVisualDuplicateMapping();
+    boolean createProxyToVisualDuplicateMappings();
 
     /**
      * @param createItemMappings Whether to create item mappings that correspond to the created block mappings,
@@ -82,6 +82,6 @@ public interface ProxyStatesRequestBuilder<US extends UsedStates> {
     /**
      * @param resultConsumer A consumer for the resulting states that were chosen.
      */
-    void useResult(Consumer<US> resultConsumer);
+    void useResult(Consumer<UsedStates> resultConsumer);
 
 }

@@ -1,0 +1,19 @@
+--- a/net/minecraft/world/level/block/state/StateDefinition.java
++++ b/net/minecraft/world/level/block/state/StateDefinition.java
+@@ -85,6 +_,16 @@
+         return this.states;
+     }
+ 
++    // Spout start - Block mapping - Automatic - Speed up state definition array queries
++    private BlockState @Nullable [] statesArray;
++    public S[] getPossibleStatesArray() {
++        if (this.statesArray == null) {
++            this.statesArray = this.states.toArray(BlockState[]::new);
++        }
++        return (S[]) this.statesArray;
++    }
++    // Spout end - Block mapping - Automatic - Speed up state definition array queries
++
+     public S any() {
+         return this.states.get(0);
+     }

@@ -7,7 +7,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * A {@link ProxyStatesRequestBuilder} that maps a single server-side {@linkplain BlockData block state}.
  */
-public interface FromBlockStateRequestBuilder<US extends UsedStates> extends FromItemRequestBuilder<US> {
+public interface FromBlockStateRequestBuilder extends FromItemRequestBuilder {
 
     /**
      * @param from The block state you are wanting to map.

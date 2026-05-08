@@ -6,7 +6,7 @@ import org.bukkit.block.data.BlockData;
 /**
  * A {@link ProxyStatesRequestBuilder} that maps to a single {@linkplain BlockData block state}.
  */
-public interface ToBlockStateRequestBuilder<US extends UsedStates> extends ToItemRequestBuilder<US> {
+public interface ToBlockStateRequestBuilder extends ToItemRequestBuilder {
 
     /**
      * @param fallback A block state that is the best fallback

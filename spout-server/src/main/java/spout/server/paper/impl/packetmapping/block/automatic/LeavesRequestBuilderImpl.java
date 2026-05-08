@@ -1,17 +1,15 @@
 package spout.server.paper.impl.packetmapping.block.automatic;
 
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.TintedParticleLeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import spout.server.paper.api.packetmapping.block.automatic.LeavesRequestBuilder;
-import spout.server.paper.api.packetmapping.block.automatic.UsedStates;
 import org.jspecify.annotations.Nullable;
 
 /**
  * The implementation of {@link LeavesRequestBuilder}.
  */
-public class LeavesRequestBuilderImpl extends FromToBlockTypeRequestBuilderImpl<UsedStates.Waterlogged> implements LeavesRequestBuilder {
+public class LeavesRequestBuilderImpl extends FromToBlockTypeRequestBuilderImpl implements LeavesRequestBuilder {
 
     public @Nullable Boolean tinted;
 

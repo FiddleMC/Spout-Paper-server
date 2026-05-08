@@ -633,7 +633,9 @@ public final class VisualDuplicatesImpl implements VisualDuplicates {
             .thenComparing(state -> state.getValueOrElse(BlockStateProperties.AGE_5, 0))
             .thenComparing(state -> state.getValueOrElse(BlockStateProperties.AGE_7, 0))
             .thenComparing(state -> state.getValueOrElse(BlockStateProperties.AGE_15, 0))
-            .thenComparing(state -> state.getValueOrElse(BlockStateProperties.AGE_25, 0));
+            .thenComparing(state -> state.getValueOrElse(BlockStateProperties.AGE_25, 0))
+            // Prefer honey (or not applicable) over no honey
+            .thenComparing(state -> state.getValueOrElse(BlockStateProperties.LEVEL_HONEY, 1) == 0);
 
         public static final Comparator<BlockState> STATE_COMPARATOR = (state1, state2) -> {
             if (state1.getBlock() == Blocks.NOTE_BLOCK && state2.getBlock() == Blocks.NOTE_BLOCK) {
@@ -642,6 +644,11 @@ public final class VisualDuplicatesImpl implements VisualDuplicates {
             }
             return NON_NOTE_BLOCK_STATE_COMPARATOR.compare(state1, state2);
         };
+
+        /**
+         * Compares 2 {@link Block}s by their first state.
+         */
+        public static final Comparator<Block> BLOCK_COMPARATOR = Comparator.comparing(block -> block.getStateDefinition().getPossibleStates().getFirst(), STATE_COMPARATOR);
 
     }
 

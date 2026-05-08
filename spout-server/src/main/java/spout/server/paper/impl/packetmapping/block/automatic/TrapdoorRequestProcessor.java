@@ -1,61 +1,38 @@
 package spout.server.paper.impl.packetmapping.block.automatic;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jspecify.annotations.Nullable;
-import spout.server.paper.api.packetmapping.block.automatic.UsedStates;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import spout.server.paper.impl.moredatadriven.minecraft.VanillaOnlyBlockRegistry;
 import spout.server.paper.impl.packetmapping.block.BlockMappingsComposeEventImpl;
+import java.util.stream.StreamSupport;
 
 /**
  * A {@link RequestProcessor} for {@link AutomaticBlockMappingsImpl#trapdoor}.
  */
-public class TrapdoorRequestProcessor extends MatchingBlockStateClaimAttemptsRequestProcessor<UsedStates.TrapDoor, FromToBlockTypeRequestBuilderImpl<UsedStates.TrapDoor>> { // TODO use powered vs unpowered unused states
+public class TrapdoorRequestProcessor extends FilledArrayResultRequestProcessor<FromToBlockTypeRequestBuilderImpl, ArrayResultRequestProcessor.RequestBasedResult> {
 
-    public TrapdoorRequestProcessor(FromToBlockTypeRequestBuilderImpl<UsedStates.TrapDoor> request, BlockMappingsComposeEventImpl event) {
+    public TrapdoorRequestProcessor(FromToBlockTypeRequestBuilderImpl request, BlockMappingsComposeEventImpl event) {
         super(request, event);
     }
 
     @Override
-    protected Block[] createBlocksToClaim() {
-        return claimableBlocks();
-    }
-
-    @Override
-    protected UsedStates.TrapDoor createUsedStates(BlockState @Nullable [] result) {
-        boolean isFallback = result == null;
-        return new UsedStates.TrapDoor(new UsedStatesInternalImpls.BlockTrapDoor<>(isFallback ? this.request.fallback : result[0].getBlock(), isFallback));
+    protected FilledArrayResultRequestProcessor<FromToBlockTypeRequestBuilderImpl, RequestBasedResult>.FillPromise constructFillPromise(final FilledArrayResultRequestProcessor<FromToBlockTypeRequestBuilderImpl, RequestBasedResult>.FillPromise kickoff) {
+        return kickoff
+            .then(PROMISE_GETTER.get(this))
+            .then(new BlockFallbackFillPromise(this.request.fallback));
     }
 
     /**
-     * The return value of {@link #claimableBlocks()},
-     * or null if not initialized yet.
-     *
-     * <p>
-     * This may contain some states that are not actually claimable.
-     * </p>
+     * A new {@link FillPromiseGetter} instance,
+     * for {@link BlockState}s that can be attempted to be claimed as trapdoor proxies.
      */
-    private static Block @Nullable [] claimableBlocks;
-
-    /**
-     * @return The list of {@link Block}s that can be attempted to be claimed
-     * by this class.
-     */
-    private static Block[] claimableBlocks() {
-        if (claimableBlocks == null) {
-            claimableBlocks = new Block[] {
-                // Copper
-                Blocks.COPPER_TRAPDOOR,
-                Blocks.EXPOSED_COPPER_TRAPDOOR,
-                Blocks.OXIDIZED_COPPER_TRAPDOOR,
-                Blocks.WEATHERED_COPPER_TRAPDOOR,
-                Blocks.WAXED_COPPER_TRAPDOOR,
-                Blocks.WAXED_EXPOSED_COPPER_TRAPDOOR,
-                Blocks.WAXED_OXIDIZED_COPPER_TRAPDOOR,
-                Blocks.WAXED_WEATHERED_COPPER_TRAPDOOR
-            };
-        }
-        return claimableBlocks;
-    }
+    public static final FillPromiseGetter<FromToBlockTypeRequestBuilderImpl, ArrayResultRequestProcessor.RequestBasedResult> PROMISE_GETTER = claimStatesForAllStatesAtOnceForBlockStatesByDynamicProperties(
+        StreamSupport.stream(VanillaOnlyBlockRegistry.get().spliterator(), false).filter(block -> block instanceof TrapDoorBlock).toList(),
+        BlockStateProperties.HORIZONTAL_FACING,
+        BlockStateProperties.HALF,
+        BlockStateProperties.OPEN,
+        BlockStateProperties.WATERLOGGED
+    );
 
 }

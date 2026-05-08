@@ -8,7 +8,6 @@ import spout.server.paper.api.packetmapping.block.automatic.AutomaticBlockMappin
 import spout.server.paper.api.packetmapping.block.automatic.SlabRequestBuilder;
 import spout.server.paper.api.packetmapping.block.automatic.ToBlockStateRequestBuilder;
 import spout.server.paper.api.packetmapping.block.automatic.ToBlockTypeRequestBuilder;
-import spout.server.paper.api.packetmapping.block.automatic.UsedStates;
 import spout.server.paper.impl.packetmapping.block.BlockMappingsComposeEventImpl;
 import java.util.function.Consumer;
 
@@ -24,48 +23,48 @@ public final class AutomaticBlockMappingsImpl implements AutomaticBlockMappings 
     }
 
     @Override
-    public <B extends FromBlockTypeRequestBuilder<UsedStates.Brushable> & ToBlockTypeRequestBuilder<UsedStates.Brushable>> void brushable(Consumer<? extends B> builderConsumer) {
-        FromToBlockTypeRequestBuilderImpl<UsedStates.Brushable> builder = new FromToBlockTypeRequestBuilderImpl<>();
+    public <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void brushable(Consumer<? extends B> builderConsumer) {
+        FromToBlockTypeRequestBuilderImpl builder = new FromToBlockTypeRequestBuilderImpl();
         builder.fallback(BlockType.SUSPICIOUS_SAND);
         ((Consumer) builderConsumer).accept(builder);
         new BrushableRequestProcessor(builder, this.event).process();
     }
 
     @Override
-    public <B extends FromBlockTypeRequestBuilder<UsedStates.Switch> & ToBlockTypeRequestBuilder<UsedStates.Switch>> void button(Consumer<? extends B> builderConsumer) {
-        FromToBlockTypeRequestBuilderImpl<UsedStates.Switch> builder = new FromToBlockTypeRequestBuilderImpl<>();
+    public <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void button(Consumer<? extends B> builderConsumer) {
+        FromToBlockTypeRequestBuilderImpl builder = new FromToBlockTypeRequestBuilderImpl();
         builder.fallback(BlockType.STONE_BUTTON);
         ((Consumer) builderConsumer).accept(builder);
         new ButtonRequestProcessor(builder, this.event).process();
     }
 
     @Override
-    public <B extends FromBlockTypeRequestBuilder<UsedStates.Door> & ToBlockTypeRequestBuilder<UsedStates.Door>> void door(Consumer<? extends B> builderConsumer) {
-        FromToBlockTypeRequestBuilderImpl<UsedStates.Door> builder = new FromToBlockTypeRequestBuilderImpl<>();
+    public <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void door(Consumer<? extends B> builderConsumer) {
+        FromToBlockTypeRequestBuilderImpl builder = new FromToBlockTypeRequestBuilderImpl();
         builder.fallback(BlockType.OAK_DOOR);
         ((Consumer) builderConsumer).accept(builder);
         new DoorRequestProcessor(builder, this.event).process();
     }
 
     @Override
-    public <B extends FromBlockTypeRequestBuilder<UsedStates.Gate> & ToBlockTypeRequestBuilder<UsedStates.Gate>> void fenceGate(Consumer<? extends B> builderConsumer) {
-        FromToBlockTypeRequestBuilderImpl<UsedStates.Gate> builder = new FromToBlockTypeRequestBuilderImpl<>();
+    public <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void fenceGate(Consumer<? extends B> builderConsumer) {
+        FromToBlockTypeRequestBuilderImpl builder = new FromToBlockTypeRequestBuilderImpl();
         builder.fallback(BlockType.OAK_FENCE_GATE);
         ((Consumer) builderConsumer).accept(builder);
         new FenceGateRequestProcessor(builder, this.event).process();
     }
 
     @Override
-    public <B extends FromBlockStateRequestBuilder<UsedStates.Single> & ToBlockStateRequestBuilder<UsedStates.Single>> void fullBlock(Consumer<? extends B> builderConsumer) {
-        FromToBlockStateRequestBuilderImpl<UsedStates.Single> builder = new FromToBlockStateRequestBuilderImpl<>();
+    public <B extends FromBlockStateRequestBuilder & ToBlockStateRequestBuilder> void fullBlock(Consumer<? extends B> builderConsumer) {
+        FromToBlockStateRequestBuilderImpl builder = new FromToBlockStateRequestBuilderImpl();
         builder.fallbackDefaultStateOf(BlockType.STONE);
         ((Consumer) builderConsumer).accept(builder);
         new FullBlockRequestProcessor(builder, this.event).process();
     }
 
     @Override
-    public <B extends FromBlockTypeRequestBuilder<UsedStates.Ladder> & ToBlockTypeRequestBuilder<UsedStates.Ladder>> void ladder(Consumer<? extends B> builderConsumer) {
-        FromToBlockTypeRequestBuilderImpl<UsedStates.Ladder> builder = new FromToBlockTypeRequestBuilderImpl<>();
+    public <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void ladder(Consumer<? extends B> builderConsumer) {
+        FromToBlockTypeRequestBuilderImpl builder = new FromToBlockTypeRequestBuilderImpl();
         builder.fallback(BlockType.LADDER);
         ((Consumer) builderConsumer).accept(builder);
         new LadderRequestProcessor(builder, this.event).process();
@@ -80,8 +79,8 @@ public final class AutomaticBlockMappingsImpl implements AutomaticBlockMappings 
     }
 
     @Override
-    public <B extends FromBlockTypeRequestBuilder<UsedStates.Powerable> & ToBlockTypeRequestBuilder<UsedStates.Powerable>> void pressurePlate(Consumer<? extends B> builderConsumer) {
-        FromToBlockTypeRequestBuilderImpl<UsedStates.Powerable> builder = new FromToBlockTypeRequestBuilderImpl<>();
+    public <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void pressurePlate(Consumer<? extends B> builderConsumer) {
+        FromToBlockTypeRequestBuilderImpl builder = new FromToBlockTypeRequestBuilderImpl();
         builder.fallback(BlockType.STONE_PRESSURE_PLATE);
         ((Consumer) builderConsumer).accept(builder);
         new PressurePlateRequestProcessor(builder, this.event).process();
@@ -96,16 +95,16 @@ public final class AutomaticBlockMappingsImpl implements AutomaticBlockMappings 
     }
 
     @Override
-    public <B extends FromBlockTypeRequestBuilder<UsedStates.Stairs> & ToBlockTypeRequestBuilder<UsedStates.Stairs>> void stairs(Consumer<? extends B> builderConsumer) {
-        FromToBlockTypeRequestBuilderImpl<UsedStates.Stairs> builder = new FromToBlockTypeRequestBuilderImpl<>();
+    public <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void stairs(Consumer<? extends B> builderConsumer) {
+        FromToBlockTypeRequestBuilderImpl builder = new FromToBlockTypeRequestBuilderImpl();
         builder.fallback(BlockType.STONE_STAIRS);
         ((Consumer) builderConsumer).accept(builder);
         new StairsRequestProcessor(builder, this.event).process();
     }
 
     @Override
-    public <B extends FromBlockTypeRequestBuilder<UsedStates.TrapDoor> & ToBlockTypeRequestBuilder<UsedStates.TrapDoor>> void trapdoor(Consumer<? extends B> builderConsumer) {
-        FromToBlockTypeRequestBuilderImpl<UsedStates.TrapDoor> builder = new FromToBlockTypeRequestBuilderImpl<>();
+    public <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void trapdoor(Consumer<? extends B> builderConsumer) {
+        FromToBlockTypeRequestBuilderImpl builder = new FromToBlockTypeRequestBuilderImpl();
         builder.fallback(BlockType.OAK_TRAPDOOR);
         ((Consumer) builderConsumer).accept(builder);
         new TrapdoorRequestProcessor(builder, this.event).process();

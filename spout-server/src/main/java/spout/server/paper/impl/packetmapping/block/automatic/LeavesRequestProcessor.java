@@ -1,98 +1,45 @@
 package spout.server.paper.impl.packetmapping.block.automatic;
 
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.TintedParticleLeavesBlock;
 import net.minecraft.world.level.block.UntintedParticleLeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import spout.server.paper.api.packetmapping.block.automatic.UsedStates;
 import spout.server.paper.impl.moredatadriven.minecraft.VanillaOnlyBlockRegistry;
 import spout.server.paper.impl.packetmapping.block.BlockMappingsComposeEventImpl;
-import org.jspecify.annotations.Nullable;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
  * A {@link RequestProcessor} for {@link AutomaticBlockMappingsImpl#leaves}.
  */
-public class LeavesRequestProcessor extends ArrayBlockStateClaimAttemptsRequestProcessor<UsedStates.Waterlogged, LeavesRequestBuilderImpl> {
+public class LeavesRequestProcessor extends FilledArrayResultRequestProcessor<LeavesRequestBuilderImpl, ArrayResultRequestProcessor.RequestBasedResult> {
 
     public LeavesRequestProcessor(LeavesRequestBuilderImpl request, BlockMappingsComposeEventImpl event) {
         super(request, event);
     }
 
     @Override
-    protected BlockState[][] createStatesToClaim() {
-        return this.request.tintedOrInfer() ? tintedClaimableStates() : untintedClaimableStates();
-    }
-
-    @Override
-    protected UsedStates.Waterlogged createUsedStates(BlockState @Nullable [] result) {
-        return new UsedStates.Waterlogged(result != null ? new UsedStatesInternalImpls.DirectWaterlogged<>(result[0], result[1], false, false) : new UsedStatesInternalImpls.DirectWaterlogged<>(this.request.fallbackNonWaterloggedState(), this.request.fallbackWaterloggedState(), true, true));
-    }
-
-    @Override
-    protected int mapFromStatesIndexToProxyStatesIndex(int fromStatesIndex, BlockState[] proxyStates) {
-        BlockState fromState = this.request.fromStates()[fromStatesIndex];
-        return fromState.getValue(BlockStateProperties.WATERLOGGED) ? 1 : 0;
-    }
-
-    @Override
-    protected int mapProxyStatesIndexToFromStatesIndex(int proxyStatesIndex, BlockState[] proxyStates) {
-        BlockState state = this.request.from.defaultBlockState();
-        if (proxyStatesIndex == 1) {
-            state = state.setValue(BlockStateProperties.WATERLOGGED, true);
-        }
-        return Arrays.asList(this.request.fromStates()).indexOf(state);
+    protected FilledArrayResultRequestProcessor<LeavesRequestBuilderImpl, ArrayResultRequestProcessor.RequestBasedResult>.FillPromise constructFillPromise(final FilledArrayResultRequestProcessor<LeavesRequestBuilderImpl, ArrayResultRequestProcessor.RequestBasedResult>.FillPromise kickoff) {
+        return kickoff
+            .then(this.request.tintedOrInfer() ? TINTED_PROMISE_GETTER.get(this) : UNTINTED_PROMISE_GETTER.get(this))
+            .then(new BlockFallbackFillPromise(this.request.fallback));
     }
 
     /**
-     * The return value of {@link #untintedClaimableStates()},
-     * or null if not initialized yet.
-     *
-     * <p>
-     * Every entry consists of two states: a non-waterlogged state and its corresponding waterlogged state.
-     * </p>
+     * A new {@link FillPromiseGetter} instance,
+     * for {@link BlockState}s that can be attempted to be claimed as tinted leaves proxies.
      */
-    private static BlockState @Nullable [][] untintedClaimableStates;
+    public static final FillPromiseGetter<LeavesRequestBuilderImpl, ArrayResultRequestProcessor.RequestBasedResult> TINTED_PROMISE_GETTER = claimStatesForAllStatesAtOnceForBlockStatesByDynamicProperties(
+        StreamSupport.stream(VanillaOnlyBlockRegistry.get().spliterator(), false).filter(block -> block instanceof TintedParticleLeavesBlock).toList(),
+        BlockStateProperties.WATERLOGGED
+    );
 
     /**
-     * The same as {@link #untintedClaimableStates}, but for tinted leaves.
+     * A new {@link FillPromiseGetter} instance,
+     * for {@link BlockState}s that can be attempted to be claimed as untinted leaves proxies.
      */
-    private static BlockState @Nullable [][] tintedClaimableStates;
-
-    /**
-     * @return The list of {@link BlockState}s that can be attempted to be claimed
-     * by this class, for untinted leaves.
-     * @see #untintedClaimableStates
-     */
-    private static BlockState[][] untintedClaimableStates() {
-        if (untintedClaimableStates == null) {
-            untintedClaimableStates = computeClaimableStates(StreamSupport.stream(VanillaOnlyBlockRegistry.get().spliterator(), false).filter(block -> block instanceof UntintedParticleLeavesBlock));
-        }
-        return untintedClaimableStates;
-    }
-
-    /**
-     * @return The list of {@link BlockState}s that can be attempted to be claimed
-     * by this class, for tinted leaves.
-     * @see #tintedClaimableStates
-     */
-    private static BlockState[][] tintedClaimableStates() {
-        if (tintedClaimableStates == null) {
-            tintedClaimableStates = computeClaimableStates(StreamSupport.stream(VanillaOnlyBlockRegistry.get().spliterator(), false).filter(block -> block instanceof TintedParticleLeavesBlock));
-        }
-        return tintedClaimableStates;
-    }
-
-    private static BlockState[][] computeClaimableStates(Stream<Block> blocks) {
-        return blocks
-            .flatMap(block -> block.getStateDefinition().getPossibleStates().stream().filter(state -> !state.getValue(BlockStateProperties.WATERLOGGED)))
-            .sorted(Comparator.comparing(state -> state == state.getBlock().defaultBlockState()))
-            .map(state -> new BlockState[]{state, state.setValue(BlockStateProperties.WATERLOGGED, true)})
-            .toArray(BlockState[][]::new);
-    }
+    public static final FillPromiseGetter<LeavesRequestBuilderImpl, ArrayResultRequestProcessor.RequestBasedResult> UNTINTED_PROMISE_GETTER = claimStatesForAllStatesAtOnceForBlockStatesByDynamicProperties(
+        StreamSupport.stream(VanillaOnlyBlockRegistry.get().spliterator(), false).filter(block -> block instanceof UntintedParticleLeavesBlock).toList(),
+        BlockStateProperties.WATERLOGGED
+    );
 
 }

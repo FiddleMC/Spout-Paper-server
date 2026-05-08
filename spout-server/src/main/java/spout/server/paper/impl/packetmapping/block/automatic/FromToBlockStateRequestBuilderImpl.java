@@ -1,20 +1,18 @@
 package spout.server.paper.impl.packetmapping.block.automatic;
 
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import spout.server.paper.api.packetmapping.block.automatic.FromBlockStateRequestBuilder;
 import spout.server.paper.api.packetmapping.block.automatic.ToBlockStateRequestBuilder;
-import spout.server.paper.api.packetmapping.block.automatic.UsedStates;
 import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 
 /**
  * A base implementation of {@link FromBlockStateRequestBuilder} and {@link ToBlockStateRequestBuilder}.
  */
-public class FromToBlockStateRequestBuilderImpl<US extends UsedStates> extends FromToItemRequestBuilderImpl<US> implements FromBlockStateRequestBuilder<US>, ToBlockStateRequestBuilder<US>, FromToBlockStatesRequestBuilder {
+public class FromToBlockStateRequestBuilderImpl extends FromToItemRequestBuilderImpl implements FromBlockStateRequestBuilder, ToBlockStateRequestBuilder, FromToBlockStatesRequestBuilder {
 
     public @Nullable BlockState from;
     public BlockState fallback;

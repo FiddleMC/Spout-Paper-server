@@ -4,13 +4,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import spout.server.paper.api.packetmapping.block.automatic.SlabRequestBuilder;
-import spout.server.paper.api.packetmapping.block.automatic.UsedStates;
 import org.jspecify.annotations.Nullable;
 
 /**
  * The implementation of {@link SlabRequestBuilder}.
  */
-public class SlabRequestBuilderImpl extends FromToBlockTypeRequestBuilderImpl<UsedStates.Slab> implements SlabRequestBuilder {
+public class SlabRequestBuilderImpl extends FromToBlockTypeRequestBuilderImpl implements SlabRequestBuilder {
 
     public @Nullable BlockState fullBlockFallback; // TODO use
 

@@ -1,10 +1,13 @@
 package spout.server.paper.api.resourcepack.content;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.data.BlockData;
 import org.jspecify.annotations.Nullable;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,6 +20,24 @@ public final class Blockstates {
 
     private Blockstates(JsonObject json) {
         this.json = json;
+    }
+
+    private @Nullable JsonArray getMultipartJsonOrNull() {
+        return this.json.getAsJsonArray("multipart");
+    }
+
+    private JsonArray getOrCreateMultipartJson() {
+        @Nullable JsonArray multipart = this.getMultipartJsonOrNull();
+        if (multipart == null) {
+            multipart = new JsonArray();
+            this.json.add("multipart", multipart);
+        }
+        return multipart;
+    }
+
+    public boolean hasMultipart() {
+        @Nullable JsonArray multipart = this.getMultipartJsonOrNull();
+        return multipart != null && !multipart.isEmpty();
     }
 
     private @Nullable JsonObject getVariantsJsonOrNull() {
@@ -46,6 +67,19 @@ public final class Blockstates {
             variants.add(variantKey, variantJson);
         }
         return variantJson;
+    }
+
+    public Map<String, JsonObject> getVariants() {
+        @Nullable JsonObject variants = this.getVariantsJsonOrNull();
+        if (variants == null) {
+            return Collections.emptyMap();
+        }
+        Map<String, JsonElement> variantsMap = variants.asMap();
+        Map<String, JsonObject> resultMap = new HashMap<>(variantsMap.size());
+        for (Map.Entry<String, JsonElement> entry : variantsMap.entrySet()) {
+            resultMap.put(entry.getKey(), entry.getValue().getAsJsonObject());
+        }
+        return resultMap;
     }
 
     public @Nullable JsonObject getVariant(String variantKey) {

@@ -11,7 +11,7 @@ import org.bukkit.block.BlockType;
  *     <li>{@link #fallback()} is {@link BlockType#STONE}.</li>
  * </ul>
  */
-public interface ToBlockTypeRequestBuilder<US extends UsedStates> extends ToItemRequestBuilder<US> {
+public interface ToBlockTypeRequestBuilder extends ToItemRequestBuilder {
 
     /**
      * @param fallback A block type that is the best fallback

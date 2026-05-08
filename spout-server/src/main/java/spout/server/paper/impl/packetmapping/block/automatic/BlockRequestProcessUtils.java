@@ -66,6 +66,12 @@ public final class BlockRequestProcessUtils {
         return state.getTags().filter(TOOL_TAGS::contains).toList();
     }
 
+    /**
+     * @return A comparison value between {@code proxyCandidate1} and {@code proxyCandidate2}:
+     * it is negative if {@code proxyCandidate1} is preferred and positive if {@code proxyCandidate2} is preferred
+     * (which causes sorting algorithms using {@link Comparator} to place preferred candidates toward the
+     * start of the array).
+     */
     public static int compareProxyCandidates(BlockState from, BlockState proxyCandidate1, BlockState proxyCandidate2) {
         // Filter validity
         int validityCompare = -Boolean.compare(
@@ -135,9 +141,9 @@ public final class BlockRequestProcessUtils {
     }
 
     public static final Comparator<BlockState> COMMONALITY_COMPARATOR = Comparator
-            .comparing(state -> VisualDuplicatesImpl.VisualDuplicateGroupImpl.getMoreCommonBlocks().contains(state.getBlock().indexInVanillaOnlyBlockRegistry));
+        .comparing(state -> VisualDuplicatesImpl.VisualDuplicateGroupImpl.getMoreCommonBlocks().contains(state.getBlock().indexInVanillaOnlyBlockRegistry));
 
     public static final Comparator<BlockState> DOUBLE_SLAB_COMPARATOR = Comparator
-            .comparing(state -> (boolean) state.getOptionalValue(BlockStateProperties.SLAB_TYPE).map(value -> value == SlabType.DOUBLE).orElse(false));
+        .comparing(state -> (boolean) state.getOptionalValue(BlockStateProperties.SLAB_TYPE).map(value -> value == SlabType.DOUBLE).orElse(false));
 
 }

@@ -1,27 +1,30 @@
 package spout.server.paper.impl.packetmapping.block.automatic;
 
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.state.BlockState;
 import spout.server.paper.api.packetmapping.block.automatic.ProxyStatesRequestBuilder;
 import spout.server.paper.api.packetmapping.block.automatic.UsedStates;
 import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * A base implementation of {@link ProxyStatesRequestBuilder}.
  */
-public abstract class ProxyStatesRequestBuilderImpl<US extends UsedStates> implements ProxyStatesRequestBuilder<US> {
+public abstract class ProxyStatesRequestBuilderImpl implements ProxyStatesRequestBuilder {
 
-    public boolean createFromToProxyMapping;
-    public boolean createProxyToVisualDuplicateMapping;
+    public boolean createFromToUsedStatesMappings;
+    public boolean createProxyToVisualDuplicateMappings;
     public boolean createItemMappings;
     public boolean createVanillaMappings;
     public boolean createResourcePackBlockstatesEntries;
-    public @Nullable List<Consumer<US>> resultConsumers;
+    public @Nullable List<Consumer<UsedStates>> resultConsumers;
 
     public ProxyStatesRequestBuilderImpl() {
-        this.createFromToProxyMapping = true;
-        this.createProxyToVisualDuplicateMapping = true;
+        this.createFromToUsedStatesMappings = true;
+        this.createProxyToVisualDuplicateMappings = true;
         this.createItemMappings = true;
         this.createVanillaMappings = true;
         this.createResourcePackBlockstatesEntries = true;
@@ -29,23 +32,23 @@ public abstract class ProxyStatesRequestBuilderImpl<US extends UsedStates> imple
     }
 
     @Override
-    public void createFromToProxyMapping(boolean createFromToProxyMapping) {
-        this.createFromToProxyMapping = createFromToProxyMapping;
+    public void createFromToUsedStatesMappings(boolean createFromToUsedStatesMappings) {
+        this.createFromToUsedStatesMappings = createFromToUsedStatesMappings;
     }
 
     @Override
-    public boolean createFromToProxyMapping() {
-        return this.createFromToProxyMapping;
+    public boolean createFromToUsedStatesMappings() {
+        return this.createFromToUsedStatesMappings;
     }
 
     @Override
-    public void createProxyToVisualDuplicateMapping(boolean createProxyToVisualDuplicateMapping) {
-        this.createProxyToVisualDuplicateMapping = createProxyToVisualDuplicateMapping;
+    public void createProxyToVisualDuplicateMappings(boolean createProxyToVisualDuplicateMappings) {
+        this.createProxyToVisualDuplicateMappings = createProxyToVisualDuplicateMappings;
     }
 
     @Override
-    public boolean createProxyToVisualDuplicateMapping() {
-        return this.createProxyToVisualDuplicateMapping;
+    public boolean createProxyToVisualDuplicateMappings() {
+        return this.createProxyToVisualDuplicateMappings;
     }
 
     @Override
@@ -79,11 +82,19 @@ public abstract class ProxyStatesRequestBuilderImpl<US extends UsedStates> imple
     }
 
     @Override
-    public void useResult(Consumer<US> resultConsumer) {
+    public void useResult(Consumer<UsedStates> resultConsumer) {
         if (this.resultConsumers == null) {
             this.resultConsumers = new ArrayList<>(1);
         }
         this.resultConsumers.add(resultConsumer);
+    }
+
+    public @Nullable Function<BlockState, @Nullable Item> getFromItemFunction() {
+        return null;
+    }
+
+    public @Nullable Function<BlockState, @Nullable Item> getToItemFunction() {
+        return null;
     }
 
     public void validateArguments() {

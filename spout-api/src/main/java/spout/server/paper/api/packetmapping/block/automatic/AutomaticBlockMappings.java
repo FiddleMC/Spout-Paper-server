@@ -51,7 +51,7 @@ public interface AutomaticBlockMappings {
      *     <li>{@link ToBlockTypeRequestBuilder#fallback()} is {@link BlockType#SUSPICIOUS_SAND}.</li>
      * </ul>
      */
-    <B extends FromBlockTypeRequestBuilder<UsedStates.Brushable> & ToBlockTypeRequestBuilder<UsedStates.Brushable>> void brushable(Consumer<? extends B> builderConsumer);
+    <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void brushable(Consumer<? extends B> builderConsumer);
 
     /**
      * Attempts to find a proxy state for every possible state of a button.
@@ -62,7 +62,7 @@ public interface AutomaticBlockMappings {
      *     <li>{@link ToBlockTypeRequestBuilder#fallback()} is {@link BlockType#STONE_BUTTON}.</li>
      * </ul>
      */
-    <B extends FromBlockTypeRequestBuilder<UsedStates.Switch> & ToBlockTypeRequestBuilder<UsedStates.Switch>> void button(Consumer<? extends B> builderConsumer);
+    <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void button(Consumer<? extends B> builderConsumer);
 
     /**
      * Attempts to find a proxy state for every possible state of a door.
@@ -73,7 +73,7 @@ public interface AutomaticBlockMappings {
      *     <li>{@link ToBlockTypeRequestBuilder#fallback()} is {@link BlockType#OAK_DOOR}.</li>
      * </ul>
      */
-    <B extends FromBlockTypeRequestBuilder<UsedStates.Door> & ToBlockTypeRequestBuilder<UsedStates.Door>> void door(Consumer<? extends B> builderConsumer);
+    <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void door(Consumer<? extends B> builderConsumer);
 
     /**
      * Attempts to find a proxy state for every possible state of a fence gate.
@@ -84,7 +84,7 @@ public interface AutomaticBlockMappings {
      *     <li>{@link ToBlockTypeRequestBuilder#fallback()} is {@link BlockType#OAK_FENCE_GATE}.</li>
      * </ul>
      */
-    <B extends FromBlockTypeRequestBuilder<UsedStates.Gate> & ToBlockTypeRequestBuilder<UsedStates.Gate>> void fenceGate(Consumer<? extends B> builderConsumer);
+    <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void fenceGate(Consumer<? extends B> builderConsumer);
 
     /**
      * Attempts to find a proxy state for a single full block state.
@@ -95,7 +95,7 @@ public interface AutomaticBlockMappings {
      *     <li>{@link ToBlockStateRequestBuilder#fallback()} is the default block state of {@link BlockType#STONE}.</li>
      * </ul>
      */
-    <B extends FromBlockStateRequestBuilder<UsedStates.Single> & ToBlockStateRequestBuilder<UsedStates.Single>> void fullBlock(Consumer<? extends B> builderConsumer);
+    <B extends FromBlockStateRequestBuilder & ToBlockStateRequestBuilder> void fullBlock(Consumer<? extends B> builderConsumer);
 
     /**
      * Attempts to find a proxy state for every possible state of a ladder.
@@ -106,7 +106,7 @@ public interface AutomaticBlockMappings {
      *     <li>{@link ToBlockTypeRequestBuilder#fallback()} is {@link BlockType#LADDER}.</li>
      * </ul>
      */
-    <B extends FromBlockTypeRequestBuilder<UsedStates.Ladder> & ToBlockTypeRequestBuilder<UsedStates.Ladder>> void ladder(Consumer<? extends B> builderConsumer);
+    <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void ladder(Consumer<? extends B> builderConsumer);
 
     /**
      * Attempts to find proxy states for 2 leaves block states:
@@ -135,7 +135,7 @@ public interface AutomaticBlockMappings {
      *     <li>{@link ToBlockTypeRequestBuilder#fallback()} is {@link BlockType#STONE_PRESSURE_PLATE}.</li>
      * </ul>
      */
-    <B extends FromBlockTypeRequestBuilder<UsedStates.Powerable> & ToBlockTypeRequestBuilder<UsedStates.Powerable>> void pressurePlate(Consumer<? extends B> builderConsumer);
+    <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void pressurePlate(Consumer<? extends B> builderConsumer);
 
     /**
      * Attempts to find a proxy state for every possible state of a slab.
@@ -157,7 +157,7 @@ public interface AutomaticBlockMappings {
      *     <li>{@link ToBlockTypeRequestBuilder#fallback()} is {@link BlockType#STONE_STAIRS}.</li>
      * </ul>
      */
-    <B extends FromBlockTypeRequestBuilder<UsedStates.Stairs> & ToBlockTypeRequestBuilder<UsedStates.Stairs>> void stairs(Consumer<? extends B> builderConsumer);
+    <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void stairs(Consumer<? extends B> builderConsumer);
 
     /**
      * Attempts to find a proxy state for every possible state of a trap door.
@@ -168,6 +168,6 @@ public interface AutomaticBlockMappings {
      *     <li>{@link ToBlockTypeRequestBuilder#fallback()} is {@link BlockType#OAK_TRAPDOOR}.</li>
      * </ul>
      */
-    <B extends FromBlockTypeRequestBuilder<UsedStates.TrapDoor> & ToBlockTypeRequestBuilder<UsedStates.TrapDoor>> void trapdoor(Consumer<? extends B> builderConsumer);
+    <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void trapdoor(Consumer<? extends B> builderConsumer);
 
 }

@@ -6,7 +6,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * A {@link ProxyStatesRequestBuilder} that maps to some server-side block state(s).
  */
-public interface ToItemRequestBuilder<US extends UsedStates> extends ProxyStatesRequestBuilder<US> {
+public interface ToItemRequestBuilder extends ProxyStatesRequestBuilder {
 
     /**
      * @param fallbackItem The item form of the fallback block state(s).

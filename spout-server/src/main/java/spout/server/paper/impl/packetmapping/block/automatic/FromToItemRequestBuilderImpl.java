@@ -9,14 +9,13 @@ import org.bukkit.craftbukkit.inventory.CraftItemType;
 import org.bukkit.inventory.ItemType;
 import spout.server.paper.api.packetmapping.block.automatic.FromItemRequestBuilder;
 import spout.server.paper.api.packetmapping.block.automatic.ToItemRequestBuilder;
-import spout.server.paper.api.packetmapping.block.automatic.UsedStates;
 import org.jspecify.annotations.Nullable;
 
 /**
  * A base implementation of {@link FromToBlockStateRequestBuilderImpl}
  * and {@link FromToBlockTypeRequestBuilderImpl}.
  */
-public abstract class FromToItemRequestBuilderImpl<US extends UsedStates> extends ProxyStatesRequestBuilderImpl<US> implements FromItemRequestBuilder<US>, ToItemRequestBuilder<US> {
+public abstract class FromToItemRequestBuilderImpl extends ProxyStatesRequestBuilderImpl implements FromItemRequestBuilder, ToItemRequestBuilder {
 
     public @Nullable Item fromItem;
     public @Nullable Item fallbackItem;

@@ -6,7 +6,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * A {@link ProxyStatesRequestBuilder} that maps a server-side {@linkplain BlockType block type}.
  */
-public interface FromBlockTypeRequestBuilder<US extends UsedStates> extends FromItemRequestBuilder<US> {
+public interface FromBlockTypeRequestBuilder extends FromItemRequestBuilder {
 
     /**
      * @param from The block type you are wanting to map.

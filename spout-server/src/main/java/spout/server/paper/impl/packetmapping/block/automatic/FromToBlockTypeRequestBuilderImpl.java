@@ -8,14 +8,13 @@ import org.bukkit.block.BlockType;
 import org.bukkit.craftbukkit.block.CraftBlockType;
 import spout.server.paper.api.packetmapping.block.automatic.FromBlockTypeRequestBuilder;
 import spout.server.paper.api.packetmapping.block.automatic.ToBlockTypeRequestBuilder;
-import spout.server.paper.api.packetmapping.block.automatic.UsedStates;
 import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 
 /**
  * A base implementation of {@link FromBlockTypeRequestBuilder} and {@link ToBlockTypeRequestBuilder}.
  */
-public class FromToBlockTypeRequestBuilderImpl<US extends UsedStates> extends FromToItemRequestBuilderImpl<US> implements FromBlockTypeRequestBuilder<US>, ToBlockTypeRequestBuilder<US>, FromToBlockStatesRequestBuilder {
+public class FromToBlockTypeRequestBuilderImpl extends FromToItemRequestBuilderImpl implements FromBlockTypeRequestBuilder, ToBlockTypeRequestBuilder, FromToBlockStatesRequestBuilder {
 
     public @Nullable Block from;
     public Block fallback;
@@ -75,7 +74,7 @@ public class FromToBlockTypeRequestBuilderImpl<US extends UsedStates> extends Fr
     public BlockState[] fromStates() {
         if (this.fromStates == null) {
             this.verifyFromNotNull();
-            this.fromStates = this.from.getStateDefinition().getPossibleStates().toArray(BlockState[]::new);
+            this.fromStates = this.from.getStateDefinition().getPossibleStatesArray();
         }
         return this.fromStates;
     }

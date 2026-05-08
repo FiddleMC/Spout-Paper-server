@@ -5,7 +5,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * A {@link ProxyStatesRequestBuilder} for {@link AutomaticBlockMappings#leaves}.
  */
-public interface LeavesRequestBuilder extends FromBlockTypeRequestBuilder<UsedStates.Waterlogged>, ToBlockTypeRequestBuilder<UsedStates.Waterlogged> {
+public interface LeavesRequestBuilder extends FromBlockTypeRequestBuilder, ToBlockTypeRequestBuilder {
 
     /**
      * @param tinted Whether to use proxy states that are tinted.

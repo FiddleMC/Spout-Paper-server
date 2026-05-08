@@ -19,7 +19,6 @@ import spout.server.paper.api.packetmapping.block.automatic.ProxyStatesRequestBu
 import spout.server.paper.api.packetmapping.block.automatic.ToBlockStateRequestBuilder;
 import spout.server.paper.api.packetmapping.block.automatic.ToBlockTypeRequestBuilder;
 import spout.common.branding.SpoutNamespace;
-import spout.server.paper.api.packetmapping.block.automatic.UsedStates;
 import spout.server.paper.impl.clientview.ClientViewImpl;
 import spout.server.paper.impl.moredatadriven.minecraft.BlockRegistry;
 import spout.server.paper.impl.packetmapping.block.BlockMappingsComposeEventImpl;
@@ -49,12 +48,12 @@ public final class BuiltInDataDrivenBlockMappingTypes {
 
     }
 
-    private static class SimpleBuiltInDataDrivenBlockMappingType<US extends UsedStates, B extends ProxyStatesRequestBuilder<US>> extends BuiltInDataDrivenBlockMappingType {
+    private static class SimpleBuiltInDataDrivenBlockMappingType<B extends ProxyStatesRequestBuilder> extends BuiltInDataDrivenBlockMappingType {
 
         private final BiConsumer<AutomaticBlockMappingsImpl, Consumer<? extends B>> mappingFunction;
-        private final BuilderConsumer<US, B> builderConsumer;
+        private final BuilderConsumer<B> builderConsumer;
 
-        SimpleBuiltInDataDrivenBlockMappingType(String key, BiConsumer<AutomaticBlockMappingsImpl, Consumer<? extends B>> mappingFunction, BuilderConsumer<US, B> builderConsumer) {
+        SimpleBuiltInDataDrivenBlockMappingType(String key, BiConsumer<AutomaticBlockMappingsImpl, Consumer<? extends B>> mappingFunction, BuilderConsumer<B> builderConsumer) {
             super(key);
             this.mappingFunction = mappingFunction;
             this.builderConsumer = builderConsumer;
@@ -65,7 +64,7 @@ public final class BuiltInDataDrivenBlockMappingTypes {
             this.mappingFunction.accept(event.automaticMappings(), builder -> this.builderConsumer.accept(builder, block, ops, mapLike));
         }
 
-        public interface BuilderConsumer<US extends UsedStates, B extends ProxyStatesRequestBuilder<US>> {
+        public interface BuilderConsumer<B extends ProxyStatesRequestBuilder> {
 
             <T> void accept(B builder, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike);
 
@@ -73,9 +72,9 @@ public final class BuiltInDataDrivenBlockMappingTypes {
 
     }
 
-    private static class MultiStateBuiltInDataDrivenBlockMappingType<US extends UsedStates, B extends FromBlockTypeRequestBuilder<US> & ToBlockTypeRequestBuilder<US>> extends SimpleBuiltInDataDrivenBlockMappingType<US, B> {
+    private static class MultiStateBuiltInDataDrivenBlockMappingType<B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> extends SimpleBuiltInDataDrivenBlockMappingType<B> {
 
-        MultiStateBuiltInDataDrivenBlockMappingType(String key, BiConsumer<AutomaticBlockMappingsImpl, Consumer<? extends B>> mappingFunction, @Nullable BuilderConsumer<US, B> additionalBuilderConsumer) {
+        MultiStateBuiltInDataDrivenBlockMappingType(String key, BiConsumer<AutomaticBlockMappingsImpl, Consumer<? extends B>> mappingFunction, @Nullable BuilderConsumer<B> additionalBuilderConsumer) {
             super(key, mappingFunction, new BuilderConsumer<>() {
 
                 @Override
@@ -114,7 +113,7 @@ public final class BuiltInDataDrivenBlockMappingTypes {
         }
     }
 
-    public static <T> @Nullable BlockData[] parseFromBlockState(FromBlockStateRequestBuilder<?> builder, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike, @Nullable BlockData @Nullable [] cached) {
+    public static <T> @Nullable BlockData[] parseFromBlockState(FromBlockStateRequestBuilder builder, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike, @Nullable BlockData @Nullable [] cached) {
         @Nullable BlockData parsed;
         if (cached != null) {
             parsed = cached[0];
@@ -135,7 +134,7 @@ public final class BuiltInDataDrivenBlockMappingTypes {
         return cached;
     }
 
-    public static <T> @Nullable BlockData[] parseToBlockState(ToBlockStateRequestBuilder<?> builder, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike, @Nullable BlockData @Nullable [] cached) {
+    public static <T> @Nullable BlockData[] parseToBlockState(ToBlockStateRequestBuilder builder, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike, @Nullable BlockData @Nullable [] cached) {
         @Nullable BlockData parsed;
         if (cached != null) {
             parsed = cached[0];
@@ -154,7 +153,7 @@ public final class BuiltInDataDrivenBlockMappingTypes {
         return cached;
     }
 
-    public static <T> @Nullable BlockType[] parseFromBlockType(FromBlockTypeRequestBuilder<?> builder, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike, @Nullable BlockType @Nullable [] cached) {
+    public static <T> @Nullable BlockType[] parseFromBlockType(FromBlockTypeRequestBuilder builder, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike, @Nullable BlockType @Nullable [] cached) {
         @Nullable BlockType parsed;
         if (cached != null) {
             parsed = cached[0];
@@ -173,7 +172,7 @@ public final class BuiltInDataDrivenBlockMappingTypes {
         return cached;
     }
 
-    public static <T> @Nullable BlockType[] parseToBlockType(ToBlockTypeRequestBuilder<?> builder, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike, @Nullable BlockType @Nullable [] cached) {
+    public static <T> @Nullable BlockType[] parseToBlockType(ToBlockTypeRequestBuilder builder, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike, @Nullable BlockType @Nullable [] cached) {
         @Nullable BlockType parsed;
         if (cached != null) {
             parsed = cached[0];
@@ -226,13 +225,13 @@ public final class BuiltInDataDrivenBlockMappingTypes {
 
     };
 
-    public static final DataDrivenBlockMappingType BRUSHABLE = new MultiStateBuiltInDataDrivenBlockMappingType<UsedStates.Brushable, FromToBlockTypeRequestBuilderImpl<UsedStates.Brushable>>("brushable", AutomaticBlockMappingsImpl::brushable);
+    public static final DataDrivenBlockMappingType BRUSHABLE = new MultiStateBuiltInDataDrivenBlockMappingType<FromToBlockTypeRequestBuilderImpl>("brushable", AutomaticBlockMappingsImpl::brushable);
 
-    public static final DataDrivenBlockMappingType BUTTON = new MultiStateBuiltInDataDrivenBlockMappingType<UsedStates.Switch, FromToBlockTypeRequestBuilderImpl<UsedStates.Switch>>("button", AutomaticBlockMappingsImpl::button);
+    public static final DataDrivenBlockMappingType BUTTON = new MultiStateBuiltInDataDrivenBlockMappingType<FromToBlockTypeRequestBuilderImpl>("button", AutomaticBlockMappingsImpl::button);
 
-    public static final DataDrivenBlockMappingType DOOR = new MultiStateBuiltInDataDrivenBlockMappingType<UsedStates.Door, FromToBlockTypeRequestBuilderImpl<UsedStates.Door>>("door", AutomaticBlockMappingsImpl::door);
+    public static final DataDrivenBlockMappingType DOOR = new MultiStateBuiltInDataDrivenBlockMappingType<FromToBlockTypeRequestBuilderImpl>("door", AutomaticBlockMappingsImpl::door);
 
-    public static final DataDrivenBlockMappingType FENCE_GATE = new MultiStateBuiltInDataDrivenBlockMappingType<UsedStates.Gate, FromToBlockTypeRequestBuilderImpl<UsedStates.Gate>>("fence_gate", AutomaticBlockMappingsImpl::fenceGate);
+    public static final DataDrivenBlockMappingType FENCE_GATE = new MultiStateBuiltInDataDrivenBlockMappingType<FromToBlockTypeRequestBuilderImpl>("fence_gate", AutomaticBlockMappingsImpl::fenceGate);
 
     public static final DataDrivenBlockMappingType FULL_BLOCK = new BuiltInDataDrivenBlockMappingType("full_block") {
 
@@ -250,9 +249,9 @@ public final class BuiltInDataDrivenBlockMappingTypes {
 
     };
 
-    public static final DataDrivenBlockMappingType LADDER = new MultiStateBuiltInDataDrivenBlockMappingType<UsedStates.Ladder, FromToBlockTypeRequestBuilderImpl<UsedStates.Ladder>>("ladder", AutomaticBlockMappingsImpl::ladder);
+    public static final DataDrivenBlockMappingType LADDER = new MultiStateBuiltInDataDrivenBlockMappingType<FromToBlockTypeRequestBuilderImpl>("ladder", AutomaticBlockMappingsImpl::ladder);
 
-    public static final DataDrivenBlockMappingType LEAVES = new MultiStateBuiltInDataDrivenBlockMappingType<UsedStates.Waterlogged, LeavesRequestBuilderImpl>("leaves", AutomaticBlockMappingsImpl::leaves, new SimpleBuiltInDataDrivenBlockMappingType.BuilderConsumer<>() {
+    public static final DataDrivenBlockMappingType LEAVES = new MultiStateBuiltInDataDrivenBlockMappingType<LeavesRequestBuilderImpl>("leaves", AutomaticBlockMappingsImpl::leaves, new SimpleBuiltInDataDrivenBlockMappingType.BuilderConsumer<>() {
 
         @Override
         public <T> void accept(LeavesRequestBuilderImpl builder, @Nullable Block block, DynamicOps<T> ops, MapLike<T> mapLike) {
@@ -264,7 +263,7 @@ public final class BuiltInDataDrivenBlockMappingTypes {
 
     });
 
-    public static final DataDrivenBlockMappingType PRESSURE_PLATE = new MultiStateBuiltInDataDrivenBlockMappingType<UsedStates.Powerable, FromToBlockTypeRequestBuilderImpl<UsedStates.Powerable>>("pressure_plate", AutomaticBlockMappingsImpl::pressurePlate);
+    public static final DataDrivenBlockMappingType PRESSURE_PLATE = new MultiStateBuiltInDataDrivenBlockMappingType<FromToBlockTypeRequestBuilderImpl>("pressure_plate", AutomaticBlockMappingsImpl::pressurePlate);
 
     public static final DataDrivenBlockMappingType SLAB = new BuiltInDataDrivenBlockMappingType("slab") {
 
@@ -282,9 +281,9 @@ public final class BuiltInDataDrivenBlockMappingTypes {
 
     };
 
-    public static final DataDrivenBlockMappingType STAIRS = new MultiStateBuiltInDataDrivenBlockMappingType<UsedStates.Stairs, FromToBlockTypeRequestBuilderImpl<UsedStates.Stairs>>("stairs", AutomaticBlockMappingsImpl::stairs);
+    public static final DataDrivenBlockMappingType STAIRS = new MultiStateBuiltInDataDrivenBlockMappingType<FromToBlockTypeRequestBuilderImpl>("stairs", AutomaticBlockMappingsImpl::stairs);
 
-    public static final DataDrivenBlockMappingType TRAPDOOR = new MultiStateBuiltInDataDrivenBlockMappingType<UsedStates.TrapDoor, FromToBlockTypeRequestBuilderImpl<UsedStates.TrapDoor>>("trapdoor", AutomaticBlockMappingsImpl::trapdoor);
+    public static final DataDrivenBlockMappingType TRAPDOOR = new MultiStateBuiltInDataDrivenBlockMappingType<FromToBlockTypeRequestBuilderImpl>("trapdoor", AutomaticBlockMappingsImpl::trapdoor);
 
     private static boolean bootstrapped = false;
 
