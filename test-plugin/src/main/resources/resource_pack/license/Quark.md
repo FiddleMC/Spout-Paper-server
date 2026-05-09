@@ -2,6 +2,8 @@ The following files (referenced relative to the parent folder of the folder this
 * `assets/quark/textures/block/azalea_door_bottom.png`
 * `assets/quark/textures/block/azalea_door_top.png`
 * `assets/quark/textures/block/azalea_ladder.png`
+* `assets/quark/textures/block/azalea_log.png`
+* `assets/quark/textures/block/azalea_log_top.png`
 * `assets/quark/textures/block/azalea_planks.png`
 * `assets/quark/textures/block/azalea_trapdoor.png`
 * `assets/quark/textures/block/birch_bookshelf.png`

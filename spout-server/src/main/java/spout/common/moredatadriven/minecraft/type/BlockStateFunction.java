@@ -146,7 +146,7 @@ public sealed interface BlockStateFunction<T> extends Function<BlockState, T> pe
                     }
                     Map<List<String>, A> precomputedValues = mapLike.entries().collect(Collectors.toMap(
                         entry -> BlockStateStringConversion.propertyKeyValuesFromString(ops.getStringValue(entry.getFirst()).getOrThrow()).stream().map(Pair::right).toList(),
-                        entry -> valueCodec.decode(ops, input).getOrThrow().getFirst())
+                        entry -> valueCodec.decode(ops, entry.getSecond()).getOrThrow().getFirst())
                     );
                     return DataResult.success(com.mojang.datafixers.util.Pair.of(new BlockStateFunction.ByProperties<>(propertyNames, precomputedValues), input));
                 });

@@ -95,6 +95,14 @@ public final class AutomaticBlockMappingsImpl implements AutomaticBlockMappings 
     }
 
     @Override
+    public <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void rotatedPillar(Consumer<? extends B> builderConsumer) {
+        FromToBlockTypeRequestBuilderImpl builder = new FromToBlockTypeRequestBuilderImpl();
+        builder.fallback(BlockType.QUARTZ_PILLAR);
+        ((Consumer) builderConsumer).accept(builder);
+        new RotatedPillarRequestProcessor(builder, this.event).process();
+    }
+
+    @Override
     public <B extends SlabRequestBuilder> void slab(Consumer<? extends B> builderConsumer) {
         SlabRequestBuilderImpl builder = new SlabRequestBuilderImpl();
         builder.fallback(BlockType.STONE_SLAB);

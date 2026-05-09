@@ -149,6 +149,17 @@ public interface AutomaticBlockMappings {
     <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void pressurePlate(Consumer<? extends B> builderConsumer);
 
     /**
+     * Attempts to find a proxy state for every possible state of a rotated pillar block.
+     *
+     * <p>
+     * By default:
+     * <ul>
+     *     <li>{@link ToBlockTypeRequestBuilder#fallback()} is {@link BlockType#QUARTZ_PILLAR}.</li>
+     * </ul>
+     */
+    <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void rotatedPillar(Consumer<? extends B> builderConsumer);
+
+    /**
      * Attempts to find a proxy state for every possible state of a slab.
      *
      * <p>

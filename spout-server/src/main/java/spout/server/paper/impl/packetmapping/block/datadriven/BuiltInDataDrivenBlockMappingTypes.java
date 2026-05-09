@@ -267,6 +267,8 @@ public final class BuiltInDataDrivenBlockMappingTypes {
 
     public static final DataDrivenBlockMappingType PRESSURE_PLATE = new MultiStateBuiltInDataDrivenBlockMappingType<FromToBlockTypeRequestBuilderImpl>("pressure_plate", AutomaticBlockMappingsImpl::pressurePlate);
 
+    public static final DataDrivenBlockMappingType ROTATED_PILLAR = new MultiStateBuiltInDataDrivenBlockMappingType<FromToBlockTypeRequestBuilderImpl>("rotated_pillar", AutomaticBlockMappingsImpl::rotatedPillar);
+
     public static final DataDrivenBlockMappingType SLAB = new BuiltInDataDrivenBlockMappingType("slab") {
 
         @Override
