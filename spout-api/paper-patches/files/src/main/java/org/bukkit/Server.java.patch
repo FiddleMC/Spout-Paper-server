@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2425,6 +_,22 @@
+@@ -2444,6 +_,22 @@
          }
          // Paper end
  

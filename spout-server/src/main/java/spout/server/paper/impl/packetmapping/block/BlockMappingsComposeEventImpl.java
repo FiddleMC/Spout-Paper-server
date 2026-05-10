@@ -40,7 +40,7 @@ public final class BlockMappingsComposeEventImpl extends AwarenessLevelPairKeyed
 
     @Override
     protected BlockData intToKeyPart(final int internalKey) {
-        return BlockStateRegistry.get().byId(internalKey).createCraftBlockData();
+        return BlockStateRegistry.get().byId(internalKey).asBlockData();
     }
 
     @Override

@@ -274,7 +274,7 @@ public abstract class BlockTypeRegistryEntryImpl implements BlockTypeRegistryEnt
 
         @Override
         public Builder instrument(Instrument instrument) {
-            return this.propertiesNMS(properties -> properties.instrument(CraftBlockData.toNMS(instrument, NoteBlockInstrument.class)));
+            return this.propertiesNMS(properties -> properties.instrument(CraftBlockData.toVanilla(instrument, NoteBlockInstrument.class)));
         }
 
         @Override

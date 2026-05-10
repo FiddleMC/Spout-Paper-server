@@ -1,14 +1,11 @@
 --- a/net/minecraft/world/level/block/FlowerPotBlock.java
 +++ b/net/minecraft/world/level/block/FlowerPotBlock.java
-@@ -30,15 +_,12 @@
+@@ -30,12 +_,12 @@
  import net.minecraft.world.phys.shapes.VoxelShape;
  
  public class FlowerPotBlock extends Block {
 -    public static final MapCodec<FlowerPotBlock> CODEC = RecordCodecBuilder.mapCodec(
--        instance -> instance.group(
--                BuiltInRegistries.BLOCK.byNameCodec().fieldOf("potted").forGetter(flowerPotBlock -> flowerPotBlock.potted), propertiesCodec()
--            )
--            .apply(instance, FlowerPotBlock::new)
+-        i -> i.group(BuiltInRegistries.BLOCK.byNameCodec().fieldOf("potted").forGetter(b -> b.potted), propertiesCodec()).apply(i, FlowerPotBlock::new)
 -    );
 -    private static final Map<Block, Block> POTTED_BY_CONTENT = Maps.newHashMap();
 +    // Spout start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late

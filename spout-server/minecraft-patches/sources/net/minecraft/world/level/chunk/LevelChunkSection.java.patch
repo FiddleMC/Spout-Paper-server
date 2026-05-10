@@ -1,10 +1,10 @@
 --- a/net/minecraft/world/level/chunk/LevelChunkSection.java
 +++ b/net/minecraft/world/level/chunk/LevelChunkSection.java
-@@ -284,6 +_,7 @@
-         buffer.writeShort(this.nonEmptyBlockCount);
-         this.states.write(buffer, chunkPacketInfo, chunkSectionIndex);
-         this.biomes.write(buffer, null, chunkSectionIndex);
+@@ -301,6 +_,7 @@
+         buffer.writeShort(this.fluidCount);
+         this.states.write(buffer, chunkPacketInfo, chunkSectionIndex); // Paper - Anti-Xray
+         this.biomes.write(buffer, null, chunkSectionIndex); // Paper - Anti-Xray
 +        chunkPacketInfo.sectionEndIndexes[chunkSectionIndex] = buffer.writerIndex(); // Spout - Block mapping - Chunk packets - Track section end indexes
-     // Paper end - Anti-Xray - Add chunk packet info
      }
  
+     public int getSerializedSize() {

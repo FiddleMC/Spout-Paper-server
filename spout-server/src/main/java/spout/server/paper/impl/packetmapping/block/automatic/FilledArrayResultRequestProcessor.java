@@ -188,7 +188,7 @@ public abstract class FilledArrayResultRequestProcessor<R extends ProxyStatesReq
                 this.claimableStates = this.claimableStatesFunction.apply(claimableStatesReference);
                 this.claimableStatesFunction = null;
                 // Compute the priority
-                BlockData[] blockStatesToClaimFor = this.resultIndicesToClaimFor != null ? Arrays.stream(this.resultIndicesToClaimFor).mapToObj(index -> FilledArrayResultRequestProcessor.this.result.fromStates()[index].createCraftBlockData()).toArray(BlockData[]::new) : Arrays.stream(FilledArrayResultRequestProcessor.this.result.fromStates()).map(BlockState::createCraftBlockData).toArray(BlockData[]::new);
+                BlockData[] blockStatesToClaimFor = this.resultIndicesToClaimFor != null ? Arrays.stream(this.resultIndicesToClaimFor).mapToObj(index -> FilledArrayResultRequestProcessor.this.result.fromStates()[index].asBlockData()).toArray(BlockData[]::new) : Arrays.stream(FilledArrayResultRequestProcessor.this.result.fromStates()).map(BlockState::asBlockData).toArray(BlockData[]::new);
                 this.priority = ClaimRequestPriority.forBlockStates(blockStatesToClaimFor);
             }
             FilledArrayResultRequestProcessor.this.attemptClaimOfProxyStates(claimableStates.get(this.claimIndex), this.priority, proxyStates -> {

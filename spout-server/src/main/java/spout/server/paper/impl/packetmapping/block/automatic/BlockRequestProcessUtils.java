@@ -63,7 +63,7 @@ public final class BlockRequestProcessUtils {
         if (!state.requiresCorrectToolForDrops()) {
             return Collections.emptyList();
         }
-        return state.getTags().filter(TOOL_TAGS::contains).toList();
+        return state.tags().filter(TOOL_TAGS::contains).toList();
     }
 
     /**

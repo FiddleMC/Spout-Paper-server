@@ -1,26 +1,26 @@
 --- a/net/minecraft/world/item/ItemStack.java
 +++ b/net/minecraft/world/item/ItemStack.java
-@@ -190,23 +_,72 @@
+@@ -175,23 +_,72 @@
          return new StreamCodec<RegistryFriendlyByteBuf, ItemStack>() {
              @Override
-             public ItemStack decode(RegistryFriendlyByteBuf buffer) {
+             public ItemStack decode(final RegistryFriendlyByteBuf input) {
 +                // Spout start - Item mapping - Reverse - Apply at ItemStack decoding
-+                return this.decode(buffer, true);
++                return this.decode(input, true);
 +            }
 +
-+            public ItemStack decode(RegistryFriendlyByteBuf buffer, boolean attemptReversing) {
++            public ItemStack decode(RegistryFriendlyByteBuf input, boolean attemptReversing) {
 +                // Spout end - Item mapping - Reverse - Apply at ItemStack decoding
-                 int varInt = buffer.readVarInt();
-                 if (varInt <= 0) {
+                 int count = input.readVarInt();
+                 if (count <= 0) {
                      return ItemStack.EMPTY;
                  } else {
-                     Holder<Item> holder = Item.STREAM_CODEC.decode(buffer);
-                     DataComponentPatch dataComponentPatch = codec.decode(buffer);
--                    return new ItemStack(holder, varInt, dataComponentPatch);
+                     Holder<Item> item = Item.STREAM_CODEC.decode(input);
+                     DataComponentPatch patch = patchCodec.decode(input);
+-                    return new ItemStack(item, count, patch);
 +                    // Spout start - Item mapping - Reverse - Apply at ItemStack decoding
-+                    ItemStack received = new ItemStack(holder, varInt, dataComponentPatch);
++                    ItemStack received = new ItemStack(item, count, patch);
 +                    if (attemptReversing) {
-+                        spout.server.paper.impl.packetmapping.item.reverse.@Nullable ItemMappingReverser itemMappingReverser = ((spout.server.paper.impl.clientview.ClientViewImpl) buffer.getClientViewOrFallback()).getItemMappingReverser();
++                        spout.server.paper.impl.packetmapping.item.reverse.@Nullable ItemMappingReverser itemMappingReverser = ((spout.server.paper.impl.clientview.ClientViewImpl) input.getClientViewOrFallback()).getItemMappingReverser();
 +                        if (itemMappingReverser != null) {
 +                            received = itemMappingReverser.reverseMappingIfPossible(received);
 +                        }
@@ -31,47 +31,47 @@
              }
  
              @Override
-             public void encode(RegistryFriendlyByteBuf buffer, ItemStack value) {
+             public void encode(final RegistryFriendlyByteBuf output, final ItemStack itemStack) {
 +                // Spout start - Item mapping - Implementation part - Apply at ItemStack encoding
-+                spout.server.paper.impl.packetmapping.item.ItemMappingFunctionContextImpl itemMappingContext = new spout.server.paper.impl.packetmapping.item.ItemMappingFunctionContextImpl(buffer.getClientViewOrFallback(), buffer.isEncodingItemFrameItem, buffer.isEncodingStonecutterRecipeResult);
-+                spout.server.paper.impl.packetmapping.item.reverse.@Nullable ItemMappingReverser itemMappingReverser = ((spout.server.paper.impl.clientview.ClientViewImpl) buffer.getClientViewOrFallback()).getItemMappingReverser();
-+                ItemStack mappedValue = spout.server.paper.impl.packetmapping.item.ItemMappingsImpl.get().apply(value, itemMappingContext);
++                spout.server.paper.impl.packetmapping.item.ItemMappingFunctionContextImpl itemMappingContext = new spout.server.paper.impl.packetmapping.item.ItemMappingFunctionContextImpl(output.getClientViewOrFallback(), output.isEncodingItemFrameItem, output.isEncodingStonecutterRecipeResult);
++                spout.server.paper.impl.packetmapping.item.reverse.@Nullable ItemMappingReverser itemMappingReverser = ((spout.server.paper.impl.clientview.ClientViewImpl) output.getClientViewOrFallback()).getItemMappingReverser();
++                ItemStack mappedValue = spout.server.paper.impl.packetmapping.item.ItemMappingsImpl.get().apply(itemStack, itemMappingContext);
 +                if (itemMappingReverser != null) {
 +                    long reservedId = -1;
-+                    if (mappedValue != value) {
-+                        reservedId = itemMappingReverser.reserveAndAttachId(mappedValue, value);
++                    if (mappedValue != itemStack) {
++                        reservedId = itemMappingReverser.reserveAndAttachId(mappedValue, itemStack);
 +                    }
-+                    int writerIndexBeforeEncoding = buffer.writerIndex();
-+                    this.encodeUnmapped(buffer, mappedValue);
-+                    int readerIndexBeforeReading = buffer.readerIndex();
-+                    buffer.readerIndex(writerIndexBeforeEncoding);
-+                    ItemStack actuallySent = this.decode(buffer, false);
-+                    buffer.readerIndex(readerIndexBeforeReading);
++                    int writerIndexBeforeEncoding = output.writerIndex();
++                    this.encodeUnmapped(output, mappedValue);
++                    int readerIndexBeforeReading = output.readerIndex();
++                    output.readerIndex(writerIndexBeforeEncoding);
++                    ItemStack actuallySent = this.decode(output, false);
++                    output.readerIndex(readerIndexBeforeReading);
 +                    if (!matches(actuallySent, mappedValue)) {
 +                        if (reservedId == -1) {
 +                            mappedValue = mappedValue.copy();
 +                        }
-+                        reservedId = itemMappingReverser.reserveAndAttachId(actuallySent, value);
++                        reservedId = itemMappingReverser.reserveAndAttachId(actuallySent, itemStack);
 +                        itemMappingReverser.attachId(mappedValue, reservedId);
-+                        buffer.writerIndex(writerIndexBeforeEncoding);
-+                        this.encodeUnmapped(buffer, mappedValue);
++                        output.writerIndex(writerIndexBeforeEncoding);
++                        this.encodeUnmapped(output, mappedValue);
 +                    }
 +                    if (reservedId != -1) {
 +                        itemMappingReverser.storeAsReversible(reservedId, actuallySent);
 +                    }
 +                } else {
-+                    this.encodeUnmapped(buffer, mappedValue);
++                    this.encodeUnmapped(output, mappedValue);
 +                }
 +            }
 +
-+            private void encodeUnmapped(RegistryFriendlyByteBuf buffer, ItemStack value) {
++            private void encodeUnmapped(RegistryFriendlyByteBuf output, ItemStack itemStack) {
 +                // Spout end - Item mapping - Implementation part - Apply at ItemStack encoding
-                 if (value.isEmpty() || value.getItem() == null) { // CraftBukkit - NPE fix itemstack.getItem()
-                     buffer.writeVarInt(0);
+                 if (itemStack.isEmpty() || itemStack.getItem() == null) { // CraftBukkit - NPE fix itemstack.getItem()
+                     output.writeVarInt(0);
                  } else {
-                     buffer.writeVarInt(io.papermc.paper.util.sanitizer.ItemComponentSanitizer.sanitizeCount(io.papermc.paper.util.sanitizer.ItemObfuscationSession.currentSession(), value, value.getCount())); // Paper - potentially sanitize count
--                    Item.STREAM_CODEC.encode(buffer, value.getItemHolder());
-+                    Item.UNMAPPED_STREAM_CODEC.encode(buffer, value.getItemHolder()); // Spout - Item mapping - Wrap codec for items - Use original for unmapped item stacks
+                     output.writeVarInt(io.papermc.paper.util.sanitizer.ItemComponentSanitizer.sanitizeCount(io.papermc.paper.util.sanitizer.ItemObfuscationSession.currentSession(), itemStack, itemStack.getCount())); // Paper - potentially sanitize count
+-                    Item.STREAM_CODEC.encode(output, itemStack.typeHolder());
++                    Item.UNMAPPED_STREAM_CODEC.encode(output, itemStack.typeHolder()); // Spout - Item mapping - Wrap codec for items - Use original for unmapped item stacks
                      // Paper start - adventure; conditionally render translatable components
                      boolean prev = net.minecraft.network.chat.ComponentSerialization.DONT_RENDER_TRANSLATABLES.get();
-                     try (final io.papermc.paper.util.SafeAutoClosable ignored = io.papermc.paper.util.sanitizer.ItemObfuscationSession.withContext(c -> c.itemStack(value))) { // pass the itemstack as context to the obfuscation session
+                     try (final io.papermc.paper.util.SafeAutoClosable ignored = io.papermc.paper.util.sanitizer.ItemObfuscationSession.withContext(c -> c.itemStack(itemStack))) { // pass the itemstack as context to the obfuscation session

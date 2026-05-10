@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import org.jspecify.annotations.Nullable;
+import spout.common.moredatadriven.minecraft.BlockEntityAlternativeValidation;
 import spout.common.moredatadriven.minecraft.type.ApplyLazyItemValues;
 
 /**

@@ -43,6 +43,17 @@ public final class MultiValuedDirectSectionContents extends DirectSectionContent
     }
 
     @Override
+    public short getFluidCount() {
+        short fluidCount = 0;
+        for (int blockIndex = 0; blockIndex < 4096; blockIndex++) {
+            if (isFluidStateId(this.blockIndexToBlockStateId[blockIndex])) {
+                fluidCount++;
+            }
+        }
+        return fluidCount;
+    }
+
+    @Override
     public byte getValidMinimalBitsPerEntry(byte globalPaletteBitsPerEntry) {
         return this.palette.getValidMinimalBitsPerEntry(globalPaletteBitsPerEntry);
     }

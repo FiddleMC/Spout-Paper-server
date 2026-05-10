@@ -1,6 +1,6 @@
 --- a/src/main/java/io/papermc/paper/configuration/PaperConfigurations.java
 +++ b/src/main/java/io/papermc/paper/configuration/PaperConfigurations.java
-@@ -86,16 +_,52 @@
+@@ -88,16 +_,52 @@
  import static io.leangen.geantyref.GenericTypeReflector.erase;
  
  @SuppressWarnings("Convert2Diamond")
@@ -58,7 +58,7 @@
              This is the global configuration file for Paper.
              As you can see, there's a lot to configure. Some options may impact gameplay, so use
              with caution, and make sure you know what each option does before configuring.
-@@ -109,9 +_,10 @@
+@@ -111,9 +_,10 @@
              File Reference: https://docs.papermc.io/paper/reference/global-configuration/
              Docs: https://docs.papermc.io/
              Discord: https://discord.gg/papermc
@@ -71,7 +71,7 @@
              This is the world defaults configuration file for Paper.
              As you can see, there's a lot to configure. Some options may impact gameplay, so use
              with caution, and make sure you know what each option does before configuring.
-@@ -126,8 +_,10 @@
+@@ -128,8 +_,10 @@
              Docs: https://docs.papermc.io/
              Discord: https://discord.gg/papermc
              Website: https://papermc.io/""";
@@ -83,13 +83,12 @@
          This is a world configuration file for Paper.
          This file may start empty but can be filled with settings to override ones in the %s/%s
          
-@@ -135,10 +_,18 @@
+@@ -137,9 +_,17 @@
          
-         World: %s (%s)""",
+         World: %s""",
          PaperConfigurations.CONFIG_DIR,
 -        PaperConfigurations.WORLD_DEFAULTS_CONFIG_FILE_NAME,
 +        this.defaultWorldConfigFileName, // Spout - Configuration - Use filename fields
-         map.require(WORLD_NAME),
          map.require(WORLD_KEY)
      );
 +    }
@@ -103,7 +102,7 @@
  
      private static final String MOVED_NOTICE = """
          The global and world default configuration files have moved to %s
-@@ -157,10 +_,46 @@
+@@ -158,10 +_,46 @@
      });
      public static final ContextKey<Supplier<SpigotWorldConfig>> SPIGOT_WORLD_CONFIG_CONTEXT_KEY = new ContextKey<>(new TypeToken<Supplier<SpigotWorldConfig>>() {}, "spigot world config");
  
@@ -154,7 +153,7 @@
  
      @Override
      protected int globalConfigVersion() {
-@@ -212,7 +_,7 @@
+@@ -213,7 +_,7 @@
  
      private static ConfigurationOptions defaultGlobalOptions(RegistryAccess registryAccess, ConfigurationOptions options) {
          return options
@@ -163,7 +162,7 @@
              .serializers(builder -> builder
                  .register(new ServerboundPacketClassSerializer())
                  .register(new RegistryValueSerializer<>(new TypeToken<DataComponentType<?>>() {}, registryAccess, Registries.DATA_COMPONENT_TYPE, false))
-@@ -220,11 +_,13 @@
+@@ -221,11 +_,13 @@
      }
  
      @Override
@@ -180,7 +179,7 @@
  
      @Override
      protected ContextMap.Builder createDefaultContextMap(final RegistryAccess registryAccess) {
-@@ -237,22 +_,17 @@
+@@ -238,22 +_,17 @@
          return super.createWorldObjectMapperFactoryBuilder(contextMap)
              .addNodeResolver(new RequiresSpigotInitialization.Factory(contextMap.require(SPIGOT_WORLD_CONFIG_CONTEXT_KEY).get()))
              .addNodeResolver(new NestedSetting.Factory())
@@ -201,27 +200,27 @@
          final RegistryAccess access = contextMap.require(REGISTRY_ACCESS);
          return super.createWorldConfigLoaderBuilder(contextMap)
              .defaultOptions(options -> options
--                .header(contextMap.require(WORLD_NAME).equals(WORLD_DEFAULTS) ? WORLD_DEFAULTS_HEADER : WORLD_HEADER.apply(contextMap))
-+                .header(contextMap.require(WORLD_NAME).equals(WORLD_DEFAULTS) ? this.getWorldDefaultsHeader() : this.getWorldHeader(contextMap)) // Spout - Configuration - Use PaperConfigurations as basis - Make headers overridable
+-                .header(contextMap.require(WORLD_KEY).equals(WORLD_DEFAULTS_KEY) ? WORLD_DEFAULTS_HEADER : WORLD_HEADER.apply(contextMap))
++                .header(contextMap.require(WORLD_KEY).equals(WORLD_DEFAULTS_KEY) ? this.getWorldDefaultsHeader() : this.getWorldHeader(contextMap)) // Spout - Configuration - Use PaperConfigurations as basis - Make headers overridable
                  .serializers(serializers -> serializers
                      .register(new TypeToken<Reference2IntMap<?>>() {}, new FastutilMapSerializer.SomethingToPrimitive<Reference2IntMap<?>>(Reference2IntOpenHashMap::new, Integer.TYPE))
                      .register(new TypeToken<Reference2LongMap<?>>() {}, new FastutilMapSerializer.SomethingToPrimitive<Reference2LongMap<?>>(Reference2LongOpenHashMap::new, Long.TYPE))
-@@ -314,12 +_,12 @@
+@@ -315,12 +_,12 @@
      }
  
      @Override
 -    public WorldConfiguration createWorldConfig(final ContextMap contextMap) {
 +    public W createWorldConfig(final ContextMap contextMap) { // Spout - Configuration - Use PaperConfigurations as basis - Make PaperConfigurations abstract
-         final String levelName = contextMap.require(WORLD_NAME);
+         final String levelKey = contextMap.require(WORLD_KEY).toString();
          try {
              return super.createWorldConfig(contextMap);
          } catch (IOException exception) {
--            throw new RuntimeException("Could not create world config for " + levelName, exception);
-+            throw new RuntimeException("Could not create " + this.softwareName + " world config for " + levelName, exception);  // Spout - Configuration - Use PaperConfigurations as basis - Store software name in field
+-            throw new RuntimeException("Could not create world config for " + levelKey, exception);
++            throw new RuntimeException("Could not create " + this.softwareName + " world config for " + levelKey, exception);  // Spout - Configuration - Use PaperConfigurations as basis - Store software name in field
          }
      }
  
-@@ -330,23 +_,23 @@
+@@ -331,23 +_,23 @@
  
      public void reloadConfigs(MinecraftServer server) {
          try {
@@ -247,7 +246,7 @@
  
 -    private static ContextMap createWorldContextMap(ServerLevel level) {
 +    public static ContextMap createWorldContextMap(ServerLevel level) { // Spout - Configuration - Use PaperConfigurations as basis - Make public
-         return createWorldContextMap(level.levelStorageAccess.levelDirectory.path(), level.serverLevelData.getLevelName(), level.dimension().identifier(), level.spigotConfig, level.registryAccess(), level.getGameRules());
+         return createWorldContextMap(level.getServer().storageSource.getDimensionPath(level.dimension()), level.dimension().identifier(), level.spigotConfig, level.registryAccess(), level.getGameRules());
      }
  
 @@ -361,7 +_,7 @@

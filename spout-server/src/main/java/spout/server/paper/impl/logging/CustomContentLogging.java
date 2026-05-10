@@ -4,6 +4,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import spout.server.paper.impl.configuration.SpoutGlobalConfiguration;
 import spout.server.paper.impl.moredatadriven.minecraft.BlockRegistry;
 import spout.server.paper.impl.moredatadriven.minecraft.BlockStateRegistry;
@@ -21,7 +22,8 @@ public final class CustomContentLogging {
         throw new UnsupportedOperationException();
     }
 
-    public static void logCustomContent(Logger logger) {
+    public static void logCustomContent() {
+        Logger logger = LoggerFactory.getLogger(CustomContentLogging.class);
         SpoutGlobalConfiguration.Logging.OnStartup onStartupLogging = SpoutGlobalConfiguration.get().logging.onStartup;
         if (onStartupLogging.blocks || onStartupLogging.blockStates || onStartupLogging.items) {
             // Do detailed logging
@@ -38,7 +40,7 @@ public final class CustomContentLogging {
                 boolean list = onStartupLogging.blockStates && !blockStates.isEmpty();
                 logger.info("Loaded {}custom block states{}", onStartupLogging.blockStateCount ? blockStates.size() + " " : "", list ? ":" : "");
                 if (list) {
-                    blockStates.stream().map(blockState -> "* " + blockState.createCraftBlockData().getAsString(false)).sorted().forEach(logger::info);
+                    blockStates.stream().map(blockState -> "* " + blockState.asBlockData().getAsString(false)).sorted().forEach(logger::info);
                 }
             }
             if (onStartupLogging.items || onStartupLogging.itemCount) {

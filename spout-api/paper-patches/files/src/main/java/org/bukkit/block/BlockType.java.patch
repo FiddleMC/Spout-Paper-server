@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/block/BlockType.java
 +++ b/src/main/java/org/bukkit/block/BlockType.java
-@@ -2744,4 +_,17 @@
+@@ -2748,4 +_,17 @@
       * @return false if this block never has collision, true if it <b>might</b> have collision
       */
      boolean hasCollision();

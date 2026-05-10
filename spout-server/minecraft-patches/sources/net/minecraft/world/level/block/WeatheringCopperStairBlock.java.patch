@@ -5,12 +5,12 @@
  
  public class WeatheringCopperStairBlock extends StairBlock implements WeatheringCopper {
 -    public static final MapCodec<WeatheringCopperStairBlock> CODEC = RecordCodecBuilder.mapCodec(
--        instance -> instance.group(
+-        i -> i.group(
 -                WeatheringCopper.WeatherState.CODEC.fieldOf("weathering_state").forGetter(ChangeOverTimeBlock::getAge),
--                BlockState.CODEC.fieldOf("base_state").forGetter(weatheringCopperStairBlock -> weatheringCopperStairBlock.baseState),
+-                BlockState.CODEC.fieldOf("base_state").forGetter(b -> b.baseState),
 -                propertiesCodec()
 -            )
--            .apply(instance, WeatheringCopperStairBlock::new)
+-            .apply(i, WeatheringCopperStairBlock::new)
 -    );
 +    public static final MapCodec<WeatheringCopperStairBlock> CODEC = spout.common.moredatadriven.minecraft.type.BlockCodecs.weatheringCopperStairCodec(WeatheringCopperStairBlock::new); // Spout - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
      private final WeatheringCopper.WeatherState weatherState;

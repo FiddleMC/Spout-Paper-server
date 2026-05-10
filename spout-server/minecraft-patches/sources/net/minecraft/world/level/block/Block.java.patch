@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/Block.java
 +++ b/net/minecraft/world/level/block/Block.java
-@@ -78,7 +_,7 @@
+@@ -79,7 +_,7 @@
      public static final MapCodec<Block> CODEC = simpleCodec(Block::new);
      private static final Logger LOGGER = LogUtils.getLogger();
      private final Holder.Reference<Block> builtInRegistryHolder = BuiltInRegistries.BLOCK.createIntrusiveHolder(this);
@@ -9,7 +9,7 @@
      private static final LoadingCache<VoxelShape, Boolean> SHAPE_FULL_BLOCK_CACHE = CacheBuilder.newBuilder()
          .maximumSize(512L)
          .weakKeys()
-@@ -144,6 +_,73 @@
+@@ -145,6 +_,73 @@
      protected MapCodec<? extends Block> codec() {
          return CODEC;
      }
@@ -81,5 +81,5 @@
 +    }
 +    // Spout end - More data-driven - Vanilla flag - Implementation part
  
-     public static int getId(@Nullable BlockState state) {
-         if (state == null) {
+     public static int getId(final @Nullable BlockState blockState) {
+         if (blockState == null) {

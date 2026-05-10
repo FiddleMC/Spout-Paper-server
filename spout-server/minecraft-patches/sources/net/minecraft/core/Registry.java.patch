@@ -17,4 +17,4 @@
 +
      Holder.Reference<T> createIntrusiveHolder(T value);
  
-     Optional<Holder.Reference<T>> get(int index);
+     Optional<Holder.Reference<T>> get(int id);

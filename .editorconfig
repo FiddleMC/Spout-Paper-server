@@ -1,3 +1,5 @@
+root = true
+
 [*]
 charset = utf-8
 end_of_line = lf
@@ -50,4 +52,4 @@ indent_size = 2
 indent_size = 2
 
 [paper-api/src/generated/java/**/*.java]
-ij_java_imports_layout = $*,|,*
+ij_java_imports_layout = $*, |, *

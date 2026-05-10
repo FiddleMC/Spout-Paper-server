@@ -1,0 +1,35 @@
+--- a/net/minecraft/world/item/ItemStackTemplate.java
++++ b/net/minecraft/world/item/ItemStackTemplate.java
+@@ -27,7 +_,7 @@
+             .apply(i, ItemStackTemplate::new)
+     );
+     public static final Codec<ItemStackTemplate> CODEC = Codec.withAlternative(MAP_CODEC.codec(), Item.CODEC, item -> new ItemStackTemplate(item.value()));
+-    public static final StreamCodec<RegistryFriendlyByteBuf, ItemStackTemplate> STREAM_CODEC = StreamCodec.composite(
++    public static final StreamCodec<RegistryFriendlyByteBuf, ItemStackTemplate> UNMAPPED_STREAM_CODEC = StreamCodec.composite( // Spout - Item mapping - Implementation part - Apply at ItemStack encoding
+         Item.STREAM_CODEC,
+         ItemStackTemplate::item,
+         ByteBufCodecs.VAR_INT,
+@@ -36,6 +_,23 @@
+         ItemStackTemplate::components,
+         ItemStackTemplate::new
+     );
++    // Spout start - Item mapping - Implementation part - Apply at ItemStack encoding
++    public static final StreamCodec<RegistryFriendlyByteBuf, ItemStackTemplate> STREAM_CODEC = new net.minecraft.network.codec.StreamCodec<>() {
++
++        @Override
++        public ItemStackTemplate decode(RegistryFriendlyByteBuf input) {
++            return UNMAPPED_STREAM_CODEC.decode(input);
++        }
++
++        @Override
++        public void encode(RegistryFriendlyByteBuf output, ItemStackTemplate value) {
++            spout.server.paper.impl.packetmapping.item.ItemMappingFunctionContextImpl itemMappingContext = new spout.server.paper.impl.packetmapping.item.ItemMappingFunctionContextImpl(output.getClientViewOrFallback(), output.isEncodingItemFrameItem, output.isEncodingStonecutterRecipeResult);
++            ItemStackTemplate mappedValue = spout.server.paper.impl.packetmapping.item.ItemMappingsImpl.get().apply(value, itemMappingContext);
++            UNMAPPED_STREAM_CODEC.encode(output, mappedValue);
++        }
++
++    };
++    // Spout end - Item mapping - Implementation part - Apply at ItemStack encoding
+ 
+     public ItemStackTemplate(final Item item) {
+         this(item.builtInRegistryHolder(), 1, DataComponentPatch.EMPTY);

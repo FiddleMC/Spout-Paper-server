@@ -23,7 +23,7 @@
      private static final int PUBLIC_KEY_SIZE = 256;
 @@ -84,6 +_,7 @@
  
-     public FriendlyByteBuf(ByteBuf source) {
+     public FriendlyByteBuf(final ByteBuf source) {
          this.adventure$locale = PacketEncoder.ADVENTURE_LOCALE.get(); // Paper - track player's locale for server-side translations
 +        this.clientViewProvider = spout.server.paper.impl.clientview.lookup.packethandling.ClientViewLookupThreadLocal.THREAD_LOCAL.get();// Spout - Client view - Lookup - During packet handling - Copy lookup from the thread-local variable to the write buffer
          this.source = source;

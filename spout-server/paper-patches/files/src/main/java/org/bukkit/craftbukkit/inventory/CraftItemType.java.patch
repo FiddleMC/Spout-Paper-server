@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemType.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemType.java
-@@ -261,4 +_,11 @@
+@@ -270,4 +_,11 @@
          return io.papermc.paper.datacomponent.PaperDataComponentType.minecraftToBukkit(this.getHandle().components().keySet());
      }
      // Paper end - data component API

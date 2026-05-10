@@ -13,7 +13,7 @@ public class BlockMappingBuilderNMSImpl extends AbstractBlockMappingBuilderImpl<
 
     @Override
     protected Collection<BlockData> getStatesToRegisterFor() {
-        return this.from.stream().map(state -> (BlockData) state.createCraftBlockData()).toList();
+        return this.from.stream().map(state -> (BlockData) state.asBlockData()).toList();
     }
 
     @Override

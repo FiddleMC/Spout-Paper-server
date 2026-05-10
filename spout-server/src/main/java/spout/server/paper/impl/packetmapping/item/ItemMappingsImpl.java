@@ -6,6 +6,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import org.bukkit.Registry;
 import org.bukkit.inventory.ItemType;
 import spout.server.paper.api.clientview.ClientView;
@@ -100,6 +101,23 @@ public final class ItemMappingsImpl extends ComposableImpl<ItemMappingsComposeEv
      * analogous to {@link WithContextSingleStepMappingPipeline#applyGenerically}.
      */
     public Item applyGenerically(Item data) {
+        return this.apply(data, this.createGenericContext());
+    }
+
+    /**
+     * Similar to {@link #apply}, but for a template.
+     *
+     * @return The mapped {@link ItemStackTemplate}, on a best-attempt basis.
+     */
+    public ItemStackTemplate apply(ItemStackTemplate data, ItemMappingFunctionContext context) {
+        return ItemStackTemplate.fromNonEmptyStack(apply(data.create(), context));
+    }
+
+    /**
+     * Convenience function for {@link #apply(ItemStackTemplate, ItemMappingFunctionContext)},
+     * analogous to {@link WithContextSingleStepMappingPipeline#applyGenerically}.
+     */
+    public ItemStackTemplate applyGenerically(ItemStackTemplate data) {
         return this.apply(data, this.createGenericContext());
     }
 

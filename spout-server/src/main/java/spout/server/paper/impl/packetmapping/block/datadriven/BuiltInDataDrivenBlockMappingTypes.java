@@ -122,7 +122,7 @@ public final class BuiltInDataDrivenBlockMappingTypes {
             if (input != null) {
                 parsed = Bukkit.createBlockData(ops.getStringValue(input).getOrThrow());
             } else if (block != null) {
-                parsed = block.defaultBlockState().createCraftBlockData();
+                parsed = block.defaultBlockState().asBlockData();
             } else {
                 parsed = null;
             }

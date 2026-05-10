@@ -6,7 +6,7 @@
  public class CoralBlock extends Block {
 -    public static final MapCodec<Block> DEAD_CORAL_FIELD = BuiltInRegistries.BLOCK.byNameCodec().fieldOf("dead");
 -    public static final MapCodec<CoralBlock> CODEC = RecordCodecBuilder.mapCodec(
--        instance -> instance.group(DEAD_CORAL_FIELD.forGetter(coralBlock -> coralBlock.deadBlock), propertiesCodec()).apply(instance, CoralBlock::new)
+-        i -> i.group(DEAD_CORAL_FIELD.forGetter(b -> b.deadBlock), propertiesCodec()).apply(i, CoralBlock::new)
 -    );
 -    private final Block deadBlock;
 +    // Spout start - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
@@ -14,5 +14,5 @@
 +    public Block deadBlock;
 +    // Spout end - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
  
-     public CoralBlock(Block deadBlock, BlockBehaviour.Properties properties) {
+     public CoralBlock(final Block deadBlock, final BlockBehaviour.Properties properties) {
          super(properties);

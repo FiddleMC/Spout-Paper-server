@@ -70,7 +70,7 @@ public abstract class RequestProcessor<R extends ProxyStatesRequestBuilderImpl> 
     // public static void a() {
     //
     //     if (priority == null) {
-    //         priority = ClaimRequestPriority.forBlockStates(Arrays.stream(from).map(state -> (BlockData) state.createCraftBlockData()).toArray(BlockData[]::new));
+    //         priority = ClaimRequestPriority.forBlockStates(Arrays.stream(from).map(state -> (BlockData) state.asBlockData()).toArray(BlockData[]::new));
     //     }
     //
     // }
@@ -198,7 +198,7 @@ public abstract class RequestProcessor<R extends ProxyStatesRequestBuilderImpl> 
                 toBlockItemStateProperties = null;
                 toItem = Items.BARRIER;
             } else {
-                toBlockItemStateProperties = new BlockItemStateProperties(targetState.createCraftBlockData().toStates(true));
+                toBlockItemStateProperties = new BlockItemStateProperties(targetState.asBlockData().toStates(true));
                 toItem = targetItem;
             }
             @Nullable Identifier toItemModel = (awarenessLevel == ClientView.AwarenessLevel.VANILLA || toItem == fromItem) ? null : fromItem.getDefaultInstance().getOrDefault(DataComponents.ITEM_MODEL, fromItem.keyInItemRegistry);

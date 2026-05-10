@@ -37,7 +37,7 @@ public class BlockMappingHandleNMSImpl extends SimpleWithContextMappingFunctionH
 
         @Override
         protected BlockData mapFromInternal(BlockState data) {
-            return data.createCraftBlockData();
+            return data.asBlockData();
         }
 
     }

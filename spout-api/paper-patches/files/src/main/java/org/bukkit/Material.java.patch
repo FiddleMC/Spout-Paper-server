@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/Material.java
 +++ b/src/main/java/org/bukkit/Material.java
-@@ -3078,16 +_,7 @@
+@@ -3080,16 +_,7 @@
      @Nullable
      public static Material matchMaterial(@NotNull final String name, boolean legacyName) {
          Preconditions.checkArgument(name != null, "Name cannot be null");

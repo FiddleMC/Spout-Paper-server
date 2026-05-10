@@ -1,6 +1,6 @@
 --- a/src/main/java/io/papermc/paper/configuration/Configurations.java
 +++ b/src/main/java/io/papermc/paper/configuration/Configurations.java
-@@ -95,7 +_,7 @@
+@@ -94,7 +_,7 @@
          };
      }
  

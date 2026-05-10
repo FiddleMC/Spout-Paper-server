@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/inventory/ItemType.java
 +++ b/src/main/java/org/bukkit/inventory/ItemType.java
-@@ -3345,4 +_,17 @@
+@@ -3348,4 +_,17 @@
       */
      @ApiStatus.Experimental
      @Unmodifiable Set<DataComponentType> getDefaultDataTypes();

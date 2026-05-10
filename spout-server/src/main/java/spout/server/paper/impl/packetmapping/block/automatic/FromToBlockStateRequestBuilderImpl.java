@@ -32,7 +32,7 @@ public class FromToBlockStateRequestBuilderImpl extends FromToItemRequestBuilder
 
     @Override
     public @Nullable BlockData from() {
-        return this.from == null ? null : this.from.createCraftBlockData();
+        return this.from == null ? null : this.from.asBlockData();
     }
 
     @Override
@@ -48,7 +48,7 @@ public class FromToBlockStateRequestBuilderImpl extends FromToItemRequestBuilder
 
     @Override
     public BlockData fallback() {
-        return this.fallback.createCraftBlockData();
+        return this.fallback.asBlockData();
     }
 
     @Override

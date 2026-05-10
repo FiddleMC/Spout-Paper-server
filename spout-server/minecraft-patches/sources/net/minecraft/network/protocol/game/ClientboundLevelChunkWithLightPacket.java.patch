@@ -1,6 +1,6 @@
 --- a/net/minecraft/network/protocol/game/ClientboundLevelChunkWithLightPacket.java
 +++ b/net/minecraft/network/protocol/game/ClientboundLevelChunkWithLightPacket.java
-@@ -18,31 +_,58 @@
+@@ -18,15 +_,39 @@
      private final int z;
      private final ClientboundLevelChunkPacketData chunkData;
      private final ClientboundLightUpdatePacketData lightData;
@@ -11,7 +11,6 @@
 +    // Spout end - Block mapping - Chunk packets - Call
      // Paper start - Async-Anti-Xray - Ready flag for the connection, add chunk packet info
      private volatile boolean ready;
- 
      @Override
      public boolean isReady() {
 -        return this.ready;
@@ -26,7 +25,7 @@
 +    }
 +
 +    private void startMappingBlocksIfNecessary() {
-+        if (this.startedMappingBlocks.compareAndExchange(false, true)) {
++        if (!this.startedMappingBlocks.compareAndExchange(false, true)) {
 +            this.spoutChunkPacketBlockMapper.applyMappings();
 +        }
      }
@@ -41,27 +40,36 @@
 +        }
 +        // Spout end - Block mapping - Chunk packets - Call after x-ray
      }
+     // Paper end - Async-Anti-Xray - Ready flag for the connection, add chunk packet info
  
-     @Deprecated @io.papermc.paper.annotation.DoNotUse
--    public ClientboundLevelChunkWithLightPacket(LevelChunk chunk, LevelLightEngine lightEngine, @Nullable BitSet skyLight, @Nullable BitSet blockLight) {
--        this(chunk, lightEngine, skyLight, blockLight, true);
-+    // Spout start - Block mapping - Chunk packets - Pass the player
-+    public ClientboundLevelChunkWithLightPacket(LevelChunk chunk, LevelLightEngine lightEngine, @Nullable BitSet skyLight, @Nullable BitSet blockLight, net.minecraft.server.level.ServerPlayer player) {
-+        this(chunk, lightEngine, skyLight, blockLight, true, player);
-+        // Spout end - Block mapping - Chunk packets - Pass the player
+@@ -36,9 +_,10 @@
+         final LevelLightEngine lightEngine,
+         final @Nullable BitSet skyChangedLightSectionFilter,
+         final @Nullable BitSet blockChangedLightSectionFilter
++        , final net.minecraft.server.level.ServerPlayer player // Spout start - Block mapping - Chunk packets - Pass the player
+     ) {
+         // Paper start - Anti-Xray
+-        this(levelChunk, lightEngine, skyChangedLightSectionFilter, blockChangedLightSectionFilter, true);
++        this(levelChunk, lightEngine, skyChangedLightSectionFilter, blockChangedLightSectionFilter, true, player); // Spout start - Block mapping - Chunk packets - Pass the player
      }
--    public ClientboundLevelChunkWithLightPacket(LevelChunk chunk, LevelLightEngine lightEngine, @Nullable BitSet skyLight, @Nullable BitSet blockLight, boolean modifyBlocks) {
-+    public ClientboundLevelChunkWithLightPacket(LevelChunk chunk, LevelLightEngine lightEngine, @Nullable BitSet skyLight, @Nullable BitSet blockLight, boolean modifyBlocks, net.minecraft.server.level.ServerPlayer player) { // Spout - Block mapping - Chunk packets - Pass the player
+     public ClientboundLevelChunkWithLightPacket(
+         final LevelChunk levelChunk,
+@@ -46,15 +_,17 @@
+         final @Nullable BitSet skyChangedLightSectionFilter,
+         final @Nullable BitSet blockChangedLightSectionFilter,
+         final boolean modifyBlocks
++        , final net.minecraft.server.level.ServerPlayer player // Spout start - Block mapping - Chunk packets - Pass the player
+     ) {
          // Paper end - Anti-Xray
-         ChunkPos pos = chunk.getPos();
-         this.x = pos.x;
-         this.z = pos.z;
--        io.papermc.paper.antixray.ChunkPacketInfo<net.minecraft.world.level.block.state.BlockState> chunkPacketInfo = modifyBlocks ? chunk.getLevel().chunkPacketBlockController.getChunkPacketInfo(this, chunk) : null; // Paper - Ant-Xray
-+        io.papermc.paper.antixray.ChunkPacketInfo<net.minecraft.world.level.block.state.BlockState> chunkPacketInfo = modifyBlocks ? chunk.getLevel().chunkPacketBlockController.getChunkPacketInfo(this, chunk) : new io.papermc.paper.antixray.ChunkPacketInfo<>(this, chunk); // Paper - Ant-Xray // Spout - Block mapping - Chunk packets - Always create ChunkPacketInfo
-         this.chunkData = new ClientboundLevelChunkPacketData(chunk, chunkPacketInfo); // Paper - Anti-Xray
-         this.lightData = new ClientboundLightUpdatePacketData(pos, lightEngine, skyLight, blockLight);
-         chunk.getLevel().chunkPacketBlockController.modifyBlocks(this, chunkPacketInfo); // Paper - Anti-Xray - Modify blocks
-+        this.spoutChunkPacketBlockMapper = new spout.server.paper.impl.packetmapping.block.chunk.ChunkPacketBlockMapper(this, chunk, player, chunkPacketInfo);
+         ChunkPos chunkPos = levelChunk.getPos();
+         this.x = chunkPos.x();
+         this.z = chunkPos.z();
+-        io.papermc.paper.antixray.ChunkPacketInfo<net.minecraft.world.level.block.state.BlockState> chunkPacketInfo = modifyBlocks ? levelChunk.getLevel().chunkPacketBlockController.getChunkPacketInfo(this, levelChunk) : null; // Paper - Anti-Xray
++        io.papermc.paper.antixray.ChunkPacketInfo<net.minecraft.world.level.block.state.BlockState> chunkPacketInfo = modifyBlocks ? levelChunk.getLevel().chunkPacketBlockController.getChunkPacketInfo(this, levelChunk) : new io.papermc.paper.antixray.ChunkPacketInfo<>(this, levelChunk); // Paper - Ant-Xray // Spout - Block mapping - Chunk packets - Always create ChunkPacketInfo
+         this.chunkData = new ClientboundLevelChunkPacketData(levelChunk, chunkPacketInfo); // Paper - Anti-Xray
+         this.lightData = new ClientboundLightUpdatePacketData(chunkPos, lightEngine, skyChangedLightSectionFilter, blockChangedLightSectionFilter);
+         levelChunk.getLevel().chunkPacketBlockController.modifyBlocks(this, chunkPacketInfo); // Paper - Anti-Xray - Modify blocks
++        this.spoutChunkPacketBlockMapper = new spout.server.paper.impl.packetmapping.block.chunk.ChunkPacketBlockMapper(this, levelChunk, player, chunkPacketInfo);
      }
  
-     private ClientboundLevelChunkWithLightPacket(RegistryFriendlyByteBuf buffer) {
+     private ClientboundLevelChunkWithLightPacket(final RegistryFriendlyByteBuf input) {

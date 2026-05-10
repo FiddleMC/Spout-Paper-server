@@ -1,9 +1,9 @@
 --- a/net/minecraft/world/item/Items.java
 +++ b/net/minecraft/world/item/Items.java
-@@ -2467,10 +_,13 @@
+@@ -2401,10 +_,13 @@
  
-     public static Item registerItem(ResourceKey<Item> key, Function<Item.Properties, Item> factory, Item.Properties properties) {
-         Item item = factory.apply(properties.setId(key));
+     private static Item registerItem(final ResourceKey<Item> key, final Function<Item.Properties, Item> itemFactory, final Item.Properties properties) {
+         Item item = itemFactory.apply(properties.setId(key));
 -        if (item instanceof BlockItem blockItem) {
 -            blockItem.registerBlocks(Item.BY_BLOCK, item);
 -        }

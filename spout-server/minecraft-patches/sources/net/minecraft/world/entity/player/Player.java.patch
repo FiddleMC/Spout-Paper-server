@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/player/Player.java
 +++ b/net/minecraft/world/entity/player/Player.java
-@@ -122,7 +_,7 @@
+@@ -124,7 +_,7 @@
  import net.minecraft.world.scores.Team;
  import org.jspecify.annotations.Nullable;
  
@@ -9,25 +9,25 @@
      public static final int MAX_HEALTH = 20;
      public static final int SLEEP_DURATION = 100;
      public static final int WAKE_UP_DURATION = 10;
-@@ -628,7 +_,13 @@
+@@ -619,7 +_,13 @@
      }
  
-     public float getDestroySpeed(BlockState state) {
--        float destroySpeed = this.inventory.getSelectedItem().getDestroySpeed(state);
+     public float getDestroySpeed(final BlockState state) {
+-        float speed = this.inventory.getSelectedItem().getDestroySpeed(state);
 +        // Spout start - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
 +        return this.getDestroySpeed(state, null);
 +    }
 +
 +    public float getDestroySpeed(BlockState state, @Nullable ItemStack heldItemStack) {
-+        float destroySpeed = (heldItemStack != null ? heldItemStack : this.inventory.getSelectedItem()).getDestroySpeed(state);
++        float speed = (heldItemStack != null ? heldItemStack : this.inventory.getSelectedItem()).getDestroySpeed(state);
 +        // Spout end - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
-         if (destroySpeed > 1.0F) {
-             destroySpeed += (float)this.getAttributeValue(Attributes.MINING_EFFICIENCY);
+         if (speed > 1.0F) {
+             speed += (float)this.getAttributeValue(Attributes.MINING_EFFICIENCY);
          }
-@@ -660,7 +_,13 @@
+@@ -651,7 +_,13 @@
      }
  
-     public boolean hasCorrectToolForDrops(BlockState state) {
+     public boolean hasCorrectToolForDrops(final BlockState state) {
 -        return !state.requiresCorrectToolForDrops() || this.inventory.getSelectedItem().isCorrectToolForDrops(state);
 +        // Spout start - Block mapping - Breaking speed - Implement calculating destroy progress with given held item stack
 +        return this.hasCorrectToolForDrops(state, null);

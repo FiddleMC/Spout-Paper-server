@@ -1,19 +1,19 @@
 --- a/net/minecraft/world/level/block/MultifaceBlock.java
 +++ b/net/minecraft/world/level/block/MultifaceBlock.java
-@@ -240,7 +_,7 @@
-         return blockState;
+@@ -242,7 +_,7 @@
+         return newState;
      }
  
--    public static boolean hasFace(BlockState state, Direction direction) {
-+    public static boolean hasFace(spout.common.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap state, Direction direction) { // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make block state function properties serializable
-         BooleanProperty faceProperty = getFaceProperty(direction);
-         return state.getValueOrElse(faceProperty, false);
+-    public static boolean hasFace(final BlockState state, final Direction faceDirection) {
++    public static boolean hasFace(spout.common.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap state, Direction faceDirection) { // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make block state function properties serializable
+         BooleanProperty property = getFaceProperty(faceDirection);
+         return state.getValueOrElse(property, false);
      }
-@@ -275,7 +_,7 @@
-         return blockState;
+@@ -279,7 +_,7 @@
+         return state;
      }
  
--    protected static boolean hasAnyFace(BlockState state) {
+-    protected static boolean hasAnyFace(final BlockState state) {
 +    protected static boolean hasAnyFace(spout.common.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap state) { // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make block state function properties serializable
          for (Direction direction : DIRECTIONS) {
              if (hasFace(state, direction)) {

@@ -11,6 +11,6 @@
 +    }
 +    // Spout end - More data-driven - Minecraft registries - Types - Add codec for items
 +
-     public EggItem(Item.Properties properties) {
+     public EggItem(final Item.Properties properties) {
          super(properties);
      }

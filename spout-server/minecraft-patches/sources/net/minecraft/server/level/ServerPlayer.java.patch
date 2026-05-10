@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerPlayer.java
 +++ b/net/minecraft/server/level/ServerPlayer.java
-@@ -226,6 +_,10 @@
+@@ -228,6 +_,10 @@
      private static final boolean DEFAULT_SEEN_CREDITS = false;
      private static final boolean DEFAULT_SPAWN_EXTRA_PARTICLES_ON_FALL = false;
      public ServerGamePacketListenerImpl connection;
@@ -11,34 +11,46 @@
      private final MinecraftServer server;
      public final ServerPlayerGameMode gameMode;
      private final PlayerAdvancements advancements;
-@@ -272,12 +_,14 @@
+@@ -274,20 +_,20 @@
      private long timeEntitySatOnShoulder;
      private CompoundTag shoulderEntityLeft = new CompoundTag();
      private CompoundTag shoulderEntityRight = new CompoundTag();
 -    public final ContainerSynchronizer containerSynchronizer = new ContainerSynchronizer() {
--        private final LoadingCache<TypedDataComponent<?>, Integer> cache = CacheBuilder.newBuilder()
--            .maximumSize(256L)
+-        private final LoadingCache<TypedDataComponent<?>, Integer> cache;
+-
+-        {
+-            Objects.requireNonNull(ServerPlayer.this);
+-            this.cache = CacheBuilder.newBuilder()
+-                .maximumSize(256L)
 +    // Spout start - Item mapping - Reverse - Reverse-map hashed item stacks - Expose hashing mechanism
 +    public static LoadingCache<TypedDataComponent<?>, Integer> createHashingCache(net.minecraft.core.RegistryAccess registryAccess, long maximumSize) {
 +        return CacheBuilder.newBuilder()
 +            .maximumSize(maximumSize)
 +            // Spout end - Item mapping - Reverse - Reverse-map hashed item stacks - Expose hashing mechanism
-             .build(
-                 new CacheLoader<TypedDataComponent<?>, Integer>() {
--                    private final DynamicOps<HashCode> registryHashOps = ServerPlayer.this.registryAccess().createSerializationContext(HashOps.CRC32C_INSTANCE);
-+                    private final DynamicOps<HashCode> registryHashOps = registryAccess.createSerializationContext(HashOps.CRC32C_INSTANCE); // Spout - Item mapping - Reverse - Reverse-map hashed item stacks - Expose hashing mechanism
+                 .build(
+                     new CacheLoader<TypedDataComponent<?>, Integer>() {
+                         private final DynamicOps<HashCode> registryHashOps;
  
-                     @Override
-                     public Integer load(TypedDataComponent<?> component) {
-@@ -287,6 +_,11 @@
+                         {
+-                            Objects.requireNonNull(ServerPlayer.this.registryAccess());
+-                            this.registryHashOps = ServerPlayer.this.registryAccess().createSerializationContext(HashOps.CRC32C_INSTANCE);
++                            // Spout start - Item mapping - Reverse - Reverse-map hashed item stacks - Expose hashing mechanism
++                            Objects.requireNonNull(registryAccess);
++                            registryHashOps = registryAccess.createSerializationContext(HashOps.CRC32C_INSTANCE);
++                            // Spout end - Item mapping - Reverse - Reverse-map hashed item stacks - Expose hashing mechanism
+                         }
+ 
+                         @Override
+@@ -298,7 +_,11 @@
+                         }
                      }
-                 }
-             );
+                 );
+-        }
 +        // Spout start - Item mapping - Reverse - Reverse-map hashed item stacks - Expose hashing mechanism
 +    }
 +    public final ContainerSynchronizer containerSynchronizer = new ContainerSynchronizer() {
-+        private final LoadingCache<TypedDataComponent<?>, Integer> cache = createHashingCache(ServerPlayer.this.registryAccess(), 256L);
++        private final LoadingCache<TypedDataComponent<?>, Integer> cache = ServerPlayer.this.createHashingCache(ServerPlayer.this.registryAccess(), 256L);
 +        // Spout end - Item mapping - Reverse - Reverse-map hashed item stacks - Expose hashing mechanism
  
          @Override
-         public void sendInitialData(AbstractContainerMenu container, List<ItemStack> items, ItemStack carried, int[] remoteDataSlots) {
+         public void sendInitialData(final AbstractContainerMenu container, final List<ItemStack> slotItems, final ItemStack carriedItem, final int[] dataSlots) {

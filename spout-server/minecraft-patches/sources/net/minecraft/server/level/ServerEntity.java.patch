@@ -2,31 +2,31 @@
 +++ b/net/minecraft/server/level/ServerEntity.java
 @@ -330,12 +_,14 @@
          if (this.entity instanceof LivingEntity livingEntity) {
-             Collection<AttributeInstance> syncableAttributes = livingEntity.getAttributes().getSyncableAttributes();
+             Collection<AttributeInstance> attributes = livingEntity.getAttributes().getSyncableAttributes();
              // CraftBukkit start - If sending own attributes send scaled health instead of current maximum health
 +            @Nullable ServerPlayer selfPlayer = null; // Spout - Block mapping - Breaking speed - Pass self player to attributes packet
              if (this.entity.getId() == player.getId()) {
 +                selfPlayer = player; // Spout - Block mapping - Breaking speed - Pass self player to attributes packet
-                 ((ServerPlayer) this.entity).getBukkitEntity().injectScaledMaxHealth(syncableAttributes, false);
+                 ((ServerPlayer) this.entity).getBukkitEntity().injectScaledMaxHealth(attributes, false);
              }
              // CraftBukkit end
-             if (!syncableAttributes.isEmpty()) {
--                consumer.accept(new ClientboundUpdateAttributesPacket(this.entity.getId(), syncableAttributes));
-+                consumer.accept(new ClientboundUpdateAttributesPacket(this.entity.getId(), syncableAttributes, selfPlayer)); // Spout - Block mapping - Breaking speed - Pass self player to attributes packet
+             if (!attributes.isEmpty()) {
+-                broadcast.accept(new ClientboundUpdateAttributesPacket(this.entity.getId(), attributes));
++                broadcast.accept(new ClientboundUpdateAttributesPacket(this.entity.getId(), attributes, selfPlayer)); // Spout - Block mapping - Breaking speed - Pass self player to attributes packet
              }
          }
  
 @@ -404,7 +_,12 @@
-                     serverPlayer.getBukkitEntity().injectScaledMaxHealth(attributesToSync, false);
+                     serverPlayer.getBukkitEntity().injectScaledMaxHealth(attributes, false);
                  }
                  // CraftBukkit end
--                this.synchronizer.sendToTrackingPlayersAndSelf(new ClientboundUpdateAttributesPacket(this.entity.getId(), attributesToSync));
+-                this.synchronizer.sendToTrackingPlayersAndSelf(new ClientboundUpdateAttributesPacket(this.entity.getId(), attributes));
 +                // Spout start - Block mapping - Breaking speed - Pass self player to attributes packet
-+                this.synchronizer.sendToTrackingPlayers(new ClientboundUpdateAttributesPacket(this.entity.getId(), attributesToSync, null));
++                this.synchronizer.sendToTrackingPlayers(new ClientboundUpdateAttributesPacket(this.entity.getId(), attributes, null));
 +                if (this.entity instanceof ServerPlayer serverPlayer) {
-+                    serverPlayer.connection.send(new net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket(this.entity.getId(), attributesToSync, serverPlayer));
++                    serverPlayer.connection.send(new net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket(this.entity.getId(), attributes, serverPlayer));
 +                }
 +                // Spout ebd - Block mapping - Breaking speed - Pass self player to attributes packet
              }
  
-             attributesToSync.clear();
+             attributes.clear();

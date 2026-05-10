@@ -32,6 +32,11 @@ public final class SingleValuedDirectSectionContents extends DirectSectionConten
     }
 
     @Override
+    public short getFluidCount() {
+        return isFluidStateId(this.blockStateId) ? (short) 4096 : 0;
+    }
+
+    @Override
     public byte getValidMinimalBitsPerEntry(byte globalPaletteBitsPerEntry) {
         return 0;
     }

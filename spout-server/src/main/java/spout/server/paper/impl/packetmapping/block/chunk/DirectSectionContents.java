@@ -2,6 +2,7 @@ package spout.server.paper.impl.packetmapping.block.chunk;
 
 import io.papermc.paper.antixray.ChunkPacketInfo;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import spout.server.paper.impl.moredatadriven.minecraft.BlockStateRegistry;
 import java.util.Arrays;
 
@@ -22,6 +23,11 @@ public abstract class DirectSectionContents implements SectionContents {
     public abstract short getNonEmptyBlockCount();
 
     /**
+     * @return The fluid count for this section contents.
+     */
+    public abstract short getFluidCount();
+
+    /**
      * @return A valid but minimal bits per entry for these contents.
      */
     public abstract byte getValidMinimalBitsPerEntry(byte globalPaletteBitsPerEntry);
@@ -33,16 +39,25 @@ public abstract class DirectSectionContents implements SectionContents {
     public abstract int getPalettedContainerSizeInBytes(byte bitsPerEntry);
 
     private static final int[] AIR_BLOCK_STATE_IDS;
+    private static final int[] FLUID_STATE_IDS;
 
     static {
-        int[] blockStateIds = new int[BlockStateRegistry.get().size()];
-        int[] count = {0}; // Array to make effectively final
+        int[] airBlockStateIds = new int[BlockStateRegistry.get().size()];
+        int[] fluidStateIds = new int[BlockStateRegistry.get().size()];
+        int[] airBlockCount = {0}; // Array to make effectively final
+        int[] fluidCount = {0}; // Array to make effectively final
         BlockStateRegistry.get().forEach(blockState -> {
             if (blockState.isAir()) {
-                blockStateIds[count[0]++] = blockState.indexInBlockStateRegistry;
+                airBlockStateIds[airBlockCount[0]++] = blockState.indexInBlockStateRegistry;
+            } else {
+                FluidState fluid = blockState.getFluidState();
+                if (!fluid.isEmpty()) {
+                    fluidStateIds[fluidCount[0]++] = blockState.indexInBlockStateRegistry;
+                }
             }
         });
-        AIR_BLOCK_STATE_IDS = Arrays.copyOf(blockStateIds, count[0]);
+        AIR_BLOCK_STATE_IDS = Arrays.copyOf(airBlockStateIds, fluidCount[0]);
+        FLUID_STATE_IDS = Arrays.copyOf(fluidStateIds, fluidCount[0]);
     }
 
     protected static boolean isNonEmptyBlockStateId(int blockStateId) {
@@ -52,6 +67,15 @@ public abstract class DirectSectionContents implements SectionContents {
             }
         }
         return true;
+    }
+
+    protected static boolean isFluidStateId(int blockStateId) {
+        for (int fluidStateId : FLUID_STATE_IDS) {
+            if (blockStateId == fluidStateId) {
+                return true;
+            }
+        }
+        return false;
     }
 
     protected void writeAsSingleValuedPalettedContainer(ChunkPacketBlockMapperWriter writer) {

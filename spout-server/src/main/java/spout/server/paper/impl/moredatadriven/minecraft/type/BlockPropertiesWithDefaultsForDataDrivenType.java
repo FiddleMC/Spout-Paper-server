@@ -51,7 +51,6 @@ public final class BlockPropertiesWithDefaultsForDataDrivenType {
                 properties.pushReaction(PushReaction.DESTROY);
             });
             addInitializer("door", properties -> {
-                properties.chunkSectionLayer = ChunkSectionLayer.CUTOUT;
                 properties.noOcclusion();
                 properties.pushReaction(PushReaction.DESTROY);
             });
@@ -59,7 +58,6 @@ public final class BlockPropertiesWithDefaultsForDataDrivenType {
                 properties.forceSolidOn();
             });
             addInitializer("ladder", properties -> {
-                properties.chunkSectionLayer = ChunkSectionLayer.CUTOUT;
                 properties.sound(SoundType.LADDER);
                 properties.strength(0.4f);
                 properties.noOcclusion();
@@ -69,7 +67,6 @@ public final class BlockPropertiesWithDefaultsForDataDrivenType {
                 getInitializer("base_pressure_plate").accept(properties);
             });
             addInitializer("trapdoor", properties -> {
-                properties.chunkSectionLayer = ChunkSectionLayer.CUTOUT;
                 properties.noOcclusion();
                 properties.isValidSpawn(Blocks::never);
             });

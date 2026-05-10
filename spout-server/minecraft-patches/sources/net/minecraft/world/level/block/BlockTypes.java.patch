@@ -8,7 +8,7 @@
 +    // Spout start - More data-driven - Minecraft registries - Types - Adapt existing block type registry
 +    public static final MapCodec<Block> CODEC = BuiltInRegistries.BLOCK_TYPE.byNameCodec().dispatchMap(block -> spout.server.paper.impl.moredatadriven.minecraft.type.WrappedBlockCodecImpl.wrap(block.codec()), spout.server.paper.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec::getExtendedCodec);
  
--    public static MapCodec<? extends Block> bootstrap(Registry<MapCodec<? extends Block>> registry) {
+-    public static MapCodec<? extends Block> bootstrap(final Registry<MapCodec<? extends Block>> registry) {
 +    public static spout.server.paper.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<?> bootstrap(Registry<spout.server.paper.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<? extends Block>> registry) {
 +        class Registry {
 +            static spout.server.paper.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<?> register(net.minecraft.core.Registry<spout.server.paper.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<? extends Block>> registry, String name, MapCodec<? extends Block> value) {

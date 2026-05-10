@@ -5,8 +5,8 @@
  
  public class InfestedRotatedPillarBlock extends InfestedBlock {
 -    public static final MapCodec<InfestedRotatedPillarBlock> CODEC = RecordCodecBuilder.mapCodec(
--        instance -> instance.group(BuiltInRegistries.BLOCK.byNameCodec().fieldOf("host").forGetter(InfestedBlock::getHostBlock), propertiesCodec())
--            .apply(instance, InfestedRotatedPillarBlock::new)
+-        i -> i.group(BuiltInRegistries.BLOCK.byNameCodec().fieldOf("host").forGetter(InfestedBlock::getHostBlock), propertiesCodec())
+-            .apply(i, InfestedRotatedPillarBlock::new)
 -    );
 +    public static final MapCodec<InfestedRotatedPillarBlock> CODEC = spout.common.moredatadriven.minecraft.type.BlockCodecs.infestedCodec(InfestedRotatedPillarBlock::new); // Spout - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
  

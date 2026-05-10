@@ -33,7 +33,10 @@ public final class ItemCodecs {
 
     private static Item.Properties constructItemProperties(DataComponentMap components, FeatureFlagSet requiredFeatures, Optional<Identifier> id) {
         Item.Properties properties = new Item.Properties();
-        properties.components.addAll(components);
+        properties.initializedComponents = components;
+        properties.componentInitializer = properties.componentInitializer.andThen((builder, _, _) -> builder.addAll(
+            components
+        ));
         properties.requiredFeatures = requiredFeatures;
         id.ifPresent(identifier -> properties.id = ResourceKey.create(BuiltInRegistries.ITEM.key(), identifier));
         return properties;
@@ -44,7 +47,7 @@ public final class ItemCodecs {
     }
 
     private static final Codec<Item.Properties> ITEM_PROPERTIES_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        DataComponentMap.CODEC.optionalFieldOf("components", DataComponentMap.EMPTY).forGetter(properties -> properties.components.build()),
+        DataComponentMap.CODEC.optionalFieldOf("components", DataComponentMap.EMPTY).forGetter(properties -> properties.initializedComponents),
         CodecUtil.optionalFieldOf(FeatureFlagCodecs.FEATURE_FLAG_SET_CODEC, "required_features", FeatureFlagSet::of).forGetter(properties -> properties.requiredFeatures),
         Identifier.CODEC.optionalFieldOf("id").forGetter(properties -> Optional.ofNullable(properties.id).map(ResourceKey::identifier))
     ).apply(instance, ItemCodecs::constructItemProperties));

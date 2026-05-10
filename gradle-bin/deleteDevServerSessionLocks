@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Deletes session lock files (in IntelliJ, right-click -> Run 'deleteSessionLocks')
+
+cd ../run
+rm -f ./*/session.lock
+cd ../gradle-bin

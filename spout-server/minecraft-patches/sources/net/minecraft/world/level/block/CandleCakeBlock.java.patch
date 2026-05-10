@@ -1,14 +1,11 @@
 --- a/net/minecraft/world/level/block/CandleCakeBlock.java
 +++ b/net/minecraft/world/level/block/CandleCakeBlock.java
-@@ -31,17 +_,12 @@
+@@ -31,14 +_,12 @@
  import net.minecraft.world.phys.shapes.VoxelShape;
  
  public class CandleCakeBlock extends AbstractCandleBlock {
 -    public static final MapCodec<CandleCakeBlock> CODEC = RecordCodecBuilder.mapCodec(
--        instance -> instance.group(
--                BuiltInRegistries.BLOCK.byNameCodec().fieldOf("candle").forGetter(candleCakeBlock -> candleCakeBlock.candleBlock), propertiesCodec()
--            )
--            .apply(instance, CandleCakeBlock::new)
+-        i -> i.group(BuiltInRegistries.BLOCK.byNameCodec().fieldOf("candle").forGetter(b -> b.candleBlock), propertiesCodec()).apply(i, CandleCakeBlock::new)
 -    );
 +    public static final MapCodec<CandleCakeBlock> CODEC = spout.common.moredatadriven.minecraft.type.BlockCodecs.candleCakeCodec(CandleCakeBlock::new); // Spout - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
      public static final BooleanProperty LIT = AbstractCandleBlock.LIT;

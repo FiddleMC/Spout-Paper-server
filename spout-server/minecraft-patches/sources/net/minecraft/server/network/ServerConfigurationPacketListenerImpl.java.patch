@@ -24,7 +24,7 @@
          ServerLinks serverLinks = this.server.serverLinks();
          if (!serverLinks.isEmpty()) {
              // Paper start
-@@ -167,6 +_,19 @@
+@@ -165,6 +_,19 @@
          if (packet.action().isTerminal() && packet.id().equals(this.server.getServerResourcePack().map(MinecraftServer.ServerResourcePackInfo::id).orElse(null))) { // Paper - Ignore resource pack requests that are not vanilla
              this.finishCurrentTask(ServerResourcePackConfigurationTask.TYPE);
          }

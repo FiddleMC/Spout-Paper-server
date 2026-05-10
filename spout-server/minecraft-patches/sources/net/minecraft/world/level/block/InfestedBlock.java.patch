@@ -5,8 +5,8 @@
  
  public class InfestedBlock extends Block {
 -    public static final MapCodec<InfestedBlock> CODEC = RecordCodecBuilder.mapCodec(
--        instance -> instance.group(BuiltInRegistries.BLOCK.byNameCodec().fieldOf("host").forGetter(InfestedBlock::getHostBlock), propertiesCodec())
--            .apply(instance, InfestedBlock::new)
+-        i -> i.group(BuiltInRegistries.BLOCK.byNameCodec().fieldOf("host").forGetter(InfestedBlock::getHostBlock), propertiesCodec())
+-            .apply(i, InfestedBlock::new)
 -    );
 -    private final Block hostBlock;
 -    private static final Map<Block, Block> BLOCK_BY_HOST_BLOCK = Maps.newIdentityHashMap();

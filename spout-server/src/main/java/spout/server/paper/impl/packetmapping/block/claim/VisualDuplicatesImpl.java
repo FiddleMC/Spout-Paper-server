@@ -468,7 +468,7 @@ public final class VisualDuplicatesImpl implements VisualDuplicates {
         @Override
         public List<? extends BlockData> getStates() {
             if (this.states == null) {
-                this.states = Arrays.stream(this.stateIndices).mapToObj(index -> VanillaOnlyBlockStateRegistry.get().byId(index).createCraftBlockData()).toList();
+                this.states = Arrays.stream(this.stateIndices).mapToObj(index -> VanillaOnlyBlockStateRegistry.get().byId(index).asBlockData()).toList();
             }
             return this.states;
         }

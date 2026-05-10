@@ -1,17 +1,17 @@
 --- a/net/minecraft/world/level/block/state/BlockState.java
 +++ b/net/minecraft/world/level/block/state/BlockState.java
-@@ -7,7 +_,7 @@
+@@ -5,7 +_,7 @@
  import net.minecraft.world.level.block.Block;
  import net.minecraft.world.level.block.state.properties.Property;
  
 -public class BlockState extends BlockBehaviour.BlockStateBase {
 +public class BlockState extends BlockBehaviour.BlockStateBase implements spout.common.moredatadriven.minecraft.type.BlockStateFunction.ByProperties.PropertyValueMap { // Spout - More data-driven - Minecraft registries - Types - Properties serialization - Make block state function properties serializable
-     public static final Codec<BlockState> CODEC = codec(BuiltInRegistries.BLOCK.byNameCodec(), Block::defaultBlockState).stable();
+     public static final Codec<BlockState> CODEC = codec(BuiltInRegistries.BLOCK.byNameCodec(), Block::defaultBlockState, Block::getStateDefinition).stable();
  
      // Paper start - optimise getType calls
-@@ -24,6 +_,60 @@
-     public BlockState(Block owner, Reference2ObjectArrayMap<Property<?>, Comparable<?>> values, MapCodec<BlockState> propertiesCodec) {
-         super(owner, values, propertiesCodec);
+@@ -22,6 +_,60 @@
+     public BlockState(final Block owner, final Property<?>[] propertyKeys, final Comparable<?>[] propertyValues) {
+         super(owner, propertyKeys, propertyValues);
      }
 +
 +    // Spout start - More data-driven - Minecraft registries - Cache block and item values

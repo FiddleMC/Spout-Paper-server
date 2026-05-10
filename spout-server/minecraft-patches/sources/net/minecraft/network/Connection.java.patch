@@ -18,16 +18,16 @@
      private static final float AVERAGE_PACKETS_SMOOTHING = 0.75F;
      private static final Logger LOGGER = LogUtils.getLogger();
      public static final Marker ROOT_MARKER = MarkerFactory.getMarker("NETWORK");
-@@ -130,12 +_,15 @@
+@@ -131,12 +_,15 @@
  
-     public Connection(PacketFlow receiving) {
+     public Connection(final PacketFlow receiving) {
          this.receiving = receiving;
 +        this.clientViewSetter = new spout.server.paper.impl.clientview.set.ClientViewSetter(this); // Spout - Client view - Set - Setter
 +        this.itemMappingReverser = new spout.server.paper.impl.packetmapping.item.reverse.ItemMappingReverser(); // Spout - Item mapping - Reverse - Store reverser in Connection
      }
  
      @Override
-     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+     public void channelActive(final ChannelHandlerContext ctx) throws Exception {
          super.channelActive(ctx);
          this.channel = ctx.channel();
 +        this.channel.attr(spout.server.paper.impl.clientview.lookup.packethandling.NettyClientViewLookupAttribute.ATTRIBUTE_KEY).set(new java.lang.ref.WeakReference<>(this)); // Spout - Client view - Lookup - During packet handling - Copy the connection (acting as the lookup) to the channel

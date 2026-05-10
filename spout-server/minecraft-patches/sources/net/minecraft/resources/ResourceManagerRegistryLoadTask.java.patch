@@ -1,0 +1,11 @@
+--- a/net/minecraft/resources/ResourceManagerRegistryLoadTask.java
++++ b/net/minecraft/resources/ResourceManagerRegistryLoadTask.java
+@@ -39,7 +_,7 @@
+ 
+     @Override
+     public CompletableFuture<?> load(final RegistryOps.RegistryInfoLookup context, final Executor executor) {
+-        FileToIdConverter lister = FileToIdConverter.registry(this.registryKey());
++        FileToIdConverter lister = spout.server.paper.impl.moredatadriven.datapack.DifferentDataPackRegistryDirectoryNames.getFileToIdConverter(registry); // Spout - More data-driven - Data pack - Allow directory name to be different than registry path
+         final io.papermc.paper.registry.data.util.Conversions conversions = new io.papermc.paper.registry.data.util.Conversions(context); // Paper - create conversions
+         return CompletableFuture.<Map<Identifier, Resource>>supplyAsync(() -> lister.listMatchingResources(this.resourceManager), executor)
+             .thenCompose(

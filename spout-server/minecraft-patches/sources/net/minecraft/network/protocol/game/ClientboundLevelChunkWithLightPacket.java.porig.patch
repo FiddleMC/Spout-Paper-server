@@ -1,0 +1,109 @@
+--- /dev/null
++++ b/net/minecraft/network/protocol/game/ClientboundLevelChunkWithLightPacket.java.porig
+@@ -1,0 +_,106 @@
++package net.minecraft.network.protocol.game;
++
++import java.util.BitSet;
++import net.minecraft.network.RegistryFriendlyByteBuf;
++import net.minecraft.network.codec.StreamCodec;
++import net.minecraft.network.protocol.Packet;
++import net.minecraft.network.protocol.PacketType;
++import net.minecraft.world.level.ChunkPos;
++import net.minecraft.world.level.chunk.LevelChunk;
++import net.minecraft.world.level.lighting.LevelLightEngine;
++import org.jspecify.annotations.Nullable;
++
++public class ClientboundLevelChunkWithLightPacket implements Packet<ClientGamePacketListener> {
++    public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundLevelChunkWithLightPacket> STREAM_CODEC = Packet.codec(
++        ClientboundLevelChunkWithLightPacket::write, ClientboundLevelChunkWithLightPacket::new
++    );
++    private final int x;
++    private final int z;
++    private final ClientboundLevelChunkPacketData chunkData;
++    private final ClientboundLightUpdatePacketData lightData;
++    // Paper start - Async-Anti-Xray - Ready flag for the connection, add chunk packet info
++    private volatile boolean ready;
++    @Override
++    public boolean isReady() {
++        return this.ready;
++    }
++
++    public void setReady(final boolean ready) {
++        this.ready = ready;
++    }
++    // Paper end - Async-Anti-Xray - Ready flag for the connection, add chunk packet info
++
++    @Deprecated @io.papermc.paper.annotation.DoNotUse // Paper - Anti-Xray
++    public ClientboundLevelChunkWithLightPacket(
++        final LevelChunk levelChunk,
++        final LevelLightEngine lightEngine,
++        final @Nullable BitSet skyChangedLightSectionFilter,
++        final @Nullable BitSet blockChangedLightSectionFilter
++    ) {
++        // Paper start - Anti-Xray
++        this(levelChunk, lightEngine, skyChangedLightSectionFilter, blockChangedLightSectionFilter, true);
++    }
++    public ClientboundLevelChunkWithLightPacket(
++        final LevelChunk levelChunk,
++        final LevelLightEngine lightEngine,
++        final @Nullable BitSet skyChangedLightSectionFilter,
++        final @Nullable BitSet blockChangedLightSectionFilter,
++        final boolean modifyBlocks
++    ) {
++        // Paper end - Anti-Xray
++        ChunkPos chunkPos = levelChunk.getPos();
++        this.x = chunkPos.x();
++        this.z = chunkPos.z();
++        io.papermc.paper.antixray.ChunkPacketInfo<net.minecraft.world.level.block.state.BlockState> chunkPacketInfo = modifyBlocks ? levelChunk.getLevel().chunkPacketBlockController.getChunkPacketInfo(this, levelChunk) : null; // Paper - Anti-Xray
++        this.chunkData = new ClientboundLevelChunkPacketData(levelChunk, chunkPacketInfo); // Paper - Anti-Xray
++        this.lightData = new ClientboundLightUpdatePacketData(chunkPos, lightEngine, skyChangedLightSectionFilter, blockChangedLightSectionFilter);
++        levelChunk.getLevel().chunkPacketBlockController.modifyBlocks(this, chunkPacketInfo); // Paper - Anti-Xray - Modify blocks
++    }
++
++    private ClientboundLevelChunkWithLightPacket(final RegistryFriendlyByteBuf input) {
++        this.x = input.readInt();
++        this.z = input.readInt();
++        this.chunkData = new ClientboundLevelChunkPacketData(input, this.x, this.z);
++        this.lightData = new ClientboundLightUpdatePacketData(input, this.x, this.z);
++    }
++
++    private void write(final RegistryFriendlyByteBuf output) {
++        output.writeInt(this.x);
++        output.writeInt(this.z);
++        this.chunkData.write(output);
++        this.lightData.write(output);
++    }
++
++    @Override
++    public PacketType<ClientboundLevelChunkWithLightPacket> type() {
++        return GamePacketTypes.CLIENTBOUND_LEVEL_CHUNK_WITH_LIGHT;
++    }
++
++    @Override
++    public void handle(final ClientGamePacketListener listener) {
++        listener.handleLevelChunkWithLight(this);
++    }
++
++    public int getX() {
++        return this.x;
++    }
++
++    public int getZ() {
++        return this.z;
++    }
++
++    public ClientboundLevelChunkPacketData getChunkData() {
++        return this.chunkData;
++    }
++
++    public ClientboundLightUpdatePacketData getLightData() {
++        return this.lightData;
++    }
++
++    // Paper start - Handle oversized block entities in chunks
++    @Override
++    public java.util.List<Packet<?>> getExtraPackets() {
++        return this.chunkData.getExtraPackets();
++    }
++    // Paper end - Handle oversized block entities in chunks
++}

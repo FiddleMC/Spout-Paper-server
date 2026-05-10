@@ -6,6 +6,6 @@
          final PackSelectionConfig packConfig;
 -        if ("paper".equals(id)) {
 +        if ("paper".equals(id) || "spout".equals(id)) { // Spout - Built-in content - Built-in data pack
-             info = new PackLocationInfo(id, title, PackSource.BUILT_IN, Optional.empty());
+             info = new PackLocationInfo(id, name, PackSource.BUILT_IN, Optional.empty());
              packConfig = new PackSelectionConfig(true, Pack.Position.TOP, true);
          } else {

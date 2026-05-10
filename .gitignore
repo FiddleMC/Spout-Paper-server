@@ -1,57 +1,61 @@
+# Gradle
+.gradle/
+build/
+*/build/
+
 # JVM crash related
 core.*
 hs_err_pid*
 
-# Intellij
-/.idea/*
-!/.idea/runConfigurations
-!/.idea/icon.svg
-*.iml
-*.ipr
-*.iws
-out/
-
-# Eclipse
+# Eclipse stuff
 .classpath
 .project
 .settings/
+
+# VSCode stuff
+.vscode/
 
 # netbeans
 nbproject/
 nbactions.xml
 
-# Gradle
-!gradle-wrapper.jar
-.gradle/
-build/
-*/build/
-
-# we use maven!
-build.xml
+# vim
+.*.sw[a-p]
 
 # Maven
+build.xml
 log/
 target/
 dependency-reduced-pom.xml
 
 # various other potential build files
-build/
 bin/
 dist/
 manifest.mf
+__pycache__/
 
-# Mac
+# Mac filesystem dust
 .DS_Store/
 .DS_Store
 
-# vim
-.*.sw[a-p]
+# intellij
+*.iml
+*.ipr
+*.iws
+.idea/
+out/
+
+# JetBrains Fleet
+.fleet/
 
 # Linux temp files
 *~
 
 # other stuff
-/run
+/run/
+logs/
+
+!gradle/wrapper/gradle-wrapper.jar
 
 /spout-server/build.gradle.kts
 /spout-server/src/minecraft

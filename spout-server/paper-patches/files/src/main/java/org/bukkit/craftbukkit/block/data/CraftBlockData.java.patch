@@ -1,9 +1,9 @@
 --- a/src/main/java/org/bukkit/craftbukkit/block/data/CraftBlockData.java
 +++ b/src/main/java/org/bukkit/craftbukkit/block/data/CraftBlockData.java
-@@ -362,6 +_,13 @@
+@@ -246,6 +_,13 @@
      static {
          //<editor-fold desc="CraftBlockData Registration" defaultstate="collapsed">
-         // Start generate - CraftBlockData#MAP
+         // Start generate - CraftBlockData#INSTANCE_CREATOR
 +        // Spout start - Built-in content - Blocks - API - Implementation part - Register BlockData translations
 +        register(spout.common.builtincontent.block.BevelBlock.class, spout.server.paper.impl.builtincontent.block.api.CraftBevel::new);
 +        register(spout.common.builtincontent.block.HalfTransparentSlabBlock.class, org.bukkit.craftbukkit.block.impl.CraftSlab::new);
@@ -14,16 +14,7 @@
          register(net.minecraft.world.level.block.AmethystClusterBlock.class, org.bukkit.craftbukkit.block.impl.CraftAmethystCluster::new);
          register(net.minecraft.world.level.block.AnvilBlock.class, org.bukkit.craftbukkit.block.impl.CraftAnvil::new);
          register(net.minecraft.world.level.block.AttachedStemBlock.class, org.bukkit.craftbukkit.block.impl.CraftAttachedStem::new);
-@@ -603,7 +_,7 @@
-                 }
- 
-                 StringReader reader = new StringReader(data);
--                BlockStateParser.BlockResult arg = BlockStateParser.parseForBlock(CraftRegistry.getMinecraftRegistry(Registries.BLOCK), reader, false);
-+                BlockStateParser.BlockResult arg = BlockStateParser.parseForBlock(BuiltInRegistries.BLOCK/*CraftRegistry.getMinecraftRegistry(Registries.BLOCK)*/, reader, false); // Spout - More data-driven - Minecraft registries - Use registry directly instead of looking it up by key, to allow translating Bukkit to Minecraft block state classes before the block registry is registered with the registry of registries
-                 Preconditions.checkArgument(!reader.canRead(), "Spurious trailing data: " + data);
- 
-                 blockData = arg.blockState();
-@@ -797,4 +_,11 @@
+@@ -653,4 +_,11 @@
      public boolean isReplaceable() {
          return this.state.canBeReplaced();
      }

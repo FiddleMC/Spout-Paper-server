@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.RegistryDataLoader;
+import net.minecraft.resources.RegistryValidator;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.BlockTypes;
 import spout.server.paper.impl.moredatadriven.datapack.CopyResourcesFromDataPackRegistryToInternalRegistry;
@@ -51,7 +52,7 @@ public final class DataPackRegistriesToLoadBeforeDelayedRegistryFreeze {
     ) {
 
         public Instance(ResourceKey<Registry<T>> registryKey, Codec<T> codec, Consumer<Registry<T>> postLoadAction) {
-            this(new RegistryDataLoader.RegistryData<>(registryKey, codec, false), postLoadAction);
+            this(new RegistryDataLoader.RegistryData<>(registryKey, codec, RegistryValidator.none()), postLoadAction);
         }
 
         public Instance(ResourceKey<Registry<T>> registryKey, MapCodec<T> codec, Consumer<Registry<T>> postLoadAction) {

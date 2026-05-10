@@ -247,7 +247,7 @@ public class ItemMappingReverser {
         }
 
         static HashedStackKey of(ItemStack itemStack) {
-            return new HashedStackKey(itemStack.getItem(), itemStack.getItemHolder(), HashedPatchMap.create(itemStack.getComponentsPatch(), hashGenerator()));
+            return new HashedStackKey(itemStack.getItem(), itemStack.typeHolder(), HashedPatchMap.create(itemStack.getComponentsPatch(), hashGenerator()));
         }
 
     }

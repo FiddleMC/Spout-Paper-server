@@ -1,6 +1,6 @@
 --- a/io/papermc/paper/FeatureHooks.java
 +++ b/io/papermc/paper/FeatureHooks.java
-@@ -58,9 +_,11 @@
+@@ -57,9 +_,11 @@
              if (player.connection == null) continue;
  
              final Boolean shouldModify = chunk.getLevel().chunkPacketBlockController.shouldModify(player, chunk);

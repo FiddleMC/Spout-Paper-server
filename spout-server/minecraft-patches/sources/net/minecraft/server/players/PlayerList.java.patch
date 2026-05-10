@@ -1,15 +1,15 @@
 --- a/net/minecraft/server/players/PlayerList.java
 +++ b/net/minecraft/server/players/PlayerList.java
-@@ -329,7 +_,7 @@
+@@ -331,7 +_,7 @@
                  .getOrThrow(net.minecraft.world.level.biome.Biomes.PLAINS);
              player.connection.send(new net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket(
-                 new net.minecraft.world.level.chunk.EmptyLevelChunk(serverLevel, player.chunkPosition(), plains),
--                serverLevel.getLightEngine(), (java.util.BitSet)null, (java.util.BitSet) null, true) // Paper - Anti-Xray
-+                serverLevel.getLightEngine(), (java.util.BitSet)null, (java.util.BitSet) null, true, player) // Paper - Anti-Xray // Spout - Block mapping - Chunk packets - Pass the player
+                 new net.minecraft.world.level.chunk.EmptyLevelChunk(level, player.chunkPosition(), plains),
+-                level.getLightEngine(), (java.util.BitSet)null, (java.util.BitSet) null, true) // Paper - Anti-Xray
++                level.getLightEngine(), (java.util.BitSet)null, (java.util.BitSet) null, true, player) // Paper - Anti-Xray // Spout - Block mapping - Chunk packets - Pass the player
              );
          }
          // Paper end - Send empty chunk
-@@ -744,6 +_,7 @@
+@@ -745,6 +_,7 @@
              // CraftBukkit end
              this.sendAllPlayerInfoIn = 0;
          }
@@ -17,7 +17,7 @@
      }
  
      // CraftBukkit start - add a world/entity limited version
-@@ -1012,7 +_,7 @@
+@@ -1021,7 +_,7 @@
          // needs to be done because the ServerPlayer instance is being reused on respawn instead of getting replaced like on vanilla
          java.util.Collection<net.minecraft.world.entity.ai.attributes.AttributeInstance> syncableAttributes = player.getAttributes().getSyncableAttributes();
          player.getBukkitEntity().injectScaledMaxHealth(syncableAttributes, true);

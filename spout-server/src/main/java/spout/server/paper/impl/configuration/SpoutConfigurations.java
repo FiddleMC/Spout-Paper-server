@@ -92,10 +92,9 @@ public final class SpoutConfigurations extends PaperConfigurations<SpoutGlobalCo
                 This is a world configuration file for Spout.
                 This file may start empty but can be filled with settings to override ones in the %s/%s
                 
-                World: %s (%s)""",
+                World: %s""",
             PaperConfigurations.CONFIG_DIR,
             this.defaultWorldConfigFileName,
-            map.require(WORLD_NAME),
             map.require(WORLD_KEY)
         );
     }

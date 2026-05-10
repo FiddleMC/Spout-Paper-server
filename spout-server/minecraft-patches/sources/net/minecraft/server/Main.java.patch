@@ -1,36 +1,36 @@
 --- a/net/minecraft/server/Main.java
 +++ b/net/minecraft/server/Main.java
-@@ -105,6 +_,18 @@
+@@ -104,6 +_,18 @@
                  JvmProfiler.INSTANCE.start(Environment.SERVER);
              }
  
 +            // Spout start - EULA before bootstrap - Add before bootstrap
-+            Path path2 = Paths.get("eula.txt");
-+            Eula eula = new Eula(path2);
++            Path eulaFile = Paths.get("eula.txt");
++            Eula eula = new Eula(eulaFile);
 +            // Spout end - EULA before bootstrap - Add before bootstrap
 +
 +            // Spout start - Configuration - Load global configuration before bootstrap
-+            var spoutConfigurations = spout.server.paper.impl.configuration.SpoutConfigurations.get(optionSet);
++            var spoutConfigurations = spout.server.paper.impl.configuration.SpoutConfigurations.get(options);
 +            spoutConfigurations.initializeGlobalConfiguration(null);
 +            // Spout end - Configuration - Load global configuration before bootstrap
 +
 +            if (!spout.server.paper.impl.confirmpermanence.ConfirmPermanence.check(LOGGER)) return; // Spout - Confirm permanence - Check and exit if necessary
 +
-             io.papermc.paper.plugin.PluginInitializerManager.load(optionSet); // Paper
+             io.papermc.paper.plugin.PluginInitializerManager.load(options); // Paper
              Bootstrap.bootStrap();
              Bootstrap.validate();
-@@ -113,8 +_,12 @@
-             DedicatedServerSettings dedicatedServerSettings = new DedicatedServerSettings(optionSet); // CraftBukkit - CLI argument support
-             dedicatedServerSettings.forceSave();
-             RegionFileVersion.configure(dedicatedServerSettings.getProperties().regionFileComression);
--            Path path2 = Paths.get("eula.txt");
--            Eula eula = new Eula(path2);
+@@ -118,8 +_,12 @@
+             }
+             // Paper end
+             RegionFileVersion.configure(settings.getProperties().regionFileComression);
+-            Path eulaFile = Paths.get("eula.txt");
+-            Eula eula = new Eula(eulaFile);
 +
 +            // Spout start - EULA before bootstrap - Remove original
-+            // Path path2 = Paths.get("eula.txt");
-+            // Eula eula = new Eula(path2);
++            // Path eulaFile = Paths.get("eula.txt");
++            // Eula eula = new Eula(eulaFile);
 +            // Spout end - EULA before bootstrap - Remove original
 +
              // Paper start - load config files early for access below if needed
-             org.bukkit.configuration.file.YamlConfiguration bukkitConfiguration = io.papermc.paper.configuration.PaperConfigurations.loadLegacyConfigFile((File) optionSet.valueOf("bukkit-settings"));
-             org.bukkit.configuration.file.YamlConfiguration spigotConfiguration = io.papermc.paper.configuration.PaperConfigurations.loadLegacyConfigFile((File) optionSet.valueOf("spigot-settings"));
+             org.bukkit.configuration.file.YamlConfiguration bukkitConfiguration = io.papermc.paper.configuration.PaperConfigurations.loadLegacyConfigFile((File) options.valueOf("bukkit-settings"));
+             org.bukkit.configuration.file.YamlConfiguration spigotConfiguration = io.papermc.paper.configuration.PaperConfigurations.loadLegacyConfigFile((File) options.valueOf("spigot-settings"));

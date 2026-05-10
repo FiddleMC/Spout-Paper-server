@@ -5,13 +5,13 @@
  
  public class BrushableBlock extends BaseEntityBlock implements Fallable {
 -    public static final MapCodec<BrushableBlock> CODEC = RecordCodecBuilder.mapCodec(
--        instance -> instance.group(
+-        i -> i.group(
 -                BuiltInRegistries.BLOCK.byNameCodec().fieldOf("turns_into").forGetter(BrushableBlock::getTurnsInto),
 -                BuiltInRegistries.SOUND_EVENT.byNameCodec().fieldOf("brush_sound").forGetter(BrushableBlock::getBrushSound),
 -                BuiltInRegistries.SOUND_EVENT.byNameCodec().fieldOf("brush_completed_sound").forGetter(BrushableBlock::getBrushCompletedSound),
 -                propertiesCodec()
 -            )
--            .apply(instance, BrushableBlock::new)
+-            .apply(i, BrushableBlock::new)
 -    );
 +    public static final MapCodec<BrushableBlock> CODEC = spout.common.moredatadriven.minecraft.type.BlockCodecs.brushableCodec(BrushableBlock::new); // Spout - More data-driven - Data pack - Copy loaded blocks and items to their internal registries - Initialize some references late
      private static final IntegerProperty DUSTED = BlockStateProperties.DUSTED;

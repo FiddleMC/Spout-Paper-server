@@ -1,6 +1,6 @@
 --- a/net/minecraft/core/registries/BuiltInRegistries.java
 +++ b/net/minecraft/core/registries/BuiltInRegistries.java
-@@ -172,12 +_,12 @@
+@@ -177,12 +_,12 @@
      public static final Registry<SoundEvent> SOUND_EVENT = registerSimple(Registries.SOUND_EVENT, registry -> SoundEvents.ITEM_PICKUP);
      public static final DefaultedRegistry<Fluid> FLUID = registerDefaultedWithIntrusiveHolders(Registries.FLUID, "empty", registry -> Fluids.EMPTY);
      public static final Registry<MobEffect> MOB_EFFECT = registerSimple(Registries.MOB_EFFECT, MobEffects::bootstrap);
@@ -15,7 +15,7 @@
      public static final Registry<Potion> POTION = registerSimple(Registries.POTION, Potions::bootstrap);
      public static final Registry<ParticleType<?>> PARTICLE_TYPE = registerSimple(Registries.PARTICLE_TYPE, registry -> ParticleTypes.BLOCK);
      public static final Registry<BlockEntityType<?>> BLOCK_ENTITY_TYPE = registerSimpleWithIntrusiveHolders(
-@@ -278,7 +_,8 @@
+@@ -283,7 +_,8 @@
      public static final Registry<MapCodec<? extends DensityFunction>> DENSITY_FUNCTION_TYPE = registerSimple(
          Registries.DENSITY_FUNCTION_TYPE, DensityFunctions::bootstrap
      );

@@ -22,6 +22,7 @@ import spout.server.paper.api.packetmapping.component.ComponentTarget;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Utilities for getting {@link ComponentTarget}.
@@ -51,7 +52,7 @@ public final class ComponentTargetUtil {
             } else if (contents instanceof KeybindContents) {
                 return ComponentTarget.KEYBIND;
             } else if (contents instanceof NbtContents nbtContents) {
-                DataSource dataSource = nbtContents.getDataSource();
+                DataSource dataSource = nbtContents.dataSource();
                 if (dataSource instanceof BlockDataSource) {
                     return ComponentTarget.NBT_BLOCK;
                 } else if (dataSource instanceof EntityDataSource) {
@@ -60,7 +61,7 @@ public final class ComponentTargetUtil {
                     return ComponentTarget.NBT_STORAGE;
                 }
                 return ComponentTarget.NBT;
-            } else if (contents instanceof ObjectContents(ObjectInfo objectInfo)) {
+            } else if (contents instanceof ObjectContents(ObjectInfo objectInfo, Optional<Component> _)) {
                 if (objectInfo instanceof AtlasSprite) {
                     return ComponentTarget.OBJECT_ATLAS;
                 } else if (objectInfo instanceof PlayerSprite) {

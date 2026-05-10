@@ -98,8 +98,6 @@ public final class BlockRegistry extends DefaultedMappedRegistry<Block> {
     protected Registry<Block> actuallyFreeze() {
         // Apply lazy values
         ApplyLazyBlockValues.apply(this.stream());
-        // Update alternatively valid block entities
-        BlockEntityAlternativeValidation.update(this.stream());
         // Freeze
         return super.actuallyFreeze();
     }

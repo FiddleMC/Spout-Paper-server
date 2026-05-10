@@ -29,7 +29,7 @@ import java.util.Arrays;
  * Provides functionality to map the blocks in chunk packets.
  *
  * <p>
- * Each instance of this class can also be {@linkplain #applyMappings used} once.
+ * Each instance of this class can only be {@linkplain #applyMappings used} once.
  * </p>
  */
 public final class ChunkPacketBlockMapper {
@@ -178,18 +178,21 @@ public final class ChunkPacketBlockMapper {
 
         // Read the non-empty block count, which we re-calculate ourselves later
         this.reader.readShort();
+        // Read the fluid count, which we re-calculate ourselves later
+        this.reader.readShort();
         // Determine the new block states
-        DirectSectionContents newContents = determineNewSectionContents(this.chunkStartY + (section << 4));
+        DirectSectionContents newContents = this.determineNewSectionContents(this.chunkStartY + (section << 4));
 
         // Write the new block states to the buffer
         this.writer.writeShort(newContents.getNonEmptyBlockCount());
+        this.writer.writeShort(newContents.getFluidCount());
         newContents.writeAsPalettedContainer(this.writer, section, this.chunkPacketInfo, this.reader, this.globalPaletteBitsPerEntry);
         // Clean the reusable new contents
         newContents.clear();
         // Copy the biomes
         PalettedContainerUtilities.copy(true, this.reader, this.writer);
         // Continue with the next section (implemented recursively to allow for continuing on the main thread if we switched to it)
-        applyMappingsToSection(section + 1, chunkData);
+        this.applyMappingsToSection(section + 1, chunkData);
 
     }
 

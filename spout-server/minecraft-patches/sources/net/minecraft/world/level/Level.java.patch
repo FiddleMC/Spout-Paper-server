@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/Level.java
 +++ b/net/minecraft/world/level/Level.java
-@@ -164,6 +_,12 @@
+@@ -170,6 +_,12 @@
          return this.paperConfig;
      }
      // Paper end - add paper world config
@@ -12,47 +12,20 @@
 +    // Spout end - Configuration - World configuration
  
      public static @Nullable BlockPos lastPhysicsProblem; // Spigot
-     private int tileTickPosition;
-@@ -819,20 +_,21 @@
-     // Paper end - optimise random ticking
- 
-     protected Level(
--        WritableLevelData levelData,
--        ResourceKey<Level> dimension,
--        RegistryAccess registryAccess,
--        Holder<DimensionType> dimensionTypeRegistration,
--        boolean isClientSide,
--        boolean isDebug,
--        long biomeZoomSeed,
--        int maxChainedNeighborUpdates,
--        org.bukkit.generator.@Nullable ChunkGenerator generator, // Paper
--        org.bukkit.generator.@Nullable BiomeProvider biomeProvider, // Paper
--        org.bukkit.World.Environment environment, // Paper
--        java.util.function.Function<org.spigotmc.SpigotWorldConfig, // Spigot - create per world config
-+            WritableLevelData levelData,
-+            ResourceKey<Level> dimension,
-+            RegistryAccess registryAccess,
-+            Holder<DimensionType> dimensionTypeRegistration,
-+            boolean isClientSide,
-+            boolean isDebug,
-+            long biomeZoomSeed,
-+            int maxChainedNeighborUpdates,
-+            org.bukkit.generator.@Nullable ChunkGenerator generator, // Paper
-+            org.bukkit.generator.@Nullable BiomeProvider biomeProvider, // Paper
-+            org.bukkit.World.Environment environment, // Paper
-+            java.util.function.Function<org.spigotmc.SpigotWorldConfig, // Spigot - create per world config
+     public final Map<ServerExplosion.CacheKey, Float> explosionDensityCache = new java.util.HashMap<>(); // Paper - Optimize explosions
+@@ -838,6 +_,7 @@
+         org.bukkit.World.Environment environment, // Paper
+         java.util.function.Function<org.spigotmc.SpigotWorldConfig, // Spigot - create per world config
          io.papermc.paper.configuration.WorldConfiguration> paperWorldConfigCreator, // Paper - create paper world config
--        java.util.concurrent.Executor executor // Paper - Anti-Xray
-+            java.util.function.Function<org.spigotmc.SpigotWorldConfig, spout.server.paper.impl.configuration.SpoutWorldConfiguration> spoutWorldConfigCreator, // Spout - Configuration - Create world configuration
-+            java.util.concurrent.Executor executor // Paper - Anti-Xray
++        java.util.function.Function<org.spigotmc.SpigotWorldConfig, spout.server.paper.impl.configuration.SpoutWorldConfiguration> spoutWorldConfigCreator, // Spout - Configuration - Create world configuration
+         java.util.concurrent.Executor executor // Paper - Anti-Xray
      ) {
          // Paper start - getblock optimisations - cache world height/sections
-         final DimensionType dimType = dimensionTypeRegistration.value();
-@@ -845,6 +_,7 @@
-         // Paper end - getblock optimisations - cache world height/sections
-         this.spigotConfig = new org.spigotmc.SpigotWorldConfig(((net.minecraft.world.level.storage.PrimaryLevelData) levelData).getLevelName()); // Spigot
+@@ -852,6 +_,7 @@
+         final org.bukkit.NamespacedKey worldKey = CraftNamespacedKey.fromMinecraft(dimension.identifier()); // Paper
+         this.spigotConfig = new org.spigotmc.SpigotWorldConfig(bukkitName, worldKey); // Spigot
          this.paperConfig = paperWorldConfigCreator.apply(this.spigotConfig); // Paper - create paper world config
 +        this.spoutConfig = spoutWorldConfigCreator.apply(this.spigotConfig); // Spout - Configuration - Create world configuration
          this.generator = generator;
-         this.world = new CraftWorld((ServerLevel) this, generator, biomeProvider, environment);
+         this.world = new CraftWorld((ServerLevel) this, worldKey, biomeProvider, environment);
  

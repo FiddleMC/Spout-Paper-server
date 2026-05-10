@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -2577,7 +_,7 @@
+@@ -2578,7 +_,7 @@
      public void updateScaledHealth(boolean sendHealth) {
          // SPIGOT-3813: Attributes before health
          if (this.getHandle().connection != null) {

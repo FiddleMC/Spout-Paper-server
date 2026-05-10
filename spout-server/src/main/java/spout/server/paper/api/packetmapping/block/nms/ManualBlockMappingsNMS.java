@@ -36,7 +36,7 @@ public interface ManualBlockMappingsNMS<M> extends ManualBlockMappings<M> {
      * @see #getRegistered(ClientView.AwarenessLevel, BlockData)
      */
     default List<M> getRegisteredNMS(ClientView.AwarenessLevel awarenessLevel, BlockState from) {
-        return this.getRegistered(awarenessLevel, from.createCraftBlockData());
+        return this.getRegistered(awarenessLevel, from.asBlockData());
     }
 
     /**
@@ -50,7 +50,7 @@ public interface ManualBlockMappingsNMS<M> extends ManualBlockMappings<M> {
      * @see #changeRegistered(ClientView.AwarenessLevel, BlockData, Consumer)
      */
     default void changeRegisteredNMS(ClientView.AwarenessLevel awarenessLevel, BlockState from, Consumer<List<M>> listConsumer) {
-        this.changeRegistered(awarenessLevel, from.createCraftBlockData(), listConsumer);
+        this.changeRegistered(awarenessLevel, from.asBlockData(), listConsumer);
     }
 
     /**

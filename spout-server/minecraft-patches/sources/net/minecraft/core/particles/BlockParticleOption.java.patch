@@ -3,9 +3,9 @@
 @@ -21,7 +_,7 @@
      }
  
-     public static StreamCodec<? super RegistryFriendlyByteBuf, BlockParticleOption> streamCodec(ParticleType<BlockParticleOption> particleType) {
--        return ByteBufCodecs.idMapper(Block.BLOCK_STATE_REGISTRY)
-+        return spout.server.paper.impl.packetmapping.block.NonPhysicalBlockStateCodec.STREAM_CODEC // Spout - Block mapping - Implementation part - Apply to block particles
-             .map(blockState -> new BlockParticleOption(particleType, blockState), blockParticleOption -> blockParticleOption.state);
+     public static StreamCodec<? super RegistryFriendlyByteBuf, BlockParticleOption> streamCodec(final ParticleType<BlockParticleOption> type) {
+-        return ByteBufCodecs.idMapper(Block.BLOCK_STATE_REGISTRY).map(state -> new BlockParticleOption(type, state), o -> o.state);
++        return spout.server.paper.impl.packetmapping.block.NonPhysicalBlockStateCodec.STREAM_CODEC.map(state -> new BlockParticleOption(type, state), o -> o.state); // Spout - Block mapping - Implementation part - Apply to block particles
      }
  
+     public BlockParticleOption(final ParticleType<BlockParticleOption> type, final BlockState state) {

@@ -108,8 +108,8 @@ public final class ResourcePackBlockStateClaimsImpl implements ResourcePackBlock
         this.claim(
             states.stream().mapToInt(state -> ((CraftBlockData) state).getState().indexInVanillaOnlyBlockStateRegistry).toArray(),
             priority,
-            resultConsumer == null ? null : result -> resultConsumer.accept(result != null ? Arrays.stream(result).mapToObj(id -> VanillaOnlyBlockStateRegistry.get().byId(id).createCraftBlockData()).toList() : null),
-            visualDuplicatesConsumer == null ? null : visualDuplicates -> visualDuplicatesConsumer.accept(Arrays.stream(visualDuplicates).mapToObj(id -> VanillaOnlyBlockStateRegistry.get().byId(id).createCraftBlockData()).toList()),
+            resultConsumer == null ? null : result -> resultConsumer.accept(result != null ? Arrays.stream(result).mapToObj(id -> VanillaOnlyBlockStateRegistry.get().byId(id).asBlockData()).toList() : null),
+            visualDuplicatesConsumer == null ? null : visualDuplicates -> visualDuplicatesConsumer.accept(Arrays.stream(visualDuplicates).mapToObj(id -> VanillaOnlyBlockStateRegistry.get().byId(id).asBlockData()).toList()),
             orSimilar,
             usingVanillaLook
         );

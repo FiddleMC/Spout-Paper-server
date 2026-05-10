@@ -35,6 +35,4 @@ public final class DifferentDataPackRegistryDirectoryNames {
         return differentName != null ? FileToIdConverter.json(differentName) : FileToIdConverter.registry(key);
     }
 
-
-
 }

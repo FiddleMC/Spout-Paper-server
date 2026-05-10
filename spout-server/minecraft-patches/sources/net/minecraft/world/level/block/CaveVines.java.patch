@@ -4,8 +4,8 @@
          return state.hasProperty(BERRIES) && state.getValue(BERRIES);
      }
  
--    static ToIntFunction<BlockState> emission(int berries) {
--        return state -> state.getValue(BlockStateProperties.BERRIES) ? berries : 0;
+-    static ToIntFunction<BlockState> emission(final int lightEmission) {
+-        return state -> state.getValue(BlockStateProperties.BERRIES) ? lightEmission : 0;
 +    // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make light emission property serializable
 +    static spout.common.moredatadriven.minecraft.type.BlockStateFunction<Integer> emission(int berries) {
 +        return new spout.common.moredatadriven.minecraft.type.BlockStateFunction.ByProperties<>(java.util.List.of(BlockStateProperties.BERRIES), state -> state.getValue(BlockStateProperties.BERRIES) ? berries : 0);

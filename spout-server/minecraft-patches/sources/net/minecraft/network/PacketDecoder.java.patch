@@ -5,6 +5,6 @@
          Packet<? super T> packet;
          try {
 +            spout.server.paper.impl.clientview.lookup.packethandling.ClientViewLookupThreadLocal.THREAD_LOCAL.set(ctx.channel().attr(spout.server.paper.impl.clientview.lookup.packethandling.NettyClientViewLookupAttribute.ATTRIBUTE_KEY).get()); // Spout - Client view - Lookup - During packet handling - Copy lookup from the channel to the thread-local variable
-             packet = this.protocolInfo.codec().decode(in);
+             packet = this.protocolInfo.codec().decode(input);
          } catch (Exception var7) {
              if (var7 instanceof SkipPacketException) {

@@ -24,7 +24,7 @@ public class SlabRequestBuilderImpl extends FromToBlockTypeRequestBuilderImpl im
 
     @Override
     public @Nullable BlockData fullBlockFallback() {
-        return this.fullBlockFallback == null ? null : this.fullBlockFallback.createCraftBlockData();
+        return this.fullBlockFallback == null ? null : this.fullBlockFallback.asBlockData();
     }
 
 }

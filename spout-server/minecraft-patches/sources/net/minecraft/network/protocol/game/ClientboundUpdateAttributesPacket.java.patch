@@ -1,20 +1,18 @@
 --- a/net/minecraft/network/protocol/game/ClientboundUpdateAttributesPacket.java
 +++ b/net/minecraft/network/protocol/game/ClientboundUpdateAttributesPacket.java
-@@ -27,7 +_,7 @@
+@@ -27,12 +_,12 @@
      private final int entityId;
      private final List<ClientboundUpdateAttributesPacket.AttributeSnapshot> attributes;
  
--    public ClientboundUpdateAttributesPacket(int entityId, Collection<AttributeInstance> attributes) {
+-    public ClientboundUpdateAttributesPacket(final int entityId, final Collection<AttributeInstance> values) {
 +    public ClientboundUpdateAttributesPacket(int entityId, Collection<AttributeInstance> attributes, net.minecraft.server.level.@org.jspecify.annotations.Nullable ServerPlayer selfPlayer) { // Spout - Block mapping - Breaking speed - Pass self player to attributes packet
          this.entityId = entityId;
          this.attributes = Lists.newArrayList();
  
-@@ -35,7 +_,7 @@
-             this.attributes
-                 .add(
-                     new ClientboundUpdateAttributesPacket.AttributeSnapshot(
--                        attributeInstance.getAttribute(), attributeInstance.getBaseValue(), attributeInstance.getModifiers()
-+                        attributeInstance.getAttribute(), attributeInstance.getBaseValue(), spout.server.paper.impl.packetmapping.block.breakspeed.BlockBreakSpeedAttributeModification.withServerToClientModifierIfNecessary(attributeInstance, attributeInstance.getModifiers(), selfPlayer) // Spout - Block mapping - Breaking speed - Add attribute modifier in packets to self
-                     )
-                 );
+-        for (AttributeInstance value : values) {
+-            this.attributes.add(new ClientboundUpdateAttributesPacket.AttributeSnapshot(value.getAttribute(), value.getBaseValue(), value.getModifiers()));
++        for (AttributeInstance value : attributes) {
++            this.attributes.add(new ClientboundUpdateAttributesPacket.AttributeSnapshot(value.getAttribute(), value.getBaseValue(), spout.server.paper.impl.packetmapping.block.breakspeed.BlockBreakSpeedAttributeModification.withServerToClientModifierIfNecessary(value, value.getModifiers(), selfPlayer))); // Spout - Block mapping - Breaking speed - Add attribute modifier in packets to self
          }
+     }
+ 

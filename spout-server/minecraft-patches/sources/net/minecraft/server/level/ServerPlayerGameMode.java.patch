@@ -16,11 +16,11 @@
      private boolean hasDelayedDestroy;
      private BlockPos delayedDestroyPos = BlockPos.ZERO;
      private int delayedTickStart;
-@@ -276,6 +_,7 @@
-                     BlockState blockStatex = this.level.getBlockState(pos);
-                     if (!blockStatex.isAir()) {
-                         float f1 = blockStatex.getDestroyProgress(this.player, this.player.level(), pos) * (i1 + 1);
-+                        f1 *= spout.server.paper.impl.packetmapping.block.breakspeed.BlockBreakSpeedLatencyCompensation.getCompensationFactor(this.player, this.player.level(), pos, blockStatex); // Spout - Block mapping - Breaking speed - Compensate for difference in intended ratio and recently observed ratio
-                         if (f1 >= 0.7F) {
+@@ -284,6 +_,7 @@
+                     BlockState state = this.level.getBlockState(pos);
+                     if (!state.isAir()) {
+                         float destroyProgress = state.getDestroyProgress(this.player, this.player.level(), pos) * (ticksSpentDestroying + 1);
++                        destroyProgress *= spout.server.paper.impl.packetmapping.block.breakspeed.BlockBreakSpeedLatencyCompensation.getCompensationFactor(this.player, this.player.level(), pos, state); // Spout - Block mapping - Breaking speed - Compensate for difference in intended ratio and recently observed ratio
+                         if (destroyProgress >= 0.7F) {
                              this.isDestroyingBlock = false;
                              this.level.destroyBlockProgress(this.player.getId(), pos, -1);

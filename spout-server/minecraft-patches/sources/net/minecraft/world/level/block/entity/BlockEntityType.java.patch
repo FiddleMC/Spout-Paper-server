@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/block/entity/BlockEntityType.java
 +++ b/net/minecraft/world/level/block/entity/BlockEntityType.java
-@@ -274,7 +_,18 @@
+@@ -273,15 +_,28 @@
      );
      private static final Set<BlockEntityType<?>> OP_ONLY_CUSTOM_DATA = Set.of(COMMAND_BLOCK, LECTERN, SIGN, HANGING_SIGN, MOB_SPAWNER, TRIAL_SPAWNER);
      private final BlockEntityType.BlockEntitySupplier<? extends T> factory;
@@ -19,10 +19,8 @@
 +    // Spout end - More data-driven - Minecraft registries - Block entities - Also allow data-driven valid blocks
      private final Holder.Reference<BlockEntityType<?>> builtInRegistryHolder = BuiltInRegistries.BLOCK_ENTITY_TYPE.createIntrusiveHolder(this);
  
-     public static @Nullable Identifier getKey(BlockEntityType<?> type) {
-@@ -284,9 +_,11 @@
      private static <T extends BlockEntity> BlockEntityType<T> register(
-         String name, BlockEntityType.BlockEntitySupplier<? extends T> factory, Block... validBlocks
+         final String name, final BlockEntityType.BlockEntitySupplier<? extends T> factory, final Block... validBlocks
      ) {
 -        if (validBlocks.length == 0) {
 -            LOGGER.warn("Block entity type {} requires at least one valid block to be defined!", name);
@@ -35,10 +33,10 @@
  
          Util.fetchChoiceType(References.BLOCK_ENTITY, name);
          return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, name, new BlockEntityType<>(factory, Set.of(validBlocks)));
-@@ -302,6 +_,7 @@
+@@ -297,6 +_,7 @@
      }
  
-     public boolean isValid(BlockState state) {
+     public boolean isValid(final BlockState state) {
 +        if (spout.common.moredatadriven.minecraft.BlockEntityAlternativeValidation.isAlternativelyValid(this, state)) return true; // Spout - More data-driven - Minecraft registries - Block entities - Also allow data-driven valid blocks
          return this.validBlocks.contains(state.getBlock());
      }

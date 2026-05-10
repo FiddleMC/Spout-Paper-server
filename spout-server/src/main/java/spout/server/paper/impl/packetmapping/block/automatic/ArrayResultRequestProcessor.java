@@ -228,7 +228,7 @@ public abstract class ArrayResultRequestProcessor<R extends ProxyStatesRequestBu
         public UsedStates getUsedStates() {
             return from -> {
                 int index = Result.this.getFromStateIndex(((CraftBlockData) from).getState());
-                return ObjectBooleanPair.of(this.resourcePackToStates[index].createCraftBlockData(), this.isResourcePackToStateProxy[index]);
+                return ObjectBooleanPair.of(this.resourcePackToStates[index].asBlockData(), this.isResourcePackToStateProxy[index]);
             };
         }
 
@@ -300,7 +300,7 @@ public abstract class ArrayResultRequestProcessor<R extends ProxyStatesRequestBu
                                 blockstates = Blockstates.create();
                             }
                             Blockstates fromBlockBlockstates = PluginResourcePackDiscoveryImpl.get().getResourcePackBlockstates(fromState.getBlock().keyInBlockRegistry);
-                            blockstates.setVariant(resourcePackToState.createCraftBlockData(), Objects.requireNonNull(fromBlockBlockstates.getVariant(fromState.createCraftBlockData()), "Missing blockstates entry for " + fromState));
+                            blockstates.setVariant(resourcePackToState.asBlockData(), Objects.requireNonNull(fromBlockBlockstates.getVariant(fromState.asBlockData()), "Missing blockstates entry for " + fromState));
                             return blockstates;
                         });
                     });

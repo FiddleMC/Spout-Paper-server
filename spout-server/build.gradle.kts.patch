@@ -15,8 +15,8 @@
      `maven-publish`
      idea
      id("io.papermc.paperweight.core")
--    id("io.papermc.fill.gradle") version "1.0.10"
-+    // id("io.papermc.fill.gradle") version "1.0.10" // Spout - Project setup - Remove Fill
+-    id("io.papermc.fill.gradle") version "1.0.11"
++    // id("io.papermc.fill.gradle") version "1.0.11" // Spout - Project setup - Remove Fill
  }
  
  val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
@@ -36,10 +36,10 @@
 +    activeFork = spout
 +    // Spout end - Project setup - Set up Paperweight
 +
-     spigot {
-         enabled = true
-         buildDataRef = "17f77cee7117ab9d6175f088ae8962bfd04e61a9"
-@@ -104,7 +_,21 @@
+     updatingMinecraft {
+         // oldPaperCommit = "7e80cef5198561d0db53406127e5b8bc7af51577"
+     }
+@@ -86,7 +_,21 @@
      }
  }
  
@@ -62,16 +62,16 @@
  configurations.named(log4jPlugins.compileClasspathConfigurationName) {
      extendsFrom(configurations.compileClasspath.get())
  }
-@@ -127,7 +_,7 @@
+@@ -109,7 +_,7 @@
  }
  
  dependencies {
 -    implementation(project(":paper-api"))
 +    implementation(project(":spout-api")) // Spout - Project setup - Set up Gradle project
-     implementation("ca.spottedleaf:concurrentutil:0.0.8")
+     implementation("ca.spottedleaf:concurrentutil:0.0.10")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
-@@ -191,21 +_,24 @@
+@@ -164,21 +_,24 @@
          val git = Git(rootProject.layout.projectDirectory.path)
          val mcVersion = rootProject.providers.gradleProperty("mcVersion").get()
          val build = System.getenv("BUILD_NUMBER") ?: null
@@ -103,7 +103,7 @@
              "Build-Number" to (build ?: ""),
              "Build-Time" to buildTime.toString(),
              "Git-Branch" to gitBranch,
-@@ -264,7 +_,8 @@
+@@ -237,7 +_,8 @@
      jvmArgumentProviders.add(provider)
  }
  
@@ -113,17 +113,18 @@
  idea {
      module {
          generatedSourceDirs.add(generatedDir.toFile())
-@@ -293,6 +_,9 @@
-         vendor.set(JvmVendorSpec.JETBRAINS)
+@@ -267,6 +_,10 @@
+         // vendor.set(JvmVendorSpec.JETBRAINS)
      })
-     jvmArgs("-XX:+AllowEnhancedClassRedefinition")
+     //jvmArgs("-XX:+AllowEnhancedClassRedefinition")
 +    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED") // Spout - Synchronize Bukkit enums - Add module opens to dev server runs
 +    // jvmArgs("--enable-final-field-mutation", "ALL-UNNAMED") // Spout - Synchronize Bukkit enums - Add enable final field mutation to dev server runs
++    jvmArgs("-Dcom.mojang.eula.agree=true") // Spout - Accept EULA for dev server runs
 +    jvmArgs("-Dspout.server.paper.enabled=true") // Spout - Confirm permanence - Ignore for dev server runs
  
      if (rootProject.childProjects["test-plugin"] != null) {
          val testPluginJar = rootProject.project(":test-plugin").tasks.jar.flatMap { it.archiveFile }
-@@ -356,6 +_,21 @@
+@@ -315,6 +_,21 @@
      mainClass.set(null as String?)
  }
  
@@ -145,7 +146,7 @@
  fill {
      project("paper")
      versionFamily(paperweight.minecraftVersion.map { it.split(".", "-").takeWhile { part -> part.toIntOrNull() != null }.take(2).joinToString(".") })
-@@ -372,3 +_,70 @@
+@@ -331,3 +_,55 @@
          }
      }
  }
@@ -159,59 +160,44 @@
 +).map { "${it.first}: ${it.second}" }
 +
 +if (extendedManifestLines.isNotEmpty()) {
-+    for (jar in listOf(
-+        "server" to null,
-+        "bundler" to "mojmap",
-+        // "paperclip" to "mojmap", // Currently not necessary since it inherits from the bundler JAR
-+        "bundler" to "reobf",
-+        // "paperclip" to "reobf", // Currently not necessary since it inherits from the bundler JAR
-+    )) {
-+        val taskName =
-+            if (jar.first == "server")
-+                "includeMappings"
-+            else "create${
-+                jar.second!!.replaceFirstChar(Char::uppercase)
-+            }${
-+                jar.first.replaceFirstChar(Char::uppercase)
-+            }Jar"
-+        tasks.named(taskName) {
-+            doLast {
++    val taskName = "createBundlerJar"
++    tasks.named(taskName) {
++        doLast {
 +
-+                project.logger.lifecycle("Adding extended manifest elements to ${jar.second?.let { "$it " } ?: ""}${jar.first} JAR...")
++            project.logger.lifecycle("Adding extended manifest elements to result of taskName...")
 +
-+                val jarName = listOfNotNull(
-+                    "spout",
-+                    jar.first,
-+                    project.version,
-+                    jar.second,
-+                ).joinToString("-") + ".jar"
++            // val jarName = listOfNotNull(
++            //     "spout",
++            //     jar.first,
++            //     project.version,
++            //     jar.second,
++            // ).joinToString("-") + ".jar"
 +
-+                val jarFile = layout.buildDirectory.file("libs/$jarName").get().asFile.toPath()
++            // val jarFile = layout.buildDirectory.file("libs/$jarName").get().asFile.toPath()
++            //
++            // val tempUnpackDir = findOutputDir(jarFile)
++            //
++            // try {
++            //     unzip(jarFile, tempUnpackDir)
++            //
++            //     val manifestFile = tempUnpackDir.resolve("META-INF/MANIFEST.MF")
++            //     val lines = ArrayList(manifestFile.readLines())
++            //     val extendedManifestLinesToAdd = extendedManifestLines.filter { it -> it !in lines }
++            //     if (extendedManifestLinesToAdd.isNotEmpty()) {
++            //         val mainClassLineIndex = lines.indexOfFirst { line -> line.startsWith("Main-Class:") }
++            //         if (mainClassLineIndex != -1) {
++            //             lines.addAll(mainClassLineIndex + 1, extendedManifestLinesToAdd)
++            //             manifestFile.writeLines(lines)
++            //
++            //             ensureDeleted(jarFile)
++            //             zip(tempUnpackDir, jarFile)
++            //         }
++            //     }
++            // } finally {
++            //     @OptIn(kotlin.io.path.ExperimentalPathApi::class)
++            //     tempUnpackDir.deleteRecursively()
++            // }
 +
-+                val tempUnpackDir = findOutputDir(jarFile)
-+
-+                try {
-+                    unzip(jarFile, tempUnpackDir)
-+
-+                    val manifestFile = tempUnpackDir.resolve("META-INF/MANIFEST.MF")
-+                    val lines = ArrayList(manifestFile.readLines())
-+                    val extendedManifestLinesToAdd = extendedManifestLines.filter { it -> it !in lines }
-+                    if (extendedManifestLinesToAdd.isNotEmpty()) {
-+                        val mainClassLineIndex = lines.indexOfFirst { line -> line.startsWith("Main-Class:") }
-+                        if (mainClassLineIndex != -1) {
-+                            lines.addAll(mainClassLineIndex + 1, extendedManifestLinesToAdd)
-+                            manifestFile.writeLines(lines)
-+
-+                            ensureDeleted(jarFile)
-+                            zip(tempUnpackDir, jarFile)
-+                        }
-+                    }
-+                } finally {
-+                    @OptIn(kotlin.io.path.ExperimentalPathApi::class)
-+                    tempUnpackDir.deleteRecursively()
-+                }
-+
-+            }
 +        }
 +    }
 +}

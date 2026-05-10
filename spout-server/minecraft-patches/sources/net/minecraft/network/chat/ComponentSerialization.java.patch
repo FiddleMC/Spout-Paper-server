@@ -1,10 +1,10 @@
 --- a/net/minecraft/network/chat/ComponentSerialization.java
 +++ b/net/minecraft/network/chat/ComponentSerialization.java
-@@ -171,6 +_,7 @@
+@@ -173,6 +_,7 @@
              }
          };
          // Paper end - adventure; create separate codec for each locale
-+        codec1 = codec1.xmap(Function.identity(), component -> spout.server.paper.impl.packetmapping.component.ComponentMappingsImpl.get().applyGenerically(component)); // Spout - Component mapping - Implementation part - Apply at Component encoding
-         return Codec.either(Codec.either(Codec.STRING, ExtraCodecs.nonEmptyList(codec.listOf())), codec1)
++        fullCodec = fullCodec.xmap(Function.identity(), component -> spout.server.paper.impl.packetmapping.component.ComponentMappingsImpl.get().applyGenerically(component)); // Spout - Component mapping - Implementation part - Apply at Component encoding
+         return Codec.either(Codec.either(Codec.STRING, ExtraCodecs.nonEmptyList(topSerializer.listOf())), fullCodec)
              .xmap(
-                 either -> either.map(either1 -> either1.map(Component::literal, ComponentSerialization::createFromList), component -> (Component)component),
+                 specialOrComponent -> specialOrComponent.map(
