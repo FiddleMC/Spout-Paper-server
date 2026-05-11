@@ -35,7 +35,7 @@ public final class MultiValuedDirectSectionContents extends DirectSectionContent
     public short getNonEmptyBlockCount() {
         short nonEmptyBlockCount = 0;
         for (int blockIndex = 0; blockIndex < 4096; blockIndex++) {
-            if (isNonEmptyBlockStateId(this.blockIndexToBlockStateId[blockIndex])) {
+            if (IS_NON_EMPTY_BLOCK_STATE[this.blockIndexToBlockStateId[blockIndex]]) {
                 nonEmptyBlockCount++;
             }
         }
@@ -46,7 +46,7 @@ public final class MultiValuedDirectSectionContents extends DirectSectionContent
     public short getFluidCount() {
         short fluidCount = 0;
         for (int blockIndex = 0; blockIndex < 4096; blockIndex++) {
-            if (isFluidStateId(this.blockIndexToBlockStateId[blockIndex])) {
+            if (IS_FLUID_STATE[this.blockIndexToBlockStateId[blockIndex]]) {
                 fluidCount++;
             }
         }

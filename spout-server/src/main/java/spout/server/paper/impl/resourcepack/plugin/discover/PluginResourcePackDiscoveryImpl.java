@@ -13,7 +13,6 @@ import spout.server.paper.api.resourcepack.plugin.discover.PluginResourcePackDis
 import spout.server.paper.api.resourcepack.plugin.discover.PluginResourcePackDiscovery;
 import spout.server.paper.impl.packetmapping.component.translatable.MinecraftLocaleUtil;
 import spout.server.paper.impl.util.composable.ComposableImpl;
-import spout.server.paper.impl.util.java.serviceloader.NoArgsConstructorServiceProviderImpl;
 import org.jspecify.annotations.Nullable;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -32,14 +31,6 @@ import java.util.regex.Pattern;
  * The implementation for {@link PluginResourcePackDiscovery}.
  */
 public final class PluginResourcePackDiscoveryImpl extends ComposableImpl<PluginResourcePackDiscoverEvent, PluginResourcePackDiscoverEventImpl> implements PluginResourcePackDiscovery {
-
-    public static final class ServiceProviderImpl extends NoArgsConstructorServiceProviderImpl<PluginResourcePackDiscovery, PluginResourcePackDiscoveryImpl> implements ServiceProvider {
-
-        public ServiceProviderImpl() {
-            super(PluginResourcePackDiscoveryImpl.class);
-        }
-
-    }
 
     public static PluginResourcePackDiscoveryImpl get() {
         return (PluginResourcePackDiscoveryImpl) PluginResourcePackDiscovery.get();
@@ -64,9 +55,6 @@ public final class PluginResourcePackDiscoveryImpl extends ComposableImpl<Plugin
     Map<String, List<Pair<PluginBootstrap, String>>> providingPluginsByResourcePackFileRelativePath = new LinkedHashMap<>();
 
     private final Map<Identifier, Blockstates> cachedBlockstates = new HashMap<>();
-
-    private PluginResourcePackDiscoveryImpl() {
-    }
 
     @Override
     protected PluginResourcePackDiscoverEventImpl createComposeEvent() {

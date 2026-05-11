@@ -16,7 +16,6 @@ import spout.server.paper.api.packetmapping.block.claim.ClaimRequestPriority;
 import spout.server.paper.api.packetmapping.block.claim.ClaimRequestPriorityComparator;
 import spout.server.paper.api.packetmapping.block.claim.ResourcePackBlockStateClaims;
 import spout.server.paper.impl.moredatadriven.minecraft.VanillaOnlyBlockStateRegistry;
-import spout.server.paper.impl.util.java.serviceloader.NoArgsConstructorServiceProviderImpl;
 import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,14 +56,6 @@ import java.util.stream.Stream;
  * </p>
  */
 public final class ResourcePackBlockStateClaimsImpl implements ResourcePackBlockStateClaims {
-
-    public static final class ServiceProviderImpl extends NoArgsConstructorServiceProviderImpl<ResourcePackBlockStateClaims, ResourcePackBlockStateClaimsImpl> implements ServiceProvider {
-
-        public ServiceProviderImpl() {
-            super(ResourcePackBlockStateClaimsImpl.class);
-        }
-
-    }
 
     public static ResourcePackBlockStateClaimsImpl get() {
         return (ResourcePackBlockStateClaimsImpl) ResourcePackBlockStateClaims.get();

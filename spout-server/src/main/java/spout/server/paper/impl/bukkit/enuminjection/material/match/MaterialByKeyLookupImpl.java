@@ -4,7 +4,6 @@ import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import spout.server.paper.impl.bukkit.enuminjection.KeyedSourceBukkitEnumSynchronizer;
-import spout.server.paper.impl.util.java.serviceloader.NoArgsConstructorServiceProviderImpl;
 import org.jspecify.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Locale;
@@ -14,14 +13,6 @@ import java.util.Map;
  * The implementation of {@link MaterialByKeyLookup}.
  */
 public final class MaterialByKeyLookupImpl implements MaterialByKeyLookup {
-
-    public static final class ServiceProviderImpl extends NoArgsConstructorServiceProviderImpl<MaterialByKeyLookup, MaterialByKeyLookupImpl> implements ServiceProvider {
-
-        public ServiceProviderImpl() {
-            super(MaterialByKeyLookupImpl.class);
-        }
-
-    }
 
     public static MaterialByKeyLookupImpl get() {
         return (MaterialByKeyLookupImpl) MaterialByKeyLookup.get();
@@ -38,9 +29,6 @@ public final class MaterialByKeyLookupImpl implements MaterialByKeyLookup {
      * or null if not initialized yet.
      */
     private @Nullable Map<String, Material> byLowerCasePathMap;
-
-    private MaterialByKeyLookupImpl() {
-    }
 
     @Override
     public @Nullable Material lookup(Key key) {

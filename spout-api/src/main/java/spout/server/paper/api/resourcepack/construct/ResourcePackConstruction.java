@@ -4,8 +4,7 @@ import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.lifecycle.event.handler.configuration.PrioritizedLifecycleEventHandlerConfiguration;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEventType;
 import spout.server.paper.api.util.composable.Composable;
-import spout.server.paper.impl.util.java.serviceloader.GenericServiceProvider;
-import java.util.ServiceLoader;
+import spout.server.paper.impl.util.service.SpoutServices;
 
 /**
  * A service to construct the Spout server resource pack.
@@ -13,16 +12,10 @@ import java.util.ServiceLoader;
 public interface ResourcePackConstruction extends Composable<ResourcePackConstructEvent> {
 
     /**
-     * An internal interface to get the {@link ResourcePackConstruction} instance.
-     */
-    interface ServiceProvider extends GenericServiceProvider<ResourcePackConstruction> {
-    }
-
-    /**
      * @return The {@link ResourcePackConstruction} instance.
      */
     static ResourcePackConstruction get() {
-        return ServiceLoader.load(ResourcePackConstruction.ServiceProvider.class, ResourcePackConstruction.ServiceProvider.class.getClassLoader()).findFirst().get().get();
+        return SpoutServices.getResourcePackConstruction();
     }
 
     /**

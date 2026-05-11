@@ -2,10 +2,9 @@ package spout.server.paper.api.packetmapping.block.claim;
 
 import io.papermc.paper.registry.event.RegistryEvents;
 import org.bukkit.block.data.BlockData;
-import spout.server.paper.impl.util.java.serviceloader.GenericServiceProvider;
 import org.jspecify.annotations.Nullable;
+import spout.server.paper.impl.util.service.SpoutServices;
 import java.util.List;
-import java.util.ServiceLoader;
 
 /**
  * Provides information about which {@linkplain BlockData block states} are visual duplicates of each other.
@@ -40,16 +39,10 @@ import java.util.ServiceLoader;
 public interface VisualDuplicates {
 
     /**
-     * An internal interface to get the {@link VisualDuplicates} instance.
-     */
-    interface ServiceProvider extends GenericServiceProvider<VisualDuplicates> {
-    }
-
-    /**
      * @return The {@link VisualDuplicates} instance.
      */
     static VisualDuplicates get() {
-        return ServiceLoader.load(VisualDuplicates.ServiceProvider.class, VisualDuplicates.ServiceProvider.class.getClassLoader()).findFirst().get().get();
+        return SpoutServices.getVisualDuplicates();
     }
 
     /**

@@ -11,7 +11,6 @@ import spout.server.paper.impl.moredatadriven.minecraft.BlockRegistry;
 import spout.server.paper.impl.moredatadriven.minecraft.BlockStateRegistry;
 import spout.server.paper.impl.packetmapping.block.claim.ResourcePackBlockStateClaimsImpl;
 import spout.server.paper.impl.util.composable.ComposableImpl;
-import spout.server.paper.impl.util.java.serviceloader.NoArgsConstructorServiceProviderImpl;
 import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,14 +22,6 @@ import java.util.Map;
  * A pipeline of block mappings.
  */
 public final class BlockMappingsImpl extends ComposableImpl<BlockMappingsComposeEvent, BlockMappingsComposeEventImpl> implements BlockMappings {
-
-    public static final class ServiceProviderImpl extends NoArgsConstructorServiceProviderImpl<BlockMappings, BlockMappingsImpl> implements ServiceProvider {
-
-        public ServiceProviderImpl() {
-            super(BlockMappingsImpl.class);
-        }
-
-    }
 
     public static BlockMappingsImpl get() {
         return (BlockMappingsImpl) BlockMappings.get();
@@ -74,7 +65,7 @@ public final class BlockMappingsImpl extends ComposableImpl<BlockMappingsCompose
      */
     private final int[][] directMappingsAsIds;
 
-    private BlockMappingsImpl() {
+    public BlockMappingsImpl() {
         this.chainMappings = new BlockMappingsStep[ClientView.AwarenessLevel.getAll().length][][];
         this.directMappings = new BlockState[this.chainMappings.length][];
         this.directMappingsAsIds = new int[this.chainMappings.length][];

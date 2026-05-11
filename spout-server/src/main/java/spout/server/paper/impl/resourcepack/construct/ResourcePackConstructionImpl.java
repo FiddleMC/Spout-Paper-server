@@ -19,7 +19,6 @@ import spout.server.paper.impl.resourcepack.plugin.discover.PluginResourcePackDi
 import spout.server.paper.impl.resourcepack.send.ResourcePackSending;
 import spout.server.paper.impl.resourcepack.serve.ResourcePackServing;
 import spout.server.paper.impl.util.composable.ComposableImpl;
-import spout.server.paper.impl.util.java.serviceloader.NoArgsConstructorServiceProviderImpl;
 import org.jspecify.annotations.Nullable;
 import java.io.IOException;
 import java.util.Arrays;
@@ -35,14 +34,6 @@ import java.util.regex.Pattern;
  */
 public final class ResourcePackConstructionImpl extends ComposableImpl<ResourcePackConstructEvent, ResourcePackConstructEventImpl> implements ResourcePackConstruction {
 
-    public static final class ServiceProviderImpl extends NoArgsConstructorServiceProviderImpl<ResourcePackConstruction, ResourcePackConstructionImpl> implements ServiceProvider {
-
-        public ServiceProviderImpl() {
-            super(ResourcePackConstructionImpl.class);
-        }
-
-    }
-
     public static ResourcePackConstructionImpl get() {
         return (ResourcePackConstructionImpl) ResourcePackConstruction.get();
     }
@@ -50,9 +41,6 @@ public final class ResourcePackConstructionImpl extends ComposableImpl<ResourceP
     @Override
     protected String getEventTypeNamePrefix() {
         return "spout_resource_pack_construction";
-    }
-
-    private ResourcePackConstructionImpl() {
     }
 
     @Override

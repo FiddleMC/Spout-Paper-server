@@ -19,7 +19,6 @@ import spout.server.paper.impl.packetmapping.item.builtin.MapDefaultItemNamesIte
 import spout.server.paper.impl.packetmapping.item.builtin.RemoveNonVanillaDebugStickStateItemMappingsStep;
 import spout.server.paper.impl.util.composable.ComposableImpl;
 import spout.server.paper.impl.util.mappingpipeline.WithContextSingleStepMappingPipeline;
-import spout.server.paper.impl.util.java.serviceloader.NoArgsConstructorServiceProviderImpl;
 import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,14 +28,6 @@ import java.util.List;
  * A pipeline of item mappings.
  */
 public final class ItemMappingsImpl extends ComposableImpl<ItemMappingsComposeEvent<ItemMappingsStep>, ItemMappingsComposeEventImpl> implements WithClientViewContextSingleStepMappingPipeline<ItemStack, ItemMappingFunctionContext, ItemMappingHandleNMSImpl>, ItemMappings<ItemMappingsStep> {
-
-    public static final class ServiceProviderImpl extends NoArgsConstructorServiceProviderImpl<ItemMappings<?>, ItemMappingsImpl> implements ServiceProvider {
-
-        public ServiceProviderImpl() {
-            super(ItemMappingsImpl.class);
-        }
-
-    }
 
     public static ItemMappingsImpl get() {
         return (ItemMappingsImpl) ItemMappings.get();
@@ -58,7 +49,7 @@ public final class ItemMappingsImpl extends ComposableImpl<ItemMappingsComposeEv
      */
     private final ItemMappingsStep[][][] mappings;
 
-    private ItemMappingsImpl() {
+    public ItemMappingsImpl() {
         this.mappings = new ItemMappingsStep[ClientView.AwarenessLevel.getAll().length][][];
     }
 

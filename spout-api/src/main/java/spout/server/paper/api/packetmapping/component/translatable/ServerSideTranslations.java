@@ -1,9 +1,8 @@
 package spout.server.paper.api.packetmapping.component.translatable;
 
 import spout.server.paper.api.util.composable.Composable;
-import spout.server.paper.impl.util.java.serviceloader.GenericServiceProvider;
 import org.jspecify.annotations.Nullable;
-import java.util.ServiceLoader;
+import spout.server.paper.impl.util.service.SpoutServices;
 
 /**
  * A service for registered server-side translations.
@@ -15,16 +14,10 @@ import java.util.ServiceLoader;
 public interface ServerSideTranslations extends Composable<ServerSideTranslationsComposeEvent> {
 
     /**
-     * An internal interface to get the {@link ServerSideTranslations} instance.
-     */
-    interface ServiceProvider extends GenericServiceProvider<ServerSideTranslations> {
-    }
-
-    /**
      * @return The {@link ServerSideTranslations} instance.
      */
     static ServerSideTranslations get() {
-        return ServiceLoader.load(ServerSideTranslations.ServiceProvider.class, ServerSideTranslations.ServiceProvider.class.getClassLoader()).findFirst().get().get();
+        return SpoutServices.getServerSideTranslations();
     }
 
     /**

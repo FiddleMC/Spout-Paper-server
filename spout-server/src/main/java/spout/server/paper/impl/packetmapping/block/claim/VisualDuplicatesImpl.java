@@ -27,7 +27,6 @@ import spout.server.paper.api.packetmapping.block.claim.VisualDuplicates;
 import spout.server.paper.impl.moredatadriven.minecraft.VanillaOnlyBlockRegistry;
 import spout.server.paper.impl.moredatadriven.minecraft.VanillaOnlyBlockStateRegistry;
 import spout.server.paper.impl.util.datastructure.UnionFind;
-import spout.server.paper.impl.util.java.serviceloader.NoArgsConstructorServiceProviderImpl;
 import org.jspecify.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -41,14 +40,6 @@ import java.util.stream.StreamSupport;
  * The implementation of {@link VisualDuplicates}.
  */
 public final class VisualDuplicatesImpl implements VisualDuplicates {
-
-    public static final class ServiceProviderImpl extends NoArgsConstructorServiceProviderImpl<VisualDuplicates, VisualDuplicatesImpl> implements ServiceProvider {
-
-        public ServiceProviderImpl() {
-            super(VisualDuplicatesImpl.class);
-        }
-
-    }
 
     public static VisualDuplicatesImpl get() {
         return (VisualDuplicatesImpl) VisualDuplicates.get();

@@ -3,9 +3,8 @@ package spout.server.paper.impl.bukkit.enuminjection.material.match;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import spout.server.paper.impl.util.java.serviceloader.GenericServiceProvider;
 import org.jspecify.annotations.Nullable;
-import java.util.ServiceLoader;
+import spout.server.paper.impl.util.service.SpoutServices;
 
 /**
  * Provides a flexible lookup from a {@link NamespacedKey} to a {@link org.bukkit.Material}.
@@ -13,16 +12,10 @@ import java.util.ServiceLoader;
 public interface MaterialByKeyLookup {
 
     /**
-     * An internal interface to get the {@link MaterialByKeyLookup} instance.
-     */
-    interface ServiceProvider extends GenericServiceProvider<MaterialByKeyLookup> {
-    }
-
-    /**
      * @return The {@link MaterialByKeyLookup} instance.
      */
     static MaterialByKeyLookup get() {
-        return ServiceLoader.load(MaterialByKeyLookup.ServiceProvider.class, MaterialByKeyLookup.ServiceProvider.class.getClassLoader()).findFirst().get().get();
+        return SpoutServices.getMaterialByKeyLookup();
     }
 
     /**

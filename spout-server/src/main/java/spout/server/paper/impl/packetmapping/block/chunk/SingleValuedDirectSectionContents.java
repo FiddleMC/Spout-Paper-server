@@ -28,12 +28,12 @@ public final class SingleValuedDirectSectionContents extends DirectSectionConten
 
     @Override
     public short getNonEmptyBlockCount() {
-        return isNonEmptyBlockStateId(this.blockStateId) ? (short) 4096 : 0;
+        return IS_NON_EMPTY_BLOCK_STATE[this.blockStateId] ? (short) 4096 : 0;
     }
 
     @Override
     public short getFluidCount() {
-        return isFluidStateId(this.blockStateId) ? (short) 4096 : 0;
+        return IS_FLUID_STATE[this.blockStateId] ? (short) 4096 : 0;
     }
 
     @Override

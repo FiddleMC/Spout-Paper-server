@@ -4,11 +4,10 @@ import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
 import org.bukkit.block.data.BlockData;
 import spout.server.paper.api.clientview.ClientView;
 import spout.server.paper.api.packetmapping.block.BlockMappingsComposeEvent;
-import spout.server.paper.impl.util.java.serviceloader.GenericServiceProvider;
 import org.jspecify.annotations.Nullable;
+import spout.server.paper.impl.util.service.SpoutServices;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ServiceLoader;
 import java.util.function.Consumer;
 
 /**
@@ -40,16 +39,10 @@ import java.util.function.Consumer;
 public interface ResourcePackBlockStateClaims {
 
     /**
-     * An internal interface to get the {@link VisualDuplicates} instance.
-     */
-    interface ServiceProvider extends GenericServiceProvider<ResourcePackBlockStateClaims> {
-    }
-
-    /**
-     * @return The {@link VisualDuplicates} instance.
+     * @return The {@link ResourcePackBlockStateClaims} instance.
      */
     static ResourcePackBlockStateClaims get() {
-        return ServiceLoader.load(ResourcePackBlockStateClaims.ServiceProvider.class, ResourcePackBlockStateClaims.ServiceProvider.class.getClassLoader()).findFirst().get().get();
+        return SpoutServices.getResourcePackBlockStateClaims();
     }
 
     /**

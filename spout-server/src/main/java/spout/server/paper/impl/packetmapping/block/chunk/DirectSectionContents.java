@@ -38,44 +38,22 @@ public abstract class DirectSectionContents implements SectionContents {
      */
     public abstract int getPalettedContainerSizeInBytes(byte bitsPerEntry);
 
-    private static final int[] AIR_BLOCK_STATE_IDS;
-    private static final int[] FLUID_STATE_IDS;
+    public static final boolean[] IS_NON_EMPTY_BLOCK_STATE;
+    public static final boolean[] IS_FLUID_STATE;
 
     static {
-        int[] airBlockStateIds = new int[BlockStateRegistry.get().size()];
-        int[] fluidStateIds = new int[BlockStateRegistry.get().size()];
-        int[] airBlockCount = {0}; // Array to make effectively final
-        int[] fluidCount = {0}; // Array to make effectively final
+        IS_NON_EMPTY_BLOCK_STATE = new boolean[BlockStateRegistry.get().size()];
+        IS_FLUID_STATE = new boolean[BlockStateRegistry.get().size()];
         BlockStateRegistry.get().forEach(blockState -> {
-            if (blockState.isAir()) {
-                airBlockStateIds[airBlockCount[0]++] = blockState.indexInBlockStateRegistry;
-            } else {
+            if (!blockState.isAir()) {
+                int index = blockState.indexInBlockStateRegistry;
+                IS_NON_EMPTY_BLOCK_STATE[index] = true;
                 FluidState fluid = blockState.getFluidState();
                 if (!fluid.isEmpty()) {
-                    fluidStateIds[fluidCount[0]++] = blockState.indexInBlockStateRegistry;
+                    IS_FLUID_STATE[index] = true;
                 }
             }
         });
-        AIR_BLOCK_STATE_IDS = Arrays.copyOf(airBlockStateIds, fluidCount[0]);
-        FLUID_STATE_IDS = Arrays.copyOf(fluidStateIds, fluidCount[0]);
-    }
-
-    protected static boolean isNonEmptyBlockStateId(int blockStateId) {
-        for (int airBlockStateId : AIR_BLOCK_STATE_IDS) {
-            if (blockStateId == airBlockStateId) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    protected static boolean isFluidStateId(int blockStateId) {
-        for (int fluidStateId : FLUID_STATE_IDS) {
-            if (blockStateId == fluidStateId) {
-                return true;
-            }
-        }
-        return false;
     }
 
     protected void writeAsSingleValuedPalettedContainer(ChunkPacketBlockMapperWriter writer) {

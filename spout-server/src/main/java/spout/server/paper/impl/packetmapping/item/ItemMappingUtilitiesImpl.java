@@ -13,7 +13,6 @@ import spout.server.paper.api.packetmapping.item.ItemMappingHandle;
 import spout.server.paper.api.packetmapping.item.ItemMappingUtilities;
 import spout.server.paper.api.packetmapping.item.nms.ItemMappingHandleNMS;
 import spout.server.paper.api.packetmapping.item.nms.ItemMappingUtilitiesNMS;
-import spout.server.paper.impl.util.java.serviceloader.NoArgsConstructorServiceProviderImpl;
 import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 
@@ -21,22 +20,6 @@ import java.util.Objects;
  * The implementation for {@link ItemMappingUtilities} and {@link ItemMappingUtilitiesNMS}.
  */
 public final class ItemMappingUtilitiesImpl implements ItemMappingUtilitiesNMS {
-
-    public static final class ServiceProviderImpl extends NoArgsConstructorServiceProviderImpl<ItemMappingUtilities, ItemMappingUtilitiesImpl> implements ItemMappingUtilities.ServiceProvider {
-
-        public ServiceProviderImpl() {
-            super(ItemMappingUtilitiesImpl.class);
-        }
-
-    }
-
-    public static final class ServiceProviderNMSImpl extends NoArgsConstructorServiceProviderImpl<ItemMappingUtilitiesNMS, ItemMappingUtilitiesImpl> implements ItemMappingUtilitiesNMS.ServiceProvider {
-
-        public ServiceProviderNMSImpl() {
-            super(ItemMappingUtilitiesImpl.class);
-        }
-
-    }
 
     public static ItemMappingUtilitiesImpl get() {
         return (ItemMappingUtilitiesImpl) ItemMappingUtilitiesNMS.get();

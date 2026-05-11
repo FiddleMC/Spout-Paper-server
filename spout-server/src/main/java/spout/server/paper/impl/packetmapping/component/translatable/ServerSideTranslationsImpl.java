@@ -13,7 +13,6 @@ import spout.server.paper.impl.configuration.SpoutGlobalConfiguration;
 import spout.server.paper.impl.resourcepack.construct.ResourcePackConstructionImpl;
 import spout.server.paper.impl.resourcepack.plugin.discover.PluginResourcePackDiscoveryImpl;
 import spout.server.paper.impl.util.composable.ComposableImpl;
-import spout.server.paper.impl.util.java.serviceloader.NoArgsConstructorServiceProviderImpl;
 import org.jspecify.annotations.Nullable;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -33,14 +32,6 @@ import java.util.stream.Collectors;
  * The implementation of {@link ServerSideTranslations}.
  */
 public final class ServerSideTranslationsImpl extends ComposableImpl<ServerSideTranslationsComposeEvent, ServerSideTranslationsComposeEventImpl> implements ServerSideTranslations {
-
-    public static final class ServiceProviderImpl extends NoArgsConstructorServiceProviderImpl<ServerSideTranslations, ServerSideTranslationsImpl> implements ServiceProvider {
-
-        public ServiceProviderImpl() {
-            super(ServerSideTranslationsImpl.class);
-        }
-
-    }
 
     public static ServerSideTranslationsImpl get() {
         return (ServerSideTranslationsImpl) ServerSideTranslations.get();

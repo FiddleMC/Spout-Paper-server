@@ -2,8 +2,7 @@ package spout.server.paper.api.packetmapping.item;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
-import spout.server.paper.impl.util.java.serviceloader.GenericServiceProvider;
-import java.util.ServiceLoader;
+import spout.server.paper.impl.util.service.SpoutServices;
 
 /**
  * Some utilities for the mapping of items.
@@ -11,16 +10,10 @@ import java.util.ServiceLoader;
 public interface ItemMappingUtilities {
 
     /**
-     * An internal interface to get the {@link ItemMappingUtilities} instance.
-     */
-    interface ServiceProvider extends GenericServiceProvider<ItemMappingUtilities> {
-    }
-
-    /**
      * @return The {@link ItemMappingUtilities} instance.
      */
     static ItemMappingUtilities get() {
-        return ServiceLoader.load(ItemMappingUtilities.ServiceProvider.class, ItemMappingUtilities.ServiceProvider.class.getClassLoader()).findFirst().get().get();
+        return SpoutServices.getItemMappingUtilities();
     }
 
     /**

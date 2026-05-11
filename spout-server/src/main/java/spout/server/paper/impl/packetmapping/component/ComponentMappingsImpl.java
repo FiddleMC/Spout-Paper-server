@@ -12,21 +12,12 @@ import spout.server.paper.api.packetmapping.component.ComponentTarget;
 import spout.server.paper.impl.packetmapping.WithClientViewContextSingleStepMappingPipeline;
 import spout.server.paper.impl.packetmapping.component.translatable.ServerSideTranslationsComponentMappingsStep;
 import spout.server.paper.impl.util.composable.ComposableImpl;
-import spout.server.paper.impl.util.java.serviceloader.NoArgsConstructorServiceProviderImpl;
 import org.jspecify.annotations.Nullable;
 
 /**
  * A pipeline of component mappings.
  */
 public final class ComponentMappingsImpl extends ComposableImpl<ComponentMappingsComposeEvent<ComponentMappingsStep>, ComponentMappingsComposeEventImpl> implements WithClientViewContextSingleStepMappingPipeline<Component, ComponentMappingFunctionContext, ComponentMappingHandleNMSImpl>, ComponentMappings<ComponentMappingsStep> {
-
-    public static final class ServiceProviderImpl extends NoArgsConstructorServiceProviderImpl<ComponentMappings<?>, ComponentMappingsImpl> implements ServiceProvider {
-
-        public ServiceProviderImpl() {
-            super(ComponentMappingsImpl.class);
-        }
-
-    }
 
     public static ComponentMappingsImpl get() {
         return (ComponentMappingsImpl) ComponentMappings.get();
@@ -48,7 +39,7 @@ public final class ComponentMappingsImpl extends ComposableImpl<ComponentMapping
      */
     private final ComponentMappingsStep[][][] mappings;
 
-    private ComponentMappingsImpl() {
+    public ComponentMappingsImpl() {
         this.mappings = new ComponentMappingsStep[ClientView.AwarenessLevel.getAll().length][][];
     }
 
