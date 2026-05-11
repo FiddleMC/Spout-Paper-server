@@ -41,7 +41,7 @@
 +                }.standardOutput.asText.map { it.trim() }
 +                for (coordinates in arrayOf(
 +                    "com.github.modernspout:spout-api",
-+                    "com.github.ModernSpout:Spout-Paper-server"
++                    "com.github.ModernSpout:Spout"
 +                )) {
 +                    for (version in arrayOf(project.version, getGitHashProvider(null).get(), getGitHashProvider(7).get(), getGitHashProvider(8).get(), getGitHashProvider(10).get())) {
 +                        val alternativeCapability = "$coordinates:$version"

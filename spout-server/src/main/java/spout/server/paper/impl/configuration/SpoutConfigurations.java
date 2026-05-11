@@ -68,7 +68,7 @@ public final class SpoutConfigurations extends PaperConfigurations<SpoutGlobalCo
         The world configuration options are inside
         their respective world folder. The files are named %s
         
-        Wiki: https://github.com/FiddleMC/Spout-Paper-server/wiki
+        Wiki: https://github.com/FiddleMC/Spout/wiki
         Discord: https://discord.gg/EduvcVmKS7""", SPOUT_WORLD_CONFIG_FILE_NAME);
 
     @Override
@@ -82,7 +82,7 @@ public final class SpoutConfigurations extends PaperConfigurations<SpoutGlobalCo
             Configuration options here apply to all worlds, unless you specify overrides inside
             the world-specific config file inside each world folder.
             
-            Wiki: https://github.com/FiddleMC/Spout-Paper-server/wiki
+            Wiki: https://github.com/FiddleMC/Spout/wiki
             Discord: https://discord.gg/EduvcVmKS7""";
     }
 

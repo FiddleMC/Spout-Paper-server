@@ -2,16 +2,16 @@
 
   <!--<img src="logo.png" alt="Spout logo" width="21%" align="right">-->
   <h1>
-    Spout<br>server (Paper/Bukkit)
+    Spout<br>(for Paper & Bukkit)
   </h1>
   <h3>
-    Lets you add new blocks and items
+    Server software extension<br>letting you add new blocks and items
     <br>
-    that are automatically sent to connecting players
+    that are automatically installed on clients
   </h3>
 
 [![Discord](https://img.shields.io/discord/1091830813240348732?color=5865F2&label=discord&style=for-the-badge)](https://discord.gg/EduvcVmKS7)
-[![1.21.11](https://img.shields.io/badge/Latest_version-1.21.11-4fa31a?style=for-the-badge)](https://github.com/ModernSpout/Spout-Paper-server/releases/download/1.21.11-R0.11/spout-1.21.11-R0.11.jar)
+[![Download latest version](https://img.shields.io/badge/Latest_version-26.1.2-4fa31a?style=for-the-badge)](https://github.com/ModernSpout/Spout/releases/download/26.1.2-R1.0/spout-26.1.2-R1.0.jar)
 
 </div>
 
@@ -42,35 +42,46 @@
 
 ## Introduction
 
-Spout lets Spout plugins add new blocks and items server-side.
-When players join, the new blocks and items will be sent to their client and also added client-side.
+Spout is a Paper server extension that lets Bukkit plugins add new blocks and items server-side.
+When players join, the new blocks and items will be sent to their client and added client-side.
 
-This is the Spout server extension of Paper.
+Spout requires a Paper server.
+<!--A Fabric server mod is also in development.-->
 
-&nbsp;&nbsp;&nbsp;&nbsp;✓&nbsp;&nbsp;Support for Bukkit / Spigot / Paper plugins
+&nbsp;&nbsp;&nbsp;&nbsp;✓&nbsp;&nbsp;Support for all Bukkit / Spigot / Paper plugins
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;✓&nbsp;&nbsp;Add Spout plugins just like Paper plugins
+&nbsp;&nbsp;&nbsp;&nbsp;✓&nbsp;&nbsp;Spout plugins are just Paper plugins
+that can add blocks and items on Spout servers
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;✓&nbsp;&nbsp;Works with the
-<a href="https://github.com/ModernSpout/Spout-Fabric-client">Spout client mod</a> and vanilla clients
+&nbsp;&nbsp;&nbsp;&nbsp;✓&nbsp;&nbsp;Works with all clients,
+with special support for clients with the corresponding
+<a href="https://github.com/ModernSpout/Spoutcraft">Fabric mod</a>
+<br>
+
+## Spout plugin showcase
+
+* [Quark](https://github.com/ModernSpout/Quark-plugin)
+* [Chinese paper lamps](https://github.com/ModernSpout/ChinesePaperLamps-plugin)
+* [Snowy stone bricks](https://github.com/ModernSpout/SnowyStoneBricks-plugin)
 
 ## Downloads
 
-* [Latest version: 1.21.11-R0.11](https://github.com/ModernSpout/Spout-Paper-server/releases/download/1.21.11-R0.11/spout-1.21.11-R0.11.jar)
+&nbsp;&nbsp;&nbsp;&nbsp;➞&nbsp;&nbsp;**[Latest version: 26.1.2 (version 1.0)](https://github.com/ModernSpout/Spout/releases/download/26.1.2-R1.0/spout-26.1.2-R1.0.jar)**
+
 * Development versions: download from
-  [Actions](https://github.com/ModernSpout/Spout-Paper-server/actions/workflows/build-server.yml),
+  [Actions](https://github.com/ModernSpout/Spout/actions/workflows/build-server.yml),
   under **Artifacts**
-* [Older releases](https://github.com/ModernSpout/Spout-Paper-server/releases)
+* [Older releases](https://github.com/ModernSpout/Spout/releases)
 
 ## Installation
 
-The `.jar` file is a drop-in replacement for the Paper server JAR, you can run it the same:
+The `.jar` file is a drop-in replacement for the Paper JAR, and you can run it the same:
 
 ```sh
-java -jar spout-1.21.11-R0.11.jar
+java -jar spout-26.1.2-R1.0.jar
 ```
 
-You can place Spout/Paper/Bukkit plugins in the `plugins` folder.
+<!--You can place Bukkit / Paper / Spout plugins in the `plugins` folder.-->
 
 <div align="center">
   <table>
@@ -89,17 +100,17 @@ You can place Spout/Paper/Bukkit plugins in the `plugins` folder.
   </table>
 </div>
 
-## Plugin showcase
+## Creating a Spout plugin
 
-* [Chinese paper lamps](https://github.com/ModernSpout/ChinesePaperLamps-plugin)
-* [Snowy stone bricks](https://github.com/ModernSpout/SnowyStoneBricks-plugin)
-* [Quark (port)](https://github.com/ModernSpout/Quark-plugin)
+It's very simple:
+1. Create a regular Paper plugin
+2. Add the Spout API as a dependency
+3. Define your content with a data and resource pack
 
-## Creating a plugin
+See the step-by-step guide on the
+<a href="https://github.com/ModernSpout/Spout/wiki">wiki</a>!
 
-It's surprisingly simple! See the step-by-step guides on the
-<a href="https://github.com/ModernSpout/Spout-Paper-server/wiki">wiki</a>.
-
+<!--
 ## Next
 
 The next goals of the project are:
@@ -109,16 +120,15 @@ The next goals of the project are:
 
 Afterward, goals of the project are:
 
-* Custom block entities and entities
+* Custom block types, item types, block entities and entities
 * Using display entities to display custom blocks to vanilla clients
 
 Don't hesitate to suggest ideas, send in PRs (we will take a serious look at every PR, even if it is only a draft),
 or ask to join the project as a developer.
-
+-->
 ## Current known issues
 
-* Custom block display entities and falling custom block entities are not displayed correctly
-* Stonecutter recipes work, but do not display correctly
+* Vanilla clients cannot see block display entities, falling blocks and stonecutter recipes for custom blocks.
 
 ## Acknowledgements
 

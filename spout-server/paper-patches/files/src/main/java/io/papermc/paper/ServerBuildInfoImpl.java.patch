@@ -5,7 +5,7 @@
              getManifestAttribute(manifest, ATTRIBUTE_BRAND_ID)
                  .map(Key::key)
 -                .orElse(BRAND_PAPER_ID),
-+                .orElse(spout.common.branding.SpoutBrandId.BRAND_ID), // Spout - Branding - Rename server brand
++                .orElse(spout.common.branding.SpoutPaperServerBrandId.BRAND_ID), // Spout - Branding - Rename server brand
              getManifestAttribute(manifest, ATTRIBUTE_BRAND_NAME)
 -                .orElse(BRAND_PAPER_NAME),
 +                .orElse(spout.common.branding.SpoutBrandName.BRAND), // Spout - Branding - Rename server brand

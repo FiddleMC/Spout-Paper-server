@@ -48,7 +48,7 @@ indent_size = 2
 [test-plugin/src/main/resources/*pack*/**/*.json]
 indent_size = 2
 
-[test-plugin/src/main/resources/data_pack/pack.mcmeta]
+[test-plugin/src/main/resources/*pack*/**/*.mcmeta]
 indent_size = 2
 
 [paper-api/src/generated/java/**/*.java]

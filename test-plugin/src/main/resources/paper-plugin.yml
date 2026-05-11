@@ -1,4 +1,4 @@
-name: Spout-Paper-Test-Plugin
+name: Spout-Test-Plugin
 version: ${version}
 main: spout.server.paper.testplugin.TestPlugin
 description: Spout test plugin

@@ -1,4 +1,4 @@
-package spout.server.paper.api.branding;
+package spout.common.branding;
 
 import net.kyori.adventure.key.Key;
 
@@ -12,7 +12,7 @@ public final class SpoutPaperServerBrandId {
     }
 
     /**
-     * The brand id of the Spout Paper server software.
+     * The Brand id of Spout.
      * Replacement for {@link io.papermc.paper.ServerBuildInfo#BRAND_PAPER_ID}.
      */
     public static final Key BRAND_ID = Key.key("spout", "spout-paper-server");

@@ -318,7 +318,7 @@ public abstract class ArrayResultRequestProcessor<R extends ProxyStatesRequestBu
             }
             // Vanilla
             if (createVanillaMappings) {
-                BlockState vanillaToState = result.resourcePackToStates[fromStateIndex];
+                BlockState vanillaToState = result.vanillaToStates[fromStateIndex];
                 // Block
                 event.manualMappings().registerNMS(builder -> {
                     builder.awarenessLevel(ClientView.AwarenessLevel.VANILLA);
