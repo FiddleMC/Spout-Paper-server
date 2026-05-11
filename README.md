@@ -11,7 +11,7 @@
   </h3>
 
 [![Discord](https://img.shields.io/discord/1091830813240348732?color=5865F2&label=discord&style=for-the-badge)](https://discord.gg/EduvcVmKS7)
-[![Download latest version](https://img.shields.io/badge/Latest_version-26.1.2-4fa31a?style=for-the-badge)](https://github.com/ModernSpout/Spout/releases/download/26.1.2-R1.0/spout-26.1.2-R1.0.jar)
+[![Download latest version](https://img.shields.io/badge/Latest_version-26.1.2-4fa31a?style=for-the-badge)](https://github.com/ModernSpout/Spout/releases/download/26.1.2-R1.1/spout-26.1.2-R1.1.jar)
 
 </div>
 
@@ -66,7 +66,7 @@ with special support for clients with the corresponding
 
 ## Downloads
 
-&nbsp;&nbsp;&nbsp;&nbsp;➞&nbsp;&nbsp;**[Latest version: 26.1.2 (version 1.0)](https://github.com/ModernSpout/Spout/releases/download/26.1.2-R1.0/spout-26.1.2-R1.0.jar)**
+&nbsp;&nbsp;&nbsp;&nbsp;➞&nbsp;&nbsp;**[Latest version: 26.1.2 (version 1.1)](https://github.com/ModernSpout/Spout/releases/download/26.1.2-R1.1/spout-26.1.2-R1.1.jar)**
 
 * Development versions: download from
   [Actions](https://github.com/ModernSpout/Spout/actions/workflows/build-server.yml),
@@ -78,7 +78,7 @@ with special support for clients with the corresponding
 The `.jar` file is a drop-in replacement for the Paper JAR, and you can run it the same:
 
 ```sh
-java -jar spout-26.1.2-R1.0.jar
+java -jar spout-26.1.2-R1.1.jar
 ```
 
 <!--You can place Bukkit / Paper / Spout plugins in the `plugins` folder.-->
