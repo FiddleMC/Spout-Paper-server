@@ -1,0 +1,13 @@
+{
+  "values": [
+    "#c:fence_gates/wooden",
+    "#minecraft:planks",
+    "#minecraft:wooden_buttons",
+    "#minecraft:wooden_doors",
+    "#minecraft:wooden_pressure_plates",
+    "#minecraft:wooden_slabs",
+    "#minecraft:wooden_stairs",
+    "#minecraft:wooden_trapdoors",
+    "#spout:ladders/wooden"
+  ]
+}

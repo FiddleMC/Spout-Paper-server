@@ -103,13 +103,15 @@
              "Build-Number" to (build ?: ""),
              "Build-Time" to buildTime.toString(),
              "Git-Branch" to gitBranch,
-@@ -237,7 +_,8 @@
+@@ -237,7 +_,10 @@
      jvmArgumentProviders.add(provider)
  }
  
 -val generatedDir: java.nio.file.Path = layout.projectDirectory.dir("src/generated/java").asFile.toPath()
++// Spout start - Project setup - Set project directory references
 +val generatedDir: java.nio.file.Path =
-+    layout.projectDirectory.dir("../paper-server/src/generated/java").asFile.toPath() // Spout - Project setup - Set project directory references
++    layout.projectDirectory.dir("../paper-server/src/generated/java").asFile.toPath()
++// Spout end - Project setup - Set project directory references
  idea {
      module {
          generatedSourceDirs.add(generatedDir.toFile())
@@ -146,7 +148,7 @@
  fill {
      project("paper")
      versionFamily(paperweight.minecraftVersion.map { it.split(".", "-").takeWhile { part -> part.toIntOrNull() != null }.take(2).joinToString(".") })
-@@ -331,3 +_,44 @@
+@@ -331,3 +_,83 @@
          }
      }
  }
@@ -190,4 +192,43 @@
 +        }
 +    }
 +}
-+// Spout end - Synchronize Bukkit enums - Add module opens to server JAR
++// Spout end - Synchronize Bukkit enums - Add module opens and enable final field mutation to server JAR
++
++// Spout start - Built-in content - Include Fabric API conventional tags
++val fabricApiCloneDir: Provider<Directory> = layout.buildDirectory.dir("tmp/fabric-api")
++val cloneFabricApi by tasks.registering(Exec::class) {
++    group = "fabric conventional tags"
++    description = "Clones Fabric API into a temporary build directory"
++    val cloneDir = fabricApiCloneDir.get().asFile
++    doFirst {
++        // Always start fresh
++        delete(cloneDir)
++        cloneDir.parentFile.mkdirs()
++    }
++    commandLine(
++        "git",
++        "clone",
++        "--depth", "1", // Avoid cloning full history
++        "https://github.com/FabricMC/fabric-api.git",
++        cloneDir.absolutePath
++    )
++}
++val importFabricConventionTags by tasks.registering(Sync::class) {
++    group = "fabric conventional tags"
++    description = "Synchronizes Fabric conventional tags into this project"
++    dependsOn(cloneFabricApi)
++    val cloneDir = fabricApiCloneDir.get().asFile
++    val sourceDir = cloneDir.resolve(
++        "fabric-convention-tags-v2/src/generated/resources/data/c/tags"
++    )
++    val targetDir = layout.projectDirectory.dir(
++        "src/main/resources/data/minecraft/datapacks/spout/data/c/tags"
++    )
++    from(sourceDir)
++    into(targetDir)
++    doFirst {
++        // Ensure previous contents are completely removed
++        delete(targetDir)
++    }
++}
++// Spout end - Built-in content - Include Fabric API conventional tags
