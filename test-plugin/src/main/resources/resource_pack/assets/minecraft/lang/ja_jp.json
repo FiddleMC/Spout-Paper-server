@@ -11,6 +11,7 @@
   "block.more_vanilla_shapes.glass_slab": "ガラスのハーフブロック",
   "block.more_vanilla_shapes.glass_stairs": "ガラスの階段",
   "block.more_vanilla_shapes.stone_brick_bevel": "石レンガのミニ",
+  "block.quark.ancient_sapling": "トネリコの苗木",
   "block.quark.azalea_button": "ツツジのボタン",
   "block.quark.azalea_door": "ツツジのドア",
   "block.quark.azalea_fence": "ツツジのフェンス",
@@ -24,6 +25,7 @@
   "block.quark.diorite_bricks": "閃緑岩レンガ",
   "block.quark.diorite_brick_slab": "閃緑岩レンガのハーフブロック",
   "block.quark.diorite_brick_stairs": "閃緑岩レンガの階段",
+  "block.quark.potted_ancient_sapling": "トネリコの苗木入り植木鉢",
   "block.red_portal.red_portal": "赤いポータル",
   "item.quark.glass_shard": "ガラスの破片"
 }

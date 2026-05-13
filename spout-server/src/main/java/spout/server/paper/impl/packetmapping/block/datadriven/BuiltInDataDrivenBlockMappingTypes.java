@@ -241,6 +241,8 @@ public final class BuiltInDataDrivenBlockMappingTypes {
 
     public static final DataDrivenBlockMappingType FENCE_GATE = new MultiStateBuiltInDataDrivenBlockMappingType<FromToBlockTypeRequestBuilderImpl>("fence_gate", AutomaticBlockMappingsImpl::fenceGate);
 
+    public static final DataDrivenBlockMappingType FLOWER_POT = new MultiStateBuiltInDataDrivenBlockMappingType<FromToBlockTypeRequestBuilderImpl>("flower_pot", AutomaticBlockMappingsImpl::flowerPot);
+
     public static final DataDrivenBlockMappingType FULL_BLOCK = new BuiltInDataDrivenBlockMappingType("full_block") {
 
         @Override

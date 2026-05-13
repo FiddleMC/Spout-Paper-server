@@ -99,6 +99,11 @@ public final class AutomaticBlockMappingsImpl implements AutomaticBlockMappings 
     }
 
     @Override
+    public <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void flowerPot(Consumer<? extends B> builderConsumer) {
+        this.simpleBlockType(BlockType.FLOWER_POT, StandardBlockTypeRequestProcessor::new, builderConsumer);
+    }
+
+    @Override
     public <B extends FromBlockStateRequestBuilder & ToBlockStateRequestBuilder> void fullBlock(Consumer<? extends B> builderConsumer) {
         this.simpleBlockStateDefaultStateOf(BlockType.STONE, FullBlockRequestProcessor::new, builderConsumer);
     }

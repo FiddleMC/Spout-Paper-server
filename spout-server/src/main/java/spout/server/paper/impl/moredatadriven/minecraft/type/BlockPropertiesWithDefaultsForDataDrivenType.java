@@ -60,6 +60,11 @@ public final class BlockPropertiesWithDefaultsForDataDrivenType {
             addInitializer("fence_gate", properties -> {
                 properties.forceSolidOn();
             });
+            addInitializer("flower_pot", properties -> {
+                properties.instabreak();
+                properties.noOcclusion();
+                properties.pushReaction(PushReaction.DESTROY);
+            });
             addInitializer("ladder", properties -> {
                 properties.sound(SoundType.LADDER);
                 properties.strength(0.4f);

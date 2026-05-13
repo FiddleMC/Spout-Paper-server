@@ -11,6 +11,7 @@
   "block.more_vanilla_shapes.glass_slab": "Glass Slab",
   "block.more_vanilla_shapes.glass_stairs": "Glass Stairs",
   "block.more_vanilla_shapes.stone_brick_bevel": "Stone Brick Piece",
+  "block.quark.ancient_sapling": "Ashen Sapling",
   "block.quark.azalea_button": "Azalea Button",
   "block.quark.azalea_door": "Azalea Door",
   "block.quark.azalea_fence": "Azalea Fence",
@@ -24,6 +25,7 @@
   "block.quark.diorite_bricks": "Diorite Bricks",
   "block.quark.diorite_brick_slab": "Diorite Brick Slab",
   "block.quark.diorite_brick_stairs": "Diorite Brick Stairs",
+  "block.quark.potted_ancient_sapling": "Potted Ashen Sapling",
   "block.red_portal.red_portal": "Red Portal",
   "item.quark.glass_shard": "Glass Shard"
 }

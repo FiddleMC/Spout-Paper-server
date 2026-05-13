@@ -131,6 +131,17 @@ public interface AutomaticBlockMappings {
     <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void fenceGate(Consumer<? extends B> builderConsumer);
 
     /**
+     * Attempts to find a proxy state for every possible state of an empty or filled flower pot.
+     *
+     * <p>
+     * By default:
+     * <ul>
+     *     <li>{@link ToBlockTypeRequestBuilder#fallback()} is {@link BlockType#FLOWER_POT}.</li>
+     * </ul>
+     */
+    <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void flowerPot(Consumer<? extends B> builderConsumer);
+
+    /**
      * Attempts to find a proxy state for a single full block state.
      *
      * <p>
