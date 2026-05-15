@@ -1,13 +1,13 @@
-# Builds the API JAR
-name: build-api
+# Builds the server JAR
+name: build-paper-server
+permissions:
+  packages: write
 on:
   push:
     branches: [ "master" ]
-  release:
-    types: [created]
 jobs:
-  build-api:
-    # Only runs if the last commit does not start with [ci-skip]
+  build-server:
+    # Only runs on master, and if the last commit does not start with [ci-skip]
     if: ${{ !contains(github.event.commits[0].message, '[ci-skip]') }}
     runs-on: ubuntu-latest
     strategy:
@@ -29,19 +29,18 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Set up Git
+      - name: Apply patches
         run: |
           git config --global user.email "no-reply@github.com"
           git config --global user.name "Github Actions"
-      - name: Apply single file patches
-        run: ./gradlew :spout-paper:applyPaperSingleFilePatches --stacktrace
-      - name: Apply API patches
-        run: ./gradlew :spout-paper:applyPaperApiPatches --stacktrace
+          ./gradlew :spout-paper:applyAllPatches --stacktrace
       - name: Build JAR
-        run: ./gradlew :spout-paper:spout-api:jar --stacktrace
+        run: ./gradlew :spout-paper:spout-server:createPaperclipJar --stacktrace
+      - name: Rename and move JAR
+        run: mv spout-paper/spout-server/build/libs/spout-paperclip-*.jar spout-$(basename spout-paper/spout-server/build/libs/spout-paperclip-*.jar | sed -E 's/^spout-paperclip-(.*)\.jar$/\1/').jar
       - name: Upload JAR
         uses: actions/upload-artifact@v7
         with:
-          name: Spout API JAR
-          path: spout-paper/spout-api/build/libs/spout-api-*.jar
+          name: Spout server JAR
+          path: spout-*.jar
           archive: false

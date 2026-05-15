@@ -7,7 +7,14 @@ although then you have to rely on someone else actually implementing it.
 
 ### Code style
 
-Generally, stick to the same style as Paper.
+Generally, stick to the good practices that you know.
+
+* Packages should act like small separate modules.
+It's even better to briefly describe their purpose in their `package-info.java`.
+
+For Fabric:
+* To stay agile, we try to keep mixin usage   to a minimum where possible
+
+For Paper:
 * Changes to Minecraft/Paper files should have a `Spout - <module name> - <reason for this code change>` comment
 * To stay agile, we try to keep changes to Minecraft/Paper files to a minimum where possible
-* Packages act like small separate modules: their purpose is briefly described in their `package-info.java`.

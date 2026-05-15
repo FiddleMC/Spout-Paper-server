@@ -5,11 +5,15 @@ build/
 # JVM crash related
 core.*
 hs_err_pid*
+replay_*.log
+*.hprof
+*.jfr
 
 # Eclipse stuff
 .classpath
 .project
 .settings/
+*.launch
 
 # VSCode stuff
 .vscode/
@@ -29,6 +33,7 @@ dependency-reduced-pom.xml
 
 # various other potential build files
 bin/
+classes/
 dist/
 manifest.mf
 __pycache__/
