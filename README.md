@@ -18,24 +18,24 @@
 <table>
   <tr>
     <td>
-      <a href="design/fire.png"><img src="design/fire_small.png"></a>
+      <a href="design/fire.png"><img alt="Custom fire colors" src="design/fire_small.png"></a>
     </td>
     <td>
-      <a href="design/orange.png"><img src="design/orange_small.png"></a>
+      <a href="design/orange.png"><img alt="Custom maple leaves" src="design/orange_small.png"></a>
     </td>
     <td>
-      <a href="design/stone.png"><img src="design/stone_small.png"></a>
+      <a href="design/stone.png"><img alt="Custom stone types" src="design/stone_small.png"></a>
     </td>
   </tr>
   <tr>
     <td>
-      <a href="design/lantern.png"><img src="design/lantern_small.png"></a>
+      <a href="design/lantern.png"><img alt="Custom Chinese paper lamps" src="design/lantern_small.png"></a>
     </td>
     <td>
-      <a href="design/bookshelves.png"><img src="design/bookshelves_small.png"></a>
+      <a href="design/bookshelves.png"><img alt="Custom bookshelves" src="design/bookshelves_small.png"></a>
     </td>
     <td>
-      <a href="design/concrete.png"><img src="design/concrete_small.png"></a>
+      <a href="design/concrete.png"><img alt="Slabs and stairs for wool, concrete and terracotta" src="design/concrete_small.png"></a>
     </td>
   </tr>
 </table>
@@ -114,9 +114,8 @@ See the step-by-step guide on the
 
 ## Introduction
 
-Spoutcraft offers extra support for Spout servers.\
-It works just like a modloader: when you join a Spout server,
-the server's modded content will be downloaded and installed automatically.
+Spoutcraft works like a per-server modloader: the moment you join a Spout server,
+the server's modded content will be transferred and added client-side automatically.
 
 &nbsp;&nbsp;&nbsp;&nbsp;✓&nbsp;&nbsp;Supports non-vanilla block shapes, like vertical slabs
 <br>
@@ -124,9 +123,14 @@ the server's modded content will be downloaded and installed automatically.
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;✓&nbsp;&nbsp;Auto-completion in commands, such as <code>/give</code>
 
-Because it contains no modded block or items of itself, the Spoutcraft client mod is super lightweight.
+Because it contains no modded blocks or items of itself, the Spoutcraft client mod is super lightweight.
 <br>
-It is incredibly fast: a server's modded content is downloaded and installed in less than a second.
+It is incredibly fast: a server's modded content is downloaded and added in less than a second.
+<br>
+The client only accepts a server's text description of block and item types.
+No server code is ever transferred or executed.
+<br>
+All custom content is automatically removed the moment you leave a server.
 
 ## Downloads
 
