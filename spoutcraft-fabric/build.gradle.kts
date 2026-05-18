@@ -29,7 +29,7 @@ loom {
 	}
 }
 
-sourceSets.main {
+sourceSets.getByName("client") {
     java.srcDir("../common-src/src/main/java")
     java.srcDir("../common-minecraft-src/src/main/java")
 }

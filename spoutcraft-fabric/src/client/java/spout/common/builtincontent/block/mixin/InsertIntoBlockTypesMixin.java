@@ -5,15 +5,16 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BlockTypes;
-import spout.common.builtincontent.block.HalfTransparentSlabBlock;
-import spout.common.builtincontent.block.HalfTransparentStairBlock;
-import spout.common.builtincontent.block.TransparentSlabBlock;
-import spout.common.builtincontent.block.TransparentStairBlock;
-import spout.common.builtincontent.block.QuadBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import spout.common.branding.SpoutNamespace;
+import spout.common.builtincontent.block.HalfTransparentSlabBlock;
+import spout.common.builtincontent.block.HalfTransparentStairBlock;
+import spout.common.builtincontent.block.QuadBlock;
+import spout.common.builtincontent.block.TransparentSlabBlock;
+import spout.common.builtincontent.block.TransparentStairBlock;
 import spout.common.builtincontent.block.VerticalSlabBlock;
 
 @Mixin(BlockTypes.class)
