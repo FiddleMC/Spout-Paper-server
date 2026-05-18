@@ -1,4 +1,4 @@
-package spout.common.branding;
+package spout.server.paper.impl.branding;
 
 /**
  * Holder for {@link #BRAND}.

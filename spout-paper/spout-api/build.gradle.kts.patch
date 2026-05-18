@@ -10,11 +10,12 @@
  idea {
      module {
          generatedSourceDirs.add(generatedDir.toFile())
-@@ -101,6 +_,18 @@
+@@ -101,6 +_,19 @@
      main {
          java {
              srcDir(generatedDir)
 +            srcDir(file("../paper-api/src/main/java"))
++            srcDir(file("../../common-src/src/main/java")) // Spout - Project setup - Set project directory references
 +        }
 +        resources {
 +            srcDir(file("../paper-api/src/main/resources"))

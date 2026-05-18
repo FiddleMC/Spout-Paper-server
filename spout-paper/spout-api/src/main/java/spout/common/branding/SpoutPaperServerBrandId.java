@@ -12,9 +12,9 @@ public final class SpoutPaperServerBrandId {
     }
 
     /**
-     * The Brand id of Spout.
+     * The brand id of Spout.
      * Replacement for {@link io.papermc.paper.ServerBuildInfo#BRAND_PAPER_ID}.
      */
-    public static final Key BRAND_ID = Key.key("spout", "spout-paper-server");
+    public static final Key BRAND_ID = Key.key(SpoutNamespace.SPOUT, "spout-paper-server");
 
 }

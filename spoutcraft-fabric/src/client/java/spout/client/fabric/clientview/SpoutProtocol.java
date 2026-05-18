@@ -13,7 +13,6 @@ import net.minecraft.resources.Identifier;
 import spout.client.fabric.clientview.mixin.ClientCommonPacketListenerImplAccessor;
 import spout.client.fabric.moredatadriven.TemporaryRegistryModifiers;
 import spout.client.fabric.ui.loadingoverlay.SwitchOverlayStyle;
-import spout.common.branding.SpoutNamespace;
 import spout.common.moredatadriven.clientmodprotocol.ClientModCustomContentPacketPayload;
 import spout.common.moredatadriven.clientmodprotocol.ClientModCustomContentReceiving;
 import java.util.Set;

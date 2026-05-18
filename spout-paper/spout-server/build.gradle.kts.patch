@@ -101,7 +101,7 @@
 -            "Brand-Id" to "papermc:paper",
 -            "Brand-Name" to "Paper",
 +            "Specification-Vendor" to "Spout authors & contributors", // Spout - Branding changes - Rename server brand
-+            "Brand-Id" to "spout:spout-server-paper", // Spout - Branding changes - Rename server brand
++            "Brand-Id" to "spout:spout-paper-server", // Spout - Branding changes - Rename server brand
 +            "Brand-Name" to "Spout", // Spout - Branding changes - Rename server brand
              "Build-Number" to (build ?: ""),
              "Build-Time" to buildTime.toString(),

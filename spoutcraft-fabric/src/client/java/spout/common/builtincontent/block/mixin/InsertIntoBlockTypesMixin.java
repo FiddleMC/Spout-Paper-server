@@ -5,7 +5,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BlockTypes;
-import spout.common.branding.SpoutNamespace;
 import spout.common.builtincontent.block.HalfTransparentSlabBlock;
 import spout.common.builtincontent.block.HalfTransparentStairBlock;
 import spout.common.builtincontent.block.TransparentSlabBlock;

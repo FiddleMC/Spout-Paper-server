@@ -2,6 +2,7 @@ package spout.server.paper.impl.clientview.lookup.packethandling;
 
 import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;
+import spout.common.branding.SpoutNamespace;
 import spout.server.paper.impl.clientview.lookup.ClientViewLookup;
 import java.lang.ref.WeakReference;
 
@@ -18,6 +19,6 @@ public final class NettyClientViewLookupAttribute {
      * An {@link AttributeKey} that is used to {@linkplain Channel#attr store} the {@link ClientViewLookup}
      * in its {@link Channel}.
      */
-    public static final AttributeKey<WeakReference<ClientViewLookup>> ATTRIBUTE_KEY = AttributeKey.valueOf("spout:client_view_lookup");
+    public static final AttributeKey<WeakReference<ClientViewLookup>> ATTRIBUTE_KEY = AttributeKey.valueOf(SpoutNamespace.SPOUT + ":client_view_lookup");
 
 }
