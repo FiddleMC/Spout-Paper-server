@@ -32,6 +32,7 @@ public final class ItemTypes {
         }
         Registry.register(registry, "item", ItemCodecs.ITEM_CODEC);
         Registry.register(registry, "block", ItemCodecs.BLOCK_ITEM_CODEC);
+        Registry.register(registry, "double_high_block", ItemCodecs.DOUBLE_HIGH_BLOCK_ITEM_CODEC);
         Registry.register(registry, "egg", ItemCodecs.EGG_ITEM_CODEC);
         // TODO others
     }

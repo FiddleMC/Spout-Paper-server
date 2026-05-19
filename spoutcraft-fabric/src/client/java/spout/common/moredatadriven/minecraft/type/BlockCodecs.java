@@ -42,7 +42,9 @@ import spout.client.fabric.moredatadriven.minecraft.type.NoteBlockInstrumentProx
 import spout.client.fabric.moredatadriven.minecraft.type.PushReactionProxy;
 import spout.client.fabric.moredatadriven.minecraft.type.SoundTypeProxy;
 import spout.client.fabric.moredatadriven.minecraft.type.mixin.BlockBehaviourPropertiesAccessor;
+import spout.common.util.mojang.codec.EnumViaIdentifierCodec;
 import spout.common.util.mojang.codec.ProxyCodec;
+import spout.common.util.mojang.codec.StaticFieldViaIdentifierCodec;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.IntStream;
@@ -52,13 +54,13 @@ import java.util.stream.IntStream;
  */
 public final class BlockCodecs {
 
-    private static final Codec<MapColor> MAP_COLOR_CODEC = new ProxyCodec<>(new EnumViaIdentifierCodec<>(MapColorProxy.class));
+    private static final Codec<MapColor> MAP_COLOR_CODEC = new StaticFieldViaIdentifierCodec<>(MapColor.class);
     private static final Codec<BlockStateFunction<MapColor>> MAP_COLOR_FUNCTION_CODEC = BlockStateFunction.codec(MAP_COLOR_CODEC);
-    private static final Codec<SoundType> SOUND_TYPE_CODEC = new ProxyCodec<>(new EnumViaIdentifierCodec<>(SoundTypeProxy.class));
+    private static final Codec<SoundType> SOUND_TYPE_CODEC = new StaticFieldViaIdentifierCodec<>(SoundType.class);
     private static final Codec<BlockStateFunction<Integer>> LIGHT_EMISSION_CODEC = BlockStateFunction.codec(Codec.INT);
-    private static final Codec<PushReaction> PUSH_REACTION_CODEC = new ProxyCodec<>(new EnumViaIdentifierCodec<>(PushReactionProxy.class));
-    private static final Codec<NoteBlockInstrument> NOTE_BLOCK_INSTRUMENT_CODEC = new ProxyCodec<>(new EnumViaIdentifierCodec<>(NoteBlockInstrumentProxy.class));
-    private static final Codec<BlockBehaviour.OffsetType> OFFSET_TYPE_CODEC = new ProxyCodec<>(new EnumViaIdentifierCodec<>(BlockBehaviourOffsetTypeProxy.class));
+    private static final Codec<PushReaction> PUSH_REACTION_CODEC = new EnumViaIdentifierCodec<>(PushReaction.class);
+    private static final Codec<NoteBlockInstrument> NOTE_BLOCK_INSTRUMENT_CODEC = new EnumViaIdentifierCodec<>(NoteBlockInstrument.class);
+    private static final Codec<BlockBehaviour.OffsetType> OFFSET_TYPE_CODEC = new EnumViaIdentifierCodec<>(BlockBehaviour.OffsetType.class);
 
     public static final Codec<BlockBehaviour.PostProcess> POST_PROCESS_CODEC = new Codec<>() {
 

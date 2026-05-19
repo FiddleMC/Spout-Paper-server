@@ -5,7 +5,7 @@
      public static final ResourceKey<Registry<BlockPredicateType<?>>> BLOCK_PREDICATE_TYPE = createRegistryKey("block_predicate_type");
      public static final ResourceKey<Registry<BlockStateProviderType<?>>> BLOCK_STATE_PROVIDER_TYPE = createRegistryKey("worldgen/block_state_provider_type");
 -    public static final ResourceKey<Registry<MapCodec<? extends Block>>> BLOCK_TYPE = createRegistryKey("block_type");
-+    public static final ResourceKey<Registry<spout.server.paper.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<?>>> BLOCK_TYPE = createRegistryKey(spout.common.branding.SpoutNamespace.SPOUT + ":block_type"); // Spout - More data-driven - Minecraft registries - Types - Adapt existing block type registry
++    public static final ResourceKey<Registry<spout.server.paper.api.moredatadriven.paper.registry.type.nms.WrappedBlockCodec<?>>> BLOCK_TYPE = createRegistryKey("block_type"); // Spout - More data-driven - Minecraft registries - Types - Adapt existing block type registry
      public static final ResourceKey<Registry<Block>> BLOCK = createRegistryKey("block");
      public static final ResourceKey<Registry<WorldCarver<?>>> CARVER = createRegistryKey("worldgen/carver");
      public static final ResourceKey<Registry<MapCodec<? extends ChunkGenerator>>> CHUNK_GENERATOR = createRegistryKey("worldgen/chunk_generator");

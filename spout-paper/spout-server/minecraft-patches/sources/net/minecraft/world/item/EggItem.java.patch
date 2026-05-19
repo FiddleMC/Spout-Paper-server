@@ -1,15 +1,10 @@
 --- a/net/minecraft/world/item/EggItem.java
 +++ b/net/minecraft/world/item/EggItem.java
-@@ -16,6 +_,13 @@
+@@ -16,6 +_,8 @@
  public class EggItem extends Item implements ProjectileItem {
      public static final float PROJECTILE_SHOOT_POWER = 1.5F;
  
-+    // Spout start - More data-driven - Minecraft registries - Types - Add codec for items
-+    @Override
-+    public com.mojang.serialization.MapCodec<? extends net.minecraft.world.item.EggItem> codec() {
-+        return spout.common.moredatadriven.minecraft.type.ItemCodecs.EGG_ITEM_CODEC;
-+    }
-+    // Spout end - More data-driven - Minecraft registries - Types - Add codec for items
++    public spout.common.moredatadriven.minecraft.itemtype.SpoutItemType spout$getItemType() { return spout.common.moredatadriven.minecraft.itemtype.SpoutItemTypes.EGG; } // Spout - More data-driven - Minecraft registries - Block - Implement interfaces
 +
      public EggItem(final Item.Properties properties) {
          super(properties);

@@ -46,7 +46,7 @@
 -    protected static <B extends Block> RecordCodecBuilder<B, BlockBehaviour.Properties> propertiesCodec() {
 -        return BlockBehaviour.Properties.CODEC.fieldOf("properties").forGetter(BlockBehaviour::properties);
 +    public static <B extends Block> RecordCodecBuilder<B, BlockBehaviour.Properties> propertiesCodec() { // Spout - More data-driven - Minecraft registries - Types - Make properties codec public
-+        return spout.common.util.mojang.codec.CodecUtil.optionalFieldOf(BlockBehaviour.Properties.CODEC,"properties", spout.server.paper.impl.moredatadriven.minecraft.type.BlockPropertiesWithDefaultsForDataDrivenType::create).forGetter(BlockBehaviour::properties); // Spout - More data-driven - Minecraft registries - Types - Adapt existing block type registry - Make properties optional in block codec
++        return spout.common.moredatadriven.minecraft.block.BlockPropertiesCodec.getBuilder(); // Spout - More data-driven - Minecraft registries - Types - Adapt existing block type registry - Make properties optional in block codec
      }
  
      public static <B extends Block> MapCodec<B> simpleCodec(final Function<BlockBehaviour.Properties, B> constructor) {
@@ -181,7 +181,7 @@
 -        private float speedFactor = 1.0F;
 -        private float jumpFactor = 1.0F;
 -        private @Nullable ResourceKey<Block> id;
-+        public static final Codec<BlockBehaviour.Properties> CODEC = spout.common.moredatadriven.minecraft.type.BlockCodecs.PROPERTIES_CODEC; // Spout - More data-driven - Minecraft registries - Types - Adapt existing block type registry - Add missing properties codec implementation
++        public static final Codec<BlockBehaviour.Properties> CODEC = spout.common.moredatadriven.minecraft.block.BlockPropertiesCodec.CODEC; // Spout - More data-driven - Minecraft registries - Block - Add missing properties codec implementation
 +        // Spout start - More data-driven - Minecraft registries - Types - Properties serialization - Make properties fields public
 +        public spout.common.moredatadriven.minecraft.type.BlockStateFunction<MapColor> mapColor = new spout.common.moredatadriven.minecraft.type.BlockStateFunction.Single<>(MapColor.NONE);
 +        public boolean hasCollision = true;

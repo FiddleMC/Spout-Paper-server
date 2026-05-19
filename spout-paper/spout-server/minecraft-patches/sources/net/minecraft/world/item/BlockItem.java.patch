@@ -1,14 +1,10 @@
 --- a/net/minecraft/world/item/BlockItem.java
 +++ b/net/minecraft/world/item/BlockItem.java
-@@ -32,6 +_,12 @@
+@@ -32,6 +_,8 @@
      @Deprecated
      private final Block block;
  
-+    // Spout start - More data-driven - Minecraft registries - Types - Add codec for items
-+    public com.mojang.serialization.MapCodec<? extends net.minecraft.world.item.BlockItem> codec() {
-+        return spout.common.moredatadriven.minecraft.type.ItemCodecs.BLOCK_ITEM_CODEC;
-+    }
-+    // Spout end - More data-driven - Minecraft registries - Types - Add codec for items
++    public spout.common.moredatadriven.minecraft.itemtype.SpoutItemType spout$getItemType() { return spout.common.moredatadriven.minecraft.itemtype.SpoutItemTypes.BLOCK; } // Spout - More data-driven - Minecraft registries - Block - Implement interfaces
 +
      public BlockItem(final Block block, final Item.Properties properties) {
          super(properties);

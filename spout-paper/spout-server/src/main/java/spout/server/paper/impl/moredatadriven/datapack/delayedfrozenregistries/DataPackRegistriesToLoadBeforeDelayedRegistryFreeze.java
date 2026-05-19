@@ -2,14 +2,16 @@ package spout.server.paper.impl.moredatadriven.datapack.delayedfrozenregistries;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.resources.RegistryValidator;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.BlockTypes;
+import spout.common.moredatadriven.minecraft.common.dependent.SortDependentDataDrivenResources;
+import spout.common.moredatadriven.minecraft.item.SpoutDataDrivenItem;
 import spout.server.paper.impl.moredatadriven.datapack.CopyResourcesFromDataPackRegistryToInternalRegistry;
 import spout.server.paper.impl.moredatadriven.datapack.SpoutDataPackRegistries;
-import spout.common.moredatadriven.minecraft.type.ItemTypes;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -36,10 +38,13 @@ public final class DataPackRegistriesToLoadBeforeDelayedRegistryFreeze {
         ),
         new Instance<>(
             SpoutDataPackRegistries.ITEM_FROM_DATA_PACK,
-            ItemTypes.CODEC,
+            SpoutDataDrivenItem.CODEC,
             registry -> {
                 CopyResourcesFromDataPackRegistryToInternalRegistry.copy(
-                    registry,
+                    SortDependentDataDrivenResources.sorted(registry).map(pair -> {
+                        pair.right().initializeItemFromInput();
+                        return Pair.of(pair.left().identifier(), pair.right().getItem());
+                    }),
                     net.minecraft.core.registries.BuiltInRegistries.ITEM
                 );
             }

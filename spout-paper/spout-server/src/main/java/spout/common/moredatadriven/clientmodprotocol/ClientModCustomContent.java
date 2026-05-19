@@ -5,7 +5,7 @@ import com.mojang.serialization.JsonOps;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BlockTypes;
-import spout.common.moredatadriven.minecraft.type.ItemTypes;
+import spout.common.moredatadriven.minecraft.item.SpoutDataDrivenItem;
 import java.util.List;
 
 /**
@@ -31,7 +31,7 @@ public class ClientModCustomContent {
     static ClientModCustomContent create(List<Block> blocks, List<Item> items) {
         return new ClientModCustomContent(
             blocks.stream().map(block -> BlockTypes.CODEC.codec().encodeStart(JsonOps.INSTANCE, block).getOrThrow()).toList(),
-            items.stream().map(item -> ItemTypes.CODEC.codec().encodeStart(JsonOps.INSTANCE, item).getOrThrow()).toList()
+            items.stream().map(item -> SpoutDataDrivenItem.MINECRAFT_ENCODER.encodeStart(JsonOps.INSTANCE, item).getOrThrow()).toList()
         );
     }
 

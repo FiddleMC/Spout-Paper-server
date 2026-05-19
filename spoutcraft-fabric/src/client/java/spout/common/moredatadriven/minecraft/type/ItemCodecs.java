@@ -18,6 +18,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import spout.client.fabric.moredatadriven.minecraft.type.mixin.ItemPropertiesAccessor;
+import spout.common.util.mojang.codec.CodecUtil;
 
 /**
  * Holder for {@link Item} codecs.
@@ -91,5 +92,11 @@ public final class ItemCodecs {
      * Based on {@link Block#CODEC}.
      */
     public static final MapCodec<EggItem> EGG_ITEM_CODEC = simpleCodec(EggItem::new);
+
+    public static final MapCodec<BlockItem> DOUBLE_HIGH_BLOCK_ITEM_CODEC = simpleCodec(
+        BuiltInRegistries.BLOCK.byNameCodec().fieldOf("block").forGetter(BlockItem::getBlock),
+        (block, properties) -> new BlockItem(block, properties.useBlockDescriptionPrefix())
+    );
+
 
 }

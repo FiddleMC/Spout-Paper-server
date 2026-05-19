@@ -1,6 +1,7 @@
 package spout.client.fabric.ui.loadingoverlay;
 
 import net.minecraft.resources.Identifier;
+import spout.common.branding.SpoutNamespace;
 
 /**
  * Holder for {@link #IDENTIFIER}.

@@ -1,6 +1,12 @@
 --- a/net/minecraft/world/level/block/Block.java
 +++ b/net/minecraft/world/level/block/Block.java
-@@ -79,7 +_,7 @@
+@@ -75,11 +_,12 @@
+ import org.jspecify.annotations.Nullable;
+ import org.slf4j.Logger;
+ 
+-public class Block extends BlockBehaviour implements ItemLike {
++public class Block extends BlockBehaviour implements ItemLike, spout.common.moredatadriven.minecraft.block.BlockCodecAccessor, spout.common.moredatadriven.minecraft.block.BlockWithType { // Spout - More data-driven - Minecraft registries - Block - Implement interfaces
++    public MapCodec<? extends Block> getClassCodec() { return this.codec(); } // Spout - More data-driven - Minecraft registries - Block - Implement interfaces
      public static final MapCodec<Block> CODEC = simpleCodec(Block::new);
      private static final Logger LOGGER = LogUtils.getLogger();
      private final Holder.Reference<Block> builtInRegistryHolder = BuiltInRegistries.BLOCK.createIntrusiveHolder(this);
