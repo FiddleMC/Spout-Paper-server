@@ -10,7 +10,6 @@
     "FeatureFlagRegistryNamesAccessorFeatureFlagRegistryMixin",
     "ItemCodecMixin",
     "ItemKeepPropertiesMixin",
-    "ItemPropertiesAccessor",
     "ReplaceBlockBehaviourPropertiesCodecMixin",
     "LazyBaseStateStairBlockAccessor",
     "LazyCandleBlockCandleCakeBlockAccessor",

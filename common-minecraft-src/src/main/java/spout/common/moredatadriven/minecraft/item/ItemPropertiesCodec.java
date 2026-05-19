@@ -23,14 +23,13 @@ public final class ItemPropertiesCodec {
 
     private static Item.Properties constructItemProperties(DataComponentMap components, FeatureFlagSet requiredFeatures, Optional<Identifier> id) {
         Item.Properties properties = new Item.Properties();
-        ItemPropertiesSerializationAccessor accessor = (ItemPropertiesSerializationAccessor) properties;
         ItemPropertiesSerializationDecorator decorator = (ItemPropertiesSerializationDecorator) properties;
         decorator.spout$initializedComponents(components);
-        accessor.spout$componentInitializer(accessor.spout$componentInitializer().andThen((builder, _, _) -> builder.addAll(
+        properties.componentInitializer = properties.componentInitializer.andThen((builder, _, _) -> builder.addAll(
             components
-        )));
-        accessor.spout$requiredFeatures(requiredFeatures);
-        id.ifPresent(identifier -> accessor.spout$id(ResourceKey.create(BuiltInRegistries.ITEM.key(), identifier)));
+        ));
+        properties.requiredFeatures = requiredFeatures;
+        id.ifPresent(identifier -> properties.id = ResourceKey.create(BuiltInRegistries.ITEM.key(), identifier));
         return properties;
     }
 
@@ -40,8 +39,8 @@ public final class ItemPropertiesCodec {
 
     public static final Codec<Item.Properties> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         DataComponentMap.CODEC.optionalFieldOf("components", DataComponentMap.EMPTY).forGetter(properties -> ((ItemPropertiesSerializationDecorator) properties).spout$initializedComponents()),
-        CodecUtil.optionalFieldOf(SubtypeCodecs.FEATURE_FLAG_SET_CODEC, "required_features", FeatureFlagSet::of).forGetter(properties -> ((ItemPropertiesSerializationAccessor) properties).spout$requiredFeatures()),
-        Identifier.CODEC.optionalFieldOf("id").forGetter(properties -> Optional.ofNullable(((ItemPropertiesSerializationAccessor) properties).spout$id()).map(ResourceKey::identifier))
+        CodecUtil.optionalFieldOf(SubtypeCodecs.FEATURE_FLAG_SET_CODEC, "required_features", FeatureFlagSet::of).forGetter(properties -> properties.requiredFeatures),
+        Identifier.CODEC.optionalFieldOf("id").forGetter(properties -> Optional.ofNullable(properties.id).map(ResourceKey::identifier))
     ).apply(instance, ItemPropertiesCodec::constructItemProperties));
 
     public static <I extends Item> RecordCodecBuilder<I, Item.Properties> getBuilder() {

@@ -22,6 +22,7 @@
       "spout.client.fabric.SpoutClient"
     ]
   },
+  "accessWidener": "spoutcraft.classtweaker",
   "mixins": [
     {
       "config": "spoutcraft.spout.client.fabric.clientview.mixins.json",

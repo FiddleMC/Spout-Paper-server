@@ -35,6 +35,24 @@
      public static final Registry<StructureProcessorType<?>> STRUCTURE_PROCESSOR = registerSimple(
          Registries.STRUCTURE_PROCESSOR, registry -> StructureProcessorType.BLOCK_IGNORE
      );
+@@ -367,7 +_,7 @@
+     );
+     // Paper end - add built-in registry conversions
+ 
+-    private static <T> Registry<T> registerSimple(final ResourceKey<? extends Registry<T>> name, final BuiltInRegistries.RegistryBootstrap<T> loader) {
++    public static <T> Registry<T> registerSimple(final ResourceKey<? extends Registry<T>> name, final BuiltInRegistries.RegistryBootstrap<T> loader) { // Spout - Common class tweakers - Make accessible
+         return internalRegister(name, new MappedRegistry<>(name, Lifecycle.stable(), false), loader);
+     }
+ 
+@@ -389,7 +_,7 @@
+         return internalRegister(name, new DefaultedMappedRegistry<>(defaultKey, name, Lifecycle.stable(), true), loader);
+     }
+ 
+-    private static <T, R extends WritableRegistry<T>> R internalRegister(
++    public static <T, R extends WritableRegistry<T>> R internalRegister( // Spout - Common class tweakers - Make accessible
+         final ResourceKey<? extends Registry<T>> name, final R registry, final BuiltInRegistries.RegistryBootstrap<T> loader
+     ) {
+         Bootstrap.checkBootstrapCalled(() -> "registry " + name.identifier());
 @@ -405,6 +_,7 @@
          bootStrap(() -> {});
      }
@@ -43,3 +61,12 @@
          // Paper end
          REGISTRY.freeze(); // Paper - freeze main registry early
          createContents();
+@@ -464,7 +_,7 @@
+     }
+ 
+     @FunctionalInterface
+-    private interface RegistryBootstrap<T> {
++    public interface RegistryBootstrap<T> { // Spout - Common class tweakers - Make accessible
+         Object run(Registry<T> registry);
+     }
+ }

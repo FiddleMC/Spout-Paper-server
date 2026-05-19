@@ -15,7 +15,8 @@ import java.util.Objects;
 public interface BlockWithType {
 
     default SpoutBlockType spout$getBlockType() {
-        return Objects.requireNonNull(BuiltInSpoutMoreDataDrivenRegistries.BLOCK_TYPE.byBlockCodec(((BlockCodecAccessor) this).spout$codec()));
+        // return Objects.requireNonNull(BuiltInSpoutMoreDataDrivenRegistries.BLOCK_TYPE.byBlockCodec(((BlockCodecAccessor) this).spout$codec()));
+        return null; // TODO remove temp
     }
 
 }

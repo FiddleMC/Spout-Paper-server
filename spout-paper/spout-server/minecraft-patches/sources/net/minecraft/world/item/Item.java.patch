@@ -155,23 +155,28 @@
          this.craftingRemainingItem = properties.craftingRemainingItem;
          this.requiredFeatures = properties.requiredFeatures;
          if (SharedConstants.IS_RUNNING_IN_IDE) {
-@@ -373,7 +_,18 @@
+@@ -373,15 +_,20 @@
          return false;
      }
  
 -    public static class Properties {
 +    // Spout start - More data-driven - Minecraft registries - Item - Implement interfaces
-+    public static class Properties implements spout.common.moredatadriven.minecraft.item.ItemPropertiesSerializationAccessor, spout.common.moredatadriven.minecraft.item.ItemPropertiesSerializationDecorator {
-+        @Override public DataComponentInitializers.Initializer<Item> spout$componentInitializer() { return this.componentInitializer; }
-+        @Override public void spout$componentInitializer(DataComponentInitializers.Initializer<Item> componentInitializer) { this.componentInitializer = componentInitializer; }
-+        @Override public FeatureFlagSet spout$requiredFeatures() { return this.requiredFeatures; }
-+        @Override public void spout$requiredFeatures(FeatureFlagSet featureFlagSet) { this.requiredFeatures = featureFlagSet; }
-+        @Override public @Nullable ResourceKey<Item> spout$id() { return this.id; }
-+        @Override public void spout$id(@Nullable ResourceKey<Item> id) { this.id = id; }
++    public static class Properties implements spout.common.moredatadriven.minecraft.item.ItemPropertiesSerializationDecorator {
 +        private @Nullable DataComponentMap initializedComponents = DataComponentMap.EMPTY;
 +        @Override public @Nullable DataComponentMap spout$initializedComponents() { return this.initializedComponents; }
 +        @Override public void spout$initializedComponents(@Nullable DataComponentMap initializedComponents) { this.initializedComponents = initializedComponents; }
 +        // Spout end - More data-driven - Minecraft registries - Item - Implement interfaces
          private static final DependantName<Item, String> BLOCK_DESCRIPTION_ID = id -> Util.makeDescriptionId("block", id.identifier());
          private static final DependantName<Item, String> ITEM_DESCRIPTION_ID = id -> Util.makeDescriptionId("item", id.identifier());
-         private DataComponentInitializers.Initializer<Item> componentInitializer = (builder, context, id) -> builder.addAll(
+-        private DataComponentInitializers.Initializer<Item> componentInitializer = (builder, context, id) -> builder.addAll(
++        public DataComponentInitializers.Initializer<Item> componentInitializer = (builder, context, id) -> builder.addAll( // Spout - Common class tweakers - Make accessible
+             DataComponents.COMMON_ITEM_COMPONENTS
+         );
+         private @Nullable ItemStackTemplate craftingRemainingItem;
+-        private FeatureFlagSet requiredFeatures = FeatureFlags.VANILLA_SET;
+-        private @Nullable ResourceKey<Item> id;
++        public FeatureFlagSet requiredFeatures = FeatureFlags.VANILLA_SET; // Spout - Common class tweakers - Make accessible
++        public @Nullable ResourceKey<Item> id; // Spout - Common class tweakers - Make accessible
+         private DependantName<Item, String> descriptionId = ITEM_DESCRIPTION_ID;
+         private final DependantName<Item, Identifier> model = ResourceKey::identifier;
+ 

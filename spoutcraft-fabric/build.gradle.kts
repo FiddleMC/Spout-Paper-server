@@ -27,6 +27,8 @@ loom {
 			sourceSet(sourceSets.getByName("client"))
 		}
 	}
+
+    accessWidenerPath = file("src/main/resources/spoutcraft.classtweaker")
 }
 
 sourceSets.getByName("client") {

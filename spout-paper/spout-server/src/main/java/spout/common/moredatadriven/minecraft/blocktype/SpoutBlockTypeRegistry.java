@@ -21,7 +21,7 @@ public final class SpoutBlockTypeRegistry extends MappedRegistry<SpoutBlockType>
     private final Map<MapCodec<? extends Block>, SpoutBlockType> byCodec = new IdentityHashMap<>();
 
     public SpoutBlockTypeRegistry() {
-        super(SpoutMoreDataDrivenRegistries.BLOCK_TYPE, Lifecycle.stable());
+        super(null/*SpoutMoreDataDrivenRegistries.BLOCK_TYPE*/, Lifecycle.stable());
     }
 
     @Override

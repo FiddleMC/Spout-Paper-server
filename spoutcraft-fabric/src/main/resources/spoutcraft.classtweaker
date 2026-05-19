@@ -1,0 +1,8 @@
+classTweaker v1 official
+
+accessible method net/minecraft/core/registries/BuiltInRegistries internalRegister (Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/core/WritableRegistry;Lnet/minecraft/core/registries/BuiltInRegistries$RegistryBootstrap;)Lnet/minecraft/core/WritableRegistry;
+accessible method net/minecraft/core/registries/BuiltInRegistries registerSimple (Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/core/registries/BuiltInRegistries$RegistryBootstrap;)Lnet/minecraft/core/Registry;
+accessible class net/minecraft/core/registries/BuiltInRegistries$RegistryBootstrap
+accessible field net/minecraft/world/item/Item$Properties componentInitializer Lnet/minecraft/core/component/DataComponentInitializers$Initializer;
+accessible field net/minecraft/world/item/Item$Properties id Lnet/minecraft/resources/ResourceKey;
+accessible field net/minecraft/world/item/Item$Properties requiredFeatures Lnet/minecraft/world/flag/FeatureFlagSet;

@@ -4,7 +4,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import spout.common.moredatadriven.minecraft.blocktype.SpoutBlockType;
 import spout.common.moredatadriven.minecraft.itemtype.SpoutItemType;
 
 /**
@@ -17,10 +16,10 @@ public final class SpoutMoreDataDrivenRegistries {
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * Key for {@link BuiltInSpoutMoreDataDrivenRegistries#BLOCK_TYPE}.
-     */
-    public static final ResourceKey<Registry<SpoutBlockType>> BLOCK_TYPE = createRegistryKey(spout.common.branding.SpoutNamespace.SPOUT + ":block_type");
+    // /**
+    //  * Key for {@link BuiltInSpoutMoreDataDrivenRegistries#BLOCK_TYPE}.
+    //  */
+    // public static final ResourceKey<Registry<SpoutBlockType>> BLOCK_TYPE = createRegistryKey(spout.common.branding.SpoutNamespace.SPOUT + ":block_type");
 
     /**
      * Key for {@link BuiltInSpoutMoreDataDrivenRegistries#ITEM_TYPE}.
