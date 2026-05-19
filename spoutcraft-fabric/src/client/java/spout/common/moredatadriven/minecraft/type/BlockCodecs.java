@@ -9,7 +9,6 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -36,63 +35,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
-import spout.client.fabric.moredatadriven.minecraft.type.BlockBehaviourOffsetTypeProxy;
-import spout.client.fabric.moredatadriven.minecraft.type.MapColorProxy;
-import spout.client.fabric.moredatadriven.minecraft.type.NoteBlockInstrumentProxy;
-import spout.client.fabric.moredatadriven.minecraft.type.PushReactionProxy;
-import spout.client.fabric.moredatadriven.minecraft.type.SoundTypeProxy;
 import spout.client.fabric.moredatadriven.minecraft.type.mixin.BlockBehaviourPropertiesAccessor;
-import spout.common.util.mojang.codec.EnumViaIdentifierCodec;
-import spout.common.util.mojang.codec.ProxyCodec;
-import spout.common.util.mojang.codec.StaticFieldViaIdentifierCodec;
+import spout.common.moredatadriven.minecraft.common.subtypes.SubtypeCodecs;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.IntStream;
 
 /**
  * Holder for codecs related to blocks.
  */
 public final class BlockCodecs {
-
-    private static final Codec<MapColor> MAP_COLOR_CODEC = new StaticFieldViaIdentifierCodec<>(MapColor.class);
-    private static final Codec<BlockStateFunction<MapColor>> MAP_COLOR_FUNCTION_CODEC = BlockStateFunction.codec(MAP_COLOR_CODEC);
-    private static final Codec<SoundType> SOUND_TYPE_CODEC = new StaticFieldViaIdentifierCodec<>(SoundType.class);
-    private static final Codec<BlockStateFunction<Integer>> LIGHT_EMISSION_CODEC = BlockStateFunction.codec(Codec.INT);
-    private static final Codec<PushReaction> PUSH_REACTION_CODEC = new EnumViaIdentifierCodec<>(PushReaction.class);
-    private static final Codec<NoteBlockInstrument> NOTE_BLOCK_INSTRUMENT_CODEC = new EnumViaIdentifierCodec<>(NoteBlockInstrument.class);
-    private static final Codec<BlockBehaviour.OffsetType> OFFSET_TYPE_CODEC = new EnumViaIdentifierCodec<>(BlockBehaviour.OffsetType.class);
-
-    public static final Codec<BlockBehaviour.PostProcess> POST_PROCESS_CODEC = new Codec<>() {
-
-        @Override
-        public <T> DataResult<T> encode(BlockBehaviour.PostProcess input, DynamicOps<T> ops, T prefix) {
-            BlockPos output;
-            try {
-                output = input.getPostProcessPos(null, null, BlockPos.ZERO);
-            } catch (Exception e) {
-                return DataResult.error(() -> "Not an encodable post process: " + e);
-            }
-            if (output == null) {
-                return DataResult.success(ops.createString("null"));
-            }
-            return DataResult.success(ops.createIntList(IntStream.of(output.getX(), output.getY(), output.getZ())));
-        }
-
-        @Override
-        public <T> DataResult<Pair<BlockBehaviour.PostProcess, T>> decode(DynamicOps<T> ops, T input) {
-            DataResult<String> stringResult = ops.getStringValue(input);
-            if (stringResult.isSuccess() && stringResult.getOrThrow().equals("null")) {
-                return DataResult.success(Pair.of((state, level, pos) -> null, input));
-            }
-            DataResult<IntStream> intStreamResult = ops.getIntStream(input);
-            IntStream intStream = intStreamResult.getOrThrow();
-            int dx = intStream.findFirst().getAsInt();
-            int dy = intStream.findFirst().getAsInt();
-            int dz = intStream.findFirst().getAsInt();
-            return DataResult.success(Pair.of((state, level, pos) -> pos.offset(dx, dy, dz), input));
-        }
-
-    };
 
     public static final Codec<BlockBehaviour.Properties> PROPERTIES_CODEC = new Codec<>() {
 
@@ -109,7 +60,7 @@ public final class BlockCodecs {
                 BlockBehaviourPropertiesAccessor accessor = (BlockBehaviourPropertiesAccessor) properties;
                 T mapColorInput = mapLike.get("map_color");
                 if (mapColorInput != null) {
-                    DataResult<BlockStateFunction<MapColor>> mapColor = MAP_COLOR_FUNCTION_CODEC.decode(ops, mapColorInput).map(Pair::getFirst);
+                    DataResult<BlockStateFunction<MapColor>> mapColor = SubtypeCodecs.MAP_COLOR_FUNCTION_CODEC.decode(ops, mapColorInput).map(Pair::getFirst);
                     if (mapColor.isError()) {
                         return mapColor.map($ -> null);
                     }
@@ -125,7 +76,7 @@ public final class BlockCodecs {
                 }
                 T soundTypeInput = mapLike.get("sound_type");
                 if (soundTypeInput != null) {
-                    DataResult<SoundType> soundType = SOUND_TYPE_CODEC.decode(ops, soundTypeInput).map(Pair::getFirst);
+                    DataResult<SoundType> soundType = SubtypeCodecs.SOUND_TYPE_CODEC.decode(ops, soundTypeInput).map(Pair::getFirst);
                     if (soundType.isError()) {
                         return soundType.map($ -> null);
                     }
@@ -133,7 +84,7 @@ public final class BlockCodecs {
                 }
                 T lightEmissionInput = mapLike.get("light_emission");
                 if (lightEmissionInput != null) {
-                    DataResult<BlockStateFunction<Integer>> lightEmission = LIGHT_EMISSION_CODEC.decode(ops, lightEmissionInput).map(Pair::getFirst);
+                    DataResult<BlockStateFunction<Integer>> lightEmission = SubtypeCodecs.LIGHT_EMISSION_CODEC.decode(ops, lightEmissionInput).map(Pair::getFirst);
                     if (lightEmission.isError()) {
                         return lightEmission.map($ -> null);
                     }
@@ -254,7 +205,7 @@ public final class BlockCodecs {
                 }
                 T pushReactionInput = mapLike.get("push_reaction");
                 if (pushReactionInput != null) {
-                    DataResult<PushReaction> pushReaction = PUSH_REACTION_CODEC.decode(ops, pushReactionInput).map(Pair::getFirst);
+                    DataResult<PushReaction> pushReaction = SubtypeCodecs.PUSH_REACTION_CODEC.decode(ops, pushReactionInput).map(Pair::getFirst);
                     if (pushReaction.isError()) {
                         return pushReaction.map($ -> null);
                     }
@@ -270,7 +221,7 @@ public final class BlockCodecs {
                 }
                 T instrumentInput = mapLike.get("instrument");
                 if (instrumentInput != null) {
-                    DataResult<NoteBlockInstrument> instrument = NOTE_BLOCK_INSTRUMENT_CODEC.decode(ops, instrumentInput).map(Pair::getFirst);
+                    DataResult<NoteBlockInstrument> instrument = SubtypeCodecs.NOTE_BLOCK_INSTRUMENT_CODEC.decode(ops, instrumentInput).map(Pair::getFirst);
                     if (instrument.isError()) {
                         return instrument.map($ -> null);
                     }
@@ -310,7 +261,7 @@ public final class BlockCodecs {
                 }
                 T postProcessInput = mapLike.get("post_process");
                 if (postProcessInput != null) {
-                    DataResult<BlockBehaviour.PostProcess> postProcess = POST_PROCESS_CODEC.decode(ops, postProcessInput).map(Pair::getFirst);
+                    DataResult<BlockBehaviour.PostProcess> postProcess = SubtypeCodecs.POST_PROCESS_CODEC.decode(ops, postProcessInput).map(Pair::getFirst);
                     if (postProcess.isError()) {
                         return postProcess.map($ -> null);
                     }
@@ -334,7 +285,7 @@ public final class BlockCodecs {
                 }
                 T requiredFeaturesInput = mapLike.get("required_features");
                 if (requiredFeaturesInput != null) {
-                    DataResult<FeatureFlagSet> requiredFeatures = FeatureFlagCodecs.FEATURE_FLAG_SET_CODEC.decode(ops, requiredFeaturesInput).map(Pair::getFirst);
+                    DataResult<FeatureFlagSet> requiredFeatures = SubtypeCodecs.FEATURE_FLAG_SET_CODEC.decode(ops, requiredFeaturesInput).map(Pair::getFirst);
                     if (requiredFeatures.isError()) {
                         return requiredFeatures.map($ -> null);
                     }
@@ -342,7 +293,7 @@ public final class BlockCodecs {
                 }
                 T offsetFunctionInput = mapLike.get("offset_function");
                 if (offsetFunctionInput != null) {
-                    DataResult<BlockBehaviour.OffsetType> offsetFunction = OFFSET_TYPE_CODEC.decode(ops, offsetFunctionInput).map(Pair::getFirst);
+                    DataResult<BlockBehaviour.OffsetType> offsetFunction = SubtypeCodecs.OFFSET_TYPE_CODEC.decode(ops, offsetFunctionInput).map(Pair::getFirst);
                     if (offsetFunction.isError()) {
                         return offsetFunction.map($ -> null);
                     }

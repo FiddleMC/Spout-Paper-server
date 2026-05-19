@@ -7,7 +7,7 @@
     "BlockItemCodecMixin",
     "BlocksStatePredicatesAccessor",
     "EggItemCodecMixin",
-    "FeatureFlagRegistryAccessor",
+    "FeatureFlagRegistryNamesAccessorFeatureFlagRegistryMixin",
     "ItemCodecMixin",
     "ItemKeepPropertiesMixin",
     "ItemPropertiesAccessor",

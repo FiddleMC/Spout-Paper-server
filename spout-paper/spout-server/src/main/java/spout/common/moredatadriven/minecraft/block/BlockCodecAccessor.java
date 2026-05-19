@@ -8,6 +8,6 @@ import net.minecraft.world.level.block.Block;
  */
 public interface BlockCodecAccessor {
 
-    MapCodec<? extends Block> getClassCodec();
+    MapCodec<? extends Block> spout$codec();
 
 }

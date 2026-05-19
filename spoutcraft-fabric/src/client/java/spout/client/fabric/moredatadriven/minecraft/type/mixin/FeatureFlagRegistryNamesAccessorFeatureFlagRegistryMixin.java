@@ -5,12 +5,14 @@ import net.minecraft.world.flag.FeatureFlag;
 import net.minecraft.world.flag.FeatureFlagRegistry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
+import spout.common.moredatadriven.minecraft.common.subtypes.FeatureFlagRegistryNamesAccessor;
 import java.util.Map;
 
 @Mixin(FeatureFlagRegistry.class)
-public interface FeatureFlagRegistryAccessor {
+public interface FeatureFlagRegistryNamesAccessorFeatureFlagRegistryMixin extends FeatureFlagRegistryNamesAccessor {
 
     @Accessor("names")
-    Map<Identifier, FeatureFlag> getNames();
+    @Override
+    Map<Identifier, FeatureFlag> spout$names();
 
 }

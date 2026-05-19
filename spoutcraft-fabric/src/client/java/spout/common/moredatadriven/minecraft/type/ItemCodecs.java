@@ -18,6 +18,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import spout.client.fabric.moredatadriven.minecraft.type.mixin.ItemPropertiesAccessor;
+import spout.common.moredatadriven.minecraft.common.subtypes.SubtypeCodecs;
 import spout.common.util.mojang.codec.CodecUtil;
 
 /**
@@ -46,7 +47,7 @@ public final class ItemCodecs {
 
     private static final Codec<Item.Properties> ITEM_PROPERTIES_CODEC = RecordCodecBuilder.create(instance -> instance.group(
         DataComponentMap.CODEC.optionalFieldOf("components", DataComponentMap.EMPTY).forGetter(properties -> null /* Only needed on server */),
-        CodecUtil.optionalFieldOf(FeatureFlagCodecs.FEATURE_FLAG_SET_CODEC, "required_features", FeatureFlagSet::of).forGetter(properties -> ((ItemPropertiesAccessor) properties).getRequiredFeatures()),
+        CodecUtil.optionalFieldOf(SubtypeCodecs.FEATURE_FLAG_SET_CODEC, "required_features", FeatureFlagSet::of).forGetter(properties -> ((ItemPropertiesAccessor) properties).getRequiredFeatures()),
         Identifier.CODEC.optionalFieldOf("id").forGetter(properties -> Optional.ofNullable(((ItemPropertiesAccessor) properties).getId()).map(ResourceKey::identifier))
     ).apply(instance, ItemCodecs::constructItemProperties));
 

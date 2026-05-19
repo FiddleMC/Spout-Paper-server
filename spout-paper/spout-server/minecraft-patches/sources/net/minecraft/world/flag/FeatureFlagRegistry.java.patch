@@ -1,0 +1,14 @@
+--- a/net/minecraft/world/flag/FeatureFlagRegistry.java
++++ b/net/minecraft/world/flag/FeatureFlagRegistry.java
+@@ -14,7 +_,10 @@
+ import net.minecraft.resources.Identifier;
+ import org.slf4j.Logger;
+ 
+-public class FeatureFlagRegistry {
++// Spout start - More data-driven - Minecraft registries - Subtypes - Feature flags - Implement interfaces
++public class FeatureFlagRegistry implements spout.common.moredatadriven.minecraft.common.subtypes.FeatureFlagRegistryNamesAccessor {
++    @Override public java.util.Map<net.minecraft.resources.Identifier, net.minecraft.world.flag.FeatureFlag> spout$names() { return this.names; }
++    // Spout end - More data-driven - Minecraft registries - Subtypes - Feature flags - Implement interfaces
+     private static final Logger LOGGER = LogUtils.getLogger();
+     private final FeatureFlagUniverse universe;
+     public final Map<Identifier, FeatureFlag> names;

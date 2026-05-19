@@ -15,7 +15,7 @@ import java.util.Objects;
 public interface BlockWithType {
 
     default SpoutBlockType spout$getBlockType() {
-        return Objects.requireNonNull(BuiltInSpoutMoreDataDrivenRegistries.BLOCK_TYPE.byBlockCodec(((BlockCodecAccessor) this).getClassCodec()));
+        return Objects.requireNonNull(BuiltInSpoutMoreDataDrivenRegistries.BLOCK_TYPE.byBlockCodec(((BlockCodecAccessor) this).spout$codec()));
     }
 
 }
