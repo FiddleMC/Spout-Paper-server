@@ -10,9 +10,9 @@ import org.jetbrains.annotations.ApiStatus;
 @ApiStatus.NonExtendable
 public interface ItemTypeTypeRegistryEntry {
 
-    Object getWrappedCodec();
-
-    Object getCodec();
+    // Object getWrappedCodec();
+    //
+    // Object getCodec();
 
     /**
      * A mutable builder for the {@link ItemTypeTypeRegistryEntry},

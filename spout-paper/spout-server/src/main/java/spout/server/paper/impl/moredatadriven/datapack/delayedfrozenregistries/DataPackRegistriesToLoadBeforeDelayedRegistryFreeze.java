@@ -1,17 +1,22 @@
 package spout.server.paper.impl.moredatadriven.datapack.delayedfrozenregistries;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.ListCodec;
 import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.RegistryDataLoader;
 import net.minecraft.resources.RegistryValidator;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.BlockTypes;
 import spout.common.moredatadriven.minecraft.common.dependent.SortDependentDataDrivenResources;
 import spout.common.moredatadriven.minecraft.item.SpoutDataDrivenItem;
 import spout.server.paper.impl.moredatadriven.datapack.CopyResourcesFromDataPackRegistryToInternalRegistry;
 import spout.server.paper.impl.moredatadriven.datapack.SpoutDataPackRegistries;
+import spout.server.paper.impl.packetmapping.item.datadriven.UnappliedDataDrivenItemMapping;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -42,8 +47,14 @@ public final class DataPackRegistriesToLoadBeforeDelayedRegistryFreeze {
             registry -> {
                 CopyResourcesFromDataPackRegistryToInternalRegistry.copy(
                     SortDependentDataDrivenResources.sortedRegistry(registry).map(pair -> {
-                        pair.right().initializeItemFromInput();
-                        return Pair.of(pair.left().identifier(), pair.right().getItem());
+                        pair.right().initializeItemFromInput(false);
+                        Item item = pair.right().getItem();
+                        Object mappingsInput = pair.right().getInput().input().get("mappings");
+                        if (mappingsInput != null) {
+                            DataResult<com.mojang.datafixers.util.Pair<List<UnappliedDataDrivenItemMapping>, ?>> mappings = UnappliedDataDrivenItemMapping.LIST_CODEC.decode((DynamicOps) pair.right().getInput().ops(), mappingsInput);
+                            item.unappliedDataPackMappings = mappings.getOrThrow().getFirst();
+                        }
+                        return Pair.of(pair.left().identifier(), item);
                     }),
                     net.minecraft.core.registries.BuiltInRegistries.ITEM
                 );

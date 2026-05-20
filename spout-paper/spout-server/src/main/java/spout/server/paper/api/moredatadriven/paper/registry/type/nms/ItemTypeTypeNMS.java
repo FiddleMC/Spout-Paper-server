@@ -1,14 +1,20 @@
 package spout.server.paper.api.moredatadriven.paper.registry.type.nms;
 
-import net.minecraft.world.item.Item;
+import net.minecraft.resources.Identifier;
+import org.bukkit.NamespacedKey;
+import org.bukkit.craftbukkit.util.CraftNamespacedKey;
 import spout.server.paper.api.moredatadriven.paper.registry.type.ItemTypeType;
 
 /**
  * Extension of {@link ItemTypeType} using Minecraft internals.
  */
-public interface ItemTypeTypeNMS<I extends Item> extends ItemTypeType {
+public interface ItemTypeTypeNMS extends ItemTypeType {
 
     @Override
-    WrappedItemCodec<I> getWrappedCodec();
+    default NamespacedKey getNamespacedKey() {
+        return CraftNamespacedKey.fromMinecraft(this.getIdentifier());
+    }
+
+    Identifier getIdentifier();
 
 }

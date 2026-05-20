@@ -1,14 +1,11 @@
 package spout.server.paper.impl.moredatadriven.paper.registry.type;
 
-import com.mojang.serialization.MapCodec;
 import io.papermc.paper.registry.PaperRegistryBuilder;
 import io.papermc.paper.registry.data.util.Conversions;
-import net.minecraft.world.item.Item;
+import spout.common.moredatadriven.minecraft.itemtype.SpoutItemType;
 import spout.server.paper.api.moredatadriven.paper.registry.type.ItemTypeType;
 import spout.server.paper.api.moredatadriven.paper.registry.type.ItemTypeTypeRegistryEntry;
 import spout.server.paper.api.moredatadriven.paper.registry.type.nms.ItemTypeTypeRegistryEntryNMS;
-import spout.server.paper.api.moredatadriven.paper.registry.type.nms.WrappedItemCodec;
-import spout.server.paper.impl.moredatadriven.minecraft.type.WrappedItemCodecImpl;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -16,31 +13,26 @@ import org.jspecify.annotations.Nullable;
  */
 public class ItemTypeTypeRegistryEntryImpl implements ItemTypeTypeRegistryEntryNMS {
 
-    protected @Nullable WrappedItemCodec<?> wrappedCodec;
+    protected @Nullable SpoutItemType itemType;
 
-    public ItemTypeTypeRegistryEntryImpl(Conversions conversions, @Nullable WrappedItemCodec<?> internal) {
-        this.wrappedCodec = internal;
+    public ItemTypeTypeRegistryEntryImpl(Conversions conversions, @Nullable SpoutItemType internal) {
+        this.itemType = internal;
     }
 
-    @Override
-    public WrappedItemCodec<?> getWrappedCodec() {
-        return this.wrappedCodec;
-    }
+    public static class BuilderImpl extends ItemTypeTypeRegistryEntryImpl implements ItemTypeTypeRegistryEntryNMS.Builder, PaperRegistryBuilder<SpoutItemType, ItemTypeType> {
 
-    public static class BuilderImpl extends ItemTypeTypeRegistryEntryImpl implements ItemTypeTypeRegistryEntryNMS.Builder, PaperRegistryBuilder<WrappedItemCodec<?>, ItemTypeType> {
-
-        public BuilderImpl(Conversions conversions, @Nullable WrappedItemCodec<?> internal) {
+        public BuilderImpl(Conversions conversions, @Nullable SpoutItemType internal) {
             super(conversions, internal);
         }
 
-        @Override
-        public void setCodec(MapCodec<? extends Item> codecForType) {
-            this.wrappedCodec = WrappedItemCodecImpl.wrap(codecForType);
-        }
+        // @Override
+        // public void setCodec(MapCodec<? extends Item> codecForType) {
+        //     this.itemType = WrappedItemCodecImpl.wrap(codecForType);
+        // }
 
         @Override
-        public WrappedItemCodec<?> build() {
-            return this.wrappedCodec;
+        public SpoutItemType build() {
+            return this.itemType;
         }
 
     }

@@ -68,7 +68,7 @@ public final class ClientModCustomContent {
         if (this.parsedItems == null) {
             this.parsedItems = SortDependentDataDrivenResources.sortedKeyedResources(Registries.ITEM, this.items.stream())
                 .map(item -> {
-                    item.second().initializeItemFromInput();
+                    item.second().initializeItemFromInput(true);
                     return item.second().getItem();
                 }).toList();
         }

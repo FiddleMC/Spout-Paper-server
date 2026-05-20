@@ -79,8 +79,18 @@ public class SpoutDataDrivenItem implements DependentDataDrivenResource {
         return Objects.requireNonNull(this.item);
     }
 
-    public void initializeItemFromInput() {
+    public @Nullable MapInputAndOps<?> getInput() {
+        return this.input;
+    }
+
+    public void initializeItemFromInput(boolean clearInput) {
         this.item = Objects.requireNonNull(this.input).<Item>decodeValue(((dynamicOps, mapLike) -> SpoutDataDrivenItem.this.type.decodeItemFromInput((DynamicOps) dynamicOps, (MapLike) mapLike)));
+        if (clearInput) {
+            this.clearInput();
+        }
+    }
+
+    public void clearInput() {
         this.input = null;
     }
 
