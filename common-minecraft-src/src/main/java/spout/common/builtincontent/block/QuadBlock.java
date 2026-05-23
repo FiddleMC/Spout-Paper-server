@@ -345,9 +345,12 @@ public class QuadBlock extends Block implements SimpleWaterloggedBlock {
 
     @Override
     protected boolean canBeReplaced(BlockState state, BlockPlaceContext context) {
-        BlockPos pos = context.getClickedPos();
-        Direction face = context.getClickedFace();
+        // Only merge with same item
+        if (!context.getItemInHand().is(this.asItem())) {
+            return false;
+        }
 
+        BlockPos pos = context.getClickedPos();
         BlockState stateAtPos = context.getLevel().getBlockState(pos);
 
         // If this block isn't actually the target, don't allow replacement
