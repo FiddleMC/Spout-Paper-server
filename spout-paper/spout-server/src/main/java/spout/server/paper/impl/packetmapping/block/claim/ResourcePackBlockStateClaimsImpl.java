@@ -83,6 +83,14 @@ public final class ResourcePackBlockStateClaimsImpl implements ResourcePackBlock
         return this.processingState != null && this.processingState.isClaimed(state);
     }
 
+    public boolean isClaimedNonVanilla(BlockState state) {
+        return this.processingState != null && this.processingState.isClaimedNonVanilla(state.indexInVanillaOnlyBlockStateRegistry);
+    }
+
+    public boolean isClaimedNonVanilla(int state) {
+        return this.processingState != null && this.processingState.isClaimedNonVanilla(state);
+    }
+
     public void processRequests() {
         this.processingState = new AllRequestsProcessingState();
         this.processingState.process();
@@ -272,6 +280,15 @@ public final class ResourcePackBlockStateClaimsImpl implements ResourcePackBlock
             this.visualDuplicateListeners = new IntConsumer[registrySize];
             this.visualDuplicateGroupVanillaClaimCount = new Int2IntArrayMap();
             this.visualDuplicateGroupNonVanillaClaimCount = new Int2IntArrayMap();
+            // Claim stone, so that it can be used as a fallback of last resort
+            {
+                int fallback = Blocks.STONE.defaultBlockState().indexInVanillaOnlyBlockStateRegistry;
+                this.claimed[fallback] = true;
+                VisualDuplicatesImpl.@Nullable VisualDuplicateGroupImpl group = VisualDuplicatesImpl.get().getVisualDuplicates(fallback);
+                if (group != null) {
+                    this.visualDuplicateGroupVanillaClaimCount.put(group.getId(), 1);
+                }
+            }
         }
 
         boolean isClaimed(int state) {

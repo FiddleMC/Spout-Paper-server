@@ -316,7 +316,7 @@ public final class VisualDuplicatesImpl implements VisualDuplicates {
         unionFind.mergeDoubleSlabStateToFullBlockDefaultState(Blocks.OAK_SLAB, Blocks.OAK_PLANKS);
         unionFind.mergeDoubleSlabStateToFullBlockDefaultState(Blocks.OXIDIZED_CUT_COPPER_SLAB, Blocks.OXIDIZED_CUT_COPPER);
         unionFind.mergeDoubleSlabStateToFullBlockDefaultState(Blocks.PALE_OAK_SLAB, Blocks.PALE_OAK_PLANKS);
-        unionFind.mergeDoubleSlabStateToFullBlockDefaultState(Blocks.PETRIFIED_OAK_SLAB, Blocks.OAK_PLANKS);
+        unionFind.mergeDoubleSlabStateToFullBlockDefaultState(Blocks.PETRIFIED_OAK_SLAB, Blocks.OAK_SLAB);
         unionFind.mergeDoubleSlabStateToFullBlockDefaultState(Blocks.POLISHED_ANDESITE_SLAB, Blocks.POLISHED_ANDESITE);
         unionFind.mergeDoubleSlabStateToFullBlockDefaultState(Blocks.POLISHED_BLACKSTONE_BRICK_SLAB, Blocks.POLISHED_BLACKSTONE_BRICKS);
         unionFind.mergeDoubleSlabStateToFullBlockDefaultState(Blocks.POLISHED_BLACKSTONE_SLAB, Blocks.POLISHED_BLACKSTONE);

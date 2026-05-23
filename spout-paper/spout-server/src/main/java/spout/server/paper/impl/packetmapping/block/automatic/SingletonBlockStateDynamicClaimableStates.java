@@ -30,8 +30,22 @@ public class SingletonBlockStateDynamicClaimableStates implements DynamicClaimab
      */
     private @Nullable Supplier<Collection<BlockState>> initialStatesSupplier;
 
-    public SingletonBlockStateDynamicClaimableStates(Supplier<Collection<BlockState>> initialStatesSupplier) {
+    /**
+     * A supplier of the preferred state,
+     * or null if there is no preferred state,
+     * or null if dereferenced.
+     */
+    private @Nullable Supplier<BlockState> preferredStateSupplier;
+
+    /**
+     * Whether these states are fallback states.
+     */
+    private final boolean isFallback;
+
+    private SingletonBlockStateDynamicClaimableStates(Supplier<Collection<BlockState>> initialStatesSupplier, Supplier<BlockState> preferredStateSupplier, boolean isFallback) {
         this.initialStatesSupplier = initialStatesSupplier;
+        this.preferredStateSupplier = preferredStateSupplier;
+        this.isFallback = isFallback;
     }
 
     @Override
@@ -39,14 +53,27 @@ public class SingletonBlockStateDynamicClaimableStates implements DynamicClaimab
         if (this.values == null) {
             Collection<BlockState> initialStates = this.initialStatesSupplier.get();
             this.initialStatesSupplier = null;
-            this.values = new LinkedHashMap<>(initialStates.size());
+            this.values = new LinkedHashMap<>(initialStates.size() + (this.preferredStateSupplier != null ? 1 : 0));
+            if (this.preferredStateSupplier != null) {
+                BlockState preferredState = this.preferredStateSupplier.get();
+                this.values.put(preferredState.indexInVanillaOnlyBlockStateRegistry, preferredState);
+                this.preferredStateSupplier = null;
+            }
             initialStates.stream()
-                .filter(state -> !ResourcePackBlockStateClaimsImpl.get().isClaimed(state))
+                .filter(state -> !(this.isFallback ? ResourcePackBlockStateClaimsImpl.get().isClaimedNonVanilla(state) : ResourcePackBlockStateClaimsImpl.get().isClaimed(state)))
                 .sorted(VisualDuplicatesImpl.VisualDuplicateGroupImpl.STATE_COMPARATOR)
                 .forEach(state -> this.values.put(state.indexInVanillaOnlyBlockStateRegistry, state));
             ResourcePackBlockStateClaimsImpl.get().registerClaimListener(this.values::remove);
         }
         return SortedClaimableStates.of(from, this.values.values().toArray(BlockState[]::new));
+    }
+
+    public static SingletonBlockStateDynamicClaimableStates forProxy(Supplier<Collection<BlockState>> initialStatesSupplier) {
+        return new SingletonBlockStateDynamicClaimableStates(initialStatesSupplier, null, false);
+    }
+
+    public static SingletonBlockStateDynamicClaimableStates forFallback(Supplier<Collection<BlockState>> initialStatesSupplier, Supplier<BlockState> preferredStateSupplier) {
+        return new SingletonBlockStateDynamicClaimableStates(initialStatesSupplier, preferredStateSupplier, true);
     }
 
 }

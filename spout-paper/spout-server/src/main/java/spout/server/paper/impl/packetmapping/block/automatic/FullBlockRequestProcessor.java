@@ -1,5 +1,6 @@
 package spout.server.paper.impl.packetmapping.block.automatic;
 
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -20,7 +21,8 @@ public class FullBlockRequestProcessor extends FilledArrayResultRequestProcessor
     @Override
     protected FilledArrayResultRequestProcessor<FromToBlockStateRequestBuilderImpl, RequestBasedResult>.FillPromise constructFillPromise(FilledArrayResultRequestProcessor<FromToBlockStateRequestBuilderImpl, RequestBasedResult>.FillPromise kickoff) {
         return kickoff
-            .then(attemptToClaimStatesFillPromiseStateByState(FULL_BLOCK_PROXY_STATES::get))
+            .then(this.attemptToClaimStatesFillPromiseStateByState(FULL_BLOCK_PROXY_STATES::get, false))
+            .then(CLAIM_FALLBACK_PROMISE_GETTER.get(this))
             .then(new StateFallbackFillPromise(this.request.fallback));
     }
 
@@ -28,7 +30,7 @@ public class FullBlockRequestProcessor extends FilledArrayResultRequestProcessor
      * A new {@link DynamicClaimableStates} instance,
      * for {@link BlockState}s that can be attempted to be claimed as full block proxies.
      */
-    public static final DynamicClaimableStates FULL_BLOCK_PROXY_STATES = new SingletonBlockStateDynamicClaimableStates(() -> {
+    public static final DynamicClaimableStates FULL_BLOCK_PROXY_STATES = SingletonBlockStateDynamicClaimableStates.forProxy(() -> {
         // Build the claimable states
         List<BlockState> states = new ArrayList<>();
         // Blocks for which every block state is a full block
@@ -174,5 +176,9 @@ public class FullBlockRequestProcessor extends FilledArrayResultRequestProcessor
         ).forEach(block -> states.add(block.defaultBlockState().setValue(BlockStateProperties.SLAB_TYPE, SlabType.DOUBLE)));
         return states;
     });
+
+    public static final FillPromiseGetter<FromToBlockStateRequestBuilderImpl, ArrayResultRequestProcessor.RequestBasedResult> CLAIM_FALLBACK_PROMISE_GETTER = claimFallbackStatesForAllStatesAtOnceByBlockState(
+        FullBlockBlockTypeRequestProcessor.SAFE_FALLBACK_BLOCKS.stream().map(Block::defaultBlockState).toList()
+    );
 
 }

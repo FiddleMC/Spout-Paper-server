@@ -158,12 +158,14 @@ public abstract class ArrayResultRequestProcessor<R extends ProxyStatesRequestBu
          *
          * @param fallbackState A fallback block state.
          */
-        public void setAllUnmapped(BlockState fallbackState) {
+        public void setAllUnmapped(BlockState fallbackState, boolean includeResourcePack) {
             this.initializeArrays();
             BlockState[] fromStates = this.fromStates();
             for (int i = 0; i < fromStates.length; i++) {
-                if (this.resourcePackToStates[i] == null) {
-                    this.resourcePackToStates[i] = fallbackState;
+                if (includeResourcePack) {
+                    if (this.resourcePackToStates[i] == null) {
+                        this.resourcePackToStates[i] = fallbackState;
+                    }
                 }
                 if (this.vanillaToStates[i] == null) {
                     this.vanillaToStates[i] = fallbackState;
@@ -177,11 +179,13 @@ public abstract class ArrayResultRequestProcessor<R extends ProxyStatesRequestBu
          * @param fallbackStates Array of fallback block states, with the same length as {@link #fromStates()},
          *                       and indexed the same as {@link #fromStates()}
          */
-        public void setAllUnmapped(BlockState[] fallbackStates) {
+        public void setAllUnmapped(BlockState[] fallbackStates, boolean includeResourcePack) {
             this.initializeArrays();
             for (int i = 0; i < fallbackStates.length; i++) {
-                if (this.resourcePackToStates[i] == null) {
-                    this.resourcePackToStates[i] = fallbackStates[i];
+                if (includeResourcePack) {
+                    if (this.resourcePackToStates[i] == null) {
+                        this.resourcePackToStates[i] = fallbackStates[i];
+                    }
                 }
                 if (this.vanillaToStates[i] == null) {
                     this.vanillaToStates[i] = fallbackStates[i];
@@ -196,12 +200,12 @@ public abstract class ArrayResultRequestProcessor<R extends ProxyStatesRequestBu
          *
          * @param fallbackBlock A fallback block.
          */
-        public void setAllUnmapped(Block fallbackBlock) {
+        public void setAllUnmapped(Block fallbackBlock, boolean includeResourcePack) {
             // Skip if all mapped already
             if (this.resourcePackToStates != null && this.vanillaToStates != null) {
                 boolean allMapped = true;
                 for (int i = 0; i < this.resourcePackToStates.length; i++) {
-                    if (this.resourcePackToStates[i] == null || this.vanillaToStates[i] == null) {
+                    if ((includeResourcePack && this.resourcePackToStates[i] == null) || this.vanillaToStates[i] == null) {
                         allMapped = false;
                         break;
                     }
@@ -210,7 +214,7 @@ public abstract class ArrayResultRequestProcessor<R extends ProxyStatesRequestBu
                     return;
                 }
             }
-            this.setAllUnmapped(BlockStateUtil.copyProperties(this.fromStates(), fallbackBlock));
+            this.setAllUnmapped(BlockStateUtil.copyProperties(this.fromStates(), fallbackBlock), includeResourcePack);
         }
 
         public int getFromStateIndex(BlockState fromState) {

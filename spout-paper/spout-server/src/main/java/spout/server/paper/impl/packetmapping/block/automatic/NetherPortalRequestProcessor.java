@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -43,8 +44,9 @@ public class NetherPortalRequestProcessor extends FilledArrayResultRequestProces
         int[] xResultIndicesIndices = IntStream.range(0, xResultIndicesArray.length).toArray();
         int[] zResultIndicesIndices = IntStream.range(0, zResultIndicesArray.length).toArray();
         return kickoff
-            .then(new AttemptToClaimStatesFillPromise(xResultIndicesArray, X_NETHER_PORTAL_PROXY_STATES::get, $ -> xResultIndicesIndices))
-            .then(new AttemptToClaimStatesFillPromise(zResultIndicesArray, Z_NETHER_PORTAL_PROXY_STATES::get, $ -> zResultIndicesIndices))
+            .then(new AttemptToClaimStatesFillPromise(xResultIndicesArray, X_NETHER_PORTAL_PROXY_STATES::get, $ -> xResultIndicesIndices, false))
+            .then(new AttemptToClaimStatesFillPromise(zResultIndicesArray, Z_NETHER_PORTAL_PROXY_STATES::get, $ -> zResultIndicesIndices, false))
+            .then(CLAIM_FALLBACK_PROMISE_GETTER.get(this))
             .then(new BlockFallbackFillPromise(this.request.fallback));
     }
 
@@ -62,12 +64,16 @@ public class NetherPortalRequestProcessor extends FilledArrayResultRequestProces
      * A new {@link DynamicClaimableStates} instance,
      * for {@link BlockState}s that can be attempted to be claimed as x-axis nether portal proxies.
      */
-    public static final DynamicClaimableStates X_NETHER_PORTAL_PROXY_STATES = new SingletonBlockStateDynamicClaimableStates(() -> getFenceGateProxyStates(Direction.Axis.Z));
+    public static final DynamicClaimableStates X_NETHER_PORTAL_PROXY_STATES = SingletonBlockStateDynamicClaimableStates.forProxy(() -> getFenceGateProxyStates(Direction.Axis.Z));
 
     /**
      * A new {@link DynamicClaimableStates} instance,
      * for {@link BlockState}s that can be attempted to be claimed as z-axis nether portal proxies.
      */
-    public static final DynamicClaimableStates Z_NETHER_PORTAL_PROXY_STATES = new SingletonBlockStateDynamicClaimableStates(() -> getFenceGateProxyStates(Direction.Axis.X));
+    public static final DynamicClaimableStates Z_NETHER_PORTAL_PROXY_STATES = SingletonBlockStateDynamicClaimableStates.forProxy(() -> getFenceGateProxyStates(Direction.Axis.X));
+
+    public static final FillPromiseGetter<FromToBlockTypeRequestBuilderImpl, ArrayResultRequestProcessor.RequestBasedResult> CLAIM_FALLBACK_PROMISE_GETTER = claimFallbackStatesForAllStatesAtOnceByBlock(
+        List.of(Blocks.NETHER_PORTAL)
+    );
 
 }

@@ -1,5 +1,11 @@
 package spout.server.paper.impl.packetmapping.block.automatic;
 
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ButtonBlock;
+import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.level.block.FlowerPotBlock;
+import net.minecraft.world.level.block.LadderBlock;
+import net.minecraft.world.level.block.WallBlock;
 import org.bukkit.block.BlockType;
 import org.bukkit.block.data.BlockData;
 import spout.server.paper.api.packetmapping.block.automatic.FromBlockStateRequestBuilder;
@@ -9,9 +15,12 @@ import spout.server.paper.api.packetmapping.block.automatic.AutomaticBlockMappin
 import spout.server.paper.api.packetmapping.block.automatic.SlabRequestBuilder;
 import spout.server.paper.api.packetmapping.block.automatic.ToBlockStateRequestBuilder;
 import spout.server.paper.api.packetmapping.block.automatic.ToBlockTypeRequestBuilder;
+import spout.server.paper.impl.moredatadriven.minecraft.VanillaOnlyBlockRegistry;
 import spout.server.paper.impl.packetmapping.block.BlockMappingsComposeEventImpl;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * The implementation of {@link AutomaticBlockMappings}.
@@ -68,9 +77,13 @@ public final class AutomaticBlockMappingsImpl implements AutomaticBlockMappings 
         this.blockTypeFullBlock(BlockType.SUSPICIOUS_SAND, builderConsumer);
     }
 
+    private static final BiFunction<FromToBlockTypeRequestBuilderImpl, BlockMappingsComposeEventImpl, StandardBlockTypeRequestProcessor> BUTTON_PROCESSOR_CONSTRUCTOR = StandardBlockTypeRequestProcessor.withFallbackBlocks(
+        Stream.concat(Stream.of(Blocks.STONE_BUTTON), StreamSupport.stream(VanillaOnlyBlockRegistry.get().spliterator(), false).filter(block -> block instanceof ButtonBlock)).distinct().toList()
+    );
+
     @Override
     public <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void button(Consumer<? extends B> builderConsumer) {
-        this.simpleBlockType(BlockType.STONE_BUTTON, StandardBlockTypeRequestProcessor::new, builderConsumer);
+        this.simpleBlockType(BlockType.STONE_BUTTON, (BiFunction) BUTTON_PROCESSOR_CONSTRUCTOR, builderConsumer);
     }
 
     @Override
@@ -88,9 +101,13 @@ public final class AutomaticBlockMappingsImpl implements AutomaticBlockMappings 
         this.simpleBlockType(BlockType.OAK_DOOR, DoorRequestProcessor::new, builderConsumer);
     }
 
+    private static final BiFunction<FromToBlockTypeRequestBuilderImpl, BlockMappingsComposeEventImpl, StandardBlockTypeRequestProcessor> FENCE_PROCESSOR_CONSTRUCTOR = StandardBlockTypeRequestProcessor.withFallbackBlocks(
+        Stream.concat(Stream.of(Blocks.OAK_FENCE), StreamSupport.stream(VanillaOnlyBlockRegistry.get().spliterator(), false).filter(block -> block instanceof FenceBlock)).distinct().toList()
+    );
+
     @Override
     public <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void fence(Consumer<? extends B> builderConsumer) {
-        this.simpleBlockType(BlockType.OAK_FENCE, StandardBlockTypeRequestProcessor::new, builderConsumer);
+        this.simpleBlockType(BlockType.OAK_FENCE, (BiFunction) FENCE_PROCESSOR_CONSTRUCTOR, builderConsumer);
     }
 
     @Override
@@ -98,9 +115,13 @@ public final class AutomaticBlockMappingsImpl implements AutomaticBlockMappings 
         this.simpleBlockType(BlockType.OAK_FENCE_GATE, FenceGateRequestProcessor::new, builderConsumer);
     }
 
+    private static final BiFunction<FromToBlockTypeRequestBuilderImpl, BlockMappingsComposeEventImpl, StandardBlockTypeRequestProcessor> FLOWER_POT_PROCESSOR_CONSTRUCTOR = StandardBlockTypeRequestProcessor.withFallbackBlocks(
+        Stream.concat(Stream.of(Blocks.FLOWER_POT), StreamSupport.stream(VanillaOnlyBlockRegistry.get().spliterator(), false).filter(block -> block instanceof FlowerPotBlock)).distinct().toList()
+    );
+
     @Override
     public <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void flowerPot(Consumer<? extends B> builderConsumer) {
-        this.simpleBlockType(BlockType.FLOWER_POT, StandardBlockTypeRequestProcessor::new, builderConsumer);
+        this.simpleBlockType(BlockType.FLOWER_POT, (BiFunction) FLOWER_POT_PROCESSOR_CONSTRUCTOR, builderConsumer);
     }
 
     @Override
@@ -118,9 +139,13 @@ public final class AutomaticBlockMappingsImpl implements AutomaticBlockMappings 
         this.blockTypeFullBlock(BlockType.WHITE_GLAZED_TERRACOTTA, builderConsumer);
     }
 
+    private static final BiFunction<FromToBlockTypeRequestBuilderImpl, BlockMappingsComposeEventImpl, StandardBlockTypeRequestProcessor> LADDER_PROCESSOR_CONSTRUCTOR = StandardBlockTypeRequestProcessor.withFallbackBlocks(
+        Stream.concat(Stream.of(Blocks.LADDER), StreamSupport.stream(VanillaOnlyBlockRegistry.get().spliterator(), false).filter(block -> block instanceof LadderBlock)).distinct().toList()
+    );
+
     @Override
     public <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void ladder(Consumer<? extends B> builderConsumer) {
-        this.simpleBlockType(BlockType.LADDER, StandardBlockTypeRequestProcessor::new, builderConsumer);
+        this.simpleBlockType(BlockType.LADDER, (BiFunction) LADDER_PROCESSOR_CONSTRUCTOR, builderConsumer);
     }
 
     @Override
@@ -189,9 +214,13 @@ public final class AutomaticBlockMappingsImpl implements AutomaticBlockMappings 
         this.simpleBlockType(BlockType.OAK_TRAPDOOR, TrapdoorRequestProcessor::new, builderConsumer);
     }
 
+    private static final BiFunction<FromToBlockTypeRequestBuilderImpl, BlockMappingsComposeEventImpl, StandardBlockTypeRequestProcessor> WALL_PROCESSOR_CONSTRUCTOR = StandardBlockTypeRequestProcessor.withFallbackBlocks(
+        Stream.concat(Stream.of(Blocks.COBBLESTONE_WALL), StreamSupport.stream(VanillaOnlyBlockRegistry.get().spliterator(), false).filter(block -> block instanceof WallBlock)).distinct().toList()
+    );
+
     @Override
     public <B extends FromBlockTypeRequestBuilder & ToBlockTypeRequestBuilder> void wall(Consumer<? extends B> builderConsumer) {
-        this.simpleBlockType(BlockType.COBBLESTONE_WALL, StandardBlockTypeRequestProcessor::new, builderConsumer);
+        this.simpleBlockType(BlockType.COBBLESTONE_WALL, (BiFunction) WALL_PROCESSOR_CONSTRUCTOR, builderConsumer);
     }
 
 }

@@ -16,6 +16,7 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import org.bukkit.block.data.BlockData;
@@ -37,6 +38,11 @@ public abstract class FilledArrayResultRequestProcessor<R extends ProxyStatesReq
 
     protected abstract FillPromise constructFillPromise(FillPromise kickoff);
 
+    protected FillPromise constructFillPromiseIncludingCommonFallback(FillPromise kickoff) {
+        return this.constructFillPromise(kickoff)
+            .then(new StateFallbackFillPromise(Blocks.STONE.defaultBlockState(), true));
+    }
+
     protected void postFillResult() {
         this.useResult();
     }
@@ -44,7 +50,7 @@ public abstract class FilledArrayResultRequestProcessor<R extends ProxyStatesReq
     @Override
     protected void processAfterValidateArguments() {
         FillPromise kickoff = new EmptyFillPromise();
-        this.constructFillPromise(kickoff).then(this::postFillResult);
+        this.constructFillPromiseIncludingCommonFallback(kickoff).then(this::postFillResult);
         kickoff.run();
     }
 
@@ -139,21 +145,28 @@ public abstract class FilledArrayResultRequestProcessor<R extends ProxyStatesReq
 
         /**
          * A function from the claimed proxy index (i.e. the index in the array of the value consumed
-         * by the {@code resultConsumer} passed to {@link #attemptClaimOfProxyStates}) to the index in
+         * by the {@code resultConsumer} passed to {@link #attemptClaimOfProxyOrFallbackStates}) to the index in
          * {@code resultIndicesToClaimFor}.
          * If null, it will be assumed to be the identity (i.e. each index mapped to a singleton array of itself).
          */
-        private final @Nullable Int2ObjectFunction<int[]> proxyToResultIndicesIndex;
+        private final @Nullable Int2ObjectFunction<int[]> claimedToResultIndicesIndex;
+
+        /**
+         * Whether this claim is being made for a fallback,
+         * which determines whether the claim will be made using the vanilla look.
+         */
+        private final boolean isFallback;
 
         /**
          * @param resultIndicesToClaimFor   The value for {@link #resultIndicesToClaimFor}.
          * @param claimableStatesFunction   The value for {@link #claimableStatesFunction}.
-         * @param proxyToResultIndicesIndex The value for {@link #proxyToResultIndicesIndex}.
+         * @param claimedToResultIndicesIndex The value for {@link #claimedToResultIndicesIndex}.
          */
-        protected AttemptToClaimStatesFillPromise(int @Nullable [] resultIndicesToClaimFor, Function<BlockState, SortedClaimableStates> claimableStatesFunction, @Nullable Int2ObjectFunction<int[]> proxyToResultIndicesIndex) {
+        protected AttemptToClaimStatesFillPromise(int @Nullable [] resultIndicesToClaimFor, Function<BlockState, SortedClaimableStates> claimableStatesFunction, @Nullable Int2ObjectFunction<int[]> claimedToResultIndicesIndex, boolean isFallback) {
             this.resultIndicesToClaimFor = resultIndicesToClaimFor;
             this.claimableStatesFunction = claimableStatesFunction;
-            this.proxyToResultIndicesIndex = proxyToResultIndicesIndex;
+            this.claimedToResultIndicesIndex = claimedToResultIndicesIndex;
+            this.isFallback = isFallback;
         }
 
         @Override
@@ -182,7 +195,7 @@ public abstract class FilledArrayResultRequestProcessor<R extends ProxyStatesReq
                 }
                 // Otherwise, perform the actual claim
                 // Compute the claimable states
-                int claimableStatesReferenceResultIndicesIndex = this.proxyToResultIndicesIndex != null ? this.proxyToResultIndicesIndex.get(0)[0] : 0;
+                int claimableStatesReferenceResultIndicesIndex = this.claimedToResultIndicesIndex != null ? this.claimedToResultIndicesIndex.get(0)[0] : 0;
                 int claimableStatesReferenceFromStatesIndex = this.resultIndicesToClaimFor != null ? this.resultIndicesToClaimFor[claimableStatesReferenceResultIndicesIndex] : claimableStatesReferenceResultIndicesIndex;
                 BlockState claimableStatesReference = FilledArrayResultRequestProcessor.this.result.fromStates()[claimableStatesReferenceFromStatesIndex];
                 this.claimableStates = this.claimableStatesFunction.apply(claimableStatesReference);
@@ -191,15 +204,15 @@ public abstract class FilledArrayResultRequestProcessor<R extends ProxyStatesReq
                 BlockData[] blockStatesToClaimFor = this.resultIndicesToClaimFor != null ? Arrays.stream(this.resultIndicesToClaimFor).mapToObj(index -> FilledArrayResultRequestProcessor.this.result.fromStates()[index].asBlockData()).toArray(BlockData[]::new) : Arrays.stream(FilledArrayResultRequestProcessor.this.result.fromStates()).map(BlockState::asBlockData).toArray(BlockData[]::new);
                 this.priority = ClaimRequestPriority.forBlockStates(blockStatesToClaimFor);
             }
-            FilledArrayResultRequestProcessor.this.attemptClaimOfProxyStates(claimableStates.get(this.claimIndex), this.priority, proxyStates -> {
-                if (proxyStates != null) {
-                    for (int proxyStateIndex = 0; proxyStateIndex < proxyStates.length; proxyStateIndex++) {
-                        int[] resultIndicesIndices = this.proxyToResultIndicesIndex != null ? this.proxyToResultIndicesIndex.get(proxyStateIndex) : new int[]{proxyStateIndex};
+            FilledArrayResultRequestProcessor.this.attemptClaimOfProxyOrFallbackStates(claimableStates.get(this.claimIndex), this.priority, claimedStates -> {
+                if (claimedStates != null) {
+                    for (int claimedStateIndex = 0; claimedStateIndex < claimedStates.length; claimedStateIndex++) {
+                        int[] resultIndicesIndices = this.claimedToResultIndicesIndex != null ? this.claimedToResultIndicesIndex.get(claimedStateIndex) : new int[]{claimedStateIndex};
                         if (resultIndicesIndices.length > 0) {
-                            BlockState proxyState = VanillaOnlyBlockStateRegistry.get().byId(proxyStates[proxyStateIndex]);
+                            BlockState claimedState = VanillaOnlyBlockStateRegistry.get().byId(claimedStates[claimedStateIndex]);
                             for (int resultIndicesIndex : resultIndicesIndices) {
                                 int resultIndex = this.resultIndicesToClaimFor != null ? this.resultIndicesToClaimFor[resultIndicesIndex] : resultIndicesIndex;
-                                FilledArrayResultRequestProcessor.this.result.setResourcePackToStateIfNotSet(resultIndex, proxyState, true);
+                                FilledArrayResultRequestProcessor.this.result.setResourcePackToStateIfNotSet(resultIndex, claimedState, !this.isFallback);
                             }
                         }
                     }
@@ -211,24 +224,24 @@ public abstract class FilledArrayResultRequestProcessor<R extends ProxyStatesReq
                     }
                     this.run();
                 }
-            });
+            }, this.isFallback);
         }
 
     }
 
-    protected FillPromise attemptToClaimStatesFillPromiseForAllStatesAtOnce(Function<BlockState, SortedClaimableStates> claimableStatesFunction) {
-        return new AttemptToClaimStatesFillPromise(null, claimableStatesFunction, null);
+    protected FillPromise attemptToClaimStatesFillPromiseForAllStatesAtOnce(Function<BlockState, SortedClaimableStates> claimableStatesFunction, boolean isFallback) {
+        return new AttemptToClaimStatesFillPromise(null, claimableStatesFunction, null, isFallback);
     }
 
-    protected FillPromise attemptToClaimStatesFillPromiseForAllStatesAtOnceForBlock(Function<BlockState, SortedClaimableStates> claimableStatesFunction, Block blockStatesReferenceBlock) {
-        return attemptToClaimStatesFillPromiseForAllStatesAtOnceForBlockStates(claimableStatesFunction, blockStatesReferenceBlock.getStateDefinition().getPossibleStatesArray(), ((FromToBlockStatesRequestBuilder) this.request).fromStates()[0].getProperties().equals(blockStatesReferenceBlock.getStateDefinition().getPossibleStates().getFirst().getProperties()));
+    protected FillPromise attemptToClaimStatesFillPromiseForAllStatesAtOnceForBlock(Function<BlockState, SortedClaimableStates> claimableStatesFunction, Block blockStatesReferenceBlock, boolean isFallback) {
+        return attemptToClaimStatesFillPromiseForAllStatesAtOnceForBlockStates(claimableStatesFunction, blockStatesReferenceBlock.getStateDefinition().getPossibleStatesArray(), ((FromToBlockStatesRequestBuilder) this.request).fromStates()[0].getProperties().equals(blockStatesReferenceBlock.getStateDefinition().getPossibleStates().getFirst().getProperties()), isFallback);
     }
 
-    protected FillPromise attemptToClaimStatesFillPromiseForAllStatesAtOnceForBlockStates(Function<BlockState, SortedClaimableStates> claimableStatesFunction, BlockState[] referenceBlockStates) {
-        return this.attemptToClaimStatesFillPromiseForAllStatesAtOnceForBlockStates(claimableStatesFunction, referenceBlockStates, false);
+    protected FillPromise attemptToClaimStatesFillPromiseForAllStatesAtOnceForBlockStates(Function<BlockState, SortedClaimableStates> claimableStatesFunction, BlockState[] referenceBlockStates, boolean isFallback) {
+        return this.attemptToClaimStatesFillPromiseForAllStatesAtOnceForBlockStates(claimableStatesFunction, referenceBlockStates, false, isFallback);
     }
 
-    protected FillPromise attemptToClaimStatesFillPromiseForAllStatesAtOnceForBlockStates(Function<BlockState, SortedClaimableStates> claimableStatesFunction, BlockState[] referenceBlockStates, boolean proxyToResultIndicesIndexIsIdentity) {
+    protected FillPromise attemptToClaimStatesFillPromiseForAllStatesAtOnceForBlockStates(Function<BlockState, SortedClaimableStates> claimableStatesFunction, BlockState[] referenceBlockStates, boolean proxyToResultIndicesIndexIsIdentity, boolean isFallback) {
         if (this.request instanceof FromToBlockStatesRequestBuilder fromStatesRequest) {
             @Nullable Int2ObjectFunction<int[]> proxyToResultIndicesIndex;
             if (proxyToResultIndicesIndexIsIdentity) {
@@ -280,20 +293,20 @@ public abstract class FilledArrayResultRequestProcessor<R extends ProxyStatesReq
                     return proxyToResultIndicesIndexMap[0].get(proxyIndex);
                 };
             }
-            return new AttemptToClaimStatesFillPromise(null, claimableStatesFunction, proxyToResultIndicesIndex);
+            return new AttemptToClaimStatesFillPromise(null, claimableStatesFunction, proxyToResultIndicesIndex, isFallback);
         } else {
             throw new UnsupportedOperationException();
         }
     }
 
-    protected FillPromise attemptToClaimStatesFillPromiseStateByState(Function<BlockState, SortedClaimableStates> claimableStatesFunction) {
-        return this.attemptToClaimStatesFillPromiseStateByState(claimableStatesFunction, null);
+    protected FillPromise attemptToClaimStatesFillPromiseStateByState(Function<BlockState, SortedClaimableStates> claimableStatesFunction, boolean isFallback) {
+        return this.attemptToClaimStatesFillPromiseStateByState(claimableStatesFunction, null, isFallback);
     }
 
-    protected FillPromise attemptToClaimStatesFillPromiseStateByState(Function<BlockState, SortedClaimableStates> claimableStatesFunction, @Nullable Int2ObjectFunction<int[]> proxyToResultIndicesIndex) {
+    protected FillPromise attemptToClaimStatesFillPromiseStateByState(Function<BlockState, SortedClaimableStates> claimableStatesFunction, @Nullable Int2ObjectFunction<int[]> proxyToResultIndicesIndex, boolean isFallback) {
         FilledArrayResultRequestProcessor<R, Re>.FillPromise[] promises = new FilledArrayResultRequestProcessor.FillPromise[FilledArrayResultRequestProcessor.this.result.fromStates().length];
         for (int i = 0; i < promises.length; i++) {
-            promises[i] = new AttemptToClaimStatesFillPromise(new int[]{i}, claimableStatesFunction, proxyToResultIndicesIndex);
+            promises[i] = new AttemptToClaimStatesFillPromise(new int[]{i}, claimableStatesFunction, proxyToResultIndicesIndex, isFallback);
         }
         return new MultiplePromisesFillPromise(promises);
     }
@@ -304,23 +317,41 @@ public abstract class FilledArrayResultRequestProcessor<R extends ProxyStatesReq
 
     }
 
-    protected static <R extends ProxyStatesRequestBuilderImpl, Re extends FilledArrayResultRequestProcessor.Result> FillPromiseGetter<R, Re> claimStatesForAllStatesAtOnceForBlockStatesByDynamicProperties(List<Block> blocks, Property... properties) {
+    protected static <R extends ProxyStatesRequestBuilderImpl, Re extends FilledArrayResultRequestProcessor.Result> FillPromiseGetter<R, Re> claimProxyStatesForAllStatesAtOnceForBlockStatesByDynamicProperties(List<Block> blocks, Property... properties) {
         BlockState[] referenceBlockStates = computeClaimableStatesForBaseWithDynamicProperties(blocks.getFirst().defaultBlockState(), properties);
-        DynamicClaimableStates claimableStates = new ExplicitDynamicClaimableStates(() -> computeClaimableStatesForDynamicProperties(blocks.stream(), properties));
-        return processor -> processor.attemptToClaimStatesFillPromiseForAllStatesAtOnceForBlockStates(claimableStates::get, referenceBlockStates);
+        DynamicClaimableStates claimableStates = ExplicitDynamicClaimableStates.forProxy(() -> computeClaimableStatesForDynamicProperties(blocks.stream(), properties));
+        return processor -> processor.attemptToClaimStatesFillPromiseForAllStatesAtOnceForBlockStates(claimableStates::get, referenceBlockStates, false);
+    }
+
+    protected static <R extends FromToBlockTypeRequestBuilderImpl, Re extends FilledArrayResultRequestProcessor.Result> FillPromiseGetter<R, Re> claimFallbackStatesForAllStatesAtOnceByBlock(List<Block> fallbackBlocks, Block referenceBlock) {
+        return processor -> processor.attemptToClaimStatesFillPromiseForAllStatesAtOnceForBlock(BlockDynamicClaimableStates.forFallback(() -> fallbackBlocks, () -> processor.request.fallback)::get, referenceBlock,true);
+    }
+
+    protected static <R extends FromToBlockTypeRequestBuilderImpl, Re extends FilledArrayResultRequestProcessor.Result> FillPromiseGetter<R, Re> claimFallbackStatesForAllStatesAtOnceByBlock(List<Block> fallbackBlocks) {
+        return claimFallbackStatesForAllStatesAtOnceByBlock(fallbackBlocks, fallbackBlocks.get(0));
+    }
+
+    protected static <R extends FromToBlockStateRequestBuilderImpl, Re extends FilledArrayResultRequestProcessor.Result> FillPromiseGetter<R, Re> claimFallbackStatesForAllStatesAtOnceByBlockState(List<BlockState> fallbackStates) {
+        return processor -> processor.attemptToClaimStatesFillPromiseForAllStatesAtOnce(SingletonBlockStateDynamicClaimableStates.forFallback(() -> fallbackStates, () -> processor.request.fallback)::get,true);
     }
 
     public class BlockFallbackFillPromise extends FillPromise {
 
         protected final Block fallbackBlock;
+        protected final boolean includeResourcePack;
+
+        public BlockFallbackFillPromise(Block fallbackBlock, boolean includeResourcePack) {
+            this.fallbackBlock = fallbackBlock;
+            this.includeResourcePack = includeResourcePack;
+        }
 
         public BlockFallbackFillPromise(Block fallbackBlock) {
-            this.fallbackBlock = fallbackBlock;
+            this(fallbackBlock, false);
         }
 
         @Override
         public void run() {
-            FilledArrayResultRequestProcessor.this.result.setAllUnmapped(this.fallbackBlock);
+            FilledArrayResultRequestProcessor.this.result.setAllUnmapped(this.fallbackBlock, this.includeResourcePack);
             this.setDone();
         }
 
@@ -329,14 +360,20 @@ public abstract class FilledArrayResultRequestProcessor<R extends ProxyStatesReq
     public class StateFallbackFillPromise extends FillPromise {
 
         protected final BlockState fallbackState;
+        protected final boolean includeResourcePack;
+
+        public StateFallbackFillPromise(BlockState fallbackState, boolean includeResourcePack) {
+            this.fallbackState = fallbackState;
+            this.includeResourcePack = includeResourcePack;
+        }
 
         public StateFallbackFillPromise(BlockState fallbackState) {
-            this.fallbackState = fallbackState;
+            this(fallbackState, false);
         }
 
         @Override
         public void run() {
-            FilledArrayResultRequestProcessor.this.result.setAllUnmapped(this.fallbackState);
+            FilledArrayResultRequestProcessor.this.result.setAllUnmapped(this.fallbackState, this.includeResourcePack);
             this.setDone();
         }
 
@@ -345,14 +382,20 @@ public abstract class FilledArrayResultRequestProcessor<R extends ProxyStatesReq
     public class StatesFallbackFillPromise extends FillPromise {
 
         protected final BlockState[] fallbackStates;
+        protected final boolean includeResourcePack;
+
+        public StatesFallbackFillPromise(BlockState[] fallbackStates, boolean includeResourcePack) {
+            this.fallbackStates = fallbackStates;
+            this.includeResourcePack = includeResourcePack;
+        }
 
         public StatesFallbackFillPromise(BlockState[] fallbackStates) {
-            this.fallbackStates = fallbackStates;
+            this(fallbackStates, false);
         }
 
         @Override
         public void run() {
-            FilledArrayResultRequestProcessor.this.result.setAllUnmapped(this.fallbackStates);
+            FilledArrayResultRequestProcessor.this.result.setAllUnmapped(this.fallbackStates, this.includeResourcePack);
             this.setDone();
         }
 

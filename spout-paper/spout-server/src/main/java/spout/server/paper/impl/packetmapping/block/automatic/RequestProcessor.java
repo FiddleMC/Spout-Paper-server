@@ -75,18 +75,20 @@ public abstract class RequestProcessor<R extends ProxyStatesRequestBuilderImpl> 
     //
     // }
 
-    public void attemptClaimOfProxyStates(
+    public void attemptClaimOfProxyOrFallbackStates(
         BlockState[] proxyCandidateStates,
         ClaimRequestPriority priority,
-        @Nullable Consumer<int @Nullable []> resultConsumer
+        @Nullable Consumer<int @Nullable []> resultConsumer,
+        boolean isFallback
     ) {
-        attemptClaimOfProxyStates(
+        attemptClaimOfProxyOrFallbackStates(
             this.event,
             proxyCandidateStates,
             priority,
             this.request.createProxyToVisualDuplicateMappings,
             this.request.createItemMappings,
-            resultConsumer
+            resultConsumer,
+            isFallback
         );
     }
 
@@ -101,20 +103,23 @@ public abstract class RequestProcessor<R extends ProxyStatesRequestBuilderImpl> 
      *                                             the claimed proxy states will be mapped to visual duplicates
      *                                             for {@link ClientView.AwarenessLevel#RESOURCE_PACK} clients.
      * @param createItemMappings                   If this is true, and {@code createProxyToVisualDuplicateMapping}
-     *                                             is also true, and the claim successful,
+     *                                             is also true, and the claim is successful,
      *                                             item mappings may be created from items corresponding
      *                                             to the claimed proxy states to items corresponding to their
      *                                             visual duplicates.
      * @param resultConsumer                       The {@code resultConsumer} passed to
      *                                             {@link ResourcePackBlockStateClaimsImpl#claim}.
+     * @param isFallback                           Whether this claim is for fallback states
+     *                                             rather than proxy states.
      */
-    public static void attemptClaimOfProxyStates(
+    public static void attemptClaimOfProxyOrFallbackStates(
         BlockMappingsComposeEventImpl event,
         BlockState[] proxyCandidateStates,
         ClaimRequestPriority priority,
         boolean createProxyToVisualDuplicateMappings,
         boolean createItemMappings,
-        @Nullable Consumer<int @Nullable []> resultConsumer
+        @Nullable Consumer<int @Nullable []> resultConsumer,
+        boolean isFallback
     ) {
         // Translate the proxy candidates to their registry indices
         int[] proxyCandidateStateIndicesInRegistry = new int[proxyCandidateStates.length];
@@ -126,7 +131,7 @@ public abstract class RequestProcessor<R extends ProxyStatesRequestBuilderImpl> 
             proxyCandidateStateIndicesInRegistry,
             priority,
             resultConsumer,
-            createProxyToVisualDuplicateMappings ? visualDuplicateStateIndicesInRegistry -> {
+            !isFallback && createProxyToVisualDuplicateMappings ? visualDuplicateStateIndicesInRegistry -> {
                 // For resource pack clients, map the claimed proxy states to their visual duplicate
                 for (int i = 0; i < visualDuplicateStateIndicesInRegistry.length; i++) {
                     BlockState visualDuplicateState = VanillaOnlyBlockStateRegistry.get().byId(visualDuplicateStateIndicesInRegistry[i]);
@@ -150,7 +155,7 @@ public abstract class RequestProcessor<R extends ProxyStatesRequestBuilderImpl> 
                 }
             } : null,
             true,
-            false
+            isFallback
         );
     }
 
