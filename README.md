@@ -130,8 +130,99 @@ Place the `.jar` file into the `mods` folder.
 
 Requires [Fabric API](https://modrinth.com/mod/fabric-api).
 
-Compatibility with other mods has not been explored fully.\
-Please report if you encounter any issues.
+Most mods are compatible and integrate with Spoutcraft perfectly.\
+For example,  mods with custom statistics, shulker box tooltips, minimaps, dynamic lights, etc.
+all support the custom blocks and items.
+
+<details>
+    <summary>Expand list of tested mods</summary>
+    🟢 <b>Compatible</b>
+    <ul>
+        <li><a href="https://modrinth.com/mod/3dskinlayers">3D Skin Layers</a></li>
+        <li><a href="https://modrinth.com/mod/ambientsounds">AmbientSounds</a></li>
+        <li><a href="https://modrinth.com/mod/appleskin">AppleSkin</a></li>
+        <li><a href="https://modrinth.com/mod/badoptimizations">BadOptimizations</a></li>
+        <li><a href="https://modrinth.com/mod/balm">Balm</a></li>
+        <li><a href="https://modrinth.com/mod/better-advancements">Better Advancements</a></li>
+        <li><a href="https://modrinth.com/mod/betterf3">BetterF3</a></li>
+        <li><a href="https://modrinth.com/mod/better-stats">Better Statistics Screen</a></li>
+        <li><a href="https://modrinth.com/mod/blur-plus">Blur+</a></li>
+        <li><a href="https://modrinth.com/mod/bookshelf-lib">Bookshelf</a></li>
+        <li><a href="https://modrinth.com/mod/capes">Capes</a></li>
+        <li><a href="https://modrinth.com/mod/chat-heads">Chat Heads</a></li>
+        <li><a href="https://modrinth.com/mod/cherished-worlds">Cherished Worlds</a></li>
+        <li><a href="https://modrinth.com/mod/chunky">Chunky</a></li>
+        <li><a href="https://modrinth.com/mod/cloth-config">Cloth Config API</a></li>
+        <li><a href="https://modrinth.com/mod/clumps">Clumps</a></li>
+        <li><a href="https://modrinth.com/mod/collective">Collective</a></li>
+        <li><a href="https://modrinth.com/mod/c2me-fabric">Concurrent Chunk Management Engine (Fabric)</a></li>
+        <li><a href="https://modrinth.com/mod/continuity">Continuity</a></li>
+        <li><a href="https://modrinth.com/mod/controlling">Controlling</a></li>
+        <li><a href="https://modrinth.com/mod/creativecore">CreativeCore</a></li>
+        <li><a href="https://modrinth.com/mod/cubes-without-borders">Cubes Without Borders</a></li>
+        <li><a href="https://modrinth.com/mod/debugify">Debugify</a></li>
+        <li><a href="https://modrinth.com/mod/dynamic-fps">Dynamic FPS</a></li>
+        <li><a href="https://modrinth.com/mod/enchantment-descriptions">Enchantment Descriptions</a></li>
+        <li><a href="https://modrinth.com/mod/entity-model-features">[EMF] Entity Model Features</a></li>
+        <li><a href="https://modrinth.com/mod/entitytexturefeatures">[ETF] Entity Texture Features</a></li>
+        <li><a href="https://modrinth.com/mod/entityculling">Entity Culling</a></li>
+        <li><a href="https://modrinth.com/mod/essential">Essential</a></li>
+        <li><a href="https://modrinth.com/mod/exordium">Exordium</a></li>
+        <li><a href="https://modrinth.com/mod/fabric-api">Fabric API</a></li>
+        <li><a href="https://modrinth.com/mod/fabric-language-kotlin">Fabric Language Kotlin</a></li>
+        <li><a href="https://modrinth.com/mod/fancymenu">FancyMenu</a></li>
+        <li><a href="https://modrinth.com/mod/ferrite-core">FerriteCore</a></li>
+        <li><a href="https://modrinth.com/mod/forge-config-api-port">Forge Config API Port</a></li>
+        <li><a href="https://modrinth.com/mod/fzzy-config">Fzzy Config</a></li>
+        <li><a href="https://modrinth.com/mod/geckolib">Geckolib</a></li>
+        <li><a href="https://modrinth.com/mod/immediatelyfast">ImmediatelyFast</a></li>
+        <li><a href="https://modrinth.com/mod/inventory-profiles-next">Inventory Profiles Next</a></li>
+        <li><a href="https://modrinth.com/mod/iris">Iris Shaders</a></li>
+        <li><a href="https://modrinth.com/mod/jade">Jade</a></li>
+        <li><a href="https://modrinth.com/mod/forcecloseworldloadingscreen">kennytvs-epic-force-close-loading-screen-mod-for-fabric</a></li>
+        <li><a href="https://modrinth.com/mod/konkrete">Konkrete</a></li>
+        <li><a href="https://modrinth.com/mod/krypton">Krypton</a></li>
+        <li><a href="https://modrinth.com/mod/ksyxis">Ksyxis</a></li>
+        <li><a href="https://modrinth.com/mod/lambdynamiclights">LambDynamicLights</a></li>
+        <li><a href="https://modrinth.com/mod/language-reload">Language Reload</a></li>
+        <li><a href="https://modrinth.com/mod/lithium">Lithium</a></li>
+        <li><a href="https://modrinth.com/mod/malilib">MaLiLib</a></li>
+        <li><a href="https://modrinth.com/mod/melody">Melody</a></li>
+        <li><a href="https://modrinth.com/mod/midnightlib">MidnightLib</a></li>
+        <li><a href="https://modrinth.com/mod/modmenu">Mod Menu</a></li>
+        <li><a href="https://modrinth.com/mod/morechathistory">More Chat History</a></li>
+        <li><a href="https://modrinth.com/mod/moreculling">More Culling</a></li>
+        <li><a href="https://modrinth.com/mod/mouse-tweaks">Mouse Tweaks</a></li>
+        <li><a href="https://modrinth.com/mod/no-chat-reports">No Chat Reports</a></li>
+        <li><a href="https://modrinth.com/mod/not-enough-animations">Not Enough Animations</a></li>
+        <li><a href="https://modrinth.com/mod/optigui">OptiGUI</a></li>
+        <li><a href="https://modrinth.com/mod/owo-lib">oωo (owo-lib)</a></li>
+        <li><a href="https://modrinth.com/mod/presence-footsteps">Presence Footsteps</a></li>
+        <li><a href="https://modrinth.com/mod/puzzles-lib">Puzzles Lib</a></li>
+        <li><a href="https://modrinth.com/mod/reeses-sodium-options">Reese's Sodium Options</a></li>
+        <li><a href="https://modrinth.com/mod/rrls">Remove Reloading Screen</a></li>
+        <li><a href="https://modrinth.com/mod/resourceful-config">Resourceful Config</a></li>
+        <li><a href="https://modrinth.com/mod/resourceful-lib">Resourceful Lib</a></li>
+        <li><a href="https://modrinth.com/mod/shulkerboxtooltip">Shulker Box Tooltip</a></li>
+        <li><a href="https://modrinth.com/plugin/simple-voice-chat">Simple Voice Chat</a></li>
+        <li><a href="https://modrinth.com/mod/sodium">Sodium</a></li>
+        <li><a href="https://modrinth.com/mod/sodium-extra">Sodium Extra</a></li>
+        <li><a href="https://modrinth.com/mod/sound-physics-remastered">Sound Physics Remastered</a></li>
+        <li><a href="https://modrinth.com/mod/structure-layout-optimizer">Structure Layout Optimizer</a></li>
+        <li><a href="https://modrinth.com/mod/tcdcommons">TCDCommons API</a></li>
+        <li><a href="https://modrinth.com/mod/terrablender">TerraBlender</a></li>
+        <li><a href="https://modrinth.com/mod/placeholder-api">Text Placeholder API</a></li>
+        <li><a href="https://modrinth.com/datapack/veinminer">VeinMiner</a></li>
+        <li><a href="https://modrinth.com/mod/veinminer-client">VeinMiner Hotkey</a></li>
+        <li><a href="https://modrinth.com/mod/vmp-fabric">Very Many Players (Fabric)</a></li>
+        <li><a href="https://modrinth.com/mod/visuality">Visuality</a></li>
+        <li><a href="https://modrinth.com/mod/voxy">Voxy</a></li>
+        <li><a href="https://modrinth.com/mod/xaeros-minimap">Xaero's Minimap</a></li>
+        <li><a href="https://modrinth.com/mod/xaeros-world-map">Xaero's World Map</a></li>
+        <li><a href="https://modrinth.com/mod/yacl">YetAnotherConfigLib (YACL)</a></li>
+        <li><a href="https://modrinth.com/mod/zoomify">Zoomify (Zoom)</a></li>
+    </ul>
+</details>
 
 <!--
 ## Next
