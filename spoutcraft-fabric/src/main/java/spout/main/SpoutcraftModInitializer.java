@@ -1,12 +1,11 @@
-package spout.client.fabric;
+package spout.main;
 
 import net.fabricmc.api.ModInitializer;
 
-import net.minecraft.core.registries.BuiltInRegistries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Spout implements ModInitializer {
+public class SpoutcraftModInitializer implements ModInitializer {
 
 	public static final String MOD_ID = "spoutcraft";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
@@ -14,9 +13,9 @@ public class Spout implements ModInitializer {
 	@Override
 	public void onInitialize() {
         try {
-            Class.forName("spout.client.fabric.SpoutClient");
+            Class.forName("spout.main.SpoutcraftClientModInitializer");
         } catch (ClassNotFoundException ignored) {
-            LOGGER.warn("Spoutcraft loaded on a Fabric server - will have no effect");
+            LOGGER.warn("Spoutcraft client mod was loaded on a server - will have no effect");
         }
 	}
 

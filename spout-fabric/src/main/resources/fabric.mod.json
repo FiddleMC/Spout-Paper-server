@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "spout",
+  "id": "spout-mod",
   "version": "${version}",
   "name": "Spout",
   "description": "Automatically sends modded content to Spout clients",
@@ -16,7 +16,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "spout.server.fabric.Spout"
+      "spout.main.SpoutModInitializer"
     ]
   },
   "accessWidener": "spout.classtweaker",

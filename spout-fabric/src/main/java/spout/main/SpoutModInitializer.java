@@ -1,19 +1,18 @@
-package spout.client.fabric;
+package spout.main;
 
 import net.fabricmc.api.ModInitializer;
 
-import net.minecraft.core.registries.BuiltInRegistries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Spout implements ModInitializer {
+public class SpoutModInitializer implements ModInitializer {
 
 	public static final String MOD_ID = "spout";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	@Override
 	public void onInitialize() {
-        System.out.println("Hi");
+        System.out.println("Initializing Spouts server mod...");
 	}
 
 }

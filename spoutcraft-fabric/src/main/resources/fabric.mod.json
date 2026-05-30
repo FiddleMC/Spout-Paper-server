@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "spoutcraft",
+  "id": "spoutcraft-mod",
   "version": "${version}",
   "name": "Spoutcraft",
   "description": "Automatically downloads and install modded content when joining Spout servers",
@@ -12,14 +12,14 @@
     "sources": "https://github.com/ModernSpout/Spoutcraft"
   },
   "license": "See the included LICENSE.txt",
-  "icon": "assets/spout/icon.png",
+  "icon": "icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "spout.client.fabric.Spout"
+      "spout.main.SpoutcraftModInitializer"
     ],
     "client": [
-      "spout.client.fabric.SpoutClient"
+      "spout.main.SpoutcraftClientModInitializer"
     ]
   },
   "accessWidener": "spoutcraft.classtweaker",

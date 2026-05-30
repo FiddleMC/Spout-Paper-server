@@ -13,4 +13,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "spoutcraft"
+rootProject.name = "spoutcraft-mod"

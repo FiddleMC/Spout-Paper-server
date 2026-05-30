@@ -22,7 +22,7 @@ loom {
 	splitEnvironmentSourceSets()
 
 	mods {
-		register("spoutcraft") {
+		register("spout-mod") {
 			sourceSet(sourceSets.main.get())
 			sourceSet(sourceSets.getByName("client"))
 		}
@@ -36,6 +36,7 @@ sourceSets.main {
     java.srcDir("../common-minecraft-src/src/main/java")
     java.srcDir("../common-fabric-src/src/main/java")
     java.srcDir("../common-server-minecraft-src/src/main/java")
+    resources.srcDir("../common-server-minecraft-src/src/main/resources")
 }
 
 dependencies {

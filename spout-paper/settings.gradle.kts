@@ -32,7 +32,7 @@ plugins {
 // Spout end - Project setup - Check for Git
 
 // Spout start - Set up Gradle project
-rootProject.name = "spout-paper"
+rootProject.name = "spout-paper-fork"
 
 include("spout-api")
 include("spout-server")
