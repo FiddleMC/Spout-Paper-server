@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "spout",
+  "version": "${version}",
+  "name": "Spout",
+  "description": "Automatically sends modded content to Spout clients",
+  "authors": [
+    "Martijn Muijsers",
+    "Spoutcraft authors and contributors"
+  ],
+  "contact": {
+    "sources": "https://github.com/ModernSpout/Spoutcraft"
+  },
+  "license": "See the included LICENSE.txt",
+  "icon": "assets/spout/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "spout.server.fabric.Spout"
+    ]
+  },
+  "accessWidener": "spout.classtweaker",
+  "mixins": [],
+  "depends": {
+    "fabricloader": ">=0.19.2",
+    "minecraft": "~26.1.2",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}
