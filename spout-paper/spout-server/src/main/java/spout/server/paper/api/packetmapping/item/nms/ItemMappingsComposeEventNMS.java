@@ -9,7 +9,7 @@ import org.bukkit.Registry;
 import org.bukkit.craftbukkit.inventory.CraftItemType;
 import org.bukkit.craftbukkit.util.CraftNamespacedKey;
 import org.bukkit.inventory.ItemType;
-import spout.server.paper.api.clientview.ClientView;
+import spout.clientview.model.ClientView;
 import spout.server.paper.api.packetmapping.item.ItemMappingsComposeEvent;
 import org.jspecify.annotations.Nullable;
 

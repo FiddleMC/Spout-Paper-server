@@ -1,7 +1,7 @@
 package spout.server.paper.impl.resourcepack.construct;
 
 import io.papermc.paper.plugin.lifecycle.event.PaperLifecycleEvent;
-import spout.server.paper.api.clientview.ClientView;
+import spout.clientview.model.ClientView;
 import spout.server.paper.api.resourcepack.construct.ConstructedResourcePack;
 import spout.server.paper.api.resourcepack.construct.ResourcePackConstructFinishEvent;
 import org.jspecify.annotations.Nullable;

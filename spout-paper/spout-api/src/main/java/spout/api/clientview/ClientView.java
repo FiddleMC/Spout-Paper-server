@@ -1,47 +1,16 @@
-package spout.server.paper.api.clientview;
+package spout.api.clientview;
 
 import org.bukkit.entity.Player;
 import org.jspecify.annotations.Nullable;
 import java.util.Arrays;
 
-/**
- * This class represents the static circumstances under which a client (typically a player) observes the data sent.
- *
- * <p>
- * An instance of this class represents a set of values that are static within a client's session with the server:
- * i.e. they stay the same for a client during the entire session.
- * </p>
- *
- * <p>
- * Note that for the purposes of this class, the session of the client only starts when it is able to have any
- * view of relevant data sent to it. For example, when a player joins, we first present them with the option
- * to accept or decline the resource pack. Until it has been confirmed that the resource pack has been definitively
- * loaded (so the moment after accepting, downloading and successful loading) or not loaded (so the moment it is either
- * confirmed that the player declined the resource pack, that the download failed or that another type of error
- * occurred after which we can be sure the resource pack will not be successfully loaded anymore), that player is not
- * assigned their {@link ClientView} yet. This also implies that we must make sure not to send any relevant
- * data (such as chunks, entities and potentially even the player's inventory - although that can be sent
- * according to a fallback view and updated as necessary) to the player before their view
- * is determined.
- * </p>
- *
- * <p>
- * Apart from the interval before having definitely loaded or not loaded the resource pack, a player's session
- * (and as such their {@link ClientView} value) lasts from joining the server until disconnecting.
- * </p>
- *
- * <p>
- * This class may be extended to support additional values relevant to certain views
- * (such as the protocol version of the client).
- * </p>
- */
 public interface ClientView {
 
     AwarenessLevel getAwarenessLevel();
 
     /**
      * @return The player of this client,
-     * or null if not available (for example when the client is still in the configuration phase).
+     * or null if not available.
      */
     @Nullable Player getPlayer();
 
@@ -53,31 +22,22 @@ public interface ClientView {
     @Nullable String getLocale();
 
     /**
-     * @return True only if this client understands all server-side translatables
-     * (such as in the case of a client that has loaded the resource pack containing them),
+     * @return True only if this client understands all server-side translatables.
      * false if it can not be guaranteed.
      */
-    default boolean understandsAllServerSideTranslatables() {
-        return this.getAwarenessLevel().alwaysUnderstandsAllServerSideTranslatables;
-    }
+    boolean understandsAllServerSideTranslatables();
 
     /**
-     * @return True only if this client understands all server-side items
-     * (such as in the case of a client mod that has added them to its client-side registry),
+     * @return True only if this client understands all server-side items.
      * false if it can not be guaranteed.
      */
-    default boolean understandsAllServerSideItems() {
-        return this.getAwarenessLevel().alwaysUnderstandsAllServerSideItems;
-    }
+    boolean understandsAllServerSideItems();
 
     /**
-     * @return True only if this client understands all server-side blocks
-     * (such as in the case of a client mod that has added them to its client-side registry),
+     * @return True only if this client understands all server-side blocks.
      * false if it can not be guaranteed.
      */
-    default boolean understandsAllServerSideBlocks() {
-        return this.getAwarenessLevel().alwaysUnderstandsAllServerSideBlocks;
-    }
+    boolean understandsAllServerSideBlocks();
 
     /**
      * This enum represents the major categorization of the client's capability
@@ -107,7 +67,7 @@ public interface ClientView {
          * Additional rendering can be done through the use of entities.
          * </p>
          */
-        RESOURCE_PACK(true, false, false), // TODO implement
+        RESOURCE_PACK(true, false, false),
 
         /**
          * For Java clients that are have the client mod, i.e. they have the mod installed and are able to use
@@ -118,7 +78,7 @@ public interface ClientView {
          * the necessary information to interpret the server-side block and item keys directly from then on.
          * </p>
          */
-        CLIENT_MOD(true, true, true); // TODO implement
+        CLIENT_MOD(true, true, true);
 
         private final boolean alwaysUnderstandsAllServerSideTranslatables;
         private final boolean alwaysUnderstandsAllServerSideBlocks;
@@ -132,6 +92,10 @@ public interface ClientView {
             this.alwaysUnderstandsAllServerSideTranslatables = alwaysUnderstandsAllServerSideTranslatables;
             this.alwaysUnderstandsAllServerSideBlocks = alwaysUnderstandsAllServerSideBlocks;
             this.alwaysUnderstandsAllServerSideItems = alwaysUnderstandsAllServerSideItems;
+        }
+
+        public int getId() {
+            return this.ordinal();
         }
 
         /**

@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import spout.server.paper.api.clientview.ClientView;
+import spout.clientview.model.ClientView;
 import spout.server.paper.impl.packetmapping.block.BlockMappingFunctionContextImpl;
 import spout.server.paper.impl.packetmapping.block.BlockMappingsImpl;
 import spout.server.paper.impl.packetmapping.item.ItemMappingFunctionContextImpl;

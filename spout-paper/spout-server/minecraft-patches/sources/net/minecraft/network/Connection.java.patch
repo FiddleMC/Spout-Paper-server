@@ -1,15 +1,25 @@
 --- a/net/minecraft/network/Connection.java
 +++ b/net/minecraft/network/Connection.java
-@@ -54,7 +_,16 @@
+@@ -28,7 +_,6 @@
+ import java.util.Queue;
+ import java.util.concurrent.RejectedExecutionException;
+ import java.util.function.Consumer;
+-import javax.crypto.Cipher;
+ import net.minecraft.SharedConstants;
+ import net.minecraft.network.chat.Component;
+ import net.minecraft.network.protocol.BundlerInfo;
+@@ -53,8 +_,18 @@
+ import org.slf4j.Logger;
  import org.slf4j.Marker;
  import org.slf4j.MarkerFactory;
++import spout.clientview.model.ClientView;
  
 -public class Connection extends SimpleChannelInboundHandler<Packet<?>> {
 +public class Connection extends SimpleChannelInboundHandler<Packet<?>> implements spout.server.paper.impl.clientview.lookup.ClientViewLookup { // Spout - Client view - Lookup - Implement for Connection
-+    public spout.server.paper.api.clientview.@Nullable ClientView clientView; // Spout - Client view - Set - Field
++    public @Nullable ClientView clientView; // Spout - Client view - Set - Field
 +    // Spout start - Client view - Lookup - Implement for Connection - Getter
 +    @Override
-+    public spout.server.paper.api.clientview.@Nullable ClientView getClientView() {
++    public @Nullable ClientView getClientView() {
 +        return this.clientView;
 +    }
 +    // Spout end - Client view - Lookup - Implement for Connection - Getter

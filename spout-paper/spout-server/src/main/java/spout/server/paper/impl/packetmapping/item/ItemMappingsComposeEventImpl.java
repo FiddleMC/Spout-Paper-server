@@ -6,7 +6,7 @@ import net.minecraft.world.item.Item;
 import org.bukkit.Registry;
 import org.bukkit.craftbukkit.inventory.CraftItemType;
 import org.bukkit.inventory.ItemType;
-import spout.server.paper.api.clientview.ClientView;
+import spout.clientview.model.ClientView;
 import spout.server.paper.api.packetmapping.item.ItemMappingBuilder;
 import spout.server.paper.api.packetmapping.item.ItemMappingsComposeEvent;
 import spout.server.paper.api.packetmapping.item.nms.ItemMappingBuilderNMS;

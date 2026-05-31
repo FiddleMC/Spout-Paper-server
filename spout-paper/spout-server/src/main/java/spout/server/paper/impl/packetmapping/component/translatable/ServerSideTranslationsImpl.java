@@ -5,7 +5,7 @@ import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import spout.server.paper.api.clientview.ClientView;
+import spout.clientview.model.ClientView;
 import spout.server.paper.api.packetmapping.component.translatable.ServerSideTranslations;
 import spout.server.paper.api.packetmapping.component.translatable.ServerSideTranslationsComposeEvent;
 import spout.server.paper.api.resourcepack.content.Lang;

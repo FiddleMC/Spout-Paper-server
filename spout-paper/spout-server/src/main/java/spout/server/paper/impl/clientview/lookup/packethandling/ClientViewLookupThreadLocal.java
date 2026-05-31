@@ -1,7 +1,7 @@
 package spout.server.paper.impl.clientview.lookup.packethandling;
 
-import spout.server.paper.api.clientview.ClientView;
-import spout.server.paper.impl.clientview.FallbackClientViewImpl;
+import spout.clientview.model.ClientView;
+import spout.clientview.model.FallbackClientViewImpl;
 import spout.server.paper.impl.clientview.lookup.ClientViewLookup;
 import org.jspecify.annotations.Nullable;
 import java.lang.ref.WeakReference;

@@ -11,7 +11,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.block.data.CraftBlockData;
 import org.jspecify.annotations.Nullable;
 import spout.common.util.minecraft.blockstate.BlockStateUtil;
-import spout.server.paper.api.clientview.ClientView;
+import spout.clientview.model.ClientView;
 import spout.server.paper.api.packetmapping.block.automatic.UsedStates;
 import spout.server.paper.api.resourcepack.construct.BlockstatesResourcePackPath;
 import spout.server.paper.api.resourcepack.content.Blockstates;

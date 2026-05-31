@@ -2,6 +2,7 @@ package spout.server.paper.impl.packetmapping.item.builtin;
 
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import spout.clientview.model.ClientView;
 import spout.server.paper.impl.packetmapping.component.ComponentMappingsImpl;
 import spout.server.paper.impl.packetmapping.item.ItemMappingHandleNMSImpl;
 import spout.server.paper.impl.packetmapping.item.ItemMappingsStep;
@@ -15,7 +16,7 @@ public final class MapDefaultItemNamesItemMappingsStep implements ItemMappingsSt
     @Override
     public void apply(ItemMappingHandleNMSImpl handle) {
         Component itemName = handle.getImmutable().getItemName().copy();
-        Component mappedItemName = ComponentMappingsImpl.get().apply(itemName, ComponentMappingsImpl.get().createGenericContext(handle.getContext().getClientView()));
+        Component mappedItemName = ComponentMappingsImpl.get().apply(itemName, ComponentMappingsImpl.get().createGenericContext((ClientView) handle.getContext().getClientView()));
         if (!mappedItemName.equals(itemName)) {
             handle.getMutable().set(DataComponents.ITEM_NAME, mappedItemName);
         }

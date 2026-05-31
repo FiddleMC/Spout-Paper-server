@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.Registry;
 import org.bukkit.block.BlockType;
 import org.bukkit.block.data.BlockData;
-import spout.server.paper.api.clientview.ClientView;
+import spout.clientview.model.ClientView;
 import spout.server.paper.api.packetmapping.block.BlockMappingsComposeEvent;
 import spout.server.paper.api.packetmapping.block.ManualBlockMappings;
 import java.util.Arrays;

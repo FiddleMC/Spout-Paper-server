@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.block.data.BlockData;
-import spout.server.paper.api.clientview.ClientView;
+import spout.clientview.model.ClientView;
 import org.jspecify.annotations.Nullable;
 
 /**

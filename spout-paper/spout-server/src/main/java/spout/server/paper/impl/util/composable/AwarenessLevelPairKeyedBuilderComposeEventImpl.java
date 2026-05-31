@@ -2,7 +2,7 @@ package spout.server.paper.impl.util.composable;
 
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.ints.IntIntPair;
-import spout.server.paper.api.clientview.ClientView;
+import spout.clientview.model.ClientView;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

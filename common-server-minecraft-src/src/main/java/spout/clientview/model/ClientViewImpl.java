@@ -1,8 +1,6 @@
-package spout.server.paper.impl.clientview;
+package spout.clientview.model;
 
 import com.mojang.serialization.Codec;
-import spout.server.paper.api.clientview.ClientView;
-import spout.server.paper.api.clientview.nms.NMSClientView;
 import spout.branding.SpoutNamespace;
 import spout.server.paper.impl.packetmapping.item.reverse.ItemMappingReverser;
 import spout.common.util.mojang.codec.EnumViaIdentifierCodec;
@@ -16,7 +14,7 @@ import java.util.List;
  * Every instance of {@link ClientView} is also an instance of {@link ClientViewImpl}.
  * </p>
  */
-public abstract class ClientViewImpl implements NMSClientView {
+public abstract class ClientViewImpl implements ClientView {
 
     public static final Codec<AwarenessLevel> AWARENESS_LEVEL_CODEC = new EnumViaIdentifierCodec<>(ClientView.AwarenessLevel.class, SpoutNamespace.SPOUT);
     public static final Codec<List<AwarenessLevel>> AWARENESS_LEVEL_LIST_CODEC = Codec.list(AWARENESS_LEVEL_CODEC);

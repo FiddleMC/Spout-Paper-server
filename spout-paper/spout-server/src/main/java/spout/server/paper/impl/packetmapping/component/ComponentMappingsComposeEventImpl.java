@@ -2,7 +2,7 @@ package spout.server.paper.impl.packetmapping.component;
 
 import java.util.Collection;
 import java.util.function.Consumer;
-import spout.server.paper.api.clientview.ClientView;
+import spout.clientview.model.ClientView;
 import spout.server.paper.api.packetmapping.component.ComponentMappingBuilder;
 import spout.server.paper.api.packetmapping.component.ComponentMappingsComposeEvent;
 import spout.server.paper.api.packetmapping.component.ComponentTarget;

@@ -5,7 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
-import spout.server.paper.api.clientview.ClientView;
+import spout.clientview.model.ClientView;
 import spout.server.paper.api.packetmapping.block.BlockMappingFunctionContext;
 import spout.server.paper.impl.clientview.lookup.packethandling.ClientViewLookupThreadLocal;
 import java.util.Iterator;

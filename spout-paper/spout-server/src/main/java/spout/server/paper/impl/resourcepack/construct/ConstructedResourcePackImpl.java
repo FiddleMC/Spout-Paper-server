@@ -3,7 +3,7 @@ package spout.server.paper.impl.resourcepack.construct;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.common.io.ByteSource;
-import spout.server.paper.api.clientview.ClientView;
+import spout.clientview.model.ClientView;
 import spout.server.paper.api.resourcepack.construct.ConstructedResourcePack;
 import java.io.IOException;
 import java.nio.file.Files;

@@ -1,7 +1,7 @@
 package spout.server.paper.api.packetmapping.block.automatic;
 
 import org.bukkit.block.BlockType;
-import spout.server.paper.api.clientview.ClientView;
+import spout.api.clientview.ClientView;
 import spout.server.paper.api.packetmapping.block.BlockMappingsComposeEvent;
 import java.util.function.Consumer;
 

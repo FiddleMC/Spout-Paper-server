@@ -3,7 +3,7 @@ package spout.server.paper.impl.packetmapping.component.translatable;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
-import spout.server.paper.api.clientview.ClientView;
+import spout.clientview.model.ClientView;
 import spout.server.paper.api.packetmapping.component.translatable.ServerSideTranslations;
 import spout.server.paper.impl.packetmapping.component.ComponentMappingHandleNMSImpl;
 import spout.server.paper.impl.packetmapping.component.ComponentMappingsImpl;
@@ -17,7 +17,7 @@ public final class ServerSideTranslationsComponentMappingsStep implements Compon
 
     @Override
     public void apply(ComponentMappingHandleNMSImpl handle) {
-        ClientView clientView = handle.getContext().getClientView();
+        ClientView clientView = (ClientView) handle.getContext().getClientView();
         if (clientView.understandsAllServerSideTranslatables()) return;
         Component immutable = handle.getImmutable();
         ComponentContents contents = immutable.getContents();

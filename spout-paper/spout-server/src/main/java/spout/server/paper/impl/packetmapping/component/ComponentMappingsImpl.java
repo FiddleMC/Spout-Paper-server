@@ -4,7 +4,7 @@ import io.papermc.paper.adventure.AdventureComponent;
 import java.util.Arrays;
 import java.util.List;
 import net.minecraft.network.chat.Component;
-import spout.server.paper.api.clientview.ClientView;
+import spout.clientview.model.ClientView;
 import spout.server.paper.api.packetmapping.component.ComponentMappingFunctionContext;
 import spout.server.paper.api.packetmapping.component.ComponentMappings;
 import spout.server.paper.api.packetmapping.component.ComponentMappingsComposeEvent;

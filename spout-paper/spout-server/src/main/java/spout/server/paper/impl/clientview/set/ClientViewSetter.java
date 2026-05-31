@@ -7,11 +7,11 @@ import net.minecraft.network.protocol.login.ClientboundCustomQueryPacket;
 import net.minecraft.network.protocol.login.ServerboundCustomQueryAnswerPacket;
 import net.minecraft.network.protocol.login.custom.CustomQueryPayload;
 import net.minecraft.resources.Identifier;
-import spout.server.paper.api.clientview.ClientView;
+import spout.clientview.model.ClientView;
 import spout.branding.SpoutNamespace;
-import spout.server.paper.impl.clientview.JavaVanillaClientViewImpl;
-import spout.server.paper.impl.clientview.JavaWithClientModClientViewImpl;
-import spout.server.paper.impl.clientview.JavaWithResourcePackClientViewImpl;
+import spout.clientview.model.JavaVanillaClientViewImpl;
+import spout.clientview.model.JavaWithClientModClientViewImpl;
+import spout.clientview.model.JavaWithResourcePackClientViewImpl;
 import spout.server.paper.impl.resourcepack.send.ResourcePackSending;
 import org.jspecify.annotations.Nullable;
 

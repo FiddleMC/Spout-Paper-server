@@ -1,7 +1,7 @@
 package spout.server.paper.api.resourcepack.construct;
 
 import com.google.common.hash.Hashing;
-import spout.server.paper.api.clientview.ClientView;
+import spout.api.clientview.ClientView;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.UUID;

@@ -1,5 +1,21 @@
 --- a/net/minecraft/world/item/ItemStack.java
 +++ b/net/minecraft/world/item/ItemStack.java
+@@ -46,7 +_,6 @@
+ import net.minecraft.stats.Stats;
+ import net.minecraft.util.ExtraCodecs;
+ import net.minecraft.util.Mth;
+-import net.minecraft.util.NullOps;
+ import net.minecraft.util.StringUtil;
+ import net.minecraft.util.Unit;
+ import net.minecraft.world.InteractionHand;
+@@ -99,6 +_,7 @@
+ import org.apache.commons.lang3.mutable.MutableBoolean;
+ import org.jspecify.annotations.Nullable;
+ import org.slf4j.Logger;
++import spout.clientview.model.ClientViewImpl;
+ 
+ public final class ItemStack implements DataComponentHolder, ItemInstance {
+     private static final List<Component> OP_NBT_WARNING = List.of(
 @@ -175,6 +_,12 @@
          return new StreamCodec<RegistryFriendlyByteBuf, ItemStack>() {
              @Override
@@ -21,7 +37,7 @@
 +                // Spout start - Item mapping - Reverse - Apply at ItemStack decoding
 +                ItemStack received = new ItemStack(item, count, patch);
 +                if (attemptReversing) {
-+                    spout.server.paper.impl.packetmapping.item.reverse.@Nullable ItemMappingReverser itemMappingReverser = ((spout.server.paper.impl.clientview.ClientViewImpl) input.getClientViewOrFallback()).getItemMappingReverser();
++                    spout.server.paper.impl.packetmapping.item.reverse.@Nullable ItemMappingReverser itemMappingReverser = ((ClientViewImpl) input.getClientViewOrFallback()).getItemMappingReverser();
 +                    if (itemMappingReverser != null) {
 +                        received = itemMappingReverser.reverseMappingIfPossible(received);
 +                    }
@@ -34,7 +50,7 @@
              public void encode(final RegistryFriendlyByteBuf output, final ItemStack itemStack) {
 +                // Spout start - Item mapping - Implementation part - Apply at ItemStack encoding
 +                spout.server.paper.impl.packetmapping.item.ItemMappingFunctionContextImpl itemMappingContext = new spout.server.paper.impl.packetmapping.item.ItemMappingFunctionContextImpl(output.getClientViewOrFallback(), output.isEncodingItemFrameItem, output.isEncodingStonecutterRecipeResult);
-+                spout.server.paper.impl.packetmapping.item.reverse.@Nullable ItemMappingReverser itemMappingReverser = ((spout.server.paper.impl.clientview.ClientViewImpl) output.getClientViewOrFallback()).getItemMappingReverser();
++                spout.server.paper.impl.packetmapping.item.reverse.@Nullable ItemMappingReverser itemMappingReverser = ((ClientViewImpl) output.getClientViewOrFallback()).getItemMappingReverser();
 +                ItemStack mappedValue = spout.server.paper.impl.packetmapping.item.ItemMappingsImpl.get().apply(itemStack, itemMappingContext);
 +                if (itemMappingReverser != null) {
 +                    long reservedId = -1;

@@ -1,7 +1,6 @@
-package spout.server.paper.impl.clientview;
+package spout.clientview.model;
 
 import net.minecraft.network.Connection;
-import spout.server.paper.api.clientview.ClientView;
 
 /**
  * A simple implementation of {@link ClientView}

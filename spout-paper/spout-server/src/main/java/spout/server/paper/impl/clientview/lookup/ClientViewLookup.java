@@ -3,8 +3,8 @@ package spout.server.paper.impl.clientview.lookup;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerCommonPacketListenerImpl;
 import net.minecraft.server.network.ServerLoginPacketListenerImpl;
-import spout.server.paper.api.clientview.ClientView;
-import spout.server.paper.impl.clientview.FallbackClientViewImpl;
+import spout.clientview.model.ClientView;
+import spout.clientview.model.FallbackClientViewImpl;
 import org.jspecify.annotations.Nullable;
 
 /**

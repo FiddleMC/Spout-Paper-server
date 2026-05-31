@@ -6,6 +6,6 @@
  * </p>
  */
 @NullMarked
-package spout.server.paper.api.clientview.nms;
+package spout.api.clientview;
 
 import org.jspecify.annotations.NullMarked;

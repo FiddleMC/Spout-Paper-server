@@ -6,7 +6,7 @@ import io.papermc.paper.plugin.lifecycle.event.LifecycleEvent;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
-import spout.server.paper.api.clientview.ClientView;
+import spout.api.clientview.ClientView;
 import org.jspecify.annotations.Nullable;
 import java.io.IOException;
 import java.nio.file.Path;

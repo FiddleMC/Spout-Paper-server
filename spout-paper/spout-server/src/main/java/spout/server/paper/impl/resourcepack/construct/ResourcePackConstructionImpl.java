@@ -9,7 +9,7 @@ import io.papermc.paper.plugin.lifecycle.event.types.PrioritizableLifecycleEvent
 import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
-import spout.server.paper.api.clientview.ClientView;
+import spout.clientview.model.ClientView;
 import spout.server.paper.api.resourcepack.construct.ResourcePackConstructEvent;
 import spout.server.paper.api.resourcepack.construct.ResourcePackConstructFinishEvent;
 import spout.server.paper.api.resourcepack.construct.ResourcePackConstruction;

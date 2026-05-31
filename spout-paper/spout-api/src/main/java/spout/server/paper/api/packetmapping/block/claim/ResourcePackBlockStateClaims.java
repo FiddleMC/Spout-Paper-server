@@ -2,7 +2,7 @@ package spout.server.paper.api.packetmapping.block.claim;
 
 import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
 import org.bukkit.block.data.BlockData;
-import spout.server.paper.api.clientview.ClientView;
+import spout.api.clientview.ClientView;
 import spout.server.paper.api.packetmapping.block.BlockMappingsComposeEvent;
 import org.jspecify.annotations.Nullable;
 import spout.server.paper.impl.util.service.SpoutServices;

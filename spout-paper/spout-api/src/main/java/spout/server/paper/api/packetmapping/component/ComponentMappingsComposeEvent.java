@@ -1,7 +1,7 @@
 package spout.server.paper.api.packetmapping.component;
 
 import it.unimi.dsi.fastutil.Pair;
-import spout.server.paper.api.clientview.ClientView;
+import spout.api.clientview.ClientView;
 import spout.server.paper.api.util.composable.BuilderComposeEvent;
 import spout.server.paper.api.util.composable.ChangeRegisteredComposeEvent;
 import spout.server.paper.api.util.composable.GetRegisteredComposeEvent;

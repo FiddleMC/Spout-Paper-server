@@ -13,7 +13,7 @@ import net.minecraft.world.level.chunk.LinearPalette;
 import net.minecraft.world.level.chunk.Palette;
 import net.minecraft.world.level.chunk.PalettedContainer;
 import net.minecraft.world.level.chunk.SingleValuePalette;
-import spout.server.paper.api.clientview.ClientView;
+import spout.clientview.model.ClientView;
 import spout.server.paper.api.packetmapping.block.BlockMappingFunctionContext;
 import spout.server.paper.api.packetmapping.block.BlockMappings;
 import spout.server.paper.impl.moredatadriven.minecraft.BlockStateRegistry;
